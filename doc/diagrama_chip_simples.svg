@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2000" height="1650" viewBox="0 0 2000 1650" font-family="Roboto, Arial, sans-serif">
+<defs>
+<marker id="seta" viewBox="0 0 20 20" refX="17" refY="10" markerWidth="7" markerHeight="7" orient="auto">
+  <path d="M 2 2 L 17 10 L 2 18" fill="none" stroke="#8A8A86" stroke-width="3"/></marker>
+<marker id="seta_ini" viewBox="0 0 20 20" refX="3" refY="10" markerWidth="7" markerHeight="7" orient="auto">
+  <path d="M 18 2 L 3 10 L 18 18" fill="none" stroke="#8A8A86" stroke-width="3"/></marker>
+</defs>
+<rect width="2000" height="1650" fill="#FFFFFF"/>
+<rect x="118" y="58" width="1764" height="330" rx="48" fill="#F1EEE8" stroke="#8C8C8C" stroke-width="2"/>
+<text x="176" y="138" font-size="40" fill="#444441" text-anchor="start">Testbench — só na simulação</text>
+<rect x="176" y="176" width="706" height="165" rx="22" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2" stroke-dasharray="12 8"/>
+<text x="529.0" y="252.5" font-size="40" fill="#444441" text-anchor="middle">Carga do firmware</text>
+<text x="529.0" y="304.5" font-size="34" fill="#6B6B66" text-anchor="middle">$readmemh direto na macro da IMEM</text>
+<rect x="1118" y="176" width="706" height="165" rx="22" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2" stroke-dasharray="12 8"/>
+<text x="1471.0" y="272.5" font-size="40" fill="#444441" text-anchor="middle">Monitor da UART</text>
+<rect x="118" y="500" width="1764" height="970" rx="48" fill="#F1EEE8" stroke="#8C8C8C" stroke-width="2"/>
+<text x="1000.0" y="580" font-size="40" fill="#444441" text-anchor="middle">Chip — SkyWater 130 nm</text>
+<rect x="176" y="640" width="470" height="160" rx="22" fill="#E1F3EE" stroke="#0F6E56" stroke-width="2"/>
+<text x="411.0" y="714.0" font-size="40" fill="#0B4F3E" text-anchor="middle">IMEM 8 kB</text>
+<text x="411.0" y="766.0" font-size="34" fill="#0F6E56" text-anchor="middle">Programa (ROM)</text>
+<rect x="765" y="640" width="470" height="160" rx="22" fill="#EEEDFB" stroke="#534AB7" stroke-width="2"/>
+<text x="1000.0" y="714.0" font-size="40" fill="#3C3489" text-anchor="middle">NEORV32</text>
+<text x="1000.0" y="766.0" font-size="34" fill="#534AB7" text-anchor="middle">CPU RISC-V rv32imc</text>
+<rect x="1353" y="640" width="470" height="160" rx="22" fill="#EEEDFB" stroke="#534AB7" stroke-width="2"/>
+<text x="1588.0" y="714.0" font-size="40" fill="#3C3489" text-anchor="middle">UART0</text>
+<text x="1588.0" y="766.0" font-size="34" fill="#534AB7" text-anchor="middle">Log (printf)</text>
+<rect x="176" y="950" width="470" height="160" rx="22" fill="#EEEDFB" stroke="#534AB7" stroke-width="2"/>
+<text x="411.0" y="1024.0" font-size="40" fill="#3C3489" text-anchor="middle">Ponte XBUS <tspan font-family="DejaVu Sans" font-size="0.85em">→</tspan> AXI</text>
+<text x="411.0" y="1076.0" font-size="34" fill="#534AB7" text-anchor="middle">AXI4 <tspan font-family="DejaVu Sans" font-size="0.85em">→</tspan> AXI4-Lite</text>
+<rect x="765" y="950" width="470" height="160" rx="22" fill="#E1F3EE" stroke="#0F6E56" stroke-width="2"/>
+<text x="1000.0" y="1024.0" font-size="40" fill="#0B4F3E" text-anchor="middle">DMEM 4 kB</text>
+<text x="1000.0" y="1076.0" font-size="34" fill="#0F6E56" text-anchor="middle">Dados e matrizes</text>
+<rect x="1353" y="950" width="470" height="160" rx="22" fill="#EEEDFB" stroke="#534AB7" stroke-width="2"/>
+<text x="1588.0" y="1024.0" font-size="40" fill="#3C3489" text-anchor="middle">DMA</text>
+<text x="1588.0" y="1076.0" font-size="34" fill="#534AB7" text-anchor="middle">DMEM <tspan font-family="DejaVu Sans" font-size="0.85em">↔</tspan> SLINK</text>
+<rect x="176" y="1250" width="530" height="160" rx="22" fill="#EEEDFB" stroke="#534AB7" stroke-width="2"/>
+<text x="441.0" y="1324.0" font-size="40" fill="#3C3489" text-anchor="middle">ISFFT</text>
+<text x="441.0" y="1376.0" font-size="34" fill="#534AB7" text-anchor="middle">Acelerador 8×8</text>
+<rect x="1294" y="1250" width="530" height="160" rx="22" fill="#EEEDFB" stroke="#534AB7" stroke-width="2"/>
+<text x="1559.0" y="1324.0" font-size="40" fill="#3C3489" text-anchor="middle">SLINK</text>
+<text x="1559.0" y="1376.0" font-size="34" fill="#534AB7" text-anchor="middle">FIFOs 64 · conv. 32 <tspan font-family="DejaVu Sans" font-size="0.85em">↔</tspan> 64</text>
+<path d="M 411 341 L 411 632" fill="none" stroke="#8A8A86" stroke-width="4" stroke-dasharray="14 10" marker-end="url(#seta)"/>
+<text x="441" y="452" font-size="34" fill="#444441" text-anchor="start">Carga direta</text>
+<path d="M 1588 640 L 1588 349" fill="none" stroke="#8A8A86" stroke-width="4" marker-end="url(#seta)"/>
+<text x="1618" y="452" font-size="34" fill="#444441" text-anchor="start">uart0_txd</text>
+<path d="M 765 720 L 654 720" fill="none" stroke="#8A8A86" stroke-width="4" marker-end="url(#seta)"/>
+<path d="M 1235 720 L 1345 720" fill="none" stroke="#8A8A86" stroke-width="4" marker-end="url(#seta)"/>
+<path d="M 1000 800 L 1000 880" fill="none" stroke="#8A8A86" stroke-width="4"/>
+<path d="M 411 880 L 1588 880" fill="none" stroke="#8A8A86" stroke-width="4"/>
+<path d="M 411 880 L 411 942" fill="none" stroke="#8A8A86" stroke-width="4" marker-end="url(#seta)"/>
+<path d="M 1000 880 L 1000 942" fill="none" stroke="#8A8A86" stroke-width="4" marker-end="url(#seta)"/>
+<path d="M 1588 880 L 1588 942" fill="none" stroke="#8A8A86" stroke-width="4" marker-end="url(#seta)"/>
+<text x="1030" y="855" font-size="34" fill="#444441" text-anchor="start">Barramento NEORV32</text>
+<path d="M 1353 1030 L 1243 1030" fill="none" stroke="#8A8A86" stroke-width="4" marker-end="url(#seta)"/>
+<path d="M 411 1110 L 411 1242" fill="none" stroke="#8A8A86" stroke-width="4" marker-end="url(#seta)"/>
+<text x="441" y="1195" font-size="34" fill="#444441" text-anchor="start">AXI4-Lite</text>
+<path d="M 1588 1110 L 1588 1242" fill="none" stroke="#8A8A86" stroke-width="4" marker-end="url(#seta)"/>
+<path d="M 1294 1295 L 714 1295" fill="none" stroke="#8A8A86" stroke-width="4" marker-end="url(#seta)"/>
+<path d="M 706 1370 L 1286 1370" fill="none" stroke="#8A8A86" stroke-width="4" marker-end="url(#seta)"/>
+<text x="1000.0" y="1346" font-size="34" fill="#444441" text-anchor="middle">Stream 64 bits</text>
+<rect x="176" y="1530" width="40" height="40" rx="8" fill="#E1F3EE" stroke="#0F6E56" stroke-width="2"/>
+<text x="240" y="1563" font-size="36" fill="#444441">Macro SRAM (OpenRAM)</text>
+<rect x="760" y="1530" width="40" height="40" rx="8" fill="#EEEDFB" stroke="#534AB7" stroke-width="2"/>
+<text x="824" y="1563" font-size="36" fill="#444441">Lógica (células sky130)</text>
+<rect x="1330" y="1530" width="40" height="40" rx="8" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="1394" y="1563" font-size="36" fill="#444441">Só no testbench</text>
+</svg>

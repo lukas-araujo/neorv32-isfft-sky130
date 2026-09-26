@@ -1,0 +1,42 @@
+# --- Gerados no notebook -----------------------------------------------------
+# neorv32_asic.v convertido, pasta montada da VM, EVM
+build/
+sim/build_*/
+*.vvp
+*.vcd
+*.fst
+e~*.o
+# executavel que o GHDL deixa na raiz
+neorv32_asic
+*.convert.out
+__pycache__/
+
+# --- Firmware (fica so main.c, makefile, .hex, vetores e somas) --------------
+sw/**/build/
+sw/**/*.elf
+sw/**/*.bin
+sw/**/*.o
+sw/**/*.d
+
+# --- OpenRAM: saida bruta (a macro pronta vai para macros/) ------------------
+openram/out/
+
+# --- Macros: so o .gds.gz vai para o git (sim: sh macros/descompacta_gds.sh) --
+macros/**/*.gds
+
+# --- Resultados da VM: nao versionar o que o Genus/Xcelium refazem ------------
+xcelium.d/
+xcelium.shm/
+*.sdf
+**/work/fv*/
+**/work/*_db/
+*.history
+*.lock
+
+# --- LibreLane: as rodadas ficam fora; o que importa vai para resultados/ -----
+layout/runs/
+
+# --- Editor / sistema --------------------------------------------------------
+*~
+*.swp
+.DS_Store

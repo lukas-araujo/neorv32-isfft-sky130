@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2000" height="1518" viewBox="0 0 2000 1518" font-family="Roboto, Arial, sans-serif">
+<rect width="2000" height="1518" fill="#FFFFFF"/>
+<rect x="118" y="60" width="1764" height="1308" rx="36" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2"/>
+<path d="M 118 156 L 118 96 Q 118 60 154 60 L 1846 60 Q 1882 60 1882 96 L 1882 156 Z" fill="#F1EEE8" stroke="#8C8C8C" stroke-width="2"/>
+<text x="158" y="121.0" font-size="36" font-weight="500" fill="#444441">#</text>
+<text x="248" y="121.0" font-size="36" font-weight="500" fill="#444441">Etapa</text>
+<text x="1045" y="121.0" font-size="36" font-weight="500" fill="#444441">Ferramenta</text>
+<text x="1482" y="121.0" font-size="36" font-weight="500" fill="#444441">Onde</text>
+<text x="1662" y="121.0" font-size="36" font-weight="500" fill="#444441">Situação</text>
+<rect x="119" y="156" width="1762" height="84" fill="#F1EEE8"/>
+<line x1="118" y1="156" x2="1882" y2="156" stroke="#8C8C8C" stroke-width="2"/>
+<text x="158" y="210.0" font-size="34" fill="#444441">Front-end — RTL e simulação</text>
+<text x="158" y="300.0" font-size="36" fill="#444441">1</text>
+<text x="248" y="300.0" font-size="36" fill="#2C2C2A">Gerar as macros SRAM</text>
+<text x="1045" y="300.0" font-size="36" font-weight="500" fill="#2C2C2A">OpenRAM</text>
+<text x="1482" y="300.0" font-size="36" fill="#444441">Notebook</text>
+<rect x="1662" y="258" width="190" height="60" rx="30" fill="#E1F3EE" stroke="#0F6E56" stroke-width="2"/>
+<text x="1757" y="299.0" font-size="32" fill="#0B4F3E" text-anchor="middle">Feito</text>
+<line x1="148" y1="336" x2="1852" y2="336" stroke="#D9D5CC" stroke-width="2"/>
+<text x="158" y="396.0" font-size="36" fill="#444441">2</text>
+<text x="248" y="396.0" font-size="36" fill="#2C2C2A">Converter o NEORV32 para Verilog</text>
+<text x="1045" y="396.0" font-size="36" font-weight="500" fill="#2C2C2A">GHDL</text>
+<text x="1482" y="396.0" font-size="36" fill="#444441">Notebook</text>
+<rect x="1662" y="354" width="190" height="60" rx="30" fill="#E1F3EE" stroke="#0F6E56" stroke-width="2"/>
+<text x="1757" y="395.0" font-size="32" fill="#0B4F3E" text-anchor="middle">Feito</text>
+<line x1="148" y1="432" x2="1852" y2="432" stroke="#D9D5CC" stroke-width="2"/>
+<text x="158" y="492.0" font-size="36" fill="#444441">3</text>
+<text x="248" y="492.0" font-size="36" fill="#2C2C2A">RTL novo: memórias, conversores, ISFFT, topo</text>
+<text x="1045" y="492.0" font-size="36" font-weight="500" fill="#2C2C2A">Verilog</text>
+<text x="1482" y="492.0" font-size="36" fill="#444441">Notebook</text>
+<rect x="1662" y="450" width="190" height="60" rx="30" fill="#E1F3EE" stroke="#0F6E56" stroke-width="2"/>
+<text x="1757" y="491.0" font-size="32" fill="#0B4F3E" text-anchor="middle">Feito</text>
+<line x1="148" y1="528" x2="1852" y2="528" stroke="#D9D5CC" stroke-width="2"/>
+<text x="158" y="588.0" font-size="36" fill="#444441">4</text>
+<text x="248" y="588.0" font-size="36" fill="#2C2C2A">Firmware com DMA + SLINK</text>
+<text x="1045" y="588.0" font-size="36" font-weight="500" fill="#2C2C2A">riscv-none-elf-gcc</text>
+<text x="1482" y="588.0" font-size="36" fill="#444441">Notebook</text>
+<rect x="1662" y="546" width="190" height="60" rx="30" fill="#E1F3EE" stroke="#0F6E56" stroke-width="2"/>
+<text x="1757" y="587.0" font-size="32" fill="#0B4F3E" text-anchor="middle">Feito</text>
+<line x1="148" y1="624" x2="1852" y2="624" stroke="#D9D5CC" stroke-width="2"/>
+<text x="158" y="684.0" font-size="36" fill="#444441">5</text>
+<text x="248" y="684.0" font-size="36" fill="#2C2C2A">Simulação do chip (EVM igual à Kria)</text>
+<text x="1045" y="684.0" font-size="36" font-weight="500" fill="#2C2C2A">Icarus Verilog</text>
+<text x="1482" y="684.0" font-size="36" fill="#444441">Notebook</text>
+<rect x="1662" y="642" width="190" height="60" rx="30" fill="#E1F3EE" stroke="#0F6E56" stroke-width="2"/>
+<text x="1757" y="683.0" font-size="32" fill="#0B4F3E" text-anchor="middle">Feito</text>
+<rect x="119" y="720" width="1762" height="84" fill="#F1EEE8"/>
+<line x1="118" y1="720" x2="1882" y2="720" stroke="#8C8C8C" stroke-width="2"/>
+<text x="158" y="774.0" font-size="34" fill="#444441">Síntese e verificação</text>
+<text x="158" y="864.0" font-size="36" fill="#444441">6</text>
+<text x="248" y="864.0" font-size="36" fill="#2C2C2A">Síntese lógica</text>
+<text x="1045" y="864.0" font-size="36" font-weight="500" fill="#2C2C2A">Genus</text>
+<text x="1482" y="864.0" font-size="36" fill="#444441">VM</text>
+<rect x="1662" y="822" width="190" height="60" rx="30" fill="#EEEDFB" stroke="#534AB7" stroke-width="2"/>
+<text x="1757" y="863.0" font-size="32" fill="#3C3489" text-anchor="middle">Próximo</text>
+<line x1="148" y1="900" x2="1852" y2="900" stroke="#D9D5CC" stroke-width="2"/>
+<text x="158" y="960.0" font-size="36" fill="#444441">7</text>
+<text x="248" y="960.0" font-size="36" fill="#2C2C2A">Equivalência RTL × netlist</text>
+<text x="1045" y="960.0" font-size="36" font-weight="500" fill="#2C2C2A">Conformal LEC</text>
+<text x="1482" y="960.0" font-size="36" fill="#444441">VM</text>
+<rect x="1662" y="918" width="190" height="60" rx="30" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="1757" y="959.0" font-size="32" fill="#6B6B66" text-anchor="middle">A fazer</text>
+<line x1="148" y1="996" x2="1852" y2="996" stroke="#D9D5CC" stroke-width="2"/>
+<text x="158" y="1056.0" font-size="36" fill="#444441">8</text>
+<text x="248" y="1056.0" font-size="36" fill="#2C2C2A">Simulação pós-síntese</text>
+<text x="1045" y="1056.0" font-size="36" font-weight="500" fill="#2C2C2A">Xcelium</text>
+<text x="1482" y="1056.0" font-size="36" fill="#444441">VM</text>
+<rect x="1662" y="1014" width="190" height="60" rx="30" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="1757" y="1055.0" font-size="32" fill="#6B6B66" text-anchor="middle">A fazer</text>
+<rect x="119" y="1092" width="1762" height="84" fill="#F1EEE8"/>
+<line x1="118" y1="1092" x2="1882" y2="1092" stroke="#8C8C8C" stroke-width="2"/>
+<text x="158" y="1146.0" font-size="34" fill="#444441">Back-end — layout</text>
+<text x="158" y="1236.0" font-size="36" fill="#444441">9</text>
+<text x="248" y="1236.0" font-size="36" fill="#2C2C2A">Floorplan, place, CTS e roteamento</text>
+<text x="1045" y="1236.0" font-size="36" font-weight="500" fill="#2C2C2A">LibreLane (OpenROAD)</text>
+<text x="1482" y="1236.0" font-size="36" fill="#444441">Notebook</text>
+<rect x="1662" y="1194" width="190" height="60" rx="30" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="1757" y="1235.0" font-size="32" fill="#6B6B66" text-anchor="middle">A fazer</text>
+<line x1="148" y1="1272" x2="1852" y2="1272" stroke="#D9D5CC" stroke-width="2"/>
+<text x="158" y="1332.0" font-size="36" fill="#444441">10</text>
+<text x="248" y="1332.0" font-size="36" fill="#2C2C2A">DRC, LVS e GDSII</text>
+<text x="1045" y="1332.0" font-size="36" font-weight="500" fill="#2C2C2A">Magic · Netgen · KLayout</text>
+<text x="1482" y="1332.0" font-size="36" fill="#444441">Notebook</text>
+<rect x="1662" y="1290" width="190" height="60" rx="30" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="1757" y="1331.0" font-size="32" fill="#6B6B66" text-anchor="middle">A fazer</text>
+<text x="158" y="1448" font-size="34" fill="#444441">Se der tempo: STA com parasitas extraídos (Tempus) e potência (Joules).</text>
+</svg>
