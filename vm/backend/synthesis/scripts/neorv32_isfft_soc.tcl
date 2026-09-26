@@ -70,10 +70,11 @@ source ${SCRIPT_DIR}/common/tech.tcl
 # convertido para UM Verilog pelo GHDL (frontend/neorv32_asic.v, D14):
 # sem VHDL, sem biblioteca 'neorv32', sem ordem de analise.
 #
-# ⚠️ -define SRAM_LIB_VIEW e OBRIGATORIO.
-# Sem ele, sram4k_1rw/sram8k_1rw instanciam a view de SIMULACAO das
-# macros de 1 porta (33 bits de dado + spare_wen0), que nao casa com o
-# .lib (32 bits, sem spare_wen0). As macros 1rw1r nao dependem disto.
+# SEM -define SRAM_LIB_VIEW (rodada para o layout, L1 do DIARIO_GDSII).
+# O .lib das macros de 1 porta foi corrigido para 33 bits + spare_wen0
+# (macros/lib_33bits.py): RTL, .lib, .v e .lef tem a mesma interface, e o
+# netlist sai pronto para o LibreLane. No front-end o define existia porque
+# o .lib original tinha 32 bits.
 #
 # -language sv: igual ao projeto anterior. Conferido que nenhum nome do
 # RTL e palavra reservada de SystemVerilog.
@@ -82,7 +83,7 @@ set_db init_hdl_search_path "${FRONTEND_DIR} ${ISFFT_RTL_DIR}"
 
 source ${SCRIPT_DIR}/rtl_files.tcl
 
-read_hdl -language sv -define SRAM_LIB_VIEW $RTL_FILES
+read_hdl -language sv $RTL_FILES
 
 #-----------------------------------------------------------------------------
 # Elaborate
@@ -131,6 +132,30 @@ syn_map ${HDL_NAME}
 
 set_db syn_opt_effort medium
 syn_opt
+
+#-----------------------------------------------------------------------------
+# Celulas de amarracao (tie cells) -- L2 do DIARIO_GDSII
+#
+# Sem isto o netlist sai com constantes soltas ("1'b0", "1'b1"): na rodada
+# do front-end eram 6 (web0 das 1rw1r, linha sobressalente das 1rw, 2 D de
+# flip-flop). Simulador e LEC aceitam; o LAYOUT nao -- constante precisa de
+# uma celula ligada a VPWR/VGND. No sky130 e a conb_1 (saida HI = 1 e
+# LO = 0 na mesma celula).
+#
+# -max_fanout 1: uma celula por pino, perto de quem usa (o posicionador
+# nao precisa puxar um fio de constante pelo chip).
+#
+# ⚠️ Primeira vez com a conb_1 no Genus (celula com 2 saidas). Se der erro,
+# o 'catch' nao deixa o -abort_on_error matar a sintese: o netlist sai com
+# as constantes soltas e o run_first.tcl mostra. Ver DIARIO_GDSII.
+#-----------------------------------------------------------------------------
+if {[catch {add_tieoffs -high sky130_fd_sc_hd__conb_1 -low sky130_fd_sc_hd__conb_1 \
+                       -max_fanout 1 -all -verbose ${HDL_NAME}} msg]} {
+    puts "  "
+    puts "!!! add_tieoffs FALHOU: $msg"
+    puts "!!! O netlist vai sair com constantes soltas. Anote a mensagem no DIARIO_GDSII."
+    puts "  "
+}
 
 #-----------------------------------------------------------------------------
 # Relatorios

@@ -58,8 +58,8 @@ library (sram_8kbyte_1rw_32x2048_8_TT_1p8V_25C_lib){
     type (data){
     base_type : array;
     data_type : bit;
-    bit_width : 32;
-    bit_from : 31;
+    bit_width : 33;
+    bit_from : 32;
     bit_to : 0;
     }
 
@@ -83,7 +83,7 @@ cell (sram_8kbyte_1rw_32x2048_8){
     memory(){ 
     type : ram;
     address_width : 12;
-    word_width : 32;
+    word_width : 33;
     }
     interface_timing : true;
     dont_use  : true;
@@ -113,7 +113,7 @@ cell (sram_8kbyte_1rw_32x2048_8){
             address : addr0; 
             clocked_on  : clk0; 
         }
-        pin(din0[31:0]){
+        pin(din0[32:0]){
         timing(){ 
             timing_type : setup_rising; 
             related_pin  : "clk0"; 
@@ -152,7 +152,7 @@ cell (sram_8kbyte_1rw_32x2048_8){
         memory_read(){ 
             address : addr0; 
         }
-        pin(dout0[31:0]){
+        pin(dout0[32:0]){
         timing(){ 
             timing_sense : non_unate; 
             related_pin : "clk0"; 
@@ -289,6 +289,40 @@ cell (sram_8kbyte_1rw_32x2048_8){
     }
 
     pin(web0){
+        direction  : input; 
+        capacitance : 0.006889999999999999;  
+        timing(){ 
+            timing_type : setup_rising; 
+            related_pin  : "clk0"; 
+            rise_constraint(CONSTRAINT_TABLE) {
+            values("0.103, 0.103, 0.103",\
+                   "0.103, 0.103, 0.103",\
+                   "0.103, 0.103, 0.103");
+            }
+            fall_constraint(CONSTRAINT_TABLE) {
+            values("0.103, 0.103, 0.103",\
+                   "0.103, 0.103, 0.103",\
+                   "0.103, 0.103, 0.103");
+            }
+        }
+        timing(){ 
+            timing_type : hold_rising; 
+            related_pin  : "clk0"; 
+            rise_constraint(CONSTRAINT_TABLE) {
+            values("-0.056, -0.056, -0.056",\
+                   "-0.056, -0.056, -0.056",\
+                   "-0.056, -0.056, -0.056");
+              }
+            fall_constraint(CONSTRAINT_TABLE) {
+            values("-0.056, -0.056, -0.056",\
+                   "-0.056, -0.056, -0.056",\
+                   "-0.056, -0.056, -0.056");
+            }
+        }
+    }
+
+
+    pin(spare_wen0){
         direction  : input; 
         capacitance : 0.006889999999999999;  
         timing(){ 

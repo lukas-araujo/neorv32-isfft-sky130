@@ -21,7 +21,7 @@ Depois, **um bloco por vez** (comente o 1, descomente o próximo):
 | Bloco | O quê | Esperado |
 |---|---|---|
 | 0 | Simulação RTL no Xcelium (opcional, antes do 1) | `[TB] PASSOU` |
-| 1 | Síntese no Genus | macros: 4 linhas no `_gates.rpt`; células evitadas: 0 |
+| 1 | Síntese no Genus | macros: 4 linhas no `_gates.rpt`; células evitadas: 0; constantes soltas: 0; `conb_1` > 0; `spare_wen0` nas 2 macros de 1 porta |
 | 2 | Simulação pós-síntese no Xcelium | `soma = RTL` nas 3 matrizes e `[TB] PASSOU` |
 | 3a / 3b | LEC no Conformal (dofile do Genus / escrito à mão) | 0 non-equivalent |
 
@@ -33,16 +33,20 @@ Depois, **um bloco por vez** (comente o 1, descomente o próximo):
 | `frontend/isfft/` | Núcleo da ISFFT (Spiral + FSMs), igual ao da Kria |
 | `sw/isfft_evm/` | Firmware (3 matrizes do notebook da Kria) + `chk_rtl.txt` (somas da simulação RTL) |
 | `sw/hello/` | Firmware de teste da IMEM inteira (`+BAUD=115200`) |
-| `tech/lib/` | `.lib` das células sky130 (TT) e das 4 macros (rodada back-end) |
+| `tech/lib/` | `.lib` das células sky130 (TT) e das 4 macros (rodada back-end; as 2 de 1 porta corrigidas para 33 bits) |
 | `tech/lef/` | LEF das células e das 4 macros (para o layout; o Genus não usa) |
 | `tech/verilog/` | Modelos de simulação: células sky130 (**1 linha corrigida**, ver abaixo) e macros OpenRAM |
-| `backend/synthesis/scripts/` | `run_first.tcl`, script do Genus, `common/`, dofile do LEC, testbench, adaptadores das macros |
+| `backend/synthesis/scripts/` | `run_first.tcl`, script do Genus, `common/`, dofile do LEC, testbench, modelo da IMEM (`imem_sim_model.v`) |
 | `backend/synthesis/constraints/` | SDC (50 MHz) |
 
 ## Pontos que já custaram tempo (não mude sem ler o DIARIO)
 
-- **`-define SRAM_LIB_VIEW`** no Genus, no Conformal e na simulação: as
-  macros de 1 porta têm 32 bits no `.lib` e 33 no `.v`.
+- **Macros de 1 porta com 33 bits em tudo** (desde a rodada para o
+  layout, `DIARIO_GDSII` L1): o `.lib` da OpenRAM tinha 32 bits e foi
+  corrigido por `macros/lib_33bits.py`. O antigo `-define SRAM_LIB_VIEW`
+  **não existe mais** — se aparecer em algum comando, está errado.
+- **Constantes em `conb_1`** (`add_tieoffs` no script do Genus, L2): o
+  layout não aceita `1'b0`/`1'b1` soltos no netlist.
 - **`-define FUNCTIONAL`** na simulação pós-síntese: o
   `sky130_fd_sc_hd.v` não tem blocos `specify`; sem `FUNCTIONAL` todo
   flip-flop fica em X (era o X do projeto anterior).
@@ -51,13 +55,13 @@ Depois, **um bloco por vez** (comente o 1, descomente o próximo):
 - **Sem `-v`** no arquivo de células; **`restore_nettype.v`** logo depois dele.
 - **Sem simulação com SDF**: sem `specify` não há onde anotar atraso.
 - O programa entra pela **macro da IMEM** (`+IMEM_HEX`), dentro do
-  adaptador — o testbench não depende dos nomes do netlist.
+  `imem_sim_model.v` — o testbench não depende dos nomes do netlist.
 
 ## Conferido antes de vir para a VM (na nuvem, com ferramentas abertas)
 
 `sim/run_gls_yosys.sh` (roda também no notebook):
 
-- RTL desta pasta no Icarus, com os mesmos adaptadores e o mesmo
+- RTL desta pasta no Icarus, com os mesmos modelos de memória e o mesmo
   testbench: `PASSOU` (somas = RTL).
 - Síntese do mesmo RTL com Yosys nas mesmas células sky130 (mesmas
   células evitadas) + simulação do netlist no Icarus com `FUNCTIONAL`:

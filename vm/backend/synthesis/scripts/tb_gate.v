@@ -4,10 +4,10 @@
 // Projeto: NEORV32 + ISFFT em ASIC (sky130)
 //
 // O MESMO testbench roda duas vezes (ver run_first.tcl):
-//   0) RTL      : frontend/*.v com +define+SRAM_LIB_VIEW
+//   0) RTL      : frontend/*.v
 //   2) netlist  : deliverables/<design>.v + celulas sky130
-// As duas usam os mesmos modelos de memoria (sram_lib_view_model.v), entao
-// a unica diferenca entre elas e o circuito sob teste.
+// As duas usam os mesmos modelos de memoria (imem_sim_model.v + .v da
+// OpenRAM), entao a unica diferenca entre elas e o circuito sob teste.
 //
 //-----------------------------------------------------------------------------
 // O QUE ELE VERIFICA
@@ -28,7 +28,7 @@
 // PLUSARGS
 //-----------------------------------------------------------------------------
 //   +IMEM_HEX=<arq>   programa (lido pelo modelo da IMEM, ver
-//                     sram_lib_view_model.v)            -- obrigatorio
+//                     imem_sim_model.v)                 -- obrigatorio
 //   +CHK_FILE=<arq>   somas esperadas, 1 por linha, hex -- isfft_evm
 //   +BAUD=<n>         baud da UART do firmware (isfft_evm: 1000000,
 //                     padrao; hello: 115200)

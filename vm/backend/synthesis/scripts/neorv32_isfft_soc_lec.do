@@ -33,10 +33,10 @@ read library -liberty -statetable -both \
     @PROJECT_DIR@/tech/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 
 //-----------------------------------------------------------------------------
-// GOLDEN: o RTL, com a MESMA macro de pre-processador da sintese
-// (SRAM_LIB_VIEW: interface de 32 bits das macros de 1 porta)
+// GOLDEN: o RTL, lido como na sintese (sem defines desde a rodada para o
+// layout: .lib das macros de 1 porta com 33 bits -- DIARIO_GDSII, L1)
 //-----------------------------------------------------------------------------
-read design -verilog2k -golden -lastmod -define SRAM_LIB_VIEW \
+read design -verilog2k -golden -lastmod \
     @PROJECT_DIR@/frontend/*.v \
     @PROJECT_DIR@/frontend/isfft/*.v
 

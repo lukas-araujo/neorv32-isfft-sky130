@@ -230,28 +230,121 @@ descartável (`.gds`, `build/`, `*.elf`, `*.sdf`, `layout/runs/` ignorados;
 
 ---
 
+## 2026-09-26 (2ª sessão) — Rodada "para o layout": `.lib` de 33 bits e tie cells
+
+**Decisão do Lukas: caminho A** (L4 ✅): o netlist do Genus vai para o
+LibreLane. Esta sessão prepara a ressíntese na VM.
+
+### L1 — `.lib` das macros de 1 porta com 33 bits
+
+Script `macros/lib_33bits.py` (idempotente, `--check` só confere). No
+próprio `.lib` de `macros/<m>/`; o original fica no histórico do git.
+
+| Mudança | Antes | Depois |
+|---|---|---|
+| `type (data)` | `bit_width 32`, `bit_from 31` | 33, 32 |
+| `memory()` | `word_width 32` | 33 |
+| barramentos | `pin(din0[31:0])`, `pin(dout0[31:0])` | `[32:0]` (bit 32 herda capacitância e arcos) |
+| `spare_wen0` | não existia | cópia do `pin(web0)`: mesma capacitância, mesmo setup/hold contra `clk0` |
+
+**Por que copiar do `web0`:** o `spare_wen0` é a habilitação de escrita da
+coluna sobressalente, controlado pela mesma lógica de entrada que o
+`web0`. O `.lib` é de modelo analítico (setup 0,103 ns em todos os pinos),
+então não há número "mais certo" para inventar.
+
+Consequências no projeto:
+- `rtl/mem/sram4k_1rw.v` e `sram8k_1rw.v`: **ramo `SRAM_LIB_VIEW`
+  removido**. Com o `.lib` novo ele instanciaria portas que não existem.
+  Interface única de 33 bits, bit 32 e `spare_wen0` em 0.
+- `sram_lib_view_model.v` **apagado**. O que ele fazia além de converter
+  32↔33 (carregar o programa pela `+IMEM_HEX`) foi para o
+  `imem_sim_model.v`. A DMEM passa a usar o `.v` da OpenRAM direto.
+- `-define SRAM_LIB_VIEW` retirado de: script do Genus, dofile do LEC
+  escrito à mão, blocos 0 e 2 do `run_first.tcl`, `sim/run_gls_yosys.sh`.
+  O dofile que o Genus escreve herda os defines do `read_hdl`, então sai
+  sem ele sozinho.
+
+### L2 — Tie cells no Genus
+
+`add_tieoffs -high conb_1 -low conb_1 -max_fanout 1 -all` depois do
+`syn_opt`, dentro de um `catch`: é a primeira vez com a `conb_1` (célula
+de duas saídas) no Genus. Se falhar, a síntese não morre (o
+`-abort_on_error` pegaria), a mensagem aparece no log e o netlist sai com
+as constantes soltas. A conferência do bloco 1 agora mostra:
+
+```
+--- constantes soltas no netlist (esperado: 0) e celulas conb_1 (esperado: > 0) ---
+--- macros de 1 porta com 33 bits (esperado: 2 linhas com spare_wen0) ---
+```
+
+`conb_1` no `.lib` do sky130: `HI` = "1", `LO` = "0", área 3,75 µm², sem
+`dont_use`.
+
+### Conferência na nuvem (antes da VM)
+
+| Bancada | Resultado |
+|---|---|
+| `python3 macros/lib_33bits.py --check` | ok nas 2 macros |
+| `sim/monta_vm.sh` | pasta montada, 99 arquivos, 66 RTL |
+| `MODO=rtl sim/run_gls_yosys.sh` (RTL de 33 bits + `imem_sim_model.v` + `tb_gate`) | ✅ **somas = RTL**, 188.194 ciclos — igual ao front-end |
+| Síntese Yosys com o `.lib` novo | 4 macros, 0 células evitadas, **0 constantes soltas** (`hilomap` → `conb_1`), **`spare_wen0` ligado nas 2** |
+| Simulação de portas (Yosys + Icarus, `FUNCTIONAL`) | ✅ **3 somas = RTL**, contadores 3/3/0, `RESULTADO: OK`, 188.195 ciclos (igual ao front-end); 38 min |
+
+O Yosys lê o `.lib` só como caixa-preta (`read_liberty -lib`): prova que a
+interface casa, não que o Genus aceita o arquivo. Essa prova é o bloco 1
+na VM.
+
+### Na VM, na ordem
+
+1. Montar a pasta: `bash sim/monta_vm.sh` (notebook, depois do
+   `git pull` e do `sim/convert.sh`). Substituir a pasta da VM inteira.
+2. Bloco 1 (Genus). Conferir: 4 macros, 0 evitadas, **0 constantes soltas,
+   `conb_1` > 0, `spare_wen0` nas 2 macros**, slack positivo.
+3. Bloco 2 (pós-síntese): somas = RTL (`0xeb88508e`, `0xba7fc58e`,
+   `0xb29c0211`) e `[TB] PASSOU`.
+4. Bloco 3a (LEC): 0 non-equivalent. Esperado: as `conb_1` novas não criam
+   ponto de comparação (são constantes nos dois lados).
+5. Trazer de volta para `resultados/2026-09-2x_sintese_layout/`: `reports/`,
+   `deliverables/` (sem o `.sdf`) e os logs do Genus, do Xcelium e do LEC.
+
+Comparar com a rodada do front-end: área (+ as `conb_1`), slack,
+contagem de células. Diferença grande = investigar antes do layout.
+
+### Decisões desta sessão
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L1 | `.lib` 1rw com 33 bits + `spare_wen0` (`macros/lib_33bits.py`) | ✅ | Feito; Yosys liga os 33 bits e o `spare_wen0` |
+| L2 | Tie cells `conb_1` no Genus (`add_tieoffs`, com `catch`) | 🟡 | Falta rodar no Genus |
+| L4 | Netlist do layout = Genus (caminho A) | ✅ | Decisão do Lukas |
+| L9 | `SRAM_LIB_VIEW` extinto; `imem_sim_model.v` substitui o adaptador | ✅ | Interface única de 33 bits em RTL, netlist, `.v`, `.lib`, `.lef` |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
 |---|---|---|---|
-| L1 | `.lib` 1rw com 33 bits + `spare_wen0` | 🟡 | 2026-09-26 |
+| L1 | `.lib` 1rw com 33 bits + `spare_wen0` | ✅ | 2026-09-26 |
 | L2 | Tie cells no Genus | 🟡 | 2026-09-26 |
 | L3 | DRC/LVS com macros como caixa-preta | 🟡 | 2026-09-26 |
-| L4 | Netlist do layout = Genus | 🟡 | 2026-09-26 |
+| L4 | Netlist do layout = Genus | ✅ | 2026-09-26 |
 | L5 | Floorplan 2,0 × 1,5 mm | 🟡 | 2026-09-26 |
 | L6 | Sem padring | 🟡 | 2026-09-26 |
 | L7 | Diário próprio, prefixo L | ✅ | 2026-09-26 |
 | L8 | Repositório git, donos por pasta | ✅ | 2026-09-26 |
+| L9 | `SRAM_LIB_VIEW` extinto; `imem_sim_model.v` | ✅ | 2026-09-26 |
 
 ---
 
 ## Pendências abertas
 
-- [ ] Decidir L4 (Genus × Yosys)
+- [x] ~~Decidir L4~~ — Genus (caminho A)
+- [ ] Rodada para o layout na VM (blocos 1, 2, 3a) e resultados em `resultados/`
 - [ ] Versão do LibreLane, forma de instalação, versão do PDK, RAM/núcleos do notebook
 - [ ] Confirmar L6 (sem padring)
 - [x] ~~Decidir a organização entre chats~~ — git (L8)
-- [ ] Ligar o GitHub à conta do Claude e fazer o primeiro push
+- [x] ~~Ligar o GitHub e fazer o primeiro push~~ — `0086abd`
 - [ ] Notebook: trocar `~/Projects/asic` pelo clone do repositório
 - [ ] Localizar os 2 erros de DRC das macros com mux de coluna (herdado, FE)
 - [ ] `.lib` das macros com `internal_power` fora de escala (herdado, FE 14ª sessão)

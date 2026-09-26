@@ -34,19 +34,18 @@ SCR="$VM/backend/synthesis/scripts"
 T="$VM/tech"
 
 # Modelos das macros: o mesmo que o prepara_modelos do run_first.tcl
-for m in sram_8kbyte_1rw_32x2048_8 sram_4kbyte_1rw_32x1024_8; do
-  sed -e "s/module ${m}(/module ${m}_beh(/" -e 's/parameter VERBOSE = 1 ;/parameter VERBOSE = 0 ;/' \
-      "$T/verilog/${m}.v" > "$B/modelos/${m}_beh.v"
-done
-for m in sram_1rw1r_64x256 sram_1rw1r_64x64_wpr2; do
+m=sram_8kbyte_1rw_32x2048_8
+sed -e "s/module ${m}(/module ${m}_beh(/" -e 's/parameter VERBOSE = 1 ;/parameter VERBOSE = 0 ;/' \
+    "$T/verilog/${m}.v" > "$B/modelos/${m}_beh.v"
+for m in sram_4kbyte_1rw_32x1024_8 sram_1rw1r_64x256 sram_1rw1r_64x64_wpr2; do
   sed -e 's/parameter VERBOSE = 1 ;/parameter VERBOSE = 0 ;/' "$T/verilog/${m}.v" > "$B/modelos/${m}.v"
 done
-MODELOS="$SCR/sram_lib_view_model.v $B/modelos/*.v"
+MODELOS="$SCR/imem_sim_model.v $B/modelos/*.v"
 ARGS="+IMEM_HEX=$VM/sw/isfft_evm/neorv32_raw_exe.hex +CHK_FILE=$VM/sw/isfft_evm/chk_rtl.txt"
 
 if [ "$MODO" = rtl ]; then
-  echo "=== tb_gate sobre o RTL (views do .lib) ==="
-  iverilog -g2005 -DSRAM_LIB_VIEW -o "$B/rtl.vvp" "$VM"/frontend/*.v "$VM"/frontend/isfft/*.v \
+  echo "=== tb_gate sobre o RTL ==="
+  iverilog -g2005 -o "$B/rtl.vvp" "$VM"/frontend/*.v "$VM"/frontend/isfft/*.v \
     $MODELOS "$SCR/tb_gate.v" 2> "$B/rtl.compile.log" || { cat "$B/rtl.compile.log"; exit 1; }
   vvp -n "$B/rtl.vvp" $ARGS | grep --line-buffered -E "^\[" | tee "$B/rtl.log"
   grep -q "\[TB\] PASSOU" "$B/rtl.log"; exit $?
@@ -61,7 +60,7 @@ LIB=sky130_fd_sc_hd__tt_025C_1v80.lib
 EVITA="-dont_use *__sdf* -dont_use *__sedf* -dont_use *__sdlclkp* -dont_use *__lpflow_* -dont_use *__probe* -dont_use *__macro_sparecell*"
 ( cd "$B"
   {
-    echo "read_verilog -DSRAM_LIB_VIEW $(cd "$B" && ls src/*.v | tr '\n' ' ')"
+    echo "read_verilog $(cd "$B" && ls src/*.v | tr '\n' ' ')"
     for l in sram_*_TT_1p8V_25C.lib $LIB; do echo "read_liberty -lib $l"; done
     echo "hierarchy -check -top asic_top"
     echo "synth -top asic_top"
@@ -80,6 +79,8 @@ EVITA="-dont_use *__sdf* -dont_use *__sedf* -dont_use *__sdlclkp* -dont_use *__l
 grep "Chip area for top module" "$B/stat.txt" | sed 's/^ */  logica (sem macros): /'
 echo "  macros no netlist: $(grep -cE '^\s*sram_(8kbyte|4kbyte|1rw1r)\S* ' "$B/netlist_yosys.v") (esperado 4)"
 echo "  celulas evitadas:  $(grep -cE 'sky130_fd_sc_hd__(sdf|sedf|sdlclkp|lpflow|probe)' "$B/netlist_yosys.v") (esperado 0)"
+echo "  constantes soltas: $(grep -oE "1'b[01]" "$B/netlist_yosys.v" | wc -l) (esperado 0)"
+echo "  spare_wen0 ligado: $(grep -c '\.spare_wen0' "$B/netlist_yosys.v") (esperado 2)"
 
 #-----------------------------------------------------------------------------
 # Simulacao de portas: mesma ordem e mesmos defines do bloco 2 do run_first
