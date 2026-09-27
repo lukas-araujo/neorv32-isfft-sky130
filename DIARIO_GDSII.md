@@ -359,9 +359,13 @@ Decisão: **o LibreLane usa o PDK dele, numa `PDK_ROOT` separada**
 (`~/Projects/pdks/librelane`). Motivos:
 - O LibreLane 3 espera arquivos e configurações de uma versão recente;
   forçar o PDK de 2022 é pedir erro difícil de achar.
-- O `ciel` troca a versão **habilitada** da `PDK_ROOT` onde baixa. Se o
-  LibreLane baixasse na `~/Projects/pdks`, a OpenRAM passaria a gerar
-  macro com outro PDK sem aviso.
+- Pasta separada deixa claro qual PDK é de quem. (Primeiro escrevi que o
+  LibreLane trocaria a versão **habilitada** e quebraria a OpenRAM.
+  Conferido no código, `librelane/flows/cli.py`: ele só faz `ciel.fetch`
+  da versão fixada e usa a pasta dela direto, **sem `enable`**. Não
+  quebraria; a separação é por organização. A `PDK_ROOT` vem da opção
+  `--pdk-root` ou da variável de ambiente `PDK_ROOT`; sem nenhuma, vai
+  para `~/.ciel`.)
 - As macros são autocontidas (GDS + LEF próprios); a célula padrão
   `sky130_fd_sc_hd` tem os mesmos nomes nas duas versões, então o netlist
   do Genus liga nas células do PDK novo.
@@ -394,7 +398,7 @@ vir do Genus (L2).
 
 | # | Decisão | Status | Motivo |
 |---|---|---|---|
-| L10 | Layout com o PDK fixado pelo LibreLane (`8afc8346`) em `PDK_ROOT` separada; OpenRAM segue com o de 2022 | 🟡 | Não quebrar a OpenRAM; LibreLane 3 com o PDK que ele testa |
+| L10 | Layout com o PDK fixado pelo LibreLane (`8afc8346`) em `PDK_ROOT` separada; OpenRAM segue com o de 2022 | 🟡 | LibreLane 3 com o PDK que ele testa; cada PDK na sua pasta |
 | L11 | LibreLane 3.0.14 via Nix, clone em `~/Projects/librelane` | 🟡 | Instalação recomendada; traz todas as ferramentas do layout |
 | L12 | `CLAUDE.md` no repositório: regras de trabalho e de git para qualquer chat | ✅ | Pedido do Lukas: o próximo chat precisa saber como o git funciona |
 
