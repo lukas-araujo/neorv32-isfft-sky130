@@ -1,0 +1,581 @@
+TOOL:	xrun(64)	23.09-s013: Started on Sep 27, 2026 at 11:10:06 -03
+xrun(64): 23.09-s013: (c) Copyright 1995-2024 Cadence Design Systems, Inc.
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/asic_top.v
+	module worklib.asic_top:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft_axi_v4.v
+	module worklib.isfft_axi_v4:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/neorv32_asic.v
+	module worklib.neorv32_cpu_alu_muldiv_1_3f29546453678b855931c174a97d6c0894b8f546:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_cpu_alu_shifter_5ba93c9db0cff93f52b521d7420e43f6eda2784f:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_prim_cnt_64:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_cpu_decompressor_1489f923c4dca729178b3e3233458550d8dddf29:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_cpu_frontend_ipb:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_prim_fifo_6_37_5ba93c9db0cff93f52b521d7420e43f6eda2784f:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_prim_fifo_0_8_5ba93c9db0cff93f52b521d7420e43f6eda2784f:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_bus_reg_9159cb8bcee7fcb95582f140960cdae72788d326:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_bus_reg_1489f923c4dca729178b3e3233458550d8dddf29:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_prim_fifo_3_32_5ba93c9db0cff93f52b521d7420e43f6eda2784f:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_cpu_lsu_0_5ba93c9db0cff93f52b521d7420e43f6eda2784f:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_cpu_alu_1_9a68e0f891a604eadc414df454e914fb8b2693a9:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_cpu_regfile_5_2:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_cpu_counters_0_64_3c585604e87f855973731fea83e21fab9392d2fc:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_cpu_control_0_6e1715dc6a0962a61af16fbd117f643ce454c2ab:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_cpu_frontend_0_9508e90548b0440a4a61e5743b76c1e309b23b7f:v
+		errors: 0, warnings: 0
+	module worklib.xbus2axi4_bridge_fifo_0_33:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_sysinfo_16_2048_1_50000000_2_8192_4096_4_4_64_f2a9bd9c2be8c4b6dc9af6c11ec3f0e85d42c707:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_slink_64_64:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_uart_1_1:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_bus_io_switch_65536_36f1dd00ff2da0b7a78b5a45338283f7bc564c06:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_xbus_5ba93c9db0cff93f52b521d7420e43f6eda2784f:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_bus_gateway_8192_16_4096_16_268435456_2048_2097152_16_2048_bd50bc0f8960043decfaeea03012348ae010fe69:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_bus_switch_29e2dcfbb16f63bb0254df7585a15bb6fb5e927d:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_dma_8:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_bus_switch_2547cc736e951fa4919853c43ae890861a3b3264:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_cpu_0_1_2_0_4_0_64_0_5f0cd1eaae4e12dfd2e4412599dec3cdb351cf20:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_sys_clock:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_sys_reset:v
+		errors: 0, warnings: 0
+	module worklib.xbus2axi4_bridge_4_5ba93c9db0cff93f52b521d7420e43f6eda2784f:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_top_50000000_2_0_1_2_0_4_0_64_8192_4096_4_4_64_2048_0_1_1_1_1_1_1_1_1_1_0_1_3_5_64_1_0_1_8_64_64_1_5ee261d56cec37c6c6af13afd96c498effd8310f:v
+		errors: 0, warnings: 0
+	module worklib.neorv32_asic:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/neorv32_dmem.v
+	module worklib.neorv32_dmem:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/neorv32_imem.v
+	module worklib.neorv32_imem:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/sram4k_1rw.v
+	module worklib.sram4k_1rw:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/sram8k_1rw.v
+	module worklib.sram8k_1rw:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/stream_32to64.v
+	module worklib.stream_32to64:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/stream_64to32.v
+	module worklib.stream_64to32:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/addfxp.v
+	module worklib.addfxp:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock40889.v
+	module worklib.codeBlock40889:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock40973.v
+	module worklib.codeBlock40973:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock41154.v
+	module worklib.codeBlock41154:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock41237.v
+	module worklib.codeBlock41237:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock41426.v
+	module worklib.codeBlock41426:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock6811.v
+	module worklib.codeBlock6811:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock6895.v
+	module worklib.codeBlock6895:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock7076.v
+	module worklib.codeBlock7076:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock7159.v
+	module worklib.codeBlock7159:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock7348.v
+	module worklib.codeBlock7348:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D2_41415.v
+	module worklib.D2_41415:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D2_7337.v
+	module worklib.D2_7337:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D4_41403.v
+	module worklib.D4_41403:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D4_7325.v
+	module worklib.D4_7325:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D6_41145.v
+	module worklib.D6_41145:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D6_7067.v
+	module worklib.D6_7067:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D8_41137.v
+	module worklib.D8_41137:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D8_7059.v
+	module worklib.D8_7059:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/DirSum_41151.v
+	module worklib.DirSum_41151:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/DirSum_41423.v
+	module worklib.DirSum_41423:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/DirSum_7073.v
+	module worklib.DirSum_7073:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/DirSum_7345.v
+	module worklib.DirSum_7345:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/fft_1d_top.v
+	module worklib.fft_1d_top:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/ifft_1d_top.v
+	module worklib.ifft_1d_top:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray4_40968.v
+	module worklib.memArray4_40968:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray4_6890.v
+	module worklib.memArray4_6890:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_40885.v
+	module worklib.memArray8_40885:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_41233.v
+	module worklib.memArray8_41233:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_41505.v
+	module worklib.memArray8_41505:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_6807.v
+	module worklib.memArray8_6807:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_7155.v
+	module worklib.memArray8_7155:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_7427.v
+	module worklib.memArray8_7427:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memMod.v
+	module worklib.memMod:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/multfix.v
+	module worklib.multfix:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm40885.v
+	module worklib.perm40885:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm40968.v
+	module worklib.perm40968:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm41233.v
+	module worklib.perm41233:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm41505.v
+	module worklib.perm41505:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm6807.v
+	module worklib.perm6807:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm6890.v
+	module worklib.perm6890:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm7155.v
+	module worklib.perm7155:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm7427.v
+	module worklib.perm7427:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc40887.v
+	module worklib.rc40887:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc40970.v
+	module worklib.rc40970:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc41235.v
+	module worklib.rc41235:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc41507.v
+	module worklib.rc41507:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc6809.v
+	module worklib.rc6809:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc6892.v
+	module worklib.rc6892:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc7157.v
+	module worklib.rc7157:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc7429.v
+	module worklib.rc7429:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/read_fsm.v
+	module worklib.read_fsm:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/shiftRegFIFO.v
+	module worklib.shiftRegFIFO:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/subfxp.v
+	module worklib.subfxp:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/switch.v
+	module worklib.switch:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/top_isfft.v
+	module worklib.top_isfft:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/write_fsm.v
+	module worklib.write_fsm:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/synthesis/scripts/imem_sim_model.v
+	module worklib.sram_8kbyte_1rw_32x2048_8:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/synthesis/sim_rtl/sram_8kbyte_1rw_32x2048_8_beh.v
+	module worklib.sram_8kbyte_1rw_32x2048_8_beh:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/synthesis/sim_rtl/sram_4kbyte_1rw_32x1024_8.v
+	module worklib.sram_4kbyte_1rw_32x1024_8:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/synthesis/sim_rtl/sram_1rw1r_64x256.v
+	module worklib.sram_1rw1r_64x256:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/synthesis/sim_rtl/sram_1rw1r_64x64_wpr2.v
+	module worklib.sram_1rw1r_64x64_wpr2:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/synthesis/scripts/tb_gate.v
+	module worklib.tb_gate:v
+		errors: 0, warnings: 0
+	Elaborating the design hierarchy:
+		Caching library 'worklib' ....... Done
+	Top level design units:
+		tb_gate
+	Building instance overlay tables: .................... Done
+	Generating native compiled code:
+		worklib.sram_1rw1r_64x256:v <0x3e7f85dd>
+			streams:   6, words:  4635
+		worklib.memArray8_7427:v <0x21418e77>
+			streams:   3, words:   540
+		worklib.perm7427:v <0x3ba051db>
+			streams:  32, words:  9447
+		worklib.rc7429:v <0x79afddd1>
+			streams:   4, words:   760
+		worklib.codeBlock7348:v <0x4c12892b>
+			streams:  16, words:  3395
+		worklib.D2_7337:v <0x6cd45a71>
+			streams:   3, words:  1213
+		worklib.D4_7325:v <0x75c2a104>
+			streams:   3, words:  1094
+		worklib.codeBlock7159:v <0x46ab54cf>
+			streams:  13, words:  8159
+		worklib.DirSum_7345:v <0x3df54afe>
+			streams:   3, words:   872
+		worklib.memArray8_7155:v <0x5cb8b884>
+			streams:   3, words:   540
+		worklib.perm7155:v <0x3da3ed27>
+			streams:  32, words:  9452
+		worklib.rc7157:v <0x0637cee7>
+			streams:   4, words:   760
+		worklib.codeBlock7076:v <0x07894ade>
+			streams:  16, words:  3395
+		worklib.D6_7067:v <0x19a7d4fd>
+			streams:   3, words:   935
+		worklib.D8_7059:v <0x42a49c14>
+			streams:   3, words:   935
+		worklib.codeBlock6895:v <0x17f81b4a>
+			streams:  13, words:  8177
+		worklib.DirSum_7073:v <0x7a63e0d5>
+			streams:   3, words:   881
+		worklib.memArray4_6890:v <0x16b58a37>
+			streams:   1, words:   238
+		worklib.perm6890:v <0x70043355>
+			streams:  31, words:  8661
+		worklib.rc6892:v <0x1ad94f92>
+			streams:   4, words:   760
+		worklib.codeBlock6811:v <0x1d112ee3>
+			streams:  16, words:  3395
+		worklib.memArray8_6807:v <0x574b85f5>
+			streams:   3, words:   540
+		worklib.perm6807:v <0x39751d09>
+			streams:  32, words:  9452
+		worklib.rc6809:v <0x79232d51>
+			streams:   4, words:   760
+		worklib.fft_1d_top:v <0x66e0cc7b>
+			streams:   8, words:  1010
+		worklib.read_fsm:v <0x740804ae>
+			streams:   9, words:  3782
+		worklib.write_fsm:v <0x7750fcb8>
+			streams:   7, words:  3066
+		worklib.memArray8_41505:v <0x488a7ec8>
+			streams:   3, words:   540
+		worklib.perm41505:v <0x46832d98>
+			streams:  32, words:  9447
+		worklib.rc41507:v <0x3687e2ef>
+			streams:   4, words:   760
+		worklib.codeBlock41426:v <0x60b7a2bd>
+			streams:  16, words:  3395
+		worklib.D2_41415:v <0x0bd8d7d6>
+			streams:   3, words:  1213
+		worklib.D4_41403:v <0x524395e6>
+			streams:   3, words:  1094
+		worklib.codeBlock41237:v <0x292edeff>
+			streams:  13, words:  8159
+		worklib.DirSum_41423:v <0x76c8d1b2>
+			streams:   3, words:   872
+		worklib.memArray8_41233:v <0x736acced>
+			streams:   3, words:   540
+		worklib.perm41233:v <0x4ef8288a>
+			streams:  32, words:  9452
+		worklib.rc41235:v <0x6c5c7a7d>
+			streams:   4, words:   760
+		worklib.codeBlock41154:v <0x6baa405c>
+			streams:  16, words:  3395
+		worklib.addfxp:v <0x53336fdf>
+			streams:   4, words:  1505
+		worklib.subfxp:v <0x6c6fa1b8>
+			streams:   4, words:  1511
+		worklib.multfix:v <0x1824ce76>
+			streams:   5, words:  1521
+		worklib.D6_41145:v <0x095d8b26>
+			streams:   3, words:   935
+		worklib.D8_41137:v <0x4e3cab52>
+			streams:   3, words:   935
+		worklib.shiftRegFIFO:v <0x23d078c6>
+			streams:   4, words:  2745
+		worklib.codeBlock40973:v <0x45c93ae9>
+			streams:  13, words:  8177
+		worklib.DirSum_41151:v <0x54bf4276>
+			streams:   3, words:   881
+		worklib.switch:v <0x025d6222>
+			streams:   1, words:   402
+		worklib.switch:v <0x7e8328e3>
+			streams:   1, words:  1183
+		worklib.memMod:v <0x4facacf0>
+			streams:   3, words:  1391
+		worklib.memArray4_40968:v <0x6b9d2f3f>
+			streams:   1, words:   238
+		worklib.perm40968:v <0x1469d47c>
+			streams:  31, words:  8661
+		worklib.rc40970:v <0x6d1f85b8>
+			streams:   4, words:   760
+		worklib.subfxp:v <0x587a4afa>
+			streams:   4, words:  1554
+		worklib.addfxp:v <0x6726849d>
+			streams:   4, words:  1548
+		worklib.shiftRegFIFO:v <0x7602a32a>
+			streams:   4, words:  1483
+		worklib.codeBlock40889:v <0x04fea901>
+			streams:  16, words:  3395
+		worklib.switch:v <0x55defae5>
+			streams:   1, words:   426
+		worklib.switch:v <0x586eccee>
+			streams:   1, words:   410
+		worklib.switch:v <0x6b402bd1>
+			streams:   1, words:  1183
+		worklib.memMod:v <0x387f84cf>
+			streams:   3, words:  1323
+		worklib.shiftRegFIFO:v <0x700ef5dc>
+			streams:   4, words:  1827
+		worklib.memArray8_40885:v <0x7a93ab95>
+			streams:   3, words:   540
+		worklib.shiftRegFIFO:v <0x64a4fef6>
+			streams:   4, words:  1220
+		worklib.shiftRegFIFO:v <0x739c17b1>
+			streams:   4, words:  1525
+		worklib.perm40885:v <0x52425621>
+			streams:  32, words:  9452
+		worklib.rc40887:v <0x6b163850>
+			streams:   4, words:   760
+		worklib.ifft_1d_top:v <0x5df9fe33>
+			streams:   8, words:  1010
+		worklib.top_isfft:v <0x51ddeffd>
+			streams:   9, words:  4366
+		worklib.sram_1rw1r_64x64_wpr2:v <0x01bbc67e>
+			streams:   6, words:  4617
+		worklib.isfft_axi_v4:v <0x1d86da2a>
+			streams:  89, words: 30553
+		worklib.stream_64to32:v <0x3b9c494e>
+			streams:  10, words:  3475
+		worklib.stream_32to64:v <0x6acaceae>
+			streams:   9, words:  3322
+		worklib.xbus2axi4_bridge_fifo_0_33:v <0x19b0d19a>
+			streams:   9, words:  1935
+		worklib.xbus2axi4_bridge_4_5ba93c9db0cff93f52b521d7420e43f6eda2784f:v <0x6a3ccc97>
+			streams:  31, words:  9722
+		worklib.neorv32_sysinfo_16_2048_1_50000000_2_8192_4096_4_4_64_f2a9bd9c2be8c4b6dc9af6c11ec3f0e85d42c707:v <0x4daedfb6>
+			streams:  20, words: 10007
+		worklib.neorv32_prim_fifo_6_37_5ba93c9db0cff93f52b521d7420e43f6eda2784f:v <0x378deb82>
+			streams:  20, words:  5377
+		worklib.neorv32_slink_64_64:v <0x2b89e621>
+			streams:  59, words: 23770
+		worklib.neorv32_prim_fifo_0_8_5ba93c9db0cff93f52b521d7420e43f6eda2784f:v <0x4e1ac628>
+			streams:  11, words:  1992
+		worklib.neorv32_uart_1_1:v <0x4bf84475>
+			streams:  93, words: 34579
+		worklib.neorv32_bus_reg_9159cb8bcee7fcb95582f140960cdae72788d326:v <0x01964906>
+			streams:  22, words:  7591
+		worklib.neorv32_bus_io_switch_65536_36f1dd00ff2da0b7a78b5a45338283f7bc564c06:v <0x7ba446c1>
+			streams: 288, words: 102457
+		worklib.neorv32_bus_reg_1489f923c4dca729178b3e3233458550d8dddf29:v <0x38fc943d>
+			streams:  10, words:  3584
+		worklib.neorv32_xbus_5ba93c9db0cff93f52b521d7420e43f6eda2784f:v <0x7e7816f6>
+			streams:  22, words:  8770
+		worklib.sram_4kbyte_1rw_32x1024_8:v <0x35d25a8a>
+			streams:   3, words:  3378
+		worklib.sram4k_1rw:v <0x330d096f>
+			streams:   6, words:   777
+		worklib.neorv32_dmem:v <0x2810f31c>
+			streams:   7, words:  1665
+		worklib.sram_8kbyte_1rw_32x2048_8:v <0x11a81906>
+			streams:   1, words:  3905
+		worklib.sram8k_1rw:v <0x46989e9d>
+			streams:   5, words:   654
+		worklib.neorv32_imem:v <0x1038e991>
+			streams:   8, words:  1757
+		worklib.neorv32_bus_gateway_8192_16_4096_16_268435456_2048_2097152_16_2048_bd50bc0f8960043decfaeea03012348ae010fe69:v <0x0fcb9141>
+			streams: 124, words: 39156
+		worklib.neorv32_bus_switch_29e2dcfbb16f63bb0254df7585a15bb6fb5e927d:v <0x5c31984b>
+			streams:  44, words: 17712
+		worklib.neorv32_prim_fifo_3_32_5ba93c9db0cff93f52b521d7420e43f6eda2784f:v <0x53e2de6c>
+			streams:  20, words:  4984
+		worklib.neorv32_dma_8:v <0x27f65d0c>
+			streams: 111, words: 51391
+		worklib.neorv32_bus_switch_2547cc736e951fa4919853c43ae890861a3b3264:v <0x09e88e03>
+			streams:  44, words: 17706
+		worklib.neorv32_cpu_lsu_0_5ba93c9db0cff93f52b521d7420e43f6eda2784f:v <0x3424e57a>
+			streams:  70, words: 26473
+		worklib.neorv32_cpu_alu_muldiv_1_3f29546453678b855931c174a97d6c0894b8f546:v <0x6c6bd86e>
+			streams:  87, words: 29354
+		worklib.neorv32_cpu_alu_shifter_5ba93c9db0cff93f52b521d7420e43f6eda2784f:v <0x5da081de>
+			streams:  27, words: 10434
+		worklib.neorv32_cpu_alu_1_9a68e0f891a604eadc414df454e914fb8b2693a9:v <0x5699951f>
+			streams:  48, words: 24236
+		worklib.neorv32_cpu_regfile_5_2:v <0x263feba3>
+			streams: 126, words: 45544
+		worklib.neorv32_prim_cnt_64:v <0x5fbfdf30>
+			streams:  22, words:  4250
+		worklib.neorv32_cpu_counters_0_64_3c585604e87f855973731fea83e21fab9392d2fc:v <0x5e42947b>
+			streams: 131, words: 67229
+		worklib.neorv32_cpu_control_0_6e1715dc6a0962a61af16fbd117f643ce454c2ab:v <0x593c2bf9>
+			streams: 369, words: 230579
+		worklib.neorv32_cpu_decompressor_1489f923c4dca729178b3e3233458550d8dddf29:v <0x2a7ef49f>
+			streams: 154, words: 47355
+		worklib.neorv32_cpu_frontend_ipb:v <0x127d47e7>
+			streams:  14, words:  3871
+		worklib.neorv32_cpu_frontend_0_9508e90548b0440a4a61e5743b76c1e309b23b7f:v <0x288456d2>
+			streams:  80, words: 25728
+		worklib.neorv32_cpu_0_1_2_0_4_0_64_0_5f0cd1eaae4e12dfd2e4412599dec3cdb351cf20:v <0x35327018>
+			streams:  74, words: 41188
+		worklib.neorv32_sys_clock:v <0x41dc67bc>
+			streams:  10, words:  2590
+		worklib.neorv32_sys_reset:v <0x26f49523>
+			streams:  14, words:  4011
+		worklib.neorv32_top_50000000_2_0_1_2_0_4_0_64_8192_4096_4_4_64_2048_0_1_1_1_1_1_1_1_1_1_0_1_3_5_64_1_0_1_8_64_64_1_5ee261d56cec37c6c6af13afd96c498effd8310f:v <0x4893dd2f>
+			streams: 180, words: 98054
+		worklib.neorv32_asic:v <0x2c8bbda3>
+			streams:  26, words:  5015
+		worklib.asic_top:v <0x4c6aa003>
+			streams:   8, words:  1204
+		worklib.tb_gate:v <0x4527e646>
+			streams:  20, words: 23122
+		worklib.sram_8kbyte_1rw_32x2048_8_beh:v <0x3888448f>
+			streams:   3, words:  3437
+	Building instance specific data structures.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                  Instances  Unique
+		Modules:                223     103
+		Registers:              994     794
+		Scalar wires:          6330       -
+		Expanded wires:        1194      65
+		Vectored wires:        3675       -
+		Always blocks:          575     468
+		Initial blocks:          13      13
+		Cont. assignments:     2263    9309
+		Pseudo assignments:     144       -
+		Process Clocks:         283      79
+		Simulation timescale:   1ps
+	Writing initial simulation snapshot: worklib.tb_gate:v
+Loading snapshot worklib.tb_gate:v .................... Done
+xcelium> source /tools/cadence/XCELIUM2309/tools/xcelium/files/xmsimrc
+xcelium> run
+[IMEM] programa: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/sw/isfft_evm/neorv32_raw_exe.hex
+[IMEM] mem[0..2] = 0f14020f3 080001217 0ffc20213
+[TB] 3 somas esperadas em /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/sw/isfft_evm/chk_rtl.txt
+[TB] reset liberado em 200000 ns
+[UART] 
+                if ($sscanf(linha, " CHK %d 0x%h", m, soma) == 2) begin
+                          |
+xmsim: *W,SYSFMW (../scripts/tb_gate.v,126|26): $sscanf --  Input does not match format string at character '.
+[UART] isfft_evm: matrizes da Kria pelo chip
+                if ($sscanf(linha, " CHK %d 0x%h", m, soma) == 2) begin
+                          |
+xmsim: *W,SYSFMW (../scripts/tb_gate.v,126|26): $sscanf --  Input does not match format string at characteri'.
+[UART] CHK 0 0xeb88508e ciclos 0x00000a3e
+[TB] matriz 0: soma = RTL (0xeb88508e)
+[UART] DUMP 0 0x80000000
+                if ($sscanf(linha, " CHK %d 0x%h", m, soma) == 2) begin
+                          |
+xmsim: *W,SYSFMW (../scripts/tb_gate.v,126|26): $sscanf --  Input does not match format string at characterD'.
+[UART] CHK 1 0xba7fc58e ciclos 0x00000a3e
+[TB] matriz 1: soma = RTL (0xba7fc58e)
+[UART] DUMP 1 0x80000000
+                if ($sscanf(linha, " CHK %d 0x%h", m, soma) == 2) begin
+                          |
+xmsim: *W,SYSFMW (../scripts/tb_gate.v,126|26): $sscanf --  Input does not match format string at characterD'.
+[UART] CHK 2 0xb29c0211 ciclos 0x00000a3e
+[TB] matriz 2: soma = RTL (0xb29c0211)
+[UART] DUMP 2 0x80000000
+                if ($sscanf(linha, " CHK %d 0x%h", m, soma) == 2) begin
+                          |
+xmsim: *W,SYSFMW (../scripts/tb_gate.v,126|26): $sscanf --  Input does not match format string at characterD'.
+[UART] MAT_IN 0x00000003 MAT_OUT 0x00000003 ERR 0x00000000
+                if ($sscanf(linha, " CHK %d 0x%h", m, soma) == 2) begin
+                          |
+xmsim: *W,SYSFMW (../scripts/tb_gate.v,126|26): $sscanf --  Input does not match format string at characterM'.
+[UART] RESULTADO: OK
+                if ($sscanf(linha, " CHK %d 0x%h", m, soma) == 2) begin
+                          |
+xmsim: *W,SYSFMW (../scripts/tb_gate.v,126|26): $sscanf --  Input does not match format string at characterR'.
+[UART] #FIM#
+                if ($sscanf(linha, " CHK %d 0x%h", m, soma) == 2) begin
+                          |
+xmsim: *W,SYSFMW (../scripts/tb_gate.v,126|26): $sscanf --  Input does not match format string at character#'.
+[TB] fim em 3.764 ms (188194 ciclos)
+[TB] PASSOU
+Simulation complete via $finish(1) at time 3764090 NS + 0
+../scripts/tb_gate.v:154             $finish;
+xcelium> exit
+TOOL:	xrun(64)	23.09-s013: Exiting on Sep 27, 2026 at 11:10:13 -03  (total: 00:00:07)
