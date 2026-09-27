@@ -34,7 +34,11 @@ xcelium.shm/
 *.lock
 
 # --- LibreLane: as rodadas ficam fora; o que importa vai para resultados/ -----
-layout/runs/
+layout/**/runs/
+# netlist descompactado que o 01_leitura.sh prepara
+layout/**/entrada/
+# rodada em andamento (criada pelo 01_leitura.sh)
+layout/**/.rodada_atual
 
 # --- Editor / sistema --------------------------------------------------------
 *~

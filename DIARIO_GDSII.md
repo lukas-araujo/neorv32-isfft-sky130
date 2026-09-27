@@ -732,6 +732,101 @@ cada rodada.
 
 ---
 
+## 2026-09-27 (8ª sessão) — `layout/nucleo/`: uma etapa por script, com GUI e imagem
+
+**Pedido do Lukas:** rodar uma parte de cada vez, cada parte num arquivo
+próprio, com a GUI abrindo para ver o que aconteceu e a imagem salva em
+`resultados/`.
+
+### Como o LibreLane roda por partes (conferido no código 3.0.14)
+
+- `--from <etapa>` / `--to <etapa>` limitam o trecho
+  (`librelane/flows/sequential.py`).
+- Com `--run-tag` de uma rodada que já existe, ele **continua** nela: as
+  pastas novas seguem a numeração (`NN-<etapa>`) e o estado inicial é o
+  `state_out.json` mais recente (`flows/flow.py`).
+- **Cuidado:** "mais recente" é por data de modificação. Se a etapa 2 for
+  refeita depois da 3, ela pegaria o estado do fim da 3. Por isso os
+  scripts passam `--with-initial-state` com o `state_out.json` da **etapa
+  anterior** (a pasta de maior número daquela etapa). Refazer uma etapa
+  nunca parte de um estado errado.
+- Pasta de cada etapa: `<NN>-<id em minúsculas, "." → "-">`, ex.
+  `3-openroad-floorplan` (`slugify` em `common/misc.py`).
+
+### Etapas 1–3 do fluxo `Classic`
+
+| Script | Trecho (`--from` → `--to`) | Imagens |
+|---|---|---|
+| `01_leitura.sh` | início → `OpenROAD.STAPrePNR` (rodada nova) | — (texto + métricas) |
+| `02_floorplan.sh` | `OpenROAD.Floorplan` → `OpenROAD.TapEndcapInsertion` | planta inteira; zoom no halo da IMEM |
+| `03_pdn.sh` | `Odb.AddPDNObstructions` → `Odb.RemovePDNObstructions` | malha met4/met5; zoom no anel da IMEM; canto do anel do núcleo |
+
+GUI: `openroad -gui tcl/imagem.tcl` no `.odb` do fim da etapa. O Tcl
+liga/desliga camadas (`gui::set_display_controls`), salva com `save_image
+-width 2400 [-area ...]` e deixa a janela aberta. `SEM_GUI=1` usa
+`QT_QPA_PLATFORM=offscreen` e fecha sozinho. Comandos conferidos no
+`src/gui/README.md` do OpenROAD.
+
+### O `config.json` do núcleo (L17)
+
+| Item | Valor | Por quê |
+|---|---|---|
+| Entrada | netlist do Genus (L14), `SYNTH_ELABORATE_ONLY`, `RUN_LINTER: false` | Não ressintetizar; lint do Verilator não faz sentido em netlist de portas |
+| Clock | `clk_i`, 20 ns; I/O 30 % (6 ns) | Igual ao SDC do Genus |
+| SDC | `nucleo.sdc` = `base.sdc` do LibreLane + false path em `rstn_i` | Mesma intenção do Genus; clock propagado depois do CTS |
+| Macros no STA | `.lib` (`STA_MACRO_PRIORITIZE_NL: false`) | Não há netlist de portas das macros (o `.v` da OpenRAM é comportamental) |
+| GDS das macros | `.gds.gz` direto do `macros/` | O `Classic` aceita GDS compactado (documentação do LibreLane) |
+| Die / núcleo | 2000 × 1500 µm / margem de 40 µm | L5; espaço para o anel do núcleo e os pinos |
+| Alimentação | `vccd1`/`vssd1` (nomes das macros), `PDN_CORE_RING: true`, `PDN_MACRO_CONNECTIONS` para as 4 | O anel do núcleo é onde o nível 2 (padring) vai ligar |
+| Halo das macros | 15 µm | Tira as linhas de célula em volta das macros |
+| DRC | `MAGIC_DRC_USE_GDS: false` | L3: DRC com as macros como caixa-preta (o padrão é `true`) |
+
+Posição das macros (canto inferior esquerdo, µm) e orientação:
+
+| Macro | Instância (depois de achatar) | Posição | Orientação | Por quê |
+|---|---|---|---|---|
+| IMEM 8 kB | `u_cpu.neorv32_top_inst.memory_system_neorv32_imem_enabled_neorv32_imem_inst.u_sram.u_macro` | (60, 886) | `FN` (espelhada em x) | pinos da esquerda vão para a direita, virados para a lógica |
+| DMEM 4 kB | `...dmem_enabled_neorv32_dmem_inst.u_sram.u_macro` | (60, 464) | `S` (girada 180°) | pinos de baixo sobem: IMEM e DMEM dividem o canal de 70 µm |
+| `out_mem` | `u_isfft.u_out_mem` | (1192, 1002) | `N` | 60 µm livres em cima para a porta de leitura |
+| `in_mem` | `u_isfft.u_in_mem` | (1204, 100) | `N` | 60 µm livres embaixo para a porta de escrita |
+
+**Nomes conferidos antes de rodar:** reproduzi aqui o passo de
+"só elaborar" do LibreLane (`proc; flatten -noscopeinfo; setattr -set
+keep 1; splitnets; opt_clean -purge`, mesmos comandos de
+`scripts/pyosys/synthesize.py`) com o Yosys sobre o netlist do Genus:
+**0 problemas** no `check`, lógica **730.162,784 µm²** (= 1.913.000,390 −
+1.182.837,6 das macros) e os 4 nomes acima.
+
+**Ainda não conferido (só rodando):** se a posição do `MACROS` é o canto
+do retângulo **depois** da orientação ou a origem antes dela. A imagem da
+etapa 2 responde.
+
+### Testado aqui com LibreLane e OpenROAD "de mentira"
+
+Scripts que só registram os argumentos e criam as pastas de etapa:
+retomada com `--with-initial-state` certo nas etapas 2 e 3, refazer a 2
+depois da 3 pega o estado da etapa 1, métricas e imagens na pasta de
+resultados certa.
+
+### 🐛 `set -e` + `[ -f x ] && comando` no fim de um bloco
+
+**Sintoma:** no teste, o `01_leitura.sh` parava logo depois de imprimir o
+resumo, sem salvar as métricas.
+**Causa:** `[ -f relatorio ] && grep ...` como último comando do bloco
+`{ ... } | tee`: com o arquivo ausente o teste dá falso, o bloco retorna
+1, o `pipefail` repassa e o `set -e` encerra o script.
+**Resolvi com:** `if [ -f ... ]; then ...; fi`.
+**Vira slide?** Não.
+
+### Decisões desta sessão
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L17 | `config.json` do núcleo como na tabela acima | 🟡 | A validar pelas imagens das etapas 2 e 3 |
+| L18 | Uma etapa por script, retomando com `--with-initial-state`; imagens em `resultados/<rodada>_layout_nucleo/` | ✅ | Pedido do Lukas |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -752,6 +847,8 @@ cada rodada.
 | L14 | Netlist do layout = rodada de 27/09 | ✅ | 2026-09-27 |
 | L15 | Dois níveis: núcleo → chip com padring | ✅ | 2026-09-27 |
 | L16 | Padring `sky130_ef_io` no nosso config | 🟡 | 2026-09-27 |
+| L17 | `config.json` do núcleo | 🟡 | 2026-09-27 |
+| L18 | Uma etapa por script, com GUI e imagem | ✅ | 2026-09-27 |
 
 ---
 
@@ -759,7 +856,8 @@ cada rodada.
 
 - [x] ~~Decidir L4~~ — Genus (caminho A)
 - [x] ~~Rodada para o layout na VM~~ — 5ª sessão: tudo passou
-- [ ] `layout/`: `config.json` do LibreLane, primeira rodada até floorplan + PDN
+- [x] ~~`layout/nucleo/`: `config.json` e scripts das etapas 1–3~~ — 8ª sessão
+- [ ] Rodar `01_leitura.sh`, `02_floorplan.sh`, `03_pdn.sh` no notebook
 - [x] ~~Máquina e PDK~~ — 3ª sessão
 - [x] ~~Instalar LibreLane e passar o `--smoke-test`~~ — 3ª sessão
 - [x] ~~Confirmar L6~~ — com padring
