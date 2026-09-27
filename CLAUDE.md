@@ -56,18 +56,20 @@ Lukas.
 
 O repositório é `lukas-araujo/neorv32-isfft-sky130` (privado). Numa
 sessão nova do Claude: anexar com a ferramenta de repositório (acesso
-**push**), clonar **uma vez** e registrar a raiz. O clone é raso: antes
-de dar push, `git fetch origin main` (senão o push reenvia tudo e o
-GitHub recusa com HTTP 413).
+**push**), clonar **uma vez** e registrar a raiz. O clone é raso e de
+**um ramo só**: `origin/main` **não existe** como referência local —
+use sempre `git pull --rebase origin main` (ou `git fetch origin main`
++ `FETCH_HEAD`). Antes de dar push, traga o `main` remoto (senão o push
+reenvia tudo e o GitHub recusa com HTTP 413).
 
 ```bash
-git pull                                   # sempre antes de começar
+git pull --rebase origin main              # sempre antes de começar
 bash macros/descompacta_gds.sh             # .gds.gz -> .gds (fora do git)
 # ... trabalho ...
 git add <arquivos das suas pastas + seu diário>
 git -c user.name="Lukas Araújo da Silva" -c user.email="texugomatoso@gmail.com" \
     commit -m "<frente>: <o quê> (<decisão>)"
-git fetch origin main && git rebase origin/main && git push origin main
+git pull --rebase origin main && git push origin main
 ```
 
 - Prefixos de mensagem: `fe:`, `gdsii:`, `uvm:`, `dft:`, `doc:`.

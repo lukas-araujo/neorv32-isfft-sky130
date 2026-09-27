@@ -485,12 +485,136 @@ com slack +2410,4 ps e 1.912.963 µm² (iguais ao `_qor.rpt`).
 
 ---
 
+## 2026-09-27 (5ª sessão) — ✅ Rodada para o layout na VM: tudo passou
+
+Resultados em `resultados/2026-09-27_sintese_layout/` (commit `7fd0940`
+do Lukas, primeira rodada trazida pelo `sim/traz_vm.sh`). Comparação com
+`resultados/2026-09-26_sintese_fe/`.
+
+### Síntese (Genus, bloco 1) — `_qor.rpt`, `_gates.rpt`, `genus.log`
+
+| | Front-end (26/09) | Para o layout (27/09) | Diferença |
+|---|---|---|---|
+| Slack a 50 MHz | +2.410,4 ps, 0 violações | **+2.410,4 ps**, 0 violações | nenhuma |
+| Caminho crítico | controle → `muldiv` (`n12685_q_reg[63]`) | o mesmo | nenhuma |
+| Área total | 1.912.962,854 µm² | **1.913.000,390 µm²** | **+37,536 = 10 × 3,7536 (`conb_1`)** |
+| Células | 60.028 (19.827 seq., 40.201 comb.) | 60.038 (19.827 / 40.211) | +10 combinacionais |
+| Não resolvidos / vazios | 0 / 0 | 0 / 0 | |
+| Macros | 4, 1 instância cada | 4, 1 instância cada, mesmas áreas | |
+| Células evitadas | 0 | 0 | |
+| DRC (transição, capacitância, fanout) | sem violações | sem violações | |
+| Tempo | 597 s | 601 s | |
+
+**L2 funcionou de primeira.** O `add_tieoffs` com a `conb_1` (célula de
+duas saídas) foi aceito sem erro; o `genus.log` mostra, módulo a módulo,
+"Connecting all 1'b0/1'b1 ... tielo_cell is ... conb_1, tiehi_cell is
+... conb_1". No netlist:
+
+```
+constantes soltas (1'b0 / 1'b1):  0      (eram 6)
+sky130_fd_sc_hd__conb_1:          10
+```
+
+Onde entraram as 10 (área por bloco, `_area_hier.rpt`):
+
+| Bloco | `conb_1` | Para quê |
+|---|---|---|
+| DMEM (`sram4k_1rw`) | 3 | bit 11 do endereço (linha sobressalente), `din0[32]`, `spare_wen0` |
+| IMEM (`sram8k_1rw`) | 3 | idem |
+| ISFFT (`isfft_axi_v4`) | 2 | `web0` das duas 1rw1r (porta 0 só escreve) |
+| `neorv32_cpu_control` | 1 | `D = 1` de um flip-flop |
+| `neorv32_sys_reset` | 1 | `D = 1` do gerador de reset |
+
+`-max_fanout 1`: **uma `conb_1` por pino** que recebe constante (nas
+memórias, `logic_0_1_net`, `_2_net` e `_3_net` são três redes de três
+células). É o que o layout quer: cada célula fica ao lado do pino que
+alimenta, sem fio de constante atravessando o chip.
+
+**L1 funcionou.** As duas macros de 1 porta saem do Genus já com a
+interface do LEF:
+
+```
+sram_4kbyte_1rw_32x1024_8 u_macro(.din0 ({logic_0_2_net, wdata_i}),
+     .addr0 ({logic_0_1_net, addr_i}), ... .spare_wen0 (logic_0_3_net),
+     .dout0 ({dout_33[32], rdata_o}));
+```
+
+O Genus leu o `.lib` corrigido sem reclamar (nenhum erro de biblioteca no
+log; áreas das macros iguais às de antes).
+
+### Simulações (Xcelium, blocos 0 e 2) — `xrun_rtl.log`, `xrun_postsyn.log`
+
+| | RTL (bloco 0) | Pós-síntese (bloco 2) |
+|---|---|---|
+| Programa carregado (`imem_sim_model.v`) | `mem[0..2] = 0f14020f3 080001217 0ffc20213` | igual |
+| Somas | `0xeb88508e`, `0xba7fc58e`, `0xb29c0211` = RTL | **iguais** |
+| Firmware | `RESULTADO: OK` | `RESULTADO: OK` |
+| Ciclos | 188.194 | 188.195 (atraso unitário, como antes) |
+| Veredito | `[TB] PASSOU` | `[TB] PASSOU` |
+| Tempo | 7 s | 32 s |
+
+Avisos: 8 `SYSFMW` (linhas da UART que não são `CHK`, conhecidos) e, na
+pós-síntese, 1.000 `NODNTW` do PDK + 1 `MXWARN` (limite de avisos). Os
+mesmos da rodada anterior. Primeira vez que o **bloco 0** (RTL no Xcelium)
+rodou na VM: confirma o `imem_sim_model.v` também no Xcelium.
+
+### LEC (Conformal, bloco 3a) — `*_lec_genus_run.log`
+
+| Etapa | Resultado |
+|---|---|
+| `fv_map` → netlist final (plana) | **19.828 pontos equivalentes** (1 saída, 19.823 flip-flops, 4 caixas-pretas); 0 não-equivalentes, 0 abortados, 0 não comparados → **PASS** |
+| RTL → `fv_map` (hierárquica) | **169/169 módulos equivalentes** |
+| Tempo da etapa hierárquica | 1.043 s (antes 1.480 s) |
+
+Mesmos 19.828 pontos da rodada anterior: as `conb_1` são constantes nos
+dois lados e não viram ponto de comparação, como previsto.
+
+### 🐛 `origin/main` não existe no clone da sessão
+
+**Sintoma:** `git log HEAD..origin/main` → `unknown revision`;
+`git rebase origin/main` → `invalid upstream`.
+**Causa:** o clone da sessão é raso e de um ramo só; `git fetch origin main`
+grava em `FETCH_HEAD`, não cria `refs/remotes/origin/main`. O comando que
+eu tinha escrito no `CLAUDE.md` (`git rebase origin/main`) não funcionava
+aqui.
+**Resolvi com:** `git pull --rebase origin main` no `CLAUDE.md`.
+**Vira slide?** Não.
+
+### Ajuste no `sim/traz_vm.sh`
+
+Veio um `xrun.log` além do `xrun_postsyn.log`. Achei que era duplicata;
+**conferido com `diff`, não é**: é o log que o próprio xrun grava na
+pasta da simulação, com o mesmo conteúdo **mais a linha de comando
+completa** (`-define FUNCTIONAL`, `UNIT_DELAY`, todos os arquivos). Vale
+guardar — é a receita exata da rodada. Como `sim_rtl/` e `sim_postsyn/`
+têm um `xrun.log` cada, o script agora traz os dois renomeados:
+`xrun_rtl_comando.log` e `xrun_postsyn_comando.log`. O desta rodada foi
+renomeado para `xrun_postsyn_comando.log` (o do bloco 0 não veio: o
+script antigo só pegava um dos dois, e o da pasta de trabalho foi
+sobrescrito pela ordem de cópia).
+
+### Estado
+
+O netlist `resultados/2026-09-27_sintese_layout/deliverables/neorv32_isfft_soc.v.gz`
+é **o netlist do layout**: 33 bits nas macros de 1 porta, constantes em
+`conb_1`, equivalente ao RTL (LEC) e funcionando (pós-síntese = RTL = EVM
+da Kria). Próximo: `layout/` com o LibreLane.
+
+### Decisões desta sessão
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L2 | Tie cells `conb_1` no Genus | ✅ | 0 constantes soltas, 10 `conb_1`, LEC PASS |
+| L14 | Netlist do layout = `resultados/2026-09-27_sintese_layout/deliverables/neorv32_isfft_soc.v.gz` | ✅ | Passou síntese, pós-síntese e LEC com a interface do LEF |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
 |---|---|---|---|
 | L1 | `.lib` 1rw com 33 bits + `spare_wen0` | ✅ | 2026-09-26 |
-| L2 | Tie cells no Genus | 🟡 | 2026-09-26 |
+| L2 | Tie cells no Genus | ✅ 10 `conb_1`, LEC PASS | 2026-09-26 |
 | L3 | DRC/LVS com macros como caixa-preta | 🟡 | 2026-09-26 |
 | L4 | Netlist do layout = Genus | ✅ | 2026-09-26 |
 | L5 | Floorplan 2,0 × 1,5 mm | 🟡 | 2026-09-26 |
@@ -502,13 +626,15 @@ com slack +2410,4 ps e 1.912.963 µm² (iguais ao `_qor.rpt`).
 | L11 | LibreLane 3.0.14 via Nix | ✅ smoke test ok | 2026-09-27 |
 | L12 | `CLAUDE.md` com regras de trabalho e git | ✅ | 2026-09-27 |
 | L13 | Resultados da VM pelo git (`sim/traz_vm.sh`) | ✅ | 2026-09-27 |
+| L14 | Netlist do layout = rodada de 27/09 | ✅ | 2026-09-27 |
 
 ---
 
 ## Pendências abertas
 
 - [x] ~~Decidir L4~~ — Genus (caminho A)
-- [ ] Rodada para o layout na VM (blocos 1, 2, 3a) e resultados em `resultados/`
+- [x] ~~Rodada para o layout na VM~~ — 5ª sessão: tudo passou
+- [ ] `layout/`: `config.json` do LibreLane, primeira rodada até floorplan + PDN
 - [x] ~~Máquina e PDK~~ — 3ª sessão
 - [x] ~~Instalar LibreLane e passar o `--smoke-test`~~ — 3ª sessão
 - [ ] Confirmar L6 (sem padring)

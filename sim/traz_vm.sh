@@ -63,9 +63,16 @@ for f in "$S"/reports/*.rpt;                  do copia "$f" "$DEST/reports"; don
 for f in "$S"/deliverables/*.v "$S"/deliverables/*.sdc "$S"/deliverables/*.do; do
   copia "$f" "$DEST/deliverables"; done
 copia "$S/work/genus.log"                        "$DEST/logs"
-for f in "$S"/sim_rtl/xrun*.log "$S"/sim_postsyn/xrun*.log \
+for f in "$S"/sim_rtl/xrun_*.log "$S"/sim_postsyn/xrun_*.log \
          "$S"/reports/*lec*.log "$S"/work/*lec*.log; do
   copia "$f" "$DEST/logs"; done
+# xrun.log: o proprio xrun grava em cada pasta de simulacao. Tem o mesmo
+# conteudo do log do tee MAIS a linha de comando completa (defines e
+# arquivos). Vem renomeado para nao sobrescrever um ao outro.
+for p in sim_rtl sim_postsyn; do
+  [ -f "$S/$p/xrun.log" ] || continue
+  cp "$S/$p/xrun.log" "$DEST/logs/xrun_${p#sim_}_comando.log"
+done
 
 # Resumo para conferir antes do commit
 echo "Destino: resultados/${DATA}_${ETAPA}"
