@@ -43,7 +43,9 @@ Decisões entram na tabela da sessão **e** no índice no fim do arquivo:
 | Pasta da VM (goku, aluno12) | `neorv32_isfft_soc/` (montada por `sim/monta_vm.sh`, FE-D36) |
 | Macros (5 vistas cada) | `asic/macros/<nome>/` |
 | Netlist do Genus (front-end) | `neorv32_isfft_soc/backend/synthesis/deliverables/neorv32_isfft_soc.v` |
-| LibreLane / PDK | *a preencher: versão, forma de instalação, versão do PDK* |
+| LibreLane | 3.0.14 via Nix, clone em `~/Projects/librelane` (L11) |
+| PDK do layout | sky130 `8afc8346…` em `~/Projects/pdks/librelane` (L10) |
+| PDK da OpenRAM | sky130 `e8294524` (2022.07.29) em `~/Projects/pdks` |
 
 ---
 
@@ -321,6 +323,83 @@ contagem de células. Diferença grande = investigar antes do layout.
 
 ---
 
+## 2026-09-27 (3ª sessão) — Máquina, PDK e instalação do LibreLane
+
+### Notebook (Linux-Batata)
+
+| | |
+|---|---|
+| Sistema | Ubuntu 24.04.5 LTS, kernel 7.0.0-34 |
+| CPU | Intel Core i7-1165G7: 4 núcleos / 8 threads |
+| Memória | 32 GB |
+| Disco | 3 TB |
+
+32 GB bastam para 60 mil células + 4 macros (o GDS final vai passar de
+100 MB, a maior parte das macros). Com 4 núcleos, o roteamento detalhado
+é a etapa mais longa: esperar dezenas de minutos por rodada.
+
+**Nada do layout está instalado** (LibreLane, OpenROAD, Magic, Netgen,
+KLayout). O `DIARIO.md` do projeto OpenRAM citava LibreLane no notebook,
+mas não chegou a ser instalado.
+
+### O PDK: dois, e cada um no seu lugar (L10)
+
+```
+$ ciel ls --pdk sky130
+In /home/lukas/Projects/pdks/ciel/sky130/versions:
+└── e8294524e5f67c533c5d0c3afa0bcc5b2a5fa066 (2022.07.29) (enabled)
+```
+
+| PDK | Versão | Usado por |
+|---|---|---|
+| `~/Projects/pdks` | open_pdks `e8294524` (**29/07/2022**) | OpenRAM (as 4 macros), `tech/sky130/` (a `.lib` que o Genus usou) |
+| LibreLane 3.0.14 | sky130 `8afc8346…` (fixado em `librelane/pdk_hashes.yaml`) | Layout: células, regras de DRC, LVS, PDN |
+
+Decisão: **o LibreLane usa o PDK dele, numa `PDK_ROOT` separada**
+(`~/Projects/pdks/librelane`). Motivos:
+- O LibreLane 3 espera arquivos e configurações de uma versão recente;
+  forçar o PDK de 2022 é pedir erro difícil de achar.
+- O `ciel` troca a versão **habilitada** da `PDK_ROOT` onde baixa. Se o
+  LibreLane baixasse na `~/Projects/pdks`, a OpenRAM passaria a gerar
+  macro com outro PDK sem aviso.
+- As macros são autocontidas (GDS + LEF próprios); a célula padrão
+  `sky130_fd_sc_hd` tem os mesmos nomes nas duas versões, então o netlist
+  do Genus liga nas células do PDK novo.
+
+Consequência a registrar no relatório: o timing do Genus usou a `.lib`
+de 2022; o do layout (OpenSTA) vai usar a do PDK novo. Diferença pequena
+esperada; comparar os dois números sabendo disso.
+
+### LibreLane: versão e instalação (L11)
+
+- Versão: **3.0.14** (tag estável mais recente; `main` de 06/09/2026).
+- Instalação: **Nix** (recomendada pela documentação para Linux). Traz
+  LibreLane + OpenROAD + Yosys + Magic + Netgen + KLayout nas versões que
+  o LibreLane testa. Clone em `~/Projects/librelane` (fora deste
+  repositório), na tag `3.0.14`.
+- Terminal **sem** o venv `microelectronics` e sem o `env_openram.sh`
+  (o venv pode esconder o Python do Nix; o `env_openram.sh` mexe no PATH).
+
+### ✅ `SYNTH_ELABORATE_ONLY` existe — e não amarra constantes
+
+Conferido no código do LibreLane 3.0.14
+(`librelane/scripts/pyosys/synthesize.py`): com
+`SYNTH_ELABORATE_ONLY = true` o Yosys faz só `proc`, `flatten`
+(opcional), `splitnets`, `opt_clean` e escreve o netlist. **Não roda
+`hilomap`.** Ou seja, as constantes que viessem soltas do Genus iriam
+soltas para o layout. Confirma que as células de amarração tinham que
+vir do Genus (L2).
+
+### Decisões desta sessão
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L10 | Layout com o PDK fixado pelo LibreLane (`8afc8346`) em `PDK_ROOT` separada; OpenRAM segue com o de 2022 | 🟡 | Não quebrar a OpenRAM; LibreLane 3 com o PDK que ele testa |
+| L11 | LibreLane 3.0.14 via Nix, clone em `~/Projects/librelane` | 🟡 | Instalação recomendada; traz todas as ferramentas do layout |
+| L12 | `CLAUDE.md` no repositório: regras de trabalho e de git para qualquer chat | ✅ | Pedido do Lukas: o próximo chat precisa saber como o git funciona |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -334,6 +413,9 @@ contagem de células. Diferença grande = investigar antes do layout.
 | L7 | Diário próprio, prefixo L | ✅ | 2026-09-26 |
 | L8 | Repositório git, donos por pasta | ✅ | 2026-09-26 |
 | L9 | `SRAM_LIB_VIEW` extinto; `imem_sim_model.v` | ✅ | 2026-09-26 |
+| L10 | PDK do LibreLane (`8afc8346`) em `PDK_ROOT` separada | 🟡 | 2026-09-27 |
+| L11 | LibreLane 3.0.14 via Nix | 🟡 | 2026-09-27 |
+| L12 | `CLAUDE.md` com regras de trabalho e git | ✅ | 2026-09-27 |
 
 ---
 
@@ -341,7 +423,8 @@ contagem de células. Diferença grande = investigar antes do layout.
 
 - [x] ~~Decidir L4~~ — Genus (caminho A)
 - [ ] Rodada para o layout na VM (blocos 1, 2, 3a) e resultados em `resultados/`
-- [ ] Versão do LibreLane, forma de instalação, versão do PDK, RAM/núcleos do notebook
+- [x] ~~Máquina e PDK~~ — 3ª sessão
+- [ ] Instalar LibreLane (Nix) e passar o `--smoke-test`
 - [ ] Confirmar L6 (sem padring)
 - [x] ~~Decidir a organização entre chats~~ — git (L8)
 - [x] ~~Ligar o GitHub e fazer o primeiro push~~ — `0086abd`
