@@ -169,8 +169,7 @@ halos/canais: ~1,5 mm² para 0,73 mm² de lógica → densidade ~47%.
 - DMEM espelhada na vertical (MX): IMEM e DMEM dividem um canal de pinos.
 - ISFFT de baixo para cima: `in_mem` → núcleo → `out_mem`, cada porta
   virada para quem a usa.
-- Sem padring: 4 pinos na borda (`clk_i`, `rstn_i`, `uart0_txd_o`,
-  `uart0_rxd_i`) — tapeout fora de escopo.
+- ~~Sem padring~~: o chip leva padring (6ª sessão, L6).
 
 ### Etapas
 
@@ -609,6 +608,90 @@ da Kria). Próximo: `layout/` com o LibreLane.
 
 ---
 
+## 2026-09-27 (6ª sessão) — Padring: o que o LibreLane e o sky130 oferecem
+
+**Decisão do Lukas: chip completo, com padring** (L6 revista).
+
+### O que existe (conferido no código, não na documentação)
+
+**LibreLane 3.0.14 tem um fluxo `Chip`** (`librelane/flows/chip.py`):
+é o `Classic` com o posicionamento de pinos trocado por
+`OpenROAD.PadRing` (os pads viram os terminais do chip) e com 5 etapas a
+mais no fim: antena no KLayout, **seal ring**, **preenchimento
+(filler)** e **checagem de densidade**. O anel é montado pelo
+`scripts/openroad/common/pad_cfg.tcl`: soma as larguras dos pads de cada
+lado, distribui o espaço que sobra e encaixa cantos e fillers.
+
+**O sky130 do LibreLane não traz a configuração do anel.** O
+`config.tcl` do PDK (open_pdks `8afc8346`, `sky130/openlane/config.tcl`)
+só lista as células de I/O (`GPIO_PADS_LEF`, `GPIO_PADS_VERILOG`);
+nenhuma das variáveis que o `PadRing` pede (`PAD_CELL_LIBRARY`,
+`PAD_SITE_NAME`, `PAD_CORNER`, `PAD_FILLERS`, `PAD_LEFS`...). O fluxo
+`Chip` foi montado para PDKs que as trazem (IHP, GF180). **Mas o
+LibreLane prevê o caso:** `PAD_FAKE_SITES` existe "se o LEF não incluir
+as definições de site dos pads". Ou seja: dá para declarar tudo no nosso
+`config.json`. Caminho pouco trilhado no sky130 — espere tropeços.
+
+(Tentei baixar o PDK aqui na nuvem com o `ciel`: `403`, o GitHub Pages
+e as *releases* são bloqueados. O `config.tcl` veio do **clone do
+open_pdks** no commit `8afc8346`, que é a mesma versão.)
+
+### As células de I/O do sky130 (`sky130_ef_io`, wrappers da Efabless sobre o `sky130_fd_io`)
+
+| Célula | Para quê | Tamanho |
+|---|---|---|
+| `sky130_ef_io__gpiov2_pad_wrapped` | pino digital (entrada/saída) | 80 × 200 µm (`top_gpiov2`) |
+| `sky130_ef_io__vccd_lvc_clamped_pad` / `vssd_lvc_clamped_pad` | alimentação do núcleo 1,8 V | 75 × ~200 µm |
+| `sky130_ef_io__vddio_hvc_clamped_pad` / `vssio_hvc_clamped_pad` | alimentação dos pads 3,3 V | 75 × 200 µm |
+| `sky130_ef_io__vdda_hvc_clamped_pad` / `vssa_hvc_clamped_pad` | domínio analógico do anel | 75 × 200 µm |
+| `sky130_ef_io__corner_pad` | canto | ~200 × 200 µm |
+| `sky130_ef_io__com_bus_slice_{1,5,10,20}um` | filler: continua os barramentos do anel | 1–20 µm × 200 µm |
+
+**O `gpiov2` não é um buffer simples: tem 39 pinos.** Além de `PAD`,
+`IN` e `OUT`: modo do driver (`DM[2:0]`), `OE_N`, `INP_DIS`,
+`VTRIP_SEL`, `SLOW`, `IB_MODE_SEL`, `ANALOG_*`, e pinos no **domínio de
+3,3 V** (`ENABLE_H`, `HLD_H_N`, `ENABLE_INP_H`, `ENABLE_VDDA_H`...) que
+não podem ser ligados a sinal de 1,8 V — no Caravel eles vêm das saídas
+`TIE_HI_ESD`/`TIE_LO_ESD` do próprio pad. Cada um dos 4 pinos do chip
+precisa ser **configurado** (entrada: `clk_i`, `rstn_i`, `uart0_rxd_i`;
+saída: `uart0_txd_o`).
+
+**Anel mínimo:** 4 cantos + 4 `gpiov2` + 6 de alimentação (núcleo, I/O,
+analógico; VDD e VSS de cada) ≈ **14 células**. O resto do perímetro é
+filler. Com 200 µm de pad de cada lado (mais o seal ring), o die cresce
+de 2,0 × 1,5 mm para **~2,45 × 1,95 mm** mantendo o mesmo núcleo.
+
+### Proposta: layout em dois níveis (L15)
+
+| Nível | O quê | Fluxo | Sai |
+|---|---|---|---|
+| 1 — núcleo | `asic_top` (netlist do Genus + 4 macros) | `Classic` | GDS + LEF de um bloco, DRC/LVS limpos |
+| 2 — chip | `chip_top`: padring + núcleo como macro | `Chip` | GDS final com pads, seal ring, filler, densidade |
+
+Por quê:
+- O nível 1 é **exatamente** o que já estava planejado — nada se perde.
+- Tropeço nos pads (o caminho incerto) não trava o núcleo: o número de
+  área, timing e DRC/LVS do núcleo sai antes.
+- Rodadas do nível 2 são rápidas: só pads e poucas ligações; o núcleo já
+  está roteado.
+- É como o Caravel é feito: o bloco do usuário fechado primeiro, o chip
+  com o padframe depois.
+
+O `chip_top.v` (pads + instância do núcleo + ligações de configuração
+dos `gpiov2`) é **Verilog estrutural escrito à mão** — o Genus não entra
+aqui. Verificação: simulação com os modelos Verilog dos pads + netlist do
+núcleo, mesmo `tb_gate` (a UART tem que passar pelo pad).
+
+### Decisões desta sessão
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L6 | ~~Sem padring~~ → **chip completo, com padring** | ✅ | Decisão do Lukas |
+| L15 | Dois níveis: núcleo (`Classic`) → chip com padring (`Chip`) | 🟡 | Núcleo sai primeiro; padring (caminho incerto no sky130) não trava o resto |
+| L16 | Padring com `sky130_ef_io` declarado no nosso config (`PAD_*`, `PAD_FAKE_SITES`) | 🟡 | O PDK do LibreLane não traz a configuração para o sky130 |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -618,7 +701,7 @@ da Kria). Próximo: `layout/` com o LibreLane.
 | L3 | DRC/LVS com macros como caixa-preta | 🟡 | 2026-09-26 |
 | L4 | Netlist do layout = Genus | ✅ | 2026-09-26 |
 | L5 | Floorplan 2,0 × 1,5 mm | 🟡 | 2026-09-26 |
-| L6 | Sem padring | 🟡 | 2026-09-26 |
+| L6 | ~~Sem padring~~ → com padring | ✅ | 2026-09-27 |
 | L7 | Diário próprio, prefixo L | ✅ | 2026-09-26 |
 | L8 | Repositório git, donos por pasta | ✅ | 2026-09-26 |
 | L9 | `SRAM_LIB_VIEW` extinto; `imem_sim_model.v` | ✅ | 2026-09-26 |
@@ -627,6 +710,8 @@ da Kria). Próximo: `layout/` com o LibreLane.
 | L12 | `CLAUDE.md` com regras de trabalho e git | ✅ | 2026-09-27 |
 | L13 | Resultados da VM pelo git (`sim/traz_vm.sh`) | ✅ | 2026-09-27 |
 | L14 | Netlist do layout = rodada de 27/09 | ✅ | 2026-09-27 |
+| L15 | Dois níveis: núcleo → chip com padring | 🟡 | 2026-09-27 |
+| L16 | Padring `sky130_ef_io` no nosso config | 🟡 | 2026-09-27 |
 
 ---
 
@@ -637,7 +722,7 @@ da Kria). Próximo: `layout/` com o LibreLane.
 - [ ] `layout/`: `config.json` do LibreLane, primeira rodada até floorplan + PDN
 - [x] ~~Máquina e PDK~~ — 3ª sessão
 - [x] ~~Instalar LibreLane e passar o `--smoke-test`~~ — 3ª sessão
-- [ ] Confirmar L6 (sem padring)
+- [x] ~~Confirmar L6~~ — com padring
 - [x] ~~Decidir a organização entre chats~~ — git (L8)
 - [x] ~~Ligar o GitHub e fazer o primeiro push~~ — `0086abd`
 - [ ] Notebook: trocar `~/Projects/asic` pelo clone do repositório
