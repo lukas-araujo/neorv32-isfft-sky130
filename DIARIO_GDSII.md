@@ -457,6 +457,34 @@ export PDK_ROOT=$HOME/Projects/pdks/librelane
 
 ---
 
+## 2026-09-27 (4ª sessão) — Resultados da VM chegam pelo git
+
+**Pedido do Lukas:** mandar os resultados da VM pelo repositório, não
+como anexo no chat.
+
+`sim/traz_vm.sh <pasta_da_vm> <etapa>` (roda no notebook, na raiz do
+repositório):
+- aceita a pasta do projeto inteira ou só `backend/synthesis/`;
+- copia `reports/*.rpt`, `deliverables/*.v|.sdc|.do` e os logs (Genus,
+  Xcelium RTL e pós-síntese, LEC); **não** copia `.sdf`, `xcelium.d/`,
+  `work/fv*`;
+- compacta o que passa de 500 kB (netlist 8 MB → ~0,9 MB);
+- nomeia `resultados/<data do netlist>_<etapa>/` e recusa sobrescrever;
+- imprime um resumo (slack, área, células) e os comandos de git.
+
+Testado com a pasta da rodada do front-end: 19 arquivos, 2,0 MB, resumo
+com slack +2410,4 ps e 1.912.963 µm² (iguais ao `_qor.rpt`).
+
+**Fluxo:** VM → copia a pasta para o notebook → `traz_vm.sh` →
+`git push` → o chat faz `git pull` e lê de `resultados/`. Regra no
+`CLAUDE.md` e no `README.md`.
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L13 | Resultados da VM entram pelo git, via `sim/traz_vm.sh` | ✅ | Pedido do Lukas; histórico no repositório, sem anexo |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -473,6 +501,7 @@ export PDK_ROOT=$HOME/Projects/pdks/librelane
 | L10 | PDK do LibreLane (`8afc8346`) em `PDK_ROOT` separada | ✅ | 2026-09-27 |
 | L11 | LibreLane 3.0.14 via Nix | ✅ smoke test ok | 2026-09-27 |
 | L12 | `CLAUDE.md` com regras de trabalho e git | ✅ | 2026-09-27 |
+| L13 | Resultados da VM pelo git (`sim/traz_vm.sh`) | ✅ | 2026-09-27 |
 
 ---
 

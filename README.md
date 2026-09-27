@@ -66,7 +66,16 @@ git push
 - Citar a decisão do diário (`L1`, `U3`, `T2`...) quando houver.
 - Resultado que volta da VM entra em `resultados/<data>_<etapa>/`
   (relatórios, netlist, logs úteis compactados), nunca a pasta de trabalho
-  inteira.
+  inteira. Quem separa é o script:
+
+  ```bash
+  # pasta da VM copiada para o notebook
+  bash sim/traz_vm.sh ~/Downloads/neorv32_isfft_soc sintese_layout
+  git add resultados/ && git commit -m "gdsii: resultados da VM -- sintese_layout" && git push
+  ```
+
+  A data da pasta é a do netlist (quando o Genus rodou). Arquivo acima de
+  500 kB vai compactado (`zless` para ler); `.sdf` não vem.
 
 ---
 

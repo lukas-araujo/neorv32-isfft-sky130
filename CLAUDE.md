@@ -45,6 +45,10 @@ Lukas.
 - Resultado que volta da VM ou do LibreLane vai para
   `resultados/<AAAA-MM-DD>_<etapa>/` (relatórios, netlist, logs úteis
   compactados; nada de `xcelium.d/`, `work/`, `.sdf`, `runs/`).
+  **Da VM, quem traz é o Lukas, pelo git:** ele copia a pasta da VM para
+  o notebook, roda `bash sim/traz_vm.sh <pasta> <etapa>` e dá push. Ao
+  começar, `git pull` e procure resultado novo em `resultados/` antes de
+  pedir arquivo no chat.
 - Antes de mandar algo para a VM, confira o que der com ferramentas
   abertas (`sim/run_gls_yosys.sh`: RTL e portas com Yosys + Icarus).
 
