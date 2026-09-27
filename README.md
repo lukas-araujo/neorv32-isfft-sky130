@@ -106,6 +106,15 @@ Dependências fora do repositório:
 
 ---
 
+## Ambiente do layout (notebook)
+
+```bash
+nix-shell ~/Projects/librelane/shell.nix        # terminal sem venv
+export PDK_ROOT=$HOME/Projects/pdks/librelane
+```
+
+---
+
 ## O que não entra no git
 
 Ver `.gitignore`: `build/`, saídas de simulação, objetos do firmware,

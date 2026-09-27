@@ -394,12 +394,65 @@ Conferido no código do LibreLane 3.0.14
 soltas para o layout. Confirma que as células de amarração tinham que
 vir do Genus (L2).
 
+### ✅ LibreLane instalado: smoke test passou
+
+**Tropeço no caminho:** o Nix já existia no notebook (2.34.7, da época da
+OpenRAM), mas o `/etc/nix/nix.conf` tinha só `experimental-features`,
+**sem o cache da FOSSi**. Sem ele o `nix-shell` compilaria OpenROAD,
+Magic e KLayout do zero (horas). Pego antes de começar a baixar:
+
+```bash
+sudo tee -a /etc/nix/nix.conf <<'EOF2'
+extra-substituters = https://nix-cache.fossi-foundation.org
+extra-trusted-public-keys = nix-cache.fossi-foundation.org:3+K59iFwXqKsL7BNu6Guy0v+uTlwsxYQxjspXzqLYQs=
+EOF2
+sudo systemctl restart nix-daemon
+nix config show | grep -E "substituters|trusted-public-keys"   # conferir
+```
+
+Com o cache: 214 pacotes baixados (792 MB, 4,6 GB descompactados) e só
+10 derivações pequenas construídas (ambientes Python e scripts do shell).
+Como reconhecer: `copying path ... from 'https://nix-cache.fossi-foundation.org'`
+é bom; muitos `building '...openroad...drv'` é o cache faltando.
+
+| Ferramenta (do `nix-shell`) | Versão |
+|---|---|
+| LibreLane | 3.0.14 |
+| OpenROAD | 2026-02-17 |
+| Yosys | 0.62 (com plugins: ghdl, slang, eqy, sby) |
+| Magic | 8.3.623 |
+| Netgen | 1.5.316 |
+| KLayout | 0.30.7 |
+| Verilator / Icarus / GHDL | 5.044 / s20250103 / 5.1.1 |
+| ciel | 2.4.0 |
+
+`librelane --smoke-test` (PDK baixado em
+`~/Projects/pdks/librelane/ciel/sky130/versions/8afc8346…`): 80 etapas
+do fluxo `Classic` em ~1 min, **Antenna, LVS e DRC: Passed**.
+
+Avisos do smoke test, todos esperados num projeto de exemplo:
+- `STA-1140 library ... already exists`: o OpenSTA lê a mesma `.lib` mais
+  de uma vez (por corner). Inofensivo.
+- `RSZ-0020 found 2 floating nets`: do projeto de exemplo, não do fluxo.
+- `DRT-0349 LEF58_ENCLOSURE with no CUTCLASS`: regra do tech LEF que o
+  roteador não usa. Conhecido no sky130.
+- `VSRC_LOC_FILES` não definido: queda de tensão (IR drop) sem pontos de
+  alimentação reais. Só importa com padring. Para nós: sem padring (L6),
+  o número de IR drop é indicativo.
+
+**Como entrar no ambiente daqui para frente** (terminal sem venv):
+
+```bash
+nix-shell ~/Projects/librelane/shell.nix
+export PDK_ROOT=$HOME/Projects/pdks/librelane
+```
+
 ### Decisões desta sessão
 
 | # | Decisão | Status | Motivo |
 |---|---|---|---|
-| L10 | Layout com o PDK fixado pelo LibreLane (`8afc8346`) em `PDK_ROOT` separada; OpenRAM segue com o de 2022 | 🟡 | LibreLane 3 com o PDK que ele testa; cada PDK na sua pasta |
-| L11 | LibreLane 3.0.14 via Nix, clone em `~/Projects/librelane` | 🟡 | Instalação recomendada; traz todas as ferramentas do layout |
+| L10 | Layout com o PDK fixado pelo LibreLane (`8afc8346`) em `PDK_ROOT` separada; OpenRAM segue com o de 2022 | ✅ | LibreLane 3 com o PDK que ele testa; cada PDK na sua pasta |
+| L11 | LibreLane 3.0.14 via Nix, clone em `~/Projects/librelane` | ✅ | Instalado; smoke test passou (Antenna, LVS, DRC) |
 | L12 | `CLAUDE.md` no repositório: regras de trabalho e de git para qualquer chat | ✅ | Pedido do Lukas: o próximo chat precisa saber como o git funciona |
 
 ---
@@ -417,8 +470,8 @@ vir do Genus (L2).
 | L7 | Diário próprio, prefixo L | ✅ | 2026-09-26 |
 | L8 | Repositório git, donos por pasta | ✅ | 2026-09-26 |
 | L9 | `SRAM_LIB_VIEW` extinto; `imem_sim_model.v` | ✅ | 2026-09-26 |
-| L10 | PDK do LibreLane (`8afc8346`) em `PDK_ROOT` separada | 🟡 | 2026-09-27 |
-| L11 | LibreLane 3.0.14 via Nix | 🟡 | 2026-09-27 |
+| L10 | PDK do LibreLane (`8afc8346`) em `PDK_ROOT` separada | ✅ | 2026-09-27 |
+| L11 | LibreLane 3.0.14 via Nix | ✅ smoke test ok | 2026-09-27 |
 | L12 | `CLAUDE.md` com regras de trabalho e git | ✅ | 2026-09-27 |
 
 ---
@@ -428,7 +481,7 @@ vir do Genus (L2).
 - [x] ~~Decidir L4~~ — Genus (caminho A)
 - [ ] Rodada para o layout na VM (blocos 1, 2, 3a) e resultados em `resultados/`
 - [x] ~~Máquina e PDK~~ — 3ª sessão
-- [ ] Instalar LibreLane (Nix) e passar o `--smoke-test`
+- [x] ~~Instalar LibreLane e passar o `--smoke-test`~~ — 3ª sessão
 - [ ] Confirmar L6 (sem padring)
 - [x] ~~Decidir a organização entre chats~~ — git (L8)
 - [x] ~~Ligar o GitHub e fazer o primeiro push~~ — `0086abd`
