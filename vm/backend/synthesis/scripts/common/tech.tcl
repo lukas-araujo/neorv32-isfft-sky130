@@ -40,6 +40,28 @@ set_db [get_db lib_cells *__lpflow_*]          .avoid true
 set_db [get_db lib_cells *__probe*]            .avoid true
 set_db [get_db lib_cells *__macro_sparecell*]  .avoid true
 
+#-----------------------------------------------------------------------------
+# 4. Celulas proibidas no LAYOUT (L20 -- DIARIO_GDSII, 10a sessao)
+#
+# O LibreLane recusa no posicionamento/roteamento as celulas da lista
+# drc_exclude.cells do PDK (PNR_EXCLUDED_CELL_FILE): variantes _0 e outras
+# com problema de DRC no desenho. Na 1a rodada do layout o netlist do Genus
+# tinha 227 instancias delas (and2_0, or2_0, o21ai_0, a2111oi_0,
+# a21boi_0). A sintese precisa saber das regras do layout: mesma lista aqui.
+# (A outra lista do PDK, no_synth.cells, e so preferencia de sintese do
+#  Yosys -- as celulas dela sao validas no layout; nao entra aqui.)
+#-----------------------------------------------------------------------------
+set f_excl [open ${TECH_DIR}/drc_exclude.cells]
+set n_excl 0
+foreach l [split [read $f_excl] "\n"] {
+    set l [string trim $l]
+    if { $l eq "" || [string index $l 0] eq "#" } { continue }
+    set cs [get_db lib_cells */$l]
+    if { [llength $cs] } { set_db $cs .avoid true ; incr n_excl [llength $cs] }
+}
+close $f_excl
+puts "--> drc_exclude.cells: $n_excl celulas marcadas avoid"
+
 #=============================================================================
 # LEF -- DELIBERADAMENTE NAO CARREGADO (licao do projeto anterior)
 #=============================================================================

@@ -67,6 +67,18 @@ write_verilog -noattr -noexpr -nohex -nodec $E/asic_top.v" > /dev/null
 echo "    assign no netlist achatado (esperado 0): $(grep -c '^\s*assign' "$E/asic_top.v" || true)"
 grep -E "Chip area" "$E/achata_stat.rpt" | sed 's/^ */    /'
 
+echo ">>> celulas proibidas no layout (tech/sky130/drc_exclude.cells):"
+python3 - "$REPO/tech/sky130/drc_exclude.cells" "$E/asic_top.v" <<'PY' | tee "$E/proibidas.txt"
+import re, sys, collections
+pats = [re.compile("^" + l.strip().replace("*", ".*") + "$")
+        for l in open(sys.argv[1]) if l.strip() and not l.startswith("#")]
+usadas = collections.Counter(re.findall(r"^\s*(sky130_fd_sc_hd__\w+)\s", open(sys.argv[2]).read(), re.M))
+ruins = {c: n for c, n in usadas.items() if any(p.match(c) for p in pats)}
+for c, n in sorted(ruins.items(), key=lambda x: -x[1]):
+    print(f"    {c:34s} {n}")
+print(f"    total: {sum(ruins.values())} instancias (esperado 0; L20: avoid no Genus)")
+PY
+
 echo ">>> conferindo: mesma ligacao em todos os pinos?"
 for x in genus:asic_top_genus.v plano:asic_top.v; do
   yosys -q -p "$LIBS
@@ -87,6 +99,7 @@ R="$(pasta_resultados)"
   echo "ETAPA 1 -- leitura do netlist ($(rodada))"
   echo "netlist: ${NETLIST#$REPO/}"
   echo "achatamento (L19):"; sed 's/^/  /' "$E/compara.txt"
+  echo "celulas proibidas no layout (L20):"; sed 's/^ */  /' "$E/proibidas.txt"
   S="$(dirname "$(estado_de Yosys.Synthesis)")"
   # (if, e nao '[ ] &&': com set -e, um teste falso no fim do bloco
   #  encerraria o script)

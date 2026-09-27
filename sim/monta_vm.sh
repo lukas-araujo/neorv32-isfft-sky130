@@ -115,6 +115,8 @@ cp "$PROJ/sw/hello/neorv32_raw_exe.hex" "$DEST/sw/hello/"
 cp "$TECH_SRC/lib/sky130_fd_sc_hd__tt_025C_1v80.lib" "$DEST/tech/lib/"
 cp "$TECH_SRC/lef/sky130_fd_sc_hd.lef" "$TECH_SRC/lef/sky130_ef_sc_hd.lef" "$DEST/tech/lef/"
 cp "$TECH_SRC/verilog/primitives.v" "$TECH_SRC/verilog/sky130_fd_sc_hd.v" "$DEST/tech/verilog/"
+# Celulas proibidas no layout (lista do PDK do LibreLane; lida pelo tech.tcl)
+cp "$PROJ/tech/sky130/drc_exclude.cells" "$DEST/tech/"
 for m in $MACROS; do
   cp "$PROJ/macros/$m/${m}_TT_1p8V_25C.lib" "$DEST/tech/lib/"
   cp "$PROJ/macros/$m/${m}.lef" "$DEST/tech/lef/"

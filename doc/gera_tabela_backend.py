@@ -12,8 +12,8 @@ FASES = [
         ("0", "Netlist para o layout (.lib 33 bits, tie cells)", "Genus · LEC · Xcelium", "tabela antes × depois", "feito"),
     ]),
     ("Nível 1 — núcleo (fluxo Classic)", [
-        ("1", "Leitura do netlist e checagens", "LibreLane (Yosys)", "—", "proximo"),
-        ("2", "Floorplan: die, macros e pinos", "OpenROAD", "planta com as 4 macros", "afazer"),
+        ("1", "Leitura do netlist e checagens", "LibreLane (Yosys)", "tabela da etapa 1", "feito"),
+        ("2", "Floorplan: die, macros e pinos", "OpenROAD", "planta com as 4 macros", "proximo"),
         ("3", "Rede de alimentação (PDN)", "OpenROAD", "malha met4/met5 + anéis", "afazer"),
         ("4", "Posicionamento das células", "OpenROAD", "mapa de densidade", "afazer"),
         ("5", "Árvore de clock (CTS)", "OpenROAD", "árvore de clock", "afazer"),

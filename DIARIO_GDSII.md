@@ -921,6 +921,95 @@ o achatamento no notebook causar outro problema.
 
 ---
 
+## 2026-09-27 (10ª sessão) — ✅ Etapa 1 passou; o que os números dizem
+
+Rodada `2026-09-27_1932` (commit `aaa5dd4` do Lukas):
+`resultados/2026-09-27_1932_layout_nucleo/01_leitura.txt` e
+`01_leitura_metricas.json` (76 métricas).
+
+| Item | Resultado | Fonte |
+|---|---|---|
+| Achatamento (L19) | 2.562 → 0 `assign`; 247.493 pinos, 62.153 redes, 0 erros | `01_leitura.txt` |
+| Checagens da síntese | `Found and reported 0 problems`; `synthesis__check_error__count` 0 | idem + métricas |
+| Células não mapeadas | `design__instance_unmapped__count` 0 | métricas |
+| Instâncias | `design__instance__count` 60.038 (= Genus) | métricas |
+
+Três números **pareciam** errados. Investigados:
+
+### 1. Área: 35.614 µm² em vez de ~730.163 — só contagem
+
+O Yosys do LibreLane calcula a área com a biblioteca **já filtrada para
+síntese**. O PDK tem duas listas (open_pdks `8afc8346`,
+`sky130/openlane/sky130_fd_sc_hd/`):
+
+| Lista | Variável no LibreLane | Células | Efeito |
+|---|---|---|---|
+| `no_synth.cells` | `SYNTH_EXCLUDED_CELL_FILE` | 199 (141 de força `_1`, buffers de clock, decaps...) | o **Yosys** não escolhe na síntese. **Válidas no layout** |
+| `drc_exclude.cells` | `PNR_EXCLUDED_CELL_FILE` | 53 | proibidas na síntese **e no layout** |
+
+O Genus usou muito `_1` (17.601 `dfxtp_1`, 17.676 `a22o_1`...): 57.093
+instâncias em células da `no_synth`. Conferido: a área das células **fora**
+das duas listas soma exatamente **35.614,2 µm²** — o número do LibreLane.
+**Não é problema**; para relatório, a área certa segue sendo a nossa
+(730.162,784 µm²).
+
+### 2. 🐛 Células proibidas no layout: 227 instâncias
+
+**Sintoma:** das 53 células da `drc_exclude.cells`, o netlist usa 5:
+
+| Célula | Instâncias |
+|---|---|
+| `sky130_fd_sc_hd__and2_0` | 169 |
+| `sky130_fd_sc_hd__or2_0` | 35 |
+| `sky130_fd_sc_hd__o21ai_0` | 12 |
+| `sky130_fd_sc_hd__a2111oi_0` | 8 |
+| `sky130_fd_sc_hd__a21boi_0` | 3 |
+
+**Causa:** o Genus só evitava as células que **nós** listamos no
+`tech.tcl` (scan, `lpflow`, `probe`, spare). As regras do layout do PDK
+não chegavam na síntese. O arquivo não diz o motivo de cada célula; o nome
+da lista indica problema de DRC no desenho. As 5 têm os mesmos pinos e a
+mesma função das versões `_1`.
+**Não trava as etapas 2 e 3** (floorplan e PDN não mexem nas células).
+Trava a partir do posicionamento (etapa 4).
+**Resolvi com (L20, 🟡):**
+- `tech/sky130/drc_exclude.cells`: cópia da lista do PDK do LibreLane;
+- `tech.tcl`: lê a lista e marca `avoid` em todas (o `monta_vm.sh` leva
+  o arquivo para `tech/` da VM);
+- `01_leitura.sh`: conta as células proibidas no netlist e mostra
+  (esperado 0). Conferido no netlist atual: acusa as 227.
+- **Falta:** rodar de novo na VM (blocos 1, 2, 3a) → novo netlist →
+  refazer a etapa 1 do layout.
+**Vira slide?** Sim: "a síntese precisa conhecer as regras do layout" —
+e a diferença entre as duas listas do PDK.
+
+### 3. Timing sem fios: −47 ns de slack (TT) — não conclusivo
+
+`timing__setup__ws` −47,35 ns (TT), −86,12 ns (SS), −28,81 ns (FF);
+6.800 caminhos violando; 61.483 violações de transição e 1.710 de fanout.
+Nesta etapa o netlist ainda está como o Genus entregou: no Genus o clock e
+o reset eram **redes ideais** (sem buffer, `set_ideal_net` no SDC) e o
+Genus não tinha o limite de fanout 10 nem a transição máxima do
+LibreLane. Aqui não há árvore de clock nem buffers nas redes de fanout
+alto, então as transições (e os atrasos) explodem. Quem conserta é o
+`RepairDesignPostGPL` (etapa 4) e o CTS (etapa 5). **O número que vale é
+o depois do CTS.** A confirmar com o relatório de STA desta rodada
+(`junta_logs.sh`), para ver o pior caminho.
+
+A potência (`power__total` 75.787.760 W) é o `.lib` das macros com
+`internal_power` fora de escala (FE 14ª sessão). Ignorar.
+
+### Para o slide
+
+`doc/tabela_etapa1.png` (`doc/gera_tabela_etapa1.py`): entrada, achatamento,
+checagens, células proibidas (Corrigir), timing (Informativo).
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L20 | Genus evita as células da `drc_exclude.cells` do PDK do LibreLane; `01_leitura.sh` confere | 🟡 | 227 instâncias proibidas no layout; falta rodar na VM |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -944,6 +1033,7 @@ o achatamento no notebook causar outro problema.
 | L17 | `config.json` do núcleo | 🟡 | 2026-09-27 |
 | L18 | Uma etapa por script, com GUI e imagem | ✅ | 2026-09-27 |
 | L19 | Achatar o netlist antes do LibreLane (0 `assign`) | ✅ | 2026-09-27 |
+| L20 | Genus evita `drc_exclude.cells` | 🟡 | 2026-09-27 |
 
 ---
 
@@ -952,7 +1042,9 @@ o achatamento no notebook causar outro problema.
 - [x] ~~Decidir L4~~ — Genus (caminho A)
 - [x] ~~Rodada para o layout na VM~~ — 5ª sessão: tudo passou
 - [x] ~~`layout/nucleo/`: `config.json` e scripts das etapas 1–3~~ — 8ª sessão
-- [ ] Rodar `01_leitura.sh`, `02_floorplan.sh`, `03_pdn.sh` no notebook
+- [x] ~~Etapa 1 no notebook~~ — passou (10ª sessão)
+- [ ] Etapas 2 e 3 no notebook
+- [ ] VM: síntese com L20 (blocos 1, 2, 3a) antes da etapa 4
 - [x] ~~Máquina e PDK~~ — 3ª sessão
 - [x] ~~Instalar LibreLane e passar o `--smoke-test`~~ — 3ª sessão
 - [x] ~~Confirmar L6~~ — com padring

@@ -22,16 +22,16 @@
 <text x="158" y="466.0" font-size="34" fill="#444441">1</text>
 <text x="248" y="466.0" font-size="34" fill="#2C2C2A">Leitura do netlist e checagens</text>
 <text x="1130" y="466.0" font-size="34" font-weight="500" fill="#2C2C2A">LibreLane (Yosys)</text>
-<text x="1620" y="466.0" font-size="32" fill="#444441">—</text>
-<rect x="2252" y="425" width="190" height="58" rx="29" fill="#EEEDFB" stroke="#534AB7" stroke-width="2"/>
-<text x="2347" y="465.0" font-size="31" fill="#3C3489" text-anchor="middle">Próximo</text>
+<text x="1620" y="466.0" font-size="32" fill="#444441">tabela da etapa 1</text>
+<rect x="2252" y="425" width="190" height="58" rx="29" fill="#E1F3EE" stroke="#0F6E56" stroke-width="2"/>
+<text x="2347" y="465.0" font-size="31" fill="#0B4F3E" text-anchor="middle">Feito</text>
 <line x1="148" y1="500" x2="2452" y2="500" stroke="#D9D5CC" stroke-width="2"/>
 <text x="158" y="558.0" font-size="34" fill="#444441">2</text>
 <text x="248" y="558.0" font-size="34" fill="#2C2C2A">Floorplan: die, macros e pinos</text>
 <text x="1130" y="558.0" font-size="34" font-weight="500" fill="#2C2C2A">OpenROAD</text>
 <text x="1620" y="558.0" font-size="32" fill="#444441">planta com as 4 macros</text>
-<rect x="2252" y="517" width="190" height="58" rx="29" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2" stroke-dasharray="10 7"/>
-<text x="2347" y="557.0" font-size="31" fill="#6B6B66" text-anchor="middle">A fazer</text>
+<rect x="2252" y="517" width="190" height="58" rx="29" fill="#EEEDFB" stroke="#534AB7" stroke-width="2"/>
+<text x="2347" y="557.0" font-size="31" fill="#3C3489" text-anchor="middle">Próximo</text>
 <line x1="148" y1="592" x2="2452" y2="592" stroke="#D9D5CC" stroke-width="2"/>
 <text x="158" y="650.0" font-size="34" fill="#444441">3</text>
 <text x="248" y="650.0" font-size="34" fill="#2C2C2A">Rede de alimentação (PDN)</text>

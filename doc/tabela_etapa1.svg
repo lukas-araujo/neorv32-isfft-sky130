@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="696" viewBox="0 0 2400 696" font-family="Roboto, Arial, sans-serif">
+<rect width="2400" height="696" fill="#FFFFFF"/>
+<rect x="118" y="60" width="2164" height="576" rx="36" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2"/>
+<path d="M 118 156 L 118 96 Q 118 60 154 60 L 2246 60 Q 2282 60 2282 96 L 2282 156 Z" fill="#F1EEE8" stroke="#8C8C8C" stroke-width="2"/>
+<text x="158" y="121.0" font-size="36" font-weight="500" fill="#444441">Etapa 1 — leitura do netlist</text>
+<text x="930" y="121.0" font-size="36" font-weight="500" fill="#444441">Resultado</text>
+<text x="2032" y="121.0" font-size="36" font-weight="500" fill="#444441">Situação</text>
+<text x="158" y="216.0" font-size="34" fill="#2C2C2A">Entrada</text>
+<text x="930" y="216.0" font-size="34" fill="#2C2C2A">netlist do Genus: 60.038 células, 4 macros, 10 conb_1</text>
+<rect x="2032" y="174" width="210" height="60" rx="30" fill="#E1F3EE" stroke="#0F6E56" stroke-width="2"/>
+<text x="2137" y="215.0" font-size="31" fill="#0B4F3E" text-anchor="middle">OK</text>
+<line x1="148" y1="252" x2="2252" y2="252" stroke="#D9D5CC" stroke-width="2"/>
+<text x="158" y="312.0" font-size="34" fill="#2C2C2A">Achatar a hierarquia</text>
+<text x="930" y="312.0" font-size="34" fill="#2C2C2A">25.960 → 0 assign; 247.493 pinos com a mesma ligação</text>
+<rect x="2032" y="270" width="210" height="60" rx="30" fill="#E1F3EE" stroke="#0F6E56" stroke-width="2"/>
+<text x="2137" y="311.0" font-size="31" fill="#0B4F3E" text-anchor="middle">OK</text>
+<line x1="148" y1="348" x2="2252" y2="348" stroke="#D9D5CC" stroke-width="2"/>
+<text x="158" y="408.0" font-size="34" fill="#2C2C2A">Checagens do LibreLane</text>
+<text x="930" y="408.0" font-size="34" fill="#2C2C2A">0 problemas · 0 células não mapeadas · 4/4 macros</text>
+<rect x="2032" y="366" width="210" height="60" rx="30" fill="#E1F3EE" stroke="#0F6E56" stroke-width="2"/>
+<text x="2137" y="407.0" font-size="31" fill="#0B4F3E" text-anchor="middle">OK</text>
+<line x1="148" y1="444" x2="2252" y2="444" stroke="#D9D5CC" stroke-width="2"/>
+<text x="158" y="504.0" font-size="34" fill="#2C2C2A">Células proibidas no layout</text>
+<text x="930" y="504.0" font-size="34" fill="#2C2C2A">227 instâncias de 5 células _0 (drc_exclude)</text>
+<rect x="2032" y="462" width="210" height="60" rx="30" fill="#FBF0DC" stroke="#A8660A" stroke-width="2"/>
+<text x="2137" y="503.0" font-size="31" fill="#7A4A06" text-anchor="middle">Corrigir</text>
+<line x1="148" y1="540" x2="2252" y2="540" stroke="#D9D5CC" stroke-width="2"/>
+<text x="158" y="600.0" font-size="34" fill="#2C2C2A">Timing sem fios nem árvore de clock</text>
+<text x="930" y="600.0" font-size="34" fill="#2C2C2A">não conclusivo: vale depois do CTS (etapa 5)</text>
+<rect x="2032" y="558" width="210" height="60" rx="30" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="2137" y="599.0" font-size="31" fill="#6B6B66" text-anchor="middle">Informativo</text>
+</svg>
