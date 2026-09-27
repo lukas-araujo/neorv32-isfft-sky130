@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="1742" viewBox="0 0 2600 1742" font-family="Roboto, Arial, sans-serif">
+<rect width="2600" height="1742" fill="#FFFFFF"/>
+<rect x="118" y="60" width="2364" height="1532" rx="36" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2"/>
+<path d="M 118 156 L 118 96 Q 118 60 154 60 L 2446 60 Q 2482 60 2482 96 L 2482 156 Z" fill="#F1EEE8" stroke="#8C8C8C" stroke-width="2"/>
+<text x="158" y="121.0" font-size="36" font-weight="500" fill="#444441">#</text>
+<text x="248" y="121.0" font-size="36" font-weight="500" fill="#444441">Etapa</text>
+<text x="1130" y="121.0" font-size="36" font-weight="500" fill="#444441">Ferramenta</text>
+<text x="1620" y="121.0" font-size="36" font-weight="500" fill="#444441">Imagem para o slide</text>
+<text x="2252" y="121.0" font-size="36" font-weight="500" fill="#444441">Situação</text>
+<rect x="119" y="156" width="2362" height="80" fill="#F1EEE8"/>
+<line x1="118" y1="156" x2="2482" y2="156" stroke="#8C8C8C" stroke-width="2"/>
+<text x="158" y="208.0" font-size="34" fill="#444441">Preparação</text>
+<text x="158" y="294.0" font-size="34" fill="#444441">0</text>
+<text x="248" y="294.0" font-size="34" fill="#2C2C2A">Netlist para o layout (.lib 33 bits, tie cells)</text>
+<text x="1130" y="294.0" font-size="34" font-weight="500" fill="#2C2C2A">Genus · LEC · Xcelium</text>
+<text x="1620" y="294.0" font-size="32" fill="#444441">tabela antes × depois</text>
+<rect x="2252" y="253" width="190" height="58" rx="29" fill="#E1F3EE" stroke="#0F6E56" stroke-width="2"/>
+<text x="2347" y="293.0" font-size="31" fill="#0B4F3E" text-anchor="middle">Feito</text>
+<rect x="119" y="328" width="2362" height="80" fill="#F1EEE8"/>
+<line x1="118" y1="328" x2="2482" y2="328" stroke="#8C8C8C" stroke-width="2"/>
+<text x="158" y="380.0" font-size="34" fill="#444441">Nível 1 — núcleo (fluxo Classic)</text>
+<text x="158" y="466.0" font-size="34" fill="#444441">1</text>
+<text x="248" y="466.0" font-size="34" fill="#2C2C2A">Leitura do netlist e checagens</text>
+<text x="1130" y="466.0" font-size="34" font-weight="500" fill="#2C2C2A">LibreLane (Yosys)</text>
+<text x="1620" y="466.0" font-size="32" fill="#444441">—</text>
+<rect x="2252" y="425" width="190" height="58" rx="29" fill="#EEEDFB" stroke="#534AB7" stroke-width="2"/>
+<text x="2347" y="465.0" font-size="31" fill="#3C3489" text-anchor="middle">Próximo</text>
+<line x1="148" y1="500" x2="2452" y2="500" stroke="#D9D5CC" stroke-width="2"/>
+<text x="158" y="558.0" font-size="34" fill="#444441">2</text>
+<text x="248" y="558.0" font-size="34" fill="#2C2C2A">Floorplan: die, macros e pinos</text>
+<text x="1130" y="558.0" font-size="34" font-weight="500" fill="#2C2C2A">OpenROAD</text>
+<text x="1620" y="558.0" font-size="32" fill="#444441">planta com as 4 macros</text>
+<rect x="2252" y="517" width="190" height="58" rx="29" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="2347" y="557.0" font-size="31" fill="#6B6B66" text-anchor="middle">A fazer</text>
+<line x1="148" y1="592" x2="2452" y2="592" stroke="#D9D5CC" stroke-width="2"/>
+<text x="158" y="650.0" font-size="34" fill="#444441">3</text>
+<text x="248" y="650.0" font-size="34" fill="#2C2C2A">Rede de alimentação (PDN)</text>
+<text x="1130" y="650.0" font-size="34" font-weight="500" fill="#2C2C2A">OpenROAD</text>
+<text x="1620" y="650.0" font-size="32" fill="#444441">malha met4/met5 + anéis</text>
+<rect x="2252" y="609" width="190" height="58" rx="29" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="2347" y="649.0" font-size="31" fill="#6B6B66" text-anchor="middle">A fazer</text>
+<line x1="148" y1="684" x2="2452" y2="684" stroke="#D9D5CC" stroke-width="2"/>
+<text x="158" y="742.0" font-size="34" fill="#444441">4</text>
+<text x="248" y="742.0" font-size="34" fill="#2C2C2A">Posicionamento das células</text>
+<text x="1130" y="742.0" font-size="34" font-weight="500" fill="#2C2C2A">OpenROAD</text>
+<text x="1620" y="742.0" font-size="32" fill="#444441">mapa de densidade</text>
+<rect x="2252" y="701" width="190" height="58" rx="29" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="2347" y="741.0" font-size="31" fill="#6B6B66" text-anchor="middle">A fazer</text>
+<line x1="148" y1="776" x2="2452" y2="776" stroke="#D9D5CC" stroke-width="2"/>
+<text x="158" y="834.0" font-size="34" fill="#444441">5</text>
+<text x="248" y="834.0" font-size="34" fill="#2C2C2A">Árvore de clock (CTS)</text>
+<text x="1130" y="834.0" font-size="34" font-weight="500" fill="#2C2C2A">OpenROAD</text>
+<text x="1620" y="834.0" font-size="32" fill="#444441">árvore de clock</text>
+<rect x="2252" y="793" width="190" height="58" rx="29" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="2347" y="833.0" font-size="31" fill="#6B6B66" text-anchor="middle">A fazer</text>
+<line x1="148" y1="868" x2="2452" y2="868" stroke="#D9D5CC" stroke-width="2"/>
+<text x="158" y="926.0" font-size="34" fill="#444441">6</text>
+<text x="248" y="926.0" font-size="34" fill="#2C2C2A">Roteamento global e detalhado</text>
+<text x="1130" y="926.0" font-size="34" font-weight="500" fill="#2C2C2A">OpenROAD</text>
+<text x="1620" y="926.0" font-size="32" fill="#444441">congestionamento + fios</text>
+<rect x="2252" y="885" width="190" height="58" rx="29" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="2347" y="925.0" font-size="31" fill="#6B6B66" text-anchor="middle">A fazer</text>
+<line x1="148" y1="960" x2="2452" y2="960" stroke="#D9D5CC" stroke-width="2"/>
+<text x="158" y="1018.0" font-size="34" fill="#444441">7</text>
+<text x="248" y="1018.0" font-size="34" fill="#2C2C2A">Parasitas e timing pós-layout</text>
+<text x="1130" y="1018.0" font-size="34" font-weight="500" fill="#2C2C2A">OpenRCX · OpenSTA</text>
+<text x="1620" y="1018.0" font-size="32" fill="#444441">slack: Genus × layout</text>
+<rect x="2252" y="977" width="190" height="58" rx="29" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="2347" y="1017.0" font-size="31" fill="#6B6B66" text-anchor="middle">A fazer</text>
+<line x1="148" y1="1052" x2="2452" y2="1052" stroke="#D9D5CC" stroke-width="2"/>
+<text x="158" y="1110.0" font-size="34" fill="#444441">8</text>
+<text x="248" y="1110.0" font-size="34" fill="#2C2C2A">DRC, LVS e antena do núcleo</text>
+<text x="1130" y="1110.0" font-size="34" font-weight="500" fill="#2C2C2A">Magic · KLayout · Netgen</text>
+<text x="1620" y="1110.0" font-size="32" fill="#444441">tabela de checagens</text>
+<rect x="2252" y="1069" width="190" height="58" rx="29" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="2347" y="1109.0" font-size="31" fill="#6B6B66" text-anchor="middle">A fazer</text>
+<line x1="148" y1="1144" x2="2452" y2="1144" stroke="#D9D5CC" stroke-width="2"/>
+<text x="158" y="1202.0" font-size="34" fill="#444441">9</text>
+<text x="248" y="1202.0" font-size="34" fill="#2C2C2A">Netlist final = netlist do Genus</text>
+<text x="1130" y="1202.0" font-size="34" font-weight="500" fill="#2C2C2A">Conformal · Xcelium</text>
+<text x="1620" y="1202.0" font-size="32" fill="#444441">PASS / somas = RTL</text>
+<rect x="2252" y="1161" width="190" height="58" rx="29" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="2347" y="1201.0" font-size="31" fill="#6B6B66" text-anchor="middle">A fazer</text>
+<rect x="119" y="1236" width="2362" height="80" fill="#F1EEE8"/>
+<line x1="118" y1="1236" x2="2482" y2="1236" stroke="#8C8C8C" stroke-width="2"/>
+<text x="158" y="1288.0" font-size="34" fill="#444441">Nível 2 — chip (fluxo Chip)</text>
+<text x="158" y="1374.0" font-size="34" fill="#444441">10</text>
+<text x="248" y="1374.0" font-size="34" fill="#2C2C2A">chip_top: pads e configuração</text>
+<text x="1130" y="1374.0" font-size="34" font-weight="500" fill="#2C2C2A">Verilog · Icarus</text>
+<text x="1620" y="1374.0" font-size="32" fill="#444441">mapa dos pads</text>
+<rect x="2252" y="1333" width="190" height="58" rx="29" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="2347" y="1373.0" font-size="31" fill="#6B6B66" text-anchor="middle">A fazer</text>
+<line x1="148" y1="1408" x2="2452" y2="1408" stroke="#D9D5CC" stroke-width="2"/>
+<text x="158" y="1466.0" font-size="34" fill="#444441">11</text>
+<text x="248" y="1466.0" font-size="34" fill="#2C2C2A">Padring, seal ring e preenchimento</text>
+<text x="1130" y="1466.0" font-size="34" font-weight="500" fill="#2C2C2A">LibreLane (Chip)</text>
+<text x="1620" y="1466.0" font-size="32" fill="#444441">chip inteiro</text>
+<rect x="2252" y="1425" width="190" height="58" rx="29" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="2347" y="1465.0" font-size="31" fill="#6B6B66" text-anchor="middle">A fazer</text>
+<line x1="148" y1="1500" x2="2452" y2="1500" stroke="#D9D5CC" stroke-width="2"/>
+<text x="158" y="1558.0" font-size="34" fill="#444441">12</text>
+<text x="248" y="1558.0" font-size="34" fill="#2C2C2A">DRC, LVS e densidade do chip: GDSII</text>
+<text x="1130" y="1558.0" font-size="34" font-weight="500" fill="#2C2C2A">Magic · KLayout · Netgen</text>
+<text x="1620" y="1558.0" font-size="32" fill="#444441">imagem final do GDS</text>
+<rect x="2252" y="1517" width="190" height="58" rx="29" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="2347" y="1557.0" font-size="31" fill="#6B6B66" text-anchor="middle">A fazer</text>
+<text x="158" y="1672" font-size="34" fill="#444441">Se der tempo: STA com SPEF no Tempus, potência no Joules e mapa de queda de tensão (IR drop).</text>
+</svg>

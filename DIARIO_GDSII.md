@@ -687,8 +687,48 @@ núcleo, mesmo `tb_gate` (a UART tem que passar pelo pad).
 | # | Decisão | Status | Motivo |
 |---|---|---|---|
 | L6 | ~~Sem padring~~ → **chip completo, com padring** | ✅ | Decisão do Lukas |
-| L15 | Dois níveis: núcleo (`Classic`) → chip com padring (`Chip`) | 🟡 | Núcleo sai primeiro; padring (caminho incerto no sky130) não trava o resto |
+| L15 | Dois níveis: núcleo (`Classic`) → chip com padring (`Chip`) | ✅ | Núcleo sai primeiro; padring (caminho incerto no sky130) não trava o resto |
 | L16 | Padring com `sky130_ef_io` declarado no nosso config (`PAD_*`, `PAD_FAKE_SITES`) | 🟡 | O PDK do LibreLane não traz a configuração para o sky130 |
+
+---
+
+## 2026-09-27 (7ª sessão) — Roteiro até o GDSII final
+
+**L15 confirmada pelo Lukas** (dois níveis). Antes de começar, o roteiro
+com ferramenta, critério de "passou" e a imagem que cada etapa rende.
+Versão de slide: `doc/tabela_backend.png` (`doc/gera_tabela_backend.py`;
+para atualizar a situação, mude a última coluna e rode de novo). A tabela
+geral (`doc/tabela_fluxo.png`) foi atualizada: 6–8 feitas, back-end em 3
+linhas (núcleo, DRC/LVS do núcleo, chip).
+
+| # | Etapa | Ferramenta | Passou quando | Imagem |
+|---|---|---|---|---|
+| 0 | Netlist para o layout | Genus · Conformal · Xcelium | ✅ 5ª sessão | tabela antes × depois |
+| **Nível 1** | **núcleo `asic_top`, fluxo `Classic`** | | | |
+| 1 | Leitura do netlist (`SYNTH_ELABORATE_ONLY`) | Yosys (no LibreLane) | 4 macros, 0 módulos não resolvidos, 0 constantes soltas | — |
+| 2 | Floorplan: die, macros (posição + orientação + halo), pinos | OpenROAD | macros sem sobreposição, pinos das macros virados para a lógica | planta com as 4 macros |
+| 3 | PDN (met4/met5 + ligação nos anéis das macros) | OpenROAD `pdngen` | nenhuma célula ou macro sem alimentação | malha de alimentação |
+| 4 | Posicionamento global + detalhado, correção de fanout/transição | OpenROAD (RePlAce, OpenDP, `repair_design`) | 0 células fora de linha; densidade < ~60% | mapa de densidade |
+| 5 | Árvore de clock (~19.800 flip-flops) | OpenROAD (TritonCTS) | skew baixo; slack ainda positivo | árvore de clock |
+| 6 | Roteamento global e detalhado | OpenROAD (FastRoute, TritonRoute) | 0 violações de roteamento (DRV) | congestionamento + fios |
+| 7 | Extração de parasitas + STA | OpenRCX · OpenSTA | slack ≥ 0 a 50 MHz (Genus: +2,4 ns) | slack Genus × layout |
+| 8 | DRC, LVS, antena (macros como caixa-preta, L3) | Magic · KLayout · Netgen | DRC 0 e LVS limpo na lógica | tabela de checagens |
+| 9 | Netlist do layout ≡ netlist do Genus; simulação do netlist final | Conformal · Xcelium (VM) | LEC PASS; somas = RTL | PASS |
+| **Nível 2** | **chip `chip_top`, fluxo `Chip`** | | | |
+| 10 | `chip_top.v`: pads `sky130_ef_io` + configuração + núcleo | Verilog · Icarus | UART sai pelo pad; `tb_gate` PASSOU | mapa dos pads |
+| 11 | Padring, núcleo como macro, seal ring, preenchimento | LibreLane `Chip` (OpenROAD, KLayout) | anel fechado; núcleo alimentado pelos pads | chip inteiro |
+| 12 | DRC, LVS, densidade → GDSII | Magic · KLayout · Netgen | DRC/LVS limpos fora das células da foundry; densidade ok | imagem final do GDS |
+
+Se der tempo (FE-D23): STA com SPEF no Tempus, potência no Joules com
+atividade da simulação, mapa de queda de tensão (IR drop).
+
+**Imagens:** o LibreLane grava uma rodada por etapa em
+`layout/runs/<RUN>/NN-<etapa>/`, com o `.odb` e o `.def` daquele momento.
+Qualquer etapa abre no OpenROAD com GUI (`openroad -gui`) ou no KLayout,
+e o fluxo já renderiza o GDS final em PNG (`KLayout.Render`). Plano: um
+script em `layout/` que gera as imagens das etapas 2–6 automaticamente
+(OpenROAD `save_image` em modo sem tela), para os slides saírem iguais a
+cada rodada.
 
 ---
 
@@ -710,7 +750,7 @@ núcleo, mesmo `tb_gate` (a UART tem que passar pelo pad).
 | L12 | `CLAUDE.md` com regras de trabalho e git | ✅ | 2026-09-27 |
 | L13 | Resultados da VM pelo git (`sim/traz_vm.sh`) | ✅ | 2026-09-27 |
 | L14 | Netlist do layout = rodada de 27/09 | ✅ | 2026-09-27 |
-| L15 | Dois níveis: núcleo → chip com padring | 🟡 | 2026-09-27 |
+| L15 | Dois níveis: núcleo → chip com padring | ✅ | 2026-09-27 |
 | L16 | Padring `sky130_ef_io` no nosso config | 🟡 | 2026-09-27 |
 
 ---

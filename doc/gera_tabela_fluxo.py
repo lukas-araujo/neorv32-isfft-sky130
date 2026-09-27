@@ -15,13 +15,14 @@ FASES = [
         ("5", "Simulação do chip (EVM igual à Kria)", "Icarus Verilog", "Notebook", "feito"),
     ]),
     ("Síntese e verificação", [
-        ("6", "Síntese lógica", "Genus", "VM", "proximo"),
-        ("7", "Equivalência RTL × netlist", "Conformal LEC", "VM", "afazer"),
-        ("8", "Simulação pós-síntese", "Xcelium", "VM", "afazer"),
+        ("6", "Síntese lógica", "Genus", "VM", "feito"),
+        ("7", "Equivalência RTL × netlist", "Conformal LEC", "VM", "feito"),
+        ("8", "Simulação pós-síntese", "Xcelium", "VM", "feito"),
     ]),
     ("Back-end — layout", [
-        ("9", "Floorplan, place, CTS e roteamento", "LibreLane (OpenROAD)", "Notebook", "afazer"),
-        ("10", "DRC, LVS e GDSII", "Magic · Netgen · KLayout", "Notebook", "afazer"),
+        ("9", "Núcleo: floorplan, place, CTS e roteamento", "LibreLane (OpenROAD)", "Notebook", "proximo"),
+        ("10", "Núcleo: DRC, LVS e GDSII", "Magic · Netgen · KLayout", "Notebook", "afazer"),
+        ("11", "Chip: padring, seal ring e GDSII final", "LibreLane (Chip)", "Notebook", "afazer"),
     ]),
 ]
 NOTA = "Se der tempo: STA com parasitas extraídos (Tempus) e potência (Joules)."
