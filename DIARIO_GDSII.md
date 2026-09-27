@@ -827,6 +827,100 @@ resumo, sem salvar as métricas.
 
 ---
 
+## 2026-09-27 (9ª sessão) — 🐛 Etapa 1 parou: 25.960 `assign` no netlist
+
+Primeira rodada de verdade no notebook (`2026-09-27_1630`). Logs em
+`resultados/2026-09-27_1630_layout_nucleo/logs_1644.tar.gz` (primeira
+vez com o `junta_logs.sh`).
+
+### 🐛 `Checker.NetlistAssignStatements`: assign statement found in netlist
+
+**Sintoma:** o fluxo parou na etapa 5 (`05-checker-netlistassignstatements`).
+`error.log` com **25.960** linhas `asic_top.nl.v:NNNNNN: assign statement
+found in netlist`. Exemplo do que o Yosys escreveu:
+```
+assign \u_isfft.inst_isfft_matriz.inst_ifft_1d.stage0.X1[4] = \u_isfft.core_x[20] ;
+```
+**Causa:** o netlist do Genus é **hierárquico** (200 módulos, 0 `assign`).
+O LibreLane, no modo `SYNTH_ELABORATE_ONLY`, achata a hierarquia e marca
+**todo fio com `keep`** (`setattr -set keep 1`, em
+`scripts/pyosys/synthesize.py`). Ao achatar, cada porta de submódulo liga
+dois nomes do mesmo fio (o de fora e o de dentro); com `keep` o
+`opt_clean` não pode fundi-los, e o Yosys escreve a ligação como
+`assign`. O OpenROAD não lida bem com `assign` no netlist, por isso o
+LibreLane barra.
+**Erro meu:** na 8ª sessão reproduzi exatamente esse passo aqui e o
+`flat.v` já tinha 25.960 `assign` — conferi o "0 problems" do `check` e
+não os `assign`. A checagem do LibreLane que vem logo depois teria me
+mostrado.
+**Resolvi com (L19):** achatar **antes** do LibreLane, sem `keep`:
+```
+flatten -noscopeinfo  ->  splitnets  ->  opt_clean -purge
+```
+- só `flatten` + `opt_clean -purge`: 25.960 → **39** `assign` (os que
+  sobram ligam **bits** de vetores diferentes; o `opt_clean` só funde fio
+  inteiro);
+- com `splitnets` antes (1 bit por fio): **0 `assign`**, área igual
+  (730.162,784 µm²), mesmos nomes das 4 macros;
+- o passo do LibreLane sobre esse netlist (com `keep`) continua com **0
+  `assign`** e 0 avisos de fio sem driver (os `UNCONNECTED_HIER_Z...
+  no driver` do log da rodada somem).
+**Tempo gasto:** ~40 min.
+**Vira slide?** Sim: "netlist hierárquico × plano: o que o P&R espera
+receber" — e a lição de conferir o que o **próximo** passo checa.
+
+### Prova de que o achatamento não mudou o circuito
+
+A prova formal pelo `equiv_*` do Yosys não fecha com células como
+caixa-preta (127 pontos não provados, do outro lado dos flip-flops). Para
+**esta** transformação (só funde nomes de fio), a prova certa é de
+**ligação**: as instâncias são as mesmas nos dois lados (mesmos nomes),
+então basta mostrar que cada pino está na mesma rede.
+
+`layout/nucleo/compara_ligacoes.py`: os dois netlists achatados e
+separados bit a bit; do lado do Genus os `assign` restantes dizem quais
+nomes são o mesmo fio (union-find); passa se existe uma correspondência
+**1:1** entre as redes que explica todos os pinos.
+
+```
+antes: 2562 assigns, 247493 pinos | depois: 0 assigns, 247493 pinos
+assigns com concatenacao: 1267
+pinos so num dos lados: 0
+redes comparadas: 62153 | erros: 0
+RESULTADO: IGUAIS (mesma ligacao em todos os pinos)
+```
+
+(Primeira versão do comparador acusou 16.082 erros falsos: tratava
+`assign {a,b,c} = {x,y,z}` como uma ligação só. Com as concatenações
+separadas bit a bit, 0.)
+
+A prova **lógica** completa continua sendo a da etapa 9: Conformal LEC
+entre o netlist do Genus e o netlist final do layout — ela cobre este
+passo também.
+
+### O que mudou no `01_leitura.sh`
+
+1. Descompacta o netlist do Genus em `entrada/asic_top_genus.v`.
+2. Achata com o Yosys do `nix-shell` → `entrada/asic_top.v` (o que o
+   `config.json` lê).
+3. Roda o `compara_ligacoes.py` e **para** se não der `IGUAIS`.
+4. Segue para o LibreLane como antes. O resultado da comparação vai para
+   o `01_leitura.txt`.
+
+Testado aqui (Yosys de verdade, LibreLane simulado): ~50 s a mais.
+
+Alternativa considerada: o Genus escrever o netlist já plano (`ungroup
+-all -flatten` antes do `write_hdl`). Também resolve, mas pede outra
+rodada na VM (síntese + LEC), muda os nomes das instâncias (e o
+`config.json`) e perde a área por bloco no relatório. Fica como opção se
+o achatamento no notebook causar outro problema.
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L19 | Achatar o netlist do Genus com o Yosys (sem `keep`) antes do LibreLane; conferir ligação pino a pino | ✅ | 0 `assign`; mesma ligação em 247.493 pinos; sem nova rodada na VM |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -849,6 +943,7 @@ resumo, sem salvar as métricas.
 | L16 | Padring `sky130_ef_io` no nosso config | 🟡 | 2026-09-27 |
 | L17 | `config.json` do núcleo | 🟡 | 2026-09-27 |
 | L18 | Uma etapa por script, com GUI e imagem | ✅ | 2026-09-27 |
+| L19 | Achatar o netlist antes do LibreLane (0 `assign`) | ✅ | 2026-09-27 |
 
 ---
 

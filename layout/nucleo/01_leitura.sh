@@ -27,17 +27,58 @@ NETLIST="${NETLIST:-$REPO/resultados/2026-09-27_sintese_layout/deliverables/neor
 date +%Y-%m-%d_%H%M > "$ARQ_TAG"
 echo ">>> rodada nova: $(rodada)"
 
-# Netlist de entrada (o LibreLane nao le .gz no VERILOG_FILES)
-mkdir -p "$NUCLEO/entrada"
+# Netlist do Genus, descompactado
+E="$NUCLEO/entrada"
+mkdir -p "$E"
 case "$NETLIST" in
-  *.gz) zcat "$NETLIST" > "$NUCLEO/entrada/asic_top.v" ;;
-  *)    cp "$NETLIST" "$NUCLEO/entrada/asic_top.v" ;;
+  *.gz) zcat "$NETLIST" > "$E/asic_top_genus.v" ;;
+  *)    cp "$NETLIST" "$E/asic_top_genus.v" ;;
 esac
-N="$NUCLEO/entrada/asic_top.v"
+N="$E/asic_top_genus.v"
 echo ">>> netlist: ${NETLIST#$REPO/}"
 echo "    constantes soltas (esperado 0): $(grep -oE "1'b[01]" "$N" | wc -l)"
 echo "    celulas conb_1   (esperado 10): $(grep -c 'sky130_fd_sc_hd__conb_1 ' "$N")"
 echo "    spare_wen0 ligado (esperado 2): $(grep -c '\.spare_wen0' "$N")"
+
+#-----------------------------------------------------------------------------
+# Achatar ANTES do LibreLane (L19 -- DIARIO_GDSII, 9a sessao)
+#
+# O netlist do Genus e hierarquico (200 modulos). O LibreLane achata e marca
+# todo fio com 'keep': cada porta de submodulo vira um 'assign' entre o nome
+# de fora e o de dentro (25.960!) e o Checker.NetlistAssignStatements para
+# o fluxo. Achatando aqui SEM 'keep', o opt_clean funde os nomes duplicados:
+#   flatten -> splitnets (1 bit por fio) -> opt_clean -purge  => 0 assign
+# So renomeia/funde fios; a conferencia abaixo prova (pino a pino) que a
+# ligacao e a mesma do netlist do Genus.
+#-----------------------------------------------------------------------------
+LIBS="read_liberty -lib $REPO/tech/sky130/lib/sky130_fd_sc_hd__tt_025C_1v80.lib"
+for m in "$REPO"/macros/*/*_TT_1p8V_25C.lib; do LIBS="$LIBS
+read_liberty -lib $m"; done
+
+echo ">>> achatando o netlist do Genus (Yosys)..."
+yosys -q -l "$E/achata.log" -p "$LIBS
+read_verilog $E/asic_top_genus.v
+hierarchy -check -top asic_top
+flatten -noscopeinfo
+splitnets
+opt_clean -purge
+tee -q -o $E/achata_stat.rpt stat -liberty $REPO/tech/sky130/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+write_verilog -noattr -noexpr -nohex -nodec $E/asic_top.v" > /dev/null
+echo "    assign no netlist achatado (esperado 0): $(grep -c '^\s*assign' "$E/asic_top.v" || true)"
+grep -E "Chip area" "$E/achata_stat.rpt" | sed 's/^ */    /'
+
+echo ">>> conferindo: mesma ligacao em todos os pinos?"
+for x in genus:asic_top_genus.v plano:asic_top.v; do
+  yosys -q -p "$LIBS
+read_verilog $E/${x#*:}
+hierarchy -top asic_top
+flatten -noscopeinfo
+splitnets -ports
+write_verilog -noattr -noexpr -nohex -nodec $E/bits_${x%%:*}.v" > /dev/null
+done
+python3 "$NUCLEO/compara_ligacoes.py" "$E/bits_genus.v" "$E/bits_plano.v" | tee "$E/compara.txt" | sed 's/^/    /'
+grep -q "RESULTADO: IGUAIS" "$E/compara.txt" || { echo "ERRO: o achatamento mudou alguma ligacao. Nao sigo."; exit 1; }
+rm -f "$E"/bits_*.v
 
 roda_trecho - - OpenROAD.STAPrePNR
 
@@ -45,6 +86,7 @@ R="$(pasta_resultados)"
 {
   echo "ETAPA 1 -- leitura do netlist ($(rodada))"
   echo "netlist: ${NETLIST#$REPO/}"
+  echo "achatamento (L19):"; sed 's/^/  /' "$E/compara.txt"
   S="$(dirname "$(estado_de Yosys.Synthesis)")"
   # (if, e nao '[ ] &&': com set -e, um teste falso no fim do bloco
   #  encerraria o script)
