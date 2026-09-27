@@ -30,6 +30,16 @@ ela recomeça do estado em que a etapa anterior terminou.
 | `SEM_GUI=1` | salva as imagens e fecha, sem abrir janela |
 | `NETLIST=<arq>` | (só no 01) outro netlist de entrada |
 
+## Deu erro? Mande os logs pelo git
+
+```bash
+bash layout/nucleo/junta_logs.sh     # logs + relatórios da rodada -> resultados/
+git add resultados/ && git commit -m "gdsii: logs do layout" && git push
+```
+
+`runs/` fica fora do git (tem `.odb`, `.def`, GDS). O script separa só o
+que é texto: `*.log`, `*.rpt`, `*.json`, `*.txt`, o `flow.log`.
+
 ## O que sai
 
 | Onde | O quê | Vai para o git? |

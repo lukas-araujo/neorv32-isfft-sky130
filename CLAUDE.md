@@ -49,6 +49,9 @@ Lukas.
   o notebook, roda `bash sim/traz_vm.sh <pasta> <etapa>` e dá push. Ao
   começar, `git pull` e procure resultado novo em `resultados/` antes de
   pedir arquivo no chat.
+  **Do LibreLane:** `layout/*/runs/` fica fora do git; quando precisar dos
+  logs de uma rodada, o Lukas roda `bash layout/nucleo/junta_logs.sh` (sai
+  um `logs_HHMM.tar.gz` em `resultados/<rodada>_layout_nucleo/`) e dá push.
 - Antes de mandar algo para a VM, confira o que der com ferramentas
   abertas (`sim/run_gls_yosys.sh`: RTL e portas com Yosys + Icarus).
 
