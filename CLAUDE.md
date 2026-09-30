@@ -93,8 +93,19 @@ git pull --rebase origin main && git push origin main
 | Onde | O quê |
 |---|---|
 | Notebook (Linux-Batata) | Ubuntu 24.04, i7-1165G7 (4 núcleos / 8 threads), 32 GB, 3 TB. OSS CAD Suite (GHDL, Icarus, Yosys), OpenRAM, LibreLane (Nix). Repositório em `~/Projects/neorv32-isfft-sky130` |
-| VM goku (aluno12) | Genus 22.1, Xcelium 23.09, Conformal 23.2, Tempus. **Sem** PVS/Pegasus/Quantus. Sem permissão de instalação; só envia arquivos e roda ferramentas |
+| VM goku (aluno12) | Genus 22.1, Xcelium 23.09, Conformal 23.2, Tempus, IMC (cobertura). Sem regras físicas do sky130 para PVS/Pegasus/Quantus (estão no PATH, mas não servem aqui). Sem permissão de instalação; só envia arquivos e roda ferramentas. **PATH completo abaixo** |
 | Sessão do Claude (nuvem) | Sem ferramentas EDA de fábrica: `pip install --break-system-packages yowasp-yosys` e `apt-get install -y iverilog` resolvem Yosys e Icarus. NEORV32 (commit `8bdbe48`) clonável do GitHub se precisar do `sim/convert.sh`. UVM: Verilator **5.052** compilado do fonte (tag `v5.052`, com `z3`; ~20 min) e `UVM_SRC=<verilator>/test_regress/t/uvm` |
+
+### PATH da VM (completo)
+
+Todo script da VM (`run_first*.tcl`) usa **este** `export`, inteiro. Um
+PATH recortado já custou tempo: o `run_first_uvm.tcl` só tinha o Xcelium e
+o **IMC** (bloco 3, cobertura) não era achado (`DIARIO_UVM`, 3ª sessão).
+Tem também o **Modus** (ATPG, para a frente de DFT).
+
+```bash
+export PATH=/tools/cadence/QUANTUS221/bin:/tools/cadence/QUANTUS221/tools/bin:/tools/cadence/PEGASUS231/bin:/tools/cadence/PEGASUS231/tools/bin:/tools/cadence/SSV231/bin:/tools/cadence/SSV231/tools/bin:/tools/cadence/XCELIUM2309/tools/bin/64bit:/tools/cadence/XCELIUM2309/tools/bin:/tools/cadence/MODUS231/bin:/tools/cadence/MODUS231/tools/bin:/tools/cadence/CONFRML232/bin:/tools/cadence/CONFRML232/tools/bin:/tools/cadence/DDI221/bin:/tools/cadence/DDI221/tools/bin:/tools/cadence/PVS231/bin:/tools/cadence/PVS231/tools/bin:/tools/cadence/VMANAGER2409/bin:/tools/bin:/tools/cadence/SPECTRE231/bin:/tools/cadence/SPECTRE231/tools/bin:/tools/cadence/ICADVM201/bin:/tools/cadence/ICADVM201/tools/bin:/tools/cadence/ICADVM201/tools/dFII/bin:/tools/cadence/ICADVM201/bin:/tools/cadence/ICADVM201/tools/bin:/pdk/TSMC/CLN12FFC+/TSMCHOME/sram/Compiler/MC2/MC2_2013.12.00.g/bin/Linux-64:/home/aluno12/.local/bin:/home/aluno12/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+```
 
 ## Armadilhas já pagas (não repita)
 

@@ -22,12 +22,9 @@ export USER=aluno12
 export PROJECT_DIR=/prj/ci/workarea/${USER}/projetos/${DESIGNS}
 export UVM_DIR=${PROJECT_DIR}/verification/uvm_isfft
 
-export PATH=/tools/cadence/XCELIUM2309/tools/bin/64bit
-export PATH=$PATH:/tools/cadence/XCELIUM2309/tools/bin
-export PATH=$PATH:/tools/cadence/XCELIUM2309/bin
-export PATH=$PATH:/tools/bin
-export PATH=$PATH:/home/${USER}/.local/bin:/home/${USER}/bin
-export PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+# PATH completo da VM (o mesmo do CLAUDE.md). Com so o Xcelium o IMC (bloco
+# 3) nao era achado.
+export PATH=/tools/cadence/QUANTUS221/bin:/tools/cadence/QUANTUS221/tools/bin:/tools/cadence/PEGASUS231/bin:/tools/cadence/PEGASUS231/tools/bin:/tools/cadence/SSV231/bin:/tools/cadence/SSV231/tools/bin:/tools/cadence/XCELIUM2309/tools/bin/64bit:/tools/cadence/XCELIUM2309/tools/bin:/tools/cadence/MODUS231/bin:/tools/cadence/MODUS231/tools/bin:/tools/cadence/CONFRML232/bin:/tools/cadence/CONFRML232/tools/bin:/tools/cadence/DDI221/bin:/tools/cadence/DDI221/tools/bin:/tools/cadence/PVS231/bin:/tools/cadence/PVS231/tools/bin:/tools/cadence/VMANAGER2409/bin:/tools/bin:/tools/cadence/SPECTRE231/bin:/tools/cadence/SPECTRE231/tools/bin:/tools/cadence/ICADVM201/bin:/tools/cadence/ICADVM201/tools/bin:/tools/cadence/ICADVM201/tools/dFII/bin:/tools/cadence/ICADVM201/bin:/tools/cadence/ICADVM201/tools/bin:/pdk/TSMC/CLN12FFC+/TSMCHOME/sram/Compiler/MC2/MC2_2013.12.00.g/bin/Linux-64:/home/${USER}/.local/bin:/home/${USER}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
 
 #=============================================================================
 # Variaveis da verificacao

@@ -544,6 +544,25 @@ classes, sintaxe do IMC.
 
 ---
 
+## 2026-09-30 — 3ª sessão: PATH da VM
+
+### 🐛 IMC não achado no bloco 3
+
+**Sintoma:** na VM, o bloco 3 (cobertura) não achou o `imc`.
+**Causa:** o `run_first_uvm.tcl` herdou da 1ª sessão um `export PATH` só
+com o Xcelium; o IMC não está nas pastas do Xcelium.
+**Resolvi com:** o Lukas pôs o `export PATH` completo da VM e o IMC
+funcionou. O mesmo `export`, inteiro, agora está no `run_first_uvm.tcl` e
+no `CLAUDE.md` (regra: todo script da VM usa o PATH completo).
+**Tempo gasto:** pouco (resolvido pelo Lukas na VM).
+**Vira slide?** Não.
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| U17 | `run_first_uvm.tcl` com o PATH completo da VM (igual ao do `CLAUDE.md`) | ✅ | Pedido do Lukas; o recortado não tinha o IMC |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -564,6 +583,7 @@ classes, sintaxe do IMC.
 | U14 | Wrapper da etapa 1 como cópia fixa em `ref/` | 🟡 | 2026-09-30 |
 | U15 | Scripts do UVM no notebook em `sim/`; espelho mínimo da VM | 🟡 | 2026-09-30 |
 | U16 | Cobertura por instância; Verilator 5.052 | ✅ | 2026-09-30 |
+| U17 | PATH completo da VM no `run_first_uvm.tcl` | ✅ | 2026-09-30 |
 
 ---
 
