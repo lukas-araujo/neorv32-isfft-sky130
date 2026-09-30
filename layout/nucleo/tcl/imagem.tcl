@@ -94,6 +94,12 @@ switch $modo {
         }
         # 3) canto do die: anel do nucleo (PDN_CORE_RING)
         salva ${pre}_zoom_anel_nucleo.png [list 0 0 120 120]
+
+        # 4) se o 03_pdn.sh achou um aviso PDN-0110 no log, zoom nele:
+        #    que pedaco de met4 cruza a met5 ali sem via?
+        if { [info exists ::env(IMG_ZOOM)] && $::env(IMG_ZOOM) ne "" } {
+            salva ${pre}_zoom_pdn0110.png $::env(IMG_ZOOM)
+        }
     }
 
     default {

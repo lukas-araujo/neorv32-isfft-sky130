@@ -1147,6 +1147,126 @@ desta rodada vale; o 02 recomeça do estado do fim dela).
 
 ---
 
+## 2026-09-30 (14ª sessão) — ✅ Etapas 2 (floorplan) e 3 (PDN) passaram
+
+Rodada `2026-09-30_0934`, depois da L21. Fontes: `02_floorplan_metricas.json`,
+`03_pdn_metricas.json` e `logs_0954.tar.gz` (passos `10-openroad-floorplan`,
+`14-odb-manualmacroplacement`, `15-openroad-cutrows`,
+`16-openroad-tapendcapinsertion`, `18-openroad-generatepdn`), todos em
+`resultados/2026-09-30_0934_layout_nucleo/`. Tamanho das macros: `SIZE` dos
+LEF em `macros/`.
+
+### Etapa 2 — floorplan
+
+| Item | Valor | Fonte |
+|---|---|---|
+| Die | 0,0 – 2000 × 1500 µm (3,00 mm²) | `IFP-0100` |
+| Núcleo | (40,020; 40,800) – (1959,600; 1457,920) µm = 2.720.275 µm² | `IFP-0101/0102` |
+| Ajuste do canto do núcleo | (40; 40) → (40,020; 40,800): múltiplo do sítio (0,46 µm) e da altura da linha (2,72 µm) | `IFP-0028` (aviso esperado) |
+| Linhas de células | 521 linhas × 4.173 sítios `unithd` → cortadas pelas 4 macros + halo em **1.124 linhas / 1.108.096 sítios** (51 % dos sítios sobram) | `IFP-0001`, `ODB-0303` |
+| Tap cells / endcaps | 20.139 / 1.042 | `TAP-0005/0004` |
+| Tie cells novas | 0 (as 10 `conb_1` vêm do Genus, L2) | `IFP-0030` |
+| Área das instâncias | 1.912.951,64 µm² (60.026 instâncias) — igual ao Genus (1.912.951,593) | `IFP-0103/0105` |
+| Utilização efetiva (tudo / só células padrão) | 0,703 / **0,491** | `IFP-0104`; métrica `design__instance__utilization__stdcell` |
+| Depois das taps | 82.413 instâncias, 1.946.587,65 µm² (macros 1.182.837,65) | tabela "Cell type report" do log |
+
+**Macros** (x0,y0 = canto do config; extensão = x0 + largura do LEF):
+
+| Macro | Instância | Orient. | x (µm) | y (µm) | Pinos de sinal no LEF (N) | Para onde ficam virados |
+|---|---|---|---|---|---|---|
+| IMEM `sram_8kbyte_1rw_32x2048_8` 810,845 × 553,53 | `…imem…u_macro` | FN | 60 – 870,8 | 886 – 1439,5 | 70 embaixo, 12 esq., 4 dir. | 70 para **baixo** (canal IMEM/DMEM); FN espelha em x: os 12 vão para a **direita** (lógica) ✅ |
+| DMEM `sram_4kbyte_1rw_32x1024_8` 808,845 × 351,29 | `…dmem…u_macro` | S | 60 – 868,8 | 464 – 815,3 | 70 embaixo, 11 esq., 4 dir. | S gira 180°: 70 para **cima** (canal), 11 para a **direita** ✅ |
+| out_mem `sram_1rw1r_64x256` 747,12 × 397,445 | `u_isfft.u_out_mem` | N | 1192 – 1939,1 | 1002 – 1399,4 | `din0`/`dout0` embaixo, `dout1` em cima | `din0` (usado) para o centro ✅; `dout1` (usado) para a borda de cima ⚠️ |
+| in_mem `sram_1rw1r_64x64_wpr2` 735,8 × 207,845 | `u_isfft.u_in_mem` | N | 1204 – 1939,8 | 100 – 307,8 | idem | `dout1` (usado) para o centro ✅; `din0` (usado) para a borda de baixo ⚠️ |
+
+| Espaço entre macros e bordas (descontado o halo de 15 µm) | Largura | Uso |
+|---|---|---|
+| Canal IMEM ↔ DMEM | 815,3 → 886 = 70,7 µm; **40,7 µm** de linhas | os 140 pinos das duas macros da CPU |
+| Acima da out_mem | 1457,9 − 1399,4 − 15 = **43,5 µm** | 64 fios do `dout1` dão a volta por aqui |
+| Abaixo da in_mem | 100 − 15 − 40,8 = **44,2 µm** | 64 fios do `din0` dão a volta por aqui |
+| Direita das memórias da ISFFT | **4,8 µm** (in_mem) / **5,5 µm** (out_mem) | tira fina, só um pedaço de linha — ver PDN-0110 abaixo |
+| Esquerda da IMEM/DMEM | 4,98 µm | idem, sem aviso |
+| Acima da IMEM | 1457,9 − 1439,5 − 15 = 3,4 µm | idem |
+
+⚠️ **As memórias da ISFFT usam as duas portas**, e a OpenRAM põe a porta 0
+(`din0`) embaixo e a porta 1 (`dout1`) em cima (RTL: `rtl/isfft/isfft_axi_v4.v`,
+linhas 174 e 352). Seja qual for a orientação, **um barramento de 64 bits fica
+de costas para a lógica**. Os ~44 µm até a borda servem de canal. Não é erro;
+é para olhar a congestão na etapa 6 (roteamento).
+**Vira slide?** Sim: "orientar macro = ler o LEF": onde ficam os pinos e para
+onde apontam, com a planta ao lado.
+
+### Etapa 3 — PDN
+
+| Item | Valor | Fonte |
+|---|---|---|
+| Grades inseridas | `stdcell_grid` + 1 grade `macro` para cada uma das 4 macros | `PDN-0001` |
+| Tiras met4 (vertical) / met5 (horizontal) | 1,6 µm de largura, 1,7 µm entre VDD e GND, passo 153,6 / 153,18 µm | `config.json` do passo 18 (padrão do LibreLane) |
+| Anel do núcleo | met4/met5, 1,6 µm, afastado 6 µm do núcleo | idem (`PDN_CORE_RING`, L17) |
+| Pinos de alimentação das macros | `vccd1`/`vssd1` em met3 + met4 (anel em volta de cada macro) | LEF |
+| Conectividade | "All shapes on net vccd1 are connected." e o mesmo para `vssd1` | `PSM-0040` |
+| Violações da grade | 0 (`vccd1-grid-errors.rpt` e `vssd1-grid-errors.rpt` vazios) | métrica `design__power_grid_violation__count` |
+| Avisos | **6 × `PDN-0110`** "No via inserted between met4 and met5" | log do passo 18 |
+
+### 🔎 Aberto: os 6 avisos `PDN-0110`
+
+**Sintoma:**
+
+| Rede | x (µm) | y (µm) | Tira met5 (y = 40,8 + 16,65 + k × 153,18) | Sobre qual macro |
+|---|---|---|---|---|
+| vccd1 | 1955,98 – 1956,78 | 209,83 / 1128,91 / 1282,09 | k = 1, 7, 8 | in_mem / out_mem / out_mem |
+| vssd1 | 1957,82 – 1958,62 | 213,13 / 1132,21 / 1285,39 | idem (tira de GND ao lado) | idem |
+
+**O que já se sabe:** os 6 pontos estão no mesmo x, **na tira de 4,8–5,5 µm
+entre o halo das memórias da ISFFT e a borda direita do núcleo**, e só nas
+tiras met5 que passam por cima dessas duas macros (as que passam acima ou
+abaixo delas não reclamam). O pedaço de via é de 0,8 µm de largura: a met4
+ali é um pedaço curto. Nada ficou solto (PSM-0040; 0 violações da grade).
+**Hipótese (não confirmada):** a tira fina que sobra à direita recebe um
+pedaço de met4 que só encosta parcialmente na met5, sem área para a via.
+Contra a hipótese: do lado esquerdo sobram 4,98 µm e não há aviso.
+**Próximo passo:** olhar antes de mexer. O `03_pdn.sh` agora salva
+`03_pdn_zoom_pdn0110.png`, um zoom de 60 × 40 µm no primeiro aviso (a
+coordenada sai do log). Se a imagem confirmar, o conserto é encostar o halo
+das duas macros na borda do núcleo (in_mem x 1204 → 1210, out_mem
+1192 → 1198) e rodar 02 + 03 de novo.
+**Tempo:** — (em aberto)
+**Vira slide?** Sim, se a hipótese se confirmar: "aviso que não quebra nada,
+mas ensina a olhar a sobra do floorplan".
+
+### Números pré-posicionamento (não se leem ainda)
+
+| Métrica (passo 16) | Valor | Por que não conta |
+|---|---|---|
+| Setup WS (TT / SS) | −47,35 / −86,12 ns; 6.800 violações | sem fio, sem buffer, relógio ideal com as cargas da síntese; mesmo número da etapa 1 |
+| Hold WS (FF) | −0,039 ns; 369 violações | antes da CTS não há relógio real |
+| Slew máx. (SS) | 61.470 violações | o reparo (`repair_design`) só roda no posicionamento (etapa 4) |
+| Potência total | 75.787.760 W | `.lib` das macros com `internal_power` fora de escala (herdado) |
+
+A leitura de verdade começa depois da CTS (etapa 5).
+
+### 🐛 Imagens do 02 não foram salvas
+
+**Sintoma:** em `resultados/…/imagens/` só existem as três `03_pdn_*.png`;
+as `02_floorplan_planta.png` e `02_floorplan_zoom_halo.png` faltam.
+**Causa:** não descoberta. As métricas do 02 foram salvas, então o LibreLane
+terminou; o problema está no `abre_gui` ou no `imagem.tcl` modo `floorplan`.
+**Resolvi com:** pedido ao Lukas para refazer só a GUI
+(`SO_GUI=1 SEM_GUI=1 bash layout/nucleo/02_floorplan.sh`) e mandar as linhas
+`[imagem]` do terminal se falhar de novo.
+**Tempo:** — (em aberto)
+**Vira slide?** Não.
+
+### Decisões desta sessão
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L5 | Die 2,0 × 1,5 mm | 🟡 → mantém | Utilização das células padrão 0,491; confirmar depois do posicionamento (congestão) |
+| L17 | `config.json` do núcleo | 🟡 → mantém | Floorplan e PDN passaram; orientação das macros conferida pelo LEF; falta o PDN-0110 |
+| L22 | Investigar o PDN-0110 com zoom automático antes de mover macros | 🟡 | Olhar antes de mexer; custa só reabrir a GUI |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -1172,6 +1292,7 @@ desta rodada vale; o 02 recomeça do estado do fim dela).
 | L19 | Achatar o netlist antes do LibreLane (0 `assign`) | ✅ | 2026-09-27 |
 | L20 | Genus evita `drc_exclude.cells` | ✅ 0 proibidas | 2026-09-27 |
 | L21 | LEF das macros em 1000 unidades por µm | ✅ | 2026-09-30 |
+| L22 | PDN-0110: zoom automático antes de mover macros | 🟡 | 2026-09-30 |
 
 ---
 
@@ -1181,10 +1302,12 @@ desta rodada vale; o 02 recomeça do estado do fim dela).
 - [x] ~~Rodada para o layout na VM~~ — 5ª sessão: tudo passou
 - [x] ~~`layout/nucleo/`: `config.json` e scripts das etapas 1–3~~ — 8ª sessão
 - [x] ~~Etapa 1 no notebook~~ — passou (10ª sessão)
-- [ ] Etapas 2 e 3 no notebook
+- [x] ~~Etapas 2 e 3 no notebook~~ — passaram (14ª sessão)
+- [ ] Imagens do 02 (refazer com `SO_GUI=1 SEM_GUI=1`) e zoom do PDN-0110 (L22)
+- [ ] Script da etapa 4 (posicionamento)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
 - [x] ~~Refazer a etapa 1 com o netlist de 29/09~~ — rodada `2026-09-30_0934`
-- [ ] Etapa 2 depois da L21
+- [x] ~~Etapa 2 depois da L21~~ — passou
 - [x] ~~Máquina e PDK~~ — 3ª sessão
 - [x] ~~Instalar LibreLane e passar o `--smoke-test`~~ — 3ª sessão
 - [x] ~~Confirmar L6~~ — com padring

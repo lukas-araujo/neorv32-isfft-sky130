@@ -26,10 +26,22 @@ if [ "${SO_GUI:-0}" != 1 ]; then
   echo ">>> avisos/erros do pdngen:"
   grep -hE "\[(WARNING|ERROR) PDN" "$P"/*.log 2>/dev/null | sort | uniq -c | head -20 || true
 fi
+
+# Zoom no PRIMEIRO aviso PDN-0110 ("No via inserted between met4 and met5"),
+# se houver: janela de 60 x 40 um em volta do ponto que o log aponta.
+# Vira a imagem 03_pdn_zoom_pdn0110.png (ver tcl/imagem.tcl).
+P="$(dirname "$(estado_de OpenROAD.GeneratePDN)")"
+IMG_ZOOM="$(grep -hm1 "PDN-0110" "$P"/*.log 2>/dev/null \
+  | sed -E 's/.*at \(([0-9.]+), ([0-9.]+)\) - \(([0-9.]+), ([0-9.]+)\).*/\1 \2 \3 \4/' \
+  | awk '{printf "%.2f %.2f %.2f %.2f", $1-30, $2-20, $3+30, $4+20}')" || true
+export IMG_ZOOM
+[ -n "$IMG_ZOOM" ] && echo ">>> zoom no 1o PDN-0110: $IMG_ZOOM"
+
 abre_gui OpenROAD.GeneratePDN pdn 03_pdn
 
 echo
 echo "Conferir: anel em volta do nucleo; tiras verticais (met4) param antes"
 echo "das macros; as horizontais (met5) passam por cima delas; no zoom, vias"
 echo "entre a met5 e o anel met4 da macro. Nenhum 'ERROR PDN' acima."
+echo "Se houve PDN-0110: ver imagens/03_pdn_zoom_pdn0110.png (DIARIO_GDSII, L22)."
 echo "Proximo: etapa 4 (posicionamento) -- script ainda nao escrito."
