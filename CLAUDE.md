@@ -105,3 +105,6 @@ git pull --rebase origin main && git push origin main
 - Variável colada em texto no bash: `${m}_TT...`, nunca `$m_TT...`.
 - Mutação só prova algo quando a versão correta passa primeiro.
 - `.gitignore` não aceita comentário no fim da linha.
+- LEF das macros da OpenRAM vem com `DATABASE MICRONS 2000`; o OpenROAD
+  só aceita 1000 no sky130 (`macros/lef_unidades.py`). Macro nova: rodar
+  `lib_33bits.py` e `lef_unidades.py`.

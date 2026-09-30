@@ -1090,6 +1090,63 @@ nova) antes das etapas 2 e 3.
 
 ---
 
+## 2026-09-30 (13ª sessão) — Etapa 1 com o netlist novo; 🐛 etapa 2 parou no LEF das macros
+
+Rodada `2026-09-30_0934`. Logs em
+`resultados/2026-09-30_0934_layout_nucleo/logs_0940.tar.gz`.
+
+### Etapa 1 (netlist de 29/09) — passou
+
+| Conferência | Resultado | Fonte |
+|---|---|---|
+| Achatamento (L19) | 2.562 → 0 `assign`; 247.457 pinos, 62.141 redes, 0 erros; IGUAIS | `01_leitura.txt` |
+| Células proibidas no layout (L20) | **0** | idem |
+| Checagens da síntese | 0 problemas | idem |
+| Área contada pelo Yosys do LibreLane | 35.467,77 µm² (só as células fora da `no_synth`; ver 10ª sessão) | idem |
+
+### 🐛 Etapa 2: `[ERROR ODB-0292] LEF data ... is discarded due to errors`
+
+**Sintoma:** `09-openroad-floorplan` parou ao ler o LEF da primeira macro:
+```
+[WARNING ODB-0205] The LEF UNITS DATABASE MICRON convert factor (2000) is greater
+                   than the database units per micron (1000) of the current technology.
+[INFO ODB-0227] LEF file: .../sram_8kbyte_1rw_32x2048_8.lef, created 1 library cells
+[ERROR ODB-0292] LEF data from .../sram_8kbyte_1rw_32x2048_8.lef is discarded due to errors
+Error: floorplan.tcl, 18 ODB-0292
+```
+**Causa:** a OpenRAM escreve os LEF com `UNITS DATABASE MICRONS 2000`
+(resolução de 0,0005 µm). O tech LEF do sky130 usa **1000** (0,001 µm). O
+OpenROAD guarda tudo na resolução da tecnologia e **recusa** LEF de macro
+com resolução mais fina. As 4 macros tinham 2000; a de 8 kB só foi a
+primeira a ser lida.
+**Resolvi com (L21):** `macros/lef_unidades.py` — confere que toda
+coordenada tem no máximo 3 casas e cai na grade de fabricação do sky130
+(0,005 µm), e troca 2000 por 1000. As coordenadas estão em µm no arquivo:
+**nenhum número muda**, só a resolução declarada.
+
+| Macro | Coordenadas conferidas | Fora da grade |
+|---|---|---|
+| `sram_8kbyte_1rw_32x2048_8` | 863 | 0 |
+| `sram_4kbyte_1rw_32x1024_8` | 859 | 0 |
+| `sram_1rw1r_64x256` | 1.815 | 0 |
+| `sram_1rw1r_64x64_wpr2` | 1.783 | 0 |
+
+**A observar:** o GDS das macros também vem da OpenRAM; se o `Magic.StreamOut`
+ou o `KLayout.StreamOut` reclamarem de unidade na etapa 8, a causa é a
+mesma.
+**Vira slide?** Sim, junto com os 33 bits (L1): "a macro gerada não
+casa com a tecnologia em três lugares — `.lib` 32 × 33 bits, LEF com
+resolução 2000, células de SRAM que o DRC de lógica não entende".
+
+**Para continuar:** `git pull` e rodar só o `02_floorplan.sh` (a etapa 1
+desta rodada vale; o 02 recomeça do estado do fim dela).
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L21 | LEF das 4 macros com `DATABASE MICRONS 1000` (`macros/lef_unidades.py`) | ✅ | OpenROAD recusa LEF mais fino que a tecnologia; coordenadas todas na grade de 0,005 µm |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -1114,6 +1171,7 @@ nova) antes das etapas 2 e 3.
 | L18 | Uma etapa por script, com GUI e imagem | ✅ | 2026-09-27 |
 | L19 | Achatar o netlist antes do LibreLane (0 `assign`) | ✅ | 2026-09-27 |
 | L20 | Genus evita `drc_exclude.cells` | ✅ 0 proibidas | 2026-09-27 |
+| L21 | LEF das macros em 1000 unidades por µm | ✅ | 2026-09-30 |
 
 ---
 
@@ -1125,7 +1183,8 @@ nova) antes das etapas 2 e 3.
 - [x] ~~Etapa 1 no notebook~~ — passou (10ª sessão)
 - [ ] Etapas 2 e 3 no notebook
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
-- [ ] Refazer a etapa 1 com o netlist de 29/09 (rodada nova)
+- [x] ~~Refazer a etapa 1 com o netlist de 29/09~~ — rodada `2026-09-30_0934`
+- [ ] Etapa 2 depois da L21
 - [x] ~~Máquina e PDK~~ — 3ª sessão
 - [x] ~~Instalar LibreLane e passar o `--smoke-test`~~ — 3ª sessão
 - [x] ~~Confirmar L6~~ — com padring
