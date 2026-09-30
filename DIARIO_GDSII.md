@@ -1034,6 +1034,62 @@ no prompt do Conformal digitar `gui`. Vale abrir **se** o LEC da etapa 9
 
 ---
 
+## 2026-09-30 (12ª sessão) — ✅ Síntese com L20 na VM: 0 células proibidas
+
+Resultados em `resultados/2026-09-29_sintese_layout/` (commit `7049416`
+do Lukas). Comparação com a rodada de 27/09 (`2026-09-27_sintese_layout`).
+
+### Síntese (Genus, bloco 1)
+
+| | 27/09 | 29/09 (com L20) | Fonte |
+|---|---|---|---|
+| `avoid` da `drc_exclude.cells` | — | 53 células marcadas | `genus.log`, linha 327 |
+| Slack de setup a 50 MHz | +2.410,4 ps | **+2.410,4 ps** (mesmo caminho: controle → `muldiv`) | `_qor.rpt`, `_timing.rpt` |
+| Área total | 1.913.000,390 µm² | **1.912.951,593 µm²** (−48,797) | `_qor.rpt` |
+| Instâncias (seq. / comb.) | 60.038 (19.827 / 40.211) | **60.026** (19.827 / 40.199) | `_qor.rpt` |
+| Macros | 4, mesmas áreas | 4, mesmas áreas | `_gates.rpt` |
+| Módulos não resolvidos | 0 | 0 | `_unresolved.rpt` |
+| DRC (transição, capacitância, fanout) | sem violações | sem violações | `_drc.rpt` |
+| `add_tieoffs` | ok | ok (nenhum `!!! FALHOU`) | `genus.log` |
+
+### Netlist (`deliverables/neorv32_isfft_soc.v.gz`)
+
+| Conferência | Esperado | Resultado |
+|---|---|---|
+| Células da `drc_exclude.cells` | 0 | **0** (eram 227) |
+| Constantes soltas (`1'b0`/`1'b1`) | 0 | 0 |
+| `conb_1` | 10 | 10 |
+| `spare_wen0` ligado | 2 | 2 |
+| `assign` | 0 | 0 |
+
+As `_0` sumiram e o Genus usou as versões `_1` e outras combinações:
+`and2_1` 407, `or2_1` 125, `o21ai_1` 471, `a21boi_1` 63, `a2111oi_1` 2.
+Área **menor** (−48,8 µm²) e 12 instâncias a menos: com as `_0` proibidas
+o mapeamento escolheu outras células, e o total saiu ligeiramente melhor.
+
+### Simulações (Xcelium) e LEC (Conformal)
+
+| Bancada | Resultado | Fonte |
+|---|---|---|
+| RTL (bloco 0) | somas = RTL (`0xeb88508e`, `0xba7fc58e`, `0xb29c0211`), `RESULTADO: OK`, 188.194 ciclos, `PASSOU` | `xrun_rtl.log` |
+| Pós-síntese (bloco 2) | mesmas somas, `RESULTADO: OK`, 188.195 ciclos, `PASSOU` | `xrun_postsyn.log` |
+| LEC plano (`fv_map` → netlist) | 19.828 pontos equivalentes (1 saída, 19.823 flip-flops, 4 caixas-pretas); 0 não-equivalentes, 0 abortados, 0 não comparados; **PASS** | `*_lec_genus_run.log` |
+| LEC hierárquico (RTL → `fv_map`) | **169/169 módulos equivalentes**; 1.039 s | idem |
+
+### Consequência para o layout
+
+**O netlist do layout passa a ser o de 29/09** (L14 atualizada). O
+`01_leitura.sh` já aponta para ele. A rodada `2026-09-27_1932` (netlist de
+27/09) fica só como registro: é preciso **refazer a etapa 1** (rodada
+nova) antes das etapas 2 e 3.
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L20 | Genus evita `drc_exclude.cells` | ✅ | 0 células proibidas; slack igual; LEC e pós-síntese passaram |
+| L14 | Netlist do layout = `resultados/2026-09-29_sintese_layout/deliverables/neorv32_isfft_soc.v.gz` | ✅ (atualizada) | Substitui o de 27/09 |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -1051,13 +1107,13 @@ no prompt do Conformal digitar `gui`. Vale abrir **se** o LEC da etapa 9
 | L11 | LibreLane 3.0.14 via Nix | ✅ smoke test ok | 2026-09-27 |
 | L12 | `CLAUDE.md` com regras de trabalho e git | ✅ | 2026-09-27 |
 | L13 | Resultados da VM pelo git (`sim/traz_vm.sh`) | ✅ | 2026-09-27 |
-| L14 | Netlist do layout = rodada de 27/09 | ✅ | 2026-09-27 |
+| L14 | Netlist do layout = rodada de ~~27/09~~ **29/09** (L20) | ✅ | 2026-09-30 |
 | L15 | Dois níveis: núcleo → chip com padring | ✅ | 2026-09-27 |
 | L16 | Padring `sky130_ef_io` no nosso config | 🟡 | 2026-09-27 |
 | L17 | `config.json` do núcleo | 🟡 | 2026-09-27 |
 | L18 | Uma etapa por script, com GUI e imagem | ✅ | 2026-09-27 |
 | L19 | Achatar o netlist antes do LibreLane (0 `assign`) | ✅ | 2026-09-27 |
-| L20 | Genus evita `drc_exclude.cells` | 🟡 | 2026-09-27 |
+| L20 | Genus evita `drc_exclude.cells` | ✅ 0 proibidas | 2026-09-27 |
 
 ---
 
@@ -1068,7 +1124,8 @@ no prompt do Conformal digitar `gui`. Vale abrir **se** o LEC da etapa 9
 - [x] ~~`layout/nucleo/`: `config.json` e scripts das etapas 1–3~~ — 8ª sessão
 - [x] ~~Etapa 1 no notebook~~ — passou (10ª sessão)
 - [ ] Etapas 2 e 3 no notebook
-- [ ] VM: síntese com L20 (blocos 1, 2, 3a) antes da etapa 4
+- [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
+- [ ] Refazer a etapa 1 com o netlist de 29/09 (rodada nova)
 - [x] ~~Máquina e PDK~~ — 3ª sessão
 - [x] ~~Instalar LibreLane e passar o `--smoke-test`~~ — 3ª sessão
 - [x] ~~Confirmar L6~~ — com padring

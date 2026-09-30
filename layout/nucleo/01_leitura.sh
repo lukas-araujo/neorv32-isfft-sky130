@@ -20,7 +20,7 @@
 source "$(dirname "$0")/comum.sh"
 confere_ambiente
 
-NETLIST="${NETLIST:-$REPO/resultados/2026-09-27_sintese_layout/deliverables/neorv32_isfft_soc.v.gz}"
+NETLIST="${NETLIST:-$REPO/resultados/2026-09-29_sintese_layout/deliverables/neorv32_isfft_soc.v.gz}"
 [ -f "$NETLIST" ] || { echo "ERRO: netlist nao encontrado: $NETLIST"; exit 1; }
 
 # Rodada nova
