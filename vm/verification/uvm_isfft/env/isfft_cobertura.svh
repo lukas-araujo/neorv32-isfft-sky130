@@ -32,6 +32,7 @@ class isfft_cobertura extends uvm_component;
     bit          o_in_avail_32, o_out_free_32;
 
     covergroup cg_ent;
+        option.per_instance = 1;
         cp_ociosos: coverpoint e_ociosos {
             bins seguido  = {0};
             bins curta    = {[1:2]};
@@ -57,6 +58,7 @@ class isfft_cobertura extends uvm_component;
     endgroup
 
     covergroup cg_sai;
+        option.per_instance = 1;
         cp_esperas: coverpoint s_esperas {
             bins nenhuma = {0};
             bins curta   = {[1:3]};
@@ -67,6 +69,7 @@ class isfft_cobertura extends uvm_component;
     endgroup
 
     covergroup cg_reg;
+        option.per_instance = 1;
         cp_acesso: coverpoint {r_write, r_addr} {
             bins le_ctrl    = {7'h00};  bins le_status  = {7'h04};
             bins le_mat_in  = {7'h08};  bins le_mat_out = {7'h0C};
@@ -88,6 +91,7 @@ class isfft_cobertura extends uvm_component;
     endgroup
 
     covergroup cg_ocup;
+        option.per_instance = 1;
         cp_in_used: coverpoint o_in_used {
             bins vazio  = {0};
             bins parcial = {[1:31]};
@@ -153,9 +157,12 @@ class isfft_cobertura extends uvm_component;
         end
     endtask
 
+    // Cobertura da INSTANCIA (get_inst_coverage, com per_instance = 1): ha
+    // uma instancia de cada grupo, entao e a mesma do tipo. O Verilator
+    // 5.052 devolve 0 em get_coverage() (tipo) -- DIARIO_UVM, 2a sessao.
     function void report_phase(uvm_phase phase);
         `uvm_info("COBERTURA", $sformatf("entrada %.1f%%  saida %.1f%%  registradores %.1f%%  ocupacao %.1f%%",
-                  cg_ent.get_coverage(), cg_sai.get_coverage(),
-                  cg_reg.get_coverage(), cg_ocup.get_coverage()), UVM_NONE)
+                  cg_ent.get_inst_coverage(), cg_sai.get_inst_coverage(),
+                  cg_reg.get_inst_coverage(), cg_ocup.get_inst_coverage()), UVM_NONE)
     endfunction
 endclass
