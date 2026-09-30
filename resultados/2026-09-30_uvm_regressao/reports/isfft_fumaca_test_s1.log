@@ -1,0 +1,228 @@
+xrun(64): 23.09-s013: (c) Copyright 1995-2024 Cadence Design Systems, Inc.
+TOOL:	xrun(64)	23.09-s013: Started on Sep 30, 2026 at 16:52:57 -03
+xrun
+	-64bit
+	-sv
+	-uvm
+	-timescale 1ns/1ps
+	-xmlibdirname /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/xcelium.d
+	-f /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/scripts/isfft_uvm.f
+		+incdir+/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/env
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tb/axil_if.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tb/axis_if.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tb/isfft_sva.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/agents/axil/axil_pkg.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/agents/axis/axis_pkg.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/env/isfft_env_pkg.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/seq/isfft_seq_pkg.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tests/isfft_test_pkg.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tb/isfft_tb_top.sv
+		-f /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/isfft_dut.f
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft_axi_v4.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/addfxp.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock40889.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock40973.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock41154.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock41237.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock41426.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock6811.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock6895.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock7076.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock7159.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock7348.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D2_41415.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D2_7337.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D4_41403.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D4_7325.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D6_41145.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D6_7067.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D8_41137.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D8_7059.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/DirSum_41151.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/DirSum_41423.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/DirSum_7073.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/DirSum_7345.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/fft_1d_top.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/ifft_1d_top.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray4_40968.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray4_6890.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_40885.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_41233.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_41505.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_6807.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_7155.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_7427.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memMod.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/multfix.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm40885.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm40968.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm41233.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm41505.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm6807.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm6890.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm7155.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm7427.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc40887.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc40970.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc41235.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc41507.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc6809.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc6892.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc7157.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc7429.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/read_fsm.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/shiftRegFIFO.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/subfxp.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/switch.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/top_isfft.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/write_fsm.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/tech/verilog/sram_1rw1r_64x64_wpr2.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/tech/verilog/sram_1rw1r_64x256.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/ref/isfft_axi_wrapper.v
+	-top isfft_tb_top
+	-coverage all
+	-covdut isfft_axi_v4
+	-covworkdir /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work
+	-covoverwrite
+	+UVM_NO_RELNOTES
+	+UVM_TESTNAME=isfft_fumaca_test
+	-svseed 1
+	-covtest isfft_fumaca_test_s1
+	-l /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/reports/isfft_fumaca_test_s1.log
+
+   User defined plus("+") options:
+	+UVM_NO_RELNOTES
+
+Loading snapshot worklib.isfft_tb_top:sv .................... Done
+SVSEED set from command line: 1
+xcelium> source /tools/cadence/XCELIUM2309/tools/xcelium/files/xmsimrc
+xcelium> source /tools/cadence/XCELIUM2309/tools/methodology/UVM/CDNS-1.1d/additions/sv/files/tcl/uvm_sim.tcl
+xcelium> run
+----------------------------------------------------------------
+CDNS-UVM-1.1d (23.09-s013)
+(C) 2007-2013 Mentor Graphics Corporation
+(C) 2007-2013 Cadence Design Systems, Inc.
+(C) 2006-2013 Synopsys, Inc.
+(C) 2011-2013 Cypress Semiconductor Corp.
+----------------------------------------------------------------
+UVM_INFO @ 0: reporter [RNTST] Running test isfft_fumaca_test...
+UVM_INFO /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tests/isfft_test_pkg.sv(60) @ 0: uvm_test_top [TESTE] UVM: CDNS-UVM-1.1d (23.09-s013)
+----------------------------------------------------------------------
+Name                       Type                            Size  Value
+----------------------------------------------------------------------
+uvm_test_top               isfft_fumaca_test               -     @2860
+  env                      isfft_env                       -     @2928
+    axil_agt               axil_agent                      -     @3004
+      drv                  axil_driver                     -     @5334
+        rsp_port           uvm_analysis_port               -     @5433
+        seq_item_port      uvm_seq_item_pull_port          -     @5384
+      mon                  axil_monitor                    -     @4618
+        ap                 uvm_analysis_port               -     @4667
+      sqr                  uvm_sequencer                   -     @4647
+        rsp_export         uvm_analysis_export             -     @4755
+        seq_item_export    uvm_seq_item_pull_imp           -     @5303
+        arbitration_queue  array                           0     -    
+        lock_queue         array                           0     -    
+        num_last_reqs      integral                        32    'd1  
+        num_last_rsps      integral                        32    'd1  
+    cov                    isfft_cobertura                 -     @3745
+      ctl_imp              uvm_analysis_imp_ctl            -     @3942
+      ent_imp              uvm_analysis_imp_ent            -     @3844
+      sai_imp              uvm_analysis_imp_sai            -     @3893
+    in_agt                 axis_agent                      -     @3034
+      drv                  axis_driver                     -     @5524
+        rsp_port           uvm_analysis_port               -     @5674
+        seq_item_port      uvm_seq_item_pull_port          -     @5623
+      mon                  axis_monitor                    -     @5495
+        ap                 uvm_analysis_port               -     @5544
+      sqr                  uvm_sequencer                   -     @5653
+        rsp_export         uvm_analysis_export             -     @5762
+        seq_item_export    uvm_seq_item_pull_imp           -     @6310
+        arbitration_queue  array                           0     -    
+        lock_queue         array                           0     -    
+        num_last_reqs      integral                        32    'd1  
+        num_last_rsps      integral                        32    'd1  
+    out_agt                axis_agent                      -     @3064
+      drv                  axis_driver                     -     @6440
+        rsp_port           uvm_analysis_port               -     @6535
+        seq_item_port      uvm_seq_item_pull_port          -     @6487
+      mon                  axis_monitor                    -     @6362
+        ap                 uvm_analysis_port               -     @6410
+      sqr                  uvm_sequencer                   -     @6565
+        rsp_export         uvm_analysis_export             -     @6620
+        seq_item_export    uvm_seq_item_pull_imp           -     @7160
+        arbitration_queue  array                           0     -    
+        lock_queue         array                           0     -    
+        num_last_reqs      integral                        32    'd1  
+        num_last_rsps      integral                        32    'd1  
+    predictor              uvm_reg_predictor #(axil_item)  -     @3284
+      bus_in               uvm_analysis_imp                -     @3345
+      reg_ap               uvm_analysis_port               -     @3396
+    refm                   isfft_ref_model                 -     @3427
+      ap                   uvm_analysis_port               -     @3579
+      ctl_imp              uvm_analysis_imp_ctl            -     @3530
+      ent_imp              uvm_analysis_imp_ent            -     @3479
+    sb                     isfft_scoreboard                -     @3610
+      ctl_imp              uvm_analysis_imp_ctl            -     @3765
+      esp_imp              uvm_analysis_imp_esp            -     @3716
+      sai_imp              uvm_analysis_imp_sai            -     @3667
+    vsqr                   isfft_vsequencer                -     @3976
+      rsp_export           uvm_analysis_export             -     @4034
+      seq_item_export      uvm_seq_item_pull_imp           -     @4584
+      arbitration_queue    array                           0     -    
+      lock_queue           array                           0     -    
+      num_last_reqs        integral                        32    'd1  
+      num_last_rsps        integral                        32    'd1  
+----------------------------------------------------------------------
+UVM_INFO /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/seq/isfft_seq_pkg.sv(138) @ 6950000: uvm_test_top.env.vsqr@@vseq [VSEQ] registradores OK: MAT_IN=1 MAT_OUT=1 ERR_CNT=0 STATUS=0x000
+UVM_INFO /tools/cadence/XCELIUM2309/tools/methodology/UVM/CDNS-1.1d/sv/src/base/uvm_objection.svh(1268) @ 6950000: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+UVM_INFO /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/env/isfft_cobertura.svh(166) @ 6950000: uvm_test_top.env.cov [COBERTURA] entrada 33.3%  saida 62.5%  registradores 41.7%  ocupacao 54.2%
+UVM_INFO /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/env/isfft_env_pkg.sv(388) @ 6950000: uvm_test_top.env.sb [SB_RESUMO] 1 matrizes / 32 palavras comparadas bit a bit; 0 erros de dado, 0 de tlast; 1 epocas
+UVM_INFO /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/env/isfft_env_pkg.sv(390) @ 6950000: uvm_test_top.env.sb [SB_RESUMO] checagem numerica: 1 matrizes, 0 fora do limite (erro max <= 4.0 LSB, medio <= 1.5 LSB)
+UVM_INFO /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/env/isfft_env_pkg.sv(394) @ 6950000: uvm_test_top.env.sb [SB_RESUMO]   faixa AMP_MEDIA:    1 matrizes  pior erro 2.79 LSB  pior EVM 1.0342%
+UVM_INFO /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tests/isfft_test_pkg.sv(96) @ 6950000: uvm_test_top [TESTE] TESTE PASSOU: isfft_fumaca_test
+
+--- UVM Report catcher Summary ---
+
+
+Number of demoted UVM_FATAL reports  :    0
+Number of demoted UVM_ERROR reports  :    0
+Number of demoted UVM_WARNING reports:    0
+Number of caught UVM_FATAL reports   :    0
+Number of caught UVM_ERROR reports   :    0
+Number of caught UVM_WARNING reports :    0
+
+--- UVM Report Summary ---
+
+Quit count :     0 of    20
+** Report counts by severity
+UVM_INFO :    9
+UVM_WARNING :    0
+UVM_ERROR :    0
+UVM_FATAL :    0
+** Report counts by id
+[COBERTURA]     1
+[RNTST]     1
+[SB_RESUMO]     3
+[TESTE]     2
+[TEST_DONE]     1
+[VSEQ]     1
+Simulation complete via $finish(1) at time 6950 NS + 57
+/tools/cadence/XCELIUM2309/tools/methodology/UVM/CDNS-1.1d/sv/src/base/uvm_root.svh:457     $finish;
+xcelium> exit
+xmsim: *N,COVCGN: Coverage configuration file command "set_covergroup -new_instance_reporting" can be specified to improve the scoping and naming of covergroup instances. It may be noted that subsequent merging of a coverage database saved with this command and a coverage database saved without this command is not allowed.
+xmsim: *W,CGDEFN: Default name "worklib.uvm_pkg::.cg_ent" will be generated for covergroup instance "cg_ent" as the name of the covergroup instance is not specified explicitly: ../env/isfft_cobertura.svh, 34.
+xmsim: *W,CGDEFN: Default name "worklib.uvm_pkg::.cg_sai" will be generated for covergroup instance "cg_sai" as the name of the covergroup instance is not specified explicitly: ../env/isfft_cobertura.svh, 60.
+xmsim: *W,CGDEFN: Default name "worklib.uvm_pkg::.cg_reg" will be generated for covergroup instance "cg_reg" as the name of the covergroup instance is not specified explicitly: ../env/isfft_cobertura.svh, 71.
+xmsim: *W,CGDEFN: Default name "worklib.uvm_pkg::.cg_ocup" will be generated for covergroup instance "cg_ocup" as the name of the covergroup instance is not specified explicitly: ../env/isfft_cobertura.svh, 93.
+
+coverage setup:
+  workdir  :  /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work
+  dutinst  :  isfft_tb_top.dut(isfft_axi_v4)
+  scope    :  scope
+  testname :  isfft_fumaca_test_s1
+
+coverage files:
+  model(design data) :  /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work/scope/icc_0abaa86a_79d4faa7.ucm (reused)
+  data               :  /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work/scope/isfft_fumaca_test_s1/icc_0abaa86a_79d4faa7.ucd
+TOOL:	xrun(64)	23.09-s013: Exiting on Sep 30, 2026 at 16:52:58 -03  (total: 00:00:01)

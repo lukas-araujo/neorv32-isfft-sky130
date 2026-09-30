@@ -1,0 +1,179 @@
+<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+<> User: aluno12
+
+Host: goku
+
+Report date: Wed 30 Sep 2026 16:57:41 -03
+
+Report options: -detail -metrics functional -out /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/reports/cobertura_funcional.txt -all -assertionStatus -aspect both
+
+Coverage database path: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_merged
+
+Coverage model files: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_merged/icc_0abaa86a_79d4faa7.ucm
+
+Coverage data files: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_merged/icc_0abaa86a_79d4faa7.ucd
+
+CCF files:  None
+
+
+Coverage database date: Wed 30 Sep 2026 16:48:15 -03
+
+*** There were no refinement files applied ***
+
+ <>
+<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+Coverage Table Legend
+---------------------
+  EXCL       excluded using refinement rule
+  P-EXCL     excluded from parent
+  U-EXCL     excluded and unreachable by IEV
+  T-EXCL     excluded from type
+  S-EXCL     smart excluded using refinement rule
+  EXCL(S)    smart indirect excluded
+  EMPTY      all children are excluded
+  CONST      marked constant during simulation
+  IGN        marked ignored during simulation
+  UNG        marked ungradeable during simulation
+  DES        marked deselected during simulation
+  UNR        marked unreachable by IEV
+  UNG-Expr   expression marked ungradeable during simulation
+  UNG-Toggle toggle marked ungradeable during simulation
+
+
+Covered+Uncovered+Excluded+UNR Assertion Detail Report, Instance Based
+======================================================================
+
+Instance name: isfft_axi_v4.u_in_mem.u_sva
+Type name: sram_1rw1r_sva
+File name: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tb/isfft_sva.sv
+Number of covered assertions: 1 of 1
+Number of uncovered assertions: 0 of 1
+Number of excluded assertions: 0
+Number of covered formal Properties: -1 of -2
+Number of uncovered formal Properties: -1 of -2
+Number of excluded formal Properties: 0
+
+Finished Failed Status   Formal Finished   Formal Failed  Formal Status   Assertion                      Line  Source Code                    
+----------------------------------------------------------------------------------------------------------------------------------------------
+8        0      Passed   -1                -1             n/a             a_sem_conflito                 83    a_sem_conflito: assert property (@(posedge clk) 
+
+Instance name: isfft_axi_v4.u_out_mem.u_sva
+Type name: sram_1rw1r_sva
+File name: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tb/isfft_sva.sv
+Number of covered assertions: 1 of 1
+Number of uncovered assertions: 0 of 1
+Number of excluded assertions: 0
+Number of covered formal Properties: -1 of -2
+Number of uncovered formal Properties: -1 of -2
+Number of excluded formal Properties: 0
+
+Finished Failed Status   Formal Finished   Formal Failed  Formal Status   Assertion                      Line  Source Code                    
+----------------------------------------------------------------------------------------------------------------------------------------------
+8        0      Passed   -1                -1             n/a             a_sem_conflito                 83    a_sem_conflito: assert property (@(posedge clk) 
+
+Instance name: isfft_axi_v4.u_sva
+Type name: isfft_v4_sva
+File name: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tb/isfft_sva.sv
+Number of covered assertions: 6 of 6
+Number of uncovered assertions: 0 of 6
+Number of excluded assertions: 0
+Number of covered formal Properties: -1 of -2
+Number of uncovered formal Properties: -1 of -2
+Number of excluded formal Properties: 0
+
+Finished Failed Status   Formal Finished   Formal Failed  Formal Status   Assertion                      Line  Source Code                    
+----------------------------------------------------------------------------------------------------------------------------------------------
+7        0      Passed   -1                -1             n/a             a_lanca                        67    a_lanca: assert property (@(posedge aclk) disable iff (dp_rst) 
+7        0      Passed   -1                -1             n/a             a_armado                       62    a_armado: assert property (@(posedge aclk) disable iff (dp_rst) 
+9        0      Passed   -1                -1             n/a             a_prebusca                     57    a_prebusca: assert property (@(posedge aclk) disable iff (dp_rst) 
+9        0      Passed   -1                -1             n/a             a_reserva                      52    a_reserva: assert property (@(posedge aclk) disable iff (dp_rst) 
+9        0      Passed   -1                -1             n/a             a_in_used                      47    a_in_used: assert property (@(posedge aclk) disable iff (dp_rst) 
+9        0      Passed   -1                -1             n/a             a_sem_overflow                 43    a_sem_overflow: assert property (@(posedge aclk) disable iff (dp_rst) 
+
+Covered+Uncovered+Excluded+UNR CoverGroup Detail Report, Instance Based
+=======================================================================
+
+Instance name: uvm_pkg.uvm_test_top.env.cov
+Type name: isfft_env_pkg
+File name: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/env/isfft_env_pkg.sv
+Include Files:
+    /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/env/isfft_cobertura.svh
+Number of covered cover bins: 51 of 54
+Number of uncovered cover bins: 3 of 54
+Number of excluded cover bins: 0
+
+Name                           Average, Covered Grade         Line  Source Code                    
+---------------------------------------------------------------------------------------------------
+cg_ent                         75.00%, 78.57% (11/14)         34 (isfft_cobertura.svh) covergroup cg_ent;             
+|--cp_ociosos                  100.00% (4/4)                  36 (isfft_cobertura.svh) cp_ociosos: coverpoint e_ociosos { 
+| |--seguido                   100.00% (4110/1)               37 (isfft_cobertura.svh) bins seguido  = {0};           
+| |--curta                     100.00% (1528/1)               38 (isfft_cobertura.svh) bins curta    = {[1:2]};       
+| |--media                     100.00% (457/1)                39 (isfft_cobertura.svh) bins media    = {[3:10]};      
+| |--longa                     100.00% (209/1)                40 (isfft_cobertura.svh) bins longa    = {[11:$]};      
+|--cp_esperas                  66.67% (2/3)                   42 (isfft_cobertura.svh) cp_esperas: coverpoint e_esperas {       // DUT segurou o tready (buffer cheio) 
+| |--nenhuma                   100.00% (6298/1)               43 (isfft_cobertura.svh) bins nenhuma  = {0};           
+| |--curta                     0.00% (0/1)                    44 (isfft_cobertura.svh) bins curta    = {[1:3]};       
+| |--longa                     100.00% (6/1)                  45 (isfft_cobertura.svh) bins longa    = {[4:$]};       
+|--cp_last                     100.00% (4/4)                  47 (isfft_cobertura.svh) cp_last: coverpoint {e_last, (e_pos == 31)} { 
+| |--meio_sem_last             100.00% (6103/1)               48 (isfft_cobertura.svh) bins meio_sem_last = {2'b00};  
+| |--fim_sem_last              100.00% (110/1)                49 (isfft_cobertura.svh) bins fim_sem_last  = {2'b01};         // pacote com varias matrizes 
+| |--fim_com_last              100.00% (83/1)                 50 (isfft_cobertura.svh) bins fim_com_last  = {2'b11};         // fim de pacote certo 
+| |--truncado                  100.00% (8/1)                  51 (isfft_cobertura.svh) bins truncado      = {2'b10};         // tlast no meio: rollback 
+|--cp_pos_trunc                33.33% (1/3)                   53 (isfft_cobertura.svh) cp_pos_trunc: coverpoint e_pos iff (e_last && e_pos != 31) { 
+| |--primeira                  0.00% (0/1)                    54 (isfft_cobertura.svh) bins primeira = {0};           
+| |--meio                      100.00% (8/1)                  55 (isfft_cobertura.svh) bins meio     = {[1:29]};      
+| |--penult                    0.00% (0/1)                    56 (isfft_cobertura.svh) bins penult   = {30};          
+cg_sai                         100.00%, 100.00% (6/6)         60 (isfft_cobertura.svh) covergroup cg_sai;             
+|--cp_esperas                  100.00% (4/4)                  62 (isfft_cobertura.svh) cp_esperas: coverpoint s_esperas { 
+| |--nenhuma                   100.00% (4124/1)               63 (isfft_cobertura.svh) bins nenhuma = {0};            
+| |--curta                     100.00% (1886/1)               64 (isfft_cobertura.svh) bins curta   = {[1:3]};        
+| |--media                     100.00% (131/1)                65 (isfft_cobertura.svh) bins media   = {[4:50]};       
+| |--longa                     100.00% (3/1)                  66 (isfft_cobertura.svh) bins longa   = {[51:$]};       
+|--cp_last                     100.00% (2/2)                  68 (isfft_cobertura.svh) cp_last: coverpoint s_last;    
+| |--auto[0]                   100.00% (6058/1)               68 (isfft_cobertura.svh) cp_last: coverpoint s_last;    
+| |--auto[1]                   100.00% (86/1)                 68 (isfft_cobertura.svh) cp_last: coverpoint s_last;    
+cg_reg                         100.00%, 100.00% (19/19)       71 (isfft_cobertura.svh) covergroup cg_reg;             
+|--cp_acesso                   100.00% (10/10)                73 (isfft_cobertura.svh) cp_acesso: coverpoint {r_write, r_addr} { 
+| |--le_ctrl                   100.00% (3/1)                  74 (isfft_cobertura.svh) bins le_ctrl    = {7'h00};  bins le_status  = {7'h04}; 
+| |--le_status                 100.00% (10/1)                 74 (isfft_cobertura.svh) bins le_ctrl    = {7'h00};  bins le_status  = {7'h04}; 
+| |--le_mat_in                 100.00% (11/1)                 75 (isfft_cobertura.svh) bins le_mat_in  = {7'h08};  bins le_mat_out = {7'h0C}; 
+| |--le_mat_out                100.00% (11/1)                 75 (isfft_cobertura.svh) bins le_mat_in  = {7'h08};  bins le_mat_out = {7'h0C}; 
+| |--le_err                    100.00% (11/1)                 76 (isfft_cobertura.svh) bins le_err     = {7'h10};  bins le_id      = {7'h14}; 
+| |--le_id                     100.00% (11/1)                 76 (isfft_cobertura.svh) bins le_err     = {7'h10};  bins le_id      = {7'h14}; 
+| |--le_pkt                    100.00% (15/1)                 77 (isfft_cobertura.svh) bins le_pkt     = {7'h18};     
+| |--esc_ctrl                  100.00% (13/1)                 78 (isfft_cobertura.svh) bins esc_ctrl   = {7'h40};  bins esc_pkt    = {7'h58}; 
+| |--esc_pkt                   100.00% (13/1)                 78 (isfft_cobertura.svh) bins esc_ctrl   = {7'h40};  bins esc_pkt    = {7'h58}; 
+| |--esc_ro                    100.00% (5/1)                  79 (isfft_cobertura.svh) bins esc_ro     = {7'h44, 7'h48, 7'h4C, 7'h50, 7'h54};  // escrita ignorada 
+|--cp_pkt_mat                  100.00% (5/5)                  81 (isfft_cobertura.svh) cp_pkt_mat: coverpoint r_data[15:0] iff (r_write && r_addr == 6'h18) { 
+| |--zero                      100.00% (1/1)                  82 (isfft_cobertura.svh) bins zero = {0};  bins um = {1};  bins dois = {2}; 
+| |--um                        100.00% (3/1)                  82 (isfft_cobertura.svh) bins zero = {0};  bins um = {1};  bins dois = {2}; 
+| |--dois                      100.00% (5/1)                  82 (isfft_cobertura.svh) bins zero = {0};  bins um = {1};  bins dois = {2}; 
+| |--tres_quatro               100.00% (2/1)                  83 (isfft_cobertura.svh) bins tres_quatro = {[3:4]};  bins grande = {[5:$]}; 
+| |--grande                    100.00% (2/1)                  83 (isfft_cobertura.svh) bins tres_quatro = {[3:4]};  bins grande = {[5:$]}; 
+|--cp_ctrl                     100.00% (4/4)                  85 (isfft_cobertura.svh) cp_ctrl: coverpoint r_data[2:0] iff (r_write && r_addr == 6'h00) { 
+| |--desliga                   100.00% (1/1)                  86 (isfft_cobertura.svh) bins desliga    = {3'b000};    
+| |--liga                      100.00% (9/1)                  87 (isfft_cobertura.svh) bins liga       = {3'b001};    
+| |--soft_reset                100.00% (1/1)                  88 (isfft_cobertura.svh) bins soft_reset = {3'b010, 3'b011}; 
+| |--limpa_err                 100.00% (2/1)                  89 (isfft_cobertura.svh) bins limpa_err  = {3'b101, 3'b100}; 
+cg_ocup                        100.00%, 100.00% (15/15)       93 (isfft_cobertura.svh) covergroup cg_ocup;            
+|--cp_in_used                  100.00% (5/5)                  95 (isfft_cobertura.svh) cp_in_used: coverpoint o_in_used { 
+| |--vazio                     100.00% (10289/1)              96 (isfft_cobertura.svh) bins vazio  = {0};             
+| |--parcial                   100.00% (16458/1)              97 (isfft_cobertura.svh) bins parcial = {[1:31]};       
+| |--uma                       100.00% (665/1)                98 (isfft_cobertura.svh) bins uma    = {32};            
+| |--mais                      100.00% (1152/1)               99 (isfft_cobertura.svh) bins mais   = {[33:63]};       
+| |--cheio                     100.00% (4590/1)               100 (isfft_cobertura.svh) bins cheio  = {64};            
+|--cp_out_used                 100.00% (5/5)                  102 (isfft_cobertura.svh) cp_out_used: coverpoint o_out_used { 
+| |--vazia                     100.00% (17152/1)              103 (isfft_cobertura.svh) bins vazia   = {0};            
+| |--pouco                     100.00% (7112/1)               104 (isfft_cobertura.svh) bins pouco   = {[1:31]};       
+| |--metade                    100.00% (2024/1)               105 (isfft_cobertura.svh) bins metade  = {[32:127]};     
+| |--muito                     100.00% (2945/1)               106 (isfft_cobertura.svh) bins muito   = {[128:255]};    
+| |--cheia                     100.00% (3921/1)               107 (isfft_cobertura.svh) bins cheia   = {256};          
+|--cp_ob_n                     100.00% (3/3)                  109 (isfft_cobertura.svh) cp_ob_n: coverpoint o_ob_n {   
+| |--zero                      100.00% (17396/1)              110 (isfft_cobertura.svh) bins zero = {0}; bins um = {1}; bins dois = {2}; 
+| |--um                        100.00% (6195/1)               110 (isfft_cobertura.svh) bins zero = {0}; bins um = {1}; bins dois = {2}; 
+| |--dois                      100.00% (9563/1)               110 (isfft_cobertura.svh) bins zero = {0}; bins um = {1}; bins dois = {2}; 
+|--cp_lanca_com_saida_cheia    100.00% (2/2)                  112 (isfft_cobertura.svh) cp_lanca_com_saida_cheia: coverpoint {o_in_avail_32, o_out_free_32} { 
+| |--espera_saida              100.00% (5003/1)               113 (isfft_cobertura.svh) bins espera_saida = {2'b10};           // matriz pronta, sem espaco na saida 
+| |--lanca                     100.00% (798/1)                114 (isfft_cobertura.svh) bins lanca        = {2'b11};   
+
