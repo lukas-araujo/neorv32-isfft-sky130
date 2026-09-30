@@ -1208,7 +1208,7 @@ onde apontam, com a planta ao lado.
 | Violações da grade | 0 (`vccd1-grid-errors.rpt` e `vssd1-grid-errors.rpt` vazios) | métrica `design__power_grid_violation__count` |
 | Avisos | **6 × `PDN-0110`** "No via inserted between met4 and met5" | log do passo 18 |
 
-### 🔎 Aberto: os 6 avisos `PDN-0110`
+### 🐛 Os 6 avisos `PDN-0110` — tiras finas que o floorplan deixou
 
 **Sintoma:**
 
@@ -1217,22 +1217,53 @@ onde apontam, com a planta ao lado.
 | vccd1 | 1955,98 – 1956,78 | 209,83 / 1128,91 / 1282,09 | k = 1, 7, 8 | in_mem / out_mem / out_mem |
 | vssd1 | 1957,82 – 1958,62 | 213,13 / 1132,21 / 1285,39 | idem (tira de GND ao lado) | idem |
 
-**O que já se sabe:** os 6 pontos estão no mesmo x, **na tira de 4,8–5,5 µm
-entre o halo das memórias da ISFFT e a borda direita do núcleo**, e só nas
-tiras met5 que passam por cima dessas duas macros (as que passam acima ou
-abaixo delas não reclamam). O pedaço de via é de 0,8 µm de largura: a met4
-ali é um pedaço curto. Nada ficou solto (PSM-0040; 0 violações da grade).
-**Hipótese (não confirmada):** a tira fina que sobra à direita recebe um
-pedaço de met4 que só encosta parcialmente na met5, sem área para a via.
-Contra a hipótese: do lado esquerdo sobram 4,98 µm e não há aviso.
-**Próximo passo:** olhar antes de mexer. O `03_pdn.sh` agora salva
-`03_pdn_zoom_pdn0110.png`, um zoom de 60 × 40 µm no primeiro aviso (a
-coordenada sai do log). Se a imagem confirmar, o conserto é encostar o halo
-das duas macros na borda do núcleo (in_mem x 1204 → 1210, out_mem
-1192 → 1198) e rodar 02 + 03 de novo.
-**Tempo:** — (em aberto)
-**Vira slide?** Sim, se a hipótese se confirmar: "aviso que não quebra nada,
-mas ensina a olhar a sobra do floorplan".
+Nada ficou solto (PSM-0040; 0 violações da grade).
+
+**Causa** (vista no zoom `imagens/antes_L23/03_pdn_zoom_pdn0110.png`, janela
+x 1926–1987 µm, y 190–231 µm):
+
+| O que aparece no zoom | x medido (µm) | Conclusão |
+|---|---|---|
+| Borda direita da in_mem | ≈ 1939,8 | igual à conta (1204 + 735,8) |
+| Coluna de endcaps (`…Left_10xx` e `…Right_1xx`) | ≈ 1954,9 – 1959,7 | a tira de 4,8 µm entre o halo e a borda do núcleo virou "linhas" que só têm um endcap de começo e um de fim, sem lugar para célula nenhuma |
+| Duas tiras met4 **estreitas** (VDD e GND) | 1955,98 – 1956,78 e 1957,82 – 1958,62 | o pdngen pôs met4 de 0,8 µm para alimentar os trilhos met1 dessas linhas isoladas; exatamente o x dos avisos |
+| Tiras met5 (1,6 µm) cruzando essas met4 | y ≈ 210,6 e 214,0 | cruzam, mas uma via4 precisa de met4 mais larga que 0,8 µm (corte 0,8 µm + borda) → "No via inserted" |
+| Anel do núcleo (met4) | ≈ 1965,6 – 1967,2 e 1968,9 – 1970,5 | 1959,6 + 6 µm de afastamento, como o config manda |
+
+Resumo: a macro + halo parava **4,8–5,5 µm antes da borda do núcleo**; ali
+sobravam linhas de célula inúteis (só endcaps), e o pdngen tentou
+alimentá-las com met4 fina demais para ter via. Elas ficaram ligadas pelas
+pontas, pelos trilhos met1 — por isso o PSM diz "connected". Do lado esquerdo
+(4,98 µm) e acima da IMEM (3,4 µm) sobravam tiras iguais; lá não houve aviso
+porque nenhuma met4 estreita caiu embaixo de uma met5, mas a tira inútil
+existia do mesmo jeito.
+**Resolvi com (L23):** mover as macros para que o halo **alcance** a borda do
+núcleo nos lados em que elas encostam. A regra: a sobra entre o halo e a borda
+tem que ser 0 ou larga o bastante para linhas de verdade, nunca poucos µm.
+
+| Macro | Antes (x, y) | Depois (x, y) | Halo agora vai até | Borda do núcleo |
+|---|---|---|---|---|
+| IMEM | (60; 886) | (55; 890) | esq. 40,0 / topo 1458,5 | 40,02 / 1457,92 ✅ |
+| DMEM | (60; 464) | (55; 464) | esq. 40,0 | 40,02 ✅ |
+| out_mem | (1192; 1002) | (1198; 1002) | dir. 1960,1 | 1959,6 ✅ |
+| in_mem | (1204; 100) | (1210; 100) | dir. 1960,8 | 1959,6 ✅ |
+
+O canal IMEM ↔ DMEM cresce de 40,7 para **44,7 µm** úteis (890 − 815,3 − 30).
+As imagens de antes ficaram em `imagens/antes_L23/` (vira slide: antes/depois).
+**Tempo:** ~30 min (ler o log, zoom automático, medir na imagem).
+**Vira slide?** Sim: "um aviso que não quebra nada, mas mostra uma sobra
+inútil no floorplan". Zoom antes/depois lado a lado.
+
+### 🐛 Planta inteira com 1448 × 7200 px
+
+**Sintoma:** com `SEM_GUI=1`, `02_floorplan_planta.png` e `03_pdn_malha.png`
+saíram estreitas e altíssimas, com o chip pequeno no meio.
+**Causa:** sem janela (Qt `offscreen`) o OpenROAD não tem proporção de tela;
+`save_image` sem `-area` usa essa "tela" inventada. Os zooms saíram certos
+porque já tinham `-area`.
+**Resolvi com:** `area_die` no `tcl/imagem.tcl` — as vistas inteiras usam a
+área do die + 20 µm de margem.
+**Tempo:** 5 min. **Vira slide?** Não.
 
 ### Números pré-posicionamento (não se leem ainda)
 
@@ -1245,25 +1276,20 @@ mas ensina a olhar a sobra do floorplan".
 
 A leitura de verdade começa depois da CTS (etapa 5).
 
-### 🐛 Imagens do 02 não foram salvas
+### Imagens do 02 que faltavam
 
-**Sintoma:** em `resultados/…/imagens/` só existem as três `03_pdn_*.png`;
-as `02_floorplan_planta.png` e `02_floorplan_zoom_halo.png` faltam.
-**Causa:** não descoberta. As métricas do 02 foram salvas, então o LibreLane
-terminou; o problema está no `abre_gui` ou no `imagem.tcl` modo `floorplan`.
-**Resolvi com:** pedido ao Lukas para refazer só a GUI
-(`SO_GUI=1 SEM_GUI=1 bash layout/nucleo/02_floorplan.sh`) e mandar as linhas
-`[imagem]` do terminal se falhar de novo.
-**Tempo:** — (em aberto)
-**Vira slide?** Não.
+Refeitas com `SO_GUI=1 SEM_GUI=1 bash layout/nucleo/02_floorplan.sh`:
+saíram as duas. A falta da primeira vez não se repetiu (causa não
+descoberta; provavelmente a janela do 02 foi fechada antes de salvar).
 
 ### Decisões desta sessão
 
 | # | Decisão | Status | Motivo |
 |---|---|---|---|
 | L5 | Die 2,0 × 1,5 mm | 🟡 → mantém | Utilização das células padrão 0,491; confirmar depois do posicionamento (congestão) |
-| L17 | `config.json` do núcleo | 🟡 → mantém | Floorplan e PDN passaram; orientação das macros conferida pelo LEF; falta o PDN-0110 |
-| L22 | Investigar o PDN-0110 com zoom automático antes de mover macros | 🟡 | Olhar antes de mexer; custa só reabrir a GUI |
+| L17 | `config.json` do núcleo | 🟡 → mantém | Floorplan e PDN passaram; orientação das macros conferida pelo LEF |
+| L22 | Investigar o PDN-0110 com zoom automático antes de mover macros | ✅ | O zoom mostrou a causa (met4 de 0,8 µm na tira de 4,8 µm) |
+| L23 | Halo das macros alcança a borda do núcleo (sem tiras de poucos µm) | 🟡 | Tira fina só tem endcaps e gera met4 sem via; refazer 02 + 03 para confirmar 0 `PDN-0110` |
 
 ---
 
@@ -1292,7 +1318,8 @@ terminou; o problema está no `abre_gui` ou no `imagem.tcl` modo `floorplan`.
 | L19 | Achatar o netlist antes do LibreLane (0 `assign`) | ✅ | 2026-09-27 |
 | L20 | Genus evita `drc_exclude.cells` | ✅ 0 proibidas | 2026-09-27 |
 | L21 | LEF das macros em 1000 unidades por µm | ✅ | 2026-09-30 |
-| L22 | PDN-0110: zoom automático antes de mover macros | 🟡 | 2026-09-30 |
+| L22 | PDN-0110: zoom automático antes de mover macros | ✅ | 2026-09-30 |
+| L23 | Halo das macros até a borda do núcleo | 🟡 | 2026-09-30 |
 
 ---
 
@@ -1303,7 +1330,8 @@ terminou; o problema está no `abre_gui` ou no `imagem.tcl` modo `floorplan`.
 - [x] ~~`layout/nucleo/`: `config.json` e scripts das etapas 1–3~~ — 8ª sessão
 - [x] ~~Etapa 1 no notebook~~ — passou (10ª sessão)
 - [x] ~~Etapas 2 e 3 no notebook~~ — passaram (14ª sessão)
-- [ ] Imagens do 02 (refazer com `SO_GUI=1 SEM_GUI=1`) e zoom do PDN-0110 (L22)
+- [x] ~~Imagens do 02 e zoom do PDN-0110 (L22)~~
+- [ ] Refazer 02 + 03 com a L23 e conferir 0 `PDN-0110`
 - [ ] Script da etapa 4 (posicionamento)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
 - [x] ~~Refazer a etapa 1 com o netlist de 29/09~~ — rodada `2026-09-30_0934`

@@ -50,6 +50,15 @@ proc caixa_macro { master } {
     return {}
 }
 
+# Area do die + 20 um de margem. As vistas inteiras usam -area explicita:
+# sem janela (SEM_GUI=1) o OpenROAD nao tem proporcao de tela e o
+# save_image sem -area sai com 1448 x 7200 px (14a sessao).
+proc area_die {} {
+    set b [$::blk getDieArea]
+    return [list [expr {[um [$b xMin]] - 20}] [expr {[um [$b yMin]] - 20}] \
+                 [expr {[um [$b xMax]] + 20}] [expr {[um [$b yMax]] + 20}]]
+}
+
 gui::fit
 
 switch $modo {
@@ -60,7 +69,7 @@ switch $modo {
         mostra "Rows" true
         mostra "Misc/Instances/Names" true
         gui::fit
-        salva ${pre}_planta.png
+        salva ${pre}_planta.png [area_die]
 
         # 2) zoom num canto da IMEM: linhas cortadas em volta da macro (halo)
         #    e as celulas de tap/endcap ja inseridas
@@ -82,7 +91,7 @@ switch $modo {
         mostra "Nets/Ground" true
         mostra "Instances/StdCells" false
         gui::fit
-        salva ${pre}_malha.png
+        salva ${pre}_malha.png [area_die]
 
         # 2) zoom na borda da IMEM: tiras de met5 descendo (via4) no anel
         #    met4 da macro -- e assim que a macro recebe alimentacao
@@ -104,7 +113,7 @@ switch $modo {
 
     default {
         gui::fit
-        salva ${pre}.png
+        salva ${pre}.png [area_die]
     }
 }
 
