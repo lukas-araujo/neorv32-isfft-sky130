@@ -16,8 +16,12 @@
 #   mento e "OpenROAD.STAMidPNR", o depois da CTS "-1", o depois do reparo
 #   "-2" (librelane/flows/sequential.py, __normalize_step_ids).
 #
-#   O STA no meio do fluxo so usa o corner TT (DEFAULT_CORNER); os corners
-#   SS e FF so voltam no STA final (etapa 7).
+#   O STA no meio do fluxo so RELATA o corner TT (DEFAULT_CORNER). O reparo
+#   (ResizerTimingPostCTS), porem, usa RSZ_CORNERS -- e sem ele usaria os 9
+#   corners do STA_CORNERS: consertar setup no SS e hold no FF custou
+#   19.485 buffers e o posicionamento nao fechou (DIARIO_GDSII, 16a sessao).
+#   config.json: RSZ_CORNERS = so os 3 TT (L26). SS e FF voltam no STA final
+#   (etapa 7) so como relatorio: o checker do sky130 reprova so no TT.
 #
 #   Imagens: arvore de relogio (visualizador do OpenROAD) + chip com os
 #   buffers de relogio destacados.

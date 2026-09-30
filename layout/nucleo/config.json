@@ -10,6 +10,11 @@
   "IO_DELAY_CONSTRAINT": 30,
   "PNR_SDC_FILE": "dir::nucleo.sdc",
   "SIGNOFF_SDC_FILE": "dir::nucleo.sdc",
+  "RSZ_CORNERS": [
+    "nom_tt_025C_1v80",
+    "min_tt_025C_1v80",
+    "max_tt_025C_1v80"
+  ],
   "STA_MACRO_PRIORITIZE_NL": false,
   "FP_SIZING": "absolute",
   "DIE_AREA": [

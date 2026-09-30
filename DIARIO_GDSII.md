@@ -1452,6 +1452,97 @@ IDs repetidos ganham sufixo `-1`, `-2`… (`flows/sequential.py`); por isso o
 
 ---
 
+## 2026-09-30 (16ª sessão) — 🐛 Etapa 5 parou: reparo em 9 corners; reparo passa a ser só no TT (L26)
+
+Rodada `2026-09-30_0934`, passos `42-…` a `44-…`. Fonte:
+`resultados/2026-09-30_0934_layout_nucleo/logs_1236.tar.gz` (commit `ef44543`).
+
+### CTS (passo 42) e STA com a árvore (passo 43) — passaram
+
+| Item | Valor | Fonte |
+|---|---|---|
+| Redes de relógio | `clk_i` das macros (6 entradas) + `clk_i_regs` (19.823 flip-flops) | `CTS-0011`, log do 42 |
+| Buffers de relógio | 3 (macros) + **2.120** (registradores), ≥ 7 níveis até o flip-flop | `CTS-0018`, `CTS-0012` |
+| Latência (TT) | 1,44 ns (`out_mem`) a 2,08 ns (flip-flop do banco de registradores) | `43-…/clock.rpt` |
+| Skew de setup (TT) | 0,87 ns (antes: ~26 ns com o fio único) | `43-…/skew.max.rpt` |
+| Setup (TT) | **+0,93 ns**, TNS 0 | `43-…/ws.max.rpt`, `tns.max.rpt` |
+| Hold (TT) | −0,046 ns, TNS −0,119 ns (poucos pontos) | `43-…/ws.min.rpt`, `tns.min.rpt` |
+| Tempo | 2 min 22 s (CTS), 24 s (STA) | `runtime.txt` |
+
+Com a árvore, o setup em TT **fecha** a 50 MHz (+0,93 ns; o Genus previa
++2,41 ns com relógio ideal e sem fio).
+
+### 🐛 Passo 44 (`ResizerTimingPostCTS`): 19.485 buffers de hold e `DPL-0036`
+
+**Sintoma:**
+
+| Fase do reparo | O que aconteceu | Fonte |
+|---|---|---|
+| Setup | 990 pontos violando, WNS **−20,84 ns**, TNS −8.693 ns → depois de 2.800 iterações: 850 pontos, WNS −10,74 ns. `RSZ-0062` "Unable to repair all setup violations" | log do 44, tabela de iterações |
+| Hold (margem 0,1 ns) | **18.624** pontos violando, WNS −0,132 ns → **19.485 buffers** inseridos (+9,4 % de área). `RSZ-0064` "Unable to repair all hold checks" | idem |
+| Legalização | `detailed_placement` não achou lugar para **379** instâncias (quase todas no `ifft_1d.stage8` da ISFFT) → `[ERROR DPL-0036] Detailed placement failed` | idem |
+
+**Causa:** os números do reparo não batem com o STA do passo 43 (setup TT
++0,93 ns, hold TT −0,046 ns). O STA do meio do fluxo **relata** só o TT,
+mas o reparo usa `RSZ_CORNERS`, que, vazio, vira o `STA_CORNERS` inteiro
+(`librelane/steps/openroad.py`, `ResizerStep.run`, tag 3.0.14): **os 9
+corners** (TT, SS 1,60 V/100 °C e FF 1,95 V/−40 °C, cada um com RC mín.,
+nominal e máx.). Conferido no `config.json` do passo 44:
+`RSZ_CORNERS: null`, `STA_CORNERS` com os 9.
+- **Setup −20,8 ns vem do SS** (dedução: o log não diz o corner, mas o TT tem +0,93 ns e o FF é mais rápido): com 1,60 V a 100 °C as células ficam perto
+  de 2× mais lentas; o caminho da CPU que tem 15,5 ns em TT (Genus) não cabe
+  em 20 ns. Nenhum redimensionamento conserta isso — o projeto nunca foi
+  feito para o SS (fora de escopo desde o `DIARIO.md`: "múltiplos corners").
+- **Hold vem do FF** (com a margem de 0,1 ns): no FF o dado é rápido e o
+  skew da árvore pesa mais. Os ~17.600 flip-flops sem reset das memórias em
+  flip-flop (FIFOs do SLINK, ping-pong, Spiral) são cadeias de registrador
+  a registrador quase sem lógica no meio: quase todo ponto vira violação, um
+  buffer para cada um. (Leitura: o primeiro pior ponto de hold é um `shiftFIFO…mem_reg` do Spiral; a distribuição por tipo de flip-flop não foi medida.)
+- **Os `.lib` das macros só existem em TT:** o log do 44 mostra o mesmo
+  `..._TT_1p8V_25C.lib` carregado nos corners SS e FF. Nos caminhos que
+  passam por macro, o "SS" e o "FF" não são SS nem FF.
+- O `DPL-0036` é consequência: 19.485 buffers a mais numa região que já
+  tinha densidade alta (RUDY 1,19, 15ª sessão) não cabem com deslocamento
+  máximo de 500 × 100 µm.
+
+**Resolvi com (L26):** reparo só nos 3 corners **TT** (RC mín., nominal e
+máx.), no `config.json`:
+```json
+"RSZ_CORNERS": ["nom_tt_025C_1v80", "min_tt_025C_1v80", "max_tt_025C_1v80"]
+```
+- É o mesmo corner em que o Genus sintetizou e em que as macros foram
+  caracterizadas; os 3 RC continuam cobrindo a incerteza do fio.
+- `STA_CORNERS` fica com os 9: o STA final (etapa 7) **relata** SS e FF
+  (o número do SS vira resultado: "a 50 MHz só no típico; no pior caso o
+  chip pediria ~40 ns"). O checker de timing do sky130 só reprova no TT
+  (`TIMING_VIOLATION_CORNERS = ["*tt*"]`, `librelane/config/pdk_compat.py`).
+- `RSZ_CORNERS` vale para todos os passos de reparo (`RepairDesign*`,
+  `ResizerTiming*`). O passo 39 (reparo pós-posicionamento) já rodou com os
+  9 corners e não é refeito: a etapa 5 continua do fim da etapa 4.
+- Comentário do `05_cts.sh` corrigido (dizia que o meio do fluxo "só usa o
+  TT" — só o **relatório** usa).
+
+**Ainda não conferido (só rodando):** quantos pontos de hold sobram no TT
+com a margem de 0,1 ns. Plano B, se a legalização falhar de novo: margem de
+hold menor (`PL_RESIZER_HOLD_SLACK_MARGIN`) ou densidade menor (L24).
+**Tempo gasto:** ~40 min (ler o log, achar no código do LibreLane de onde
+vêm os corners).
+**Vira slide?** Sim: "o que é um corner (processo × tensão × temperatura
+× RC) e por que consertar num corner para o qual o projeto não foi feito
+enche o chip de buffers".
+
+**Para continuar:** `git pull` e rodar de novo só o `05_cts.sh` (ele
+retoma do fim da etapa 4; as pastas novas começam em `45-…`). Depois,
+`junta_logs.sh` e push.
+
+### Decisões desta sessão
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L26 | Reparo de timing só nos corners TT (`RSZ_CORNERS`); SS e FF só relatados no STA final | 🟡 | Síntese e `.lib` das macros só em TT; o reparo em 9 corners pôs 19.485 buffers e travou a legalização |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -1481,6 +1572,7 @@ IDs repetidos ganham sufixo `-1`, `-2`… (`flows/sequential.py`); por isso o
 | L23 | Halo das macros até a borda do núcleo | 🟡 | 2026-09-30 |
 | L24 | Densidade alvo padrão; decidir com o GRT | 🟡 | 2026-09-30 |
 | L25 | Timing só vale depois do `STAMidPNR-2` | 🟡 | 2026-09-30 |
+| L26 | Reparo de timing só no TT (`RSZ_CORNERS`) | 🟡 | 2026-09-30 |
 
 ---
 
@@ -1495,7 +1587,7 @@ IDs repetidos ganham sufixo `-1`, `-2`… (`flows/sequential.py`); por isso o
 - [x] ~~Refazer 02 + 03 com a L23 e conferir 0 `PDN-0110`~~ — 0 avisos
 - [x] ~~Script da etapa 4 (posicionamento)~~
 - [x] ~~Rodar a etapa 4 no notebook~~ — passou (15ª sessão)
-- [ ] Rodar a etapa 5 (CTS) no notebook
+- [ ] Rodar a etapa 5 (CTS) no notebook — 1ª tentativa parou no reparo (16ª sessão); refazer com L26
 - [ ] Etapa 6: se o GRT não couber, baixar `PL_TARGET_DENSITY_PCT` (L24)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
 - [x] ~~Refazer a etapa 1 com o netlist de 29/09~~ — rodada `2026-09-30_0934`
