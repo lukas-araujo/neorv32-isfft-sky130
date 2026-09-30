@@ -1254,6 +1254,25 @@ As imagens de antes ficaram em `imagens/antes_L23/` (vira slide: antes/depois).
 **Vira slide?** Sim: "um aviso que não quebra nada, mas mostra uma sobra
 inútil no floorplan". Zoom antes/depois lado a lado.
 
+### Conferência da L23 — 02 + 03 de novo na mesma rodada (`logs_1056`)
+
+Passos `20-…` a `29-…` da rodada `2026-09-30_0934` (os `09`–`19` são os de antes).
+
+| Item | Antes (L17) | Depois (L23) | Fonte |
+|---|---|---|---|
+| Linhas de células depois do corte | 1.124 (linhas partidas em pedaços, inclusive os de 4,8 µm) | **521** (cada linha virou um único trecho) | `ODB-0303` |
+| Sítios disponíveis | 1.108.096 | 1.109.034 | idem |
+| Endcaps / tap cells | 1.042 / 20.139 | 1.042 / 20.186 | `TAP-0004/0005` |
+| Utilização das células padrão | 0,491 | 0,491 | métrica `…utilization__stdcell` |
+| Avisos `PDN-0110` | 6 | **0** | log do `28-openroad-generatepdn`; nenhuma `03_pdn_zoom_pdn0110.png` gerada |
+| Conectividade (PSM) / violações da grade | conectado / 0 | conectado / 0 | `PSM-0040`; `…grid-errors.rpt` vazios |
+| Avisos que sobraram | — | só `IFP-0028` (canto do núcleo), `ODB-0220` (LEF antigo), `ORD-0039` | métricas `flow__warnings__count:*` |
+
+As imagens `02_floorplan_planta.png` e `03_pdn_malha.png` agora saem na
+proporção do chip (2399 × 1811 px).
+**Vira slide?** Sim: a planta e a malha de depois, com o zoom do PDN-0110
+de antes ao lado.
+
 ### 🐛 Planta inteira com 1448 × 7200 px
 
 **Sintoma:** com `SEM_GUI=1`, `02_floorplan_planta.png` e `03_pdn_malha.png`
@@ -1264,6 +1283,32 @@ porque já tinham `-area`.
 **Resolvi com:** `area_die` no `tcl/imagem.tcl` — as vistas inteiras usam a
 área do die + 20 µm de margem.
 **Tempo:** 5 min. **Vira slide?** Não.
+
+### Etapa 4 — script `04_posicionamento.sh` (escrito, não rodado)
+
+Trecho do fluxo `Classic` (lista de passos conferida em
+`librelane/flows/classic.py`, tag 3.0.14): de `Odb.AddRoutingObstructions`
+até `OpenROAD.DetailedPlacement`.
+
+| Passo | O que faz |
+|---|---|
+| `OpenROAD.GlobalPlacementSkipIO` | posicionamento global sem os pinos de E/S, só para saber onde a lógica fica |
+| `OpenROAD.IOPlacement` | os 4 pinos de E/S na borda, perto de quem os usa |
+| `OpenROAD.GlobalPlacement` | RePlAce: as células se espalham como cargas elétricas até a densidade alvo |
+| `OpenROAD.STAMidPNR` | STA com fio estimado |
+| `OpenROAD.RepairDesignPostGPL` | resizer: buffers e troca de tamanho para slew, capacitância e fanout |
+| `OpenROAD.DetailedPlacement` | encaixa cada célula num sítio, sem sobreposição |
+
+| Parâmetro | Valor | De onde |
+|---|---|---|
+| Densidade alvo | não definida no config → LibreLane usa utilização (com macros) + 10 = 71,2 + 10 ≈ **81 %** | `steps/openroad.py` (`_GlobalPlacement.run`); o log confirma |
+| Posicionamento guiado por timing | desligado (`PL_TIMING_DRIVEN` padrão) | `resolved.json` |
+| Guiado por roteabilidade | ligado | idem |
+| Fanout máx. / slew / cap | 10 / margem de 20 % / 20 % | idem |
+
+O script salva `04_posicionamento_metricas.json`, `04_posicionamento.txt`
+(resumo do log de cada passo) e três imagens: células no chip inteiro, mapa de
+densidade e zoom no canal IMEM/DMEM.
 
 ### Números pré-posicionamento (não se leem ainda)
 
@@ -1289,7 +1334,7 @@ descoberta; provavelmente a janela do 02 foi fechada antes de salvar).
 | L5 | Die 2,0 × 1,5 mm | 🟡 → mantém | Utilização das células padrão 0,491; confirmar depois do posicionamento (congestão) |
 | L17 | `config.json` do núcleo | 🟡 → mantém | Floorplan e PDN passaram; orientação das macros conferida pelo LEF |
 | L22 | Investigar o PDN-0110 com zoom automático antes de mover macros | ✅ | O zoom mostrou a causa (met4 de 0,8 µm na tira de 4,8 µm) |
-| L23 | Halo das macros alcança a borda do núcleo (sem tiras de poucos µm) | 🟡 | Tira fina só tem endcaps e gera met4 sem via; refazer 02 + 03 para confirmar 0 `PDN-0110` |
+| L23 | Halo das macros alcança a borda do núcleo (sem tiras de poucos µm) | 🟡 | Tira fina só tem endcaps e gera met4 sem via. Refeito: 0 `PDN-0110`, 521 linhas inteiras |
 
 ---
 
@@ -1331,8 +1376,9 @@ descoberta; provavelmente a janela do 02 foi fechada antes de salvar).
 - [x] ~~Etapa 1 no notebook~~ — passou (10ª sessão)
 - [x] ~~Etapas 2 e 3 no notebook~~ — passaram (14ª sessão)
 - [x] ~~Imagens do 02 e zoom do PDN-0110 (L22)~~
-- [ ] Refazer 02 + 03 com a L23 e conferir 0 `PDN-0110`
-- [ ] Script da etapa 4 (posicionamento)
+- [x] ~~Refazer 02 + 03 com a L23 e conferir 0 `PDN-0110`~~ — 0 avisos
+- [x] ~~Script da etapa 4 (posicionamento)~~
+- [ ] Rodar a etapa 4 no notebook
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
 - [x] ~~Refazer a etapa 1 com o netlist de 29/09~~ — rodada `2026-09-30_0934`
 - [x] ~~Etapa 2 depois da L21~~ — passou

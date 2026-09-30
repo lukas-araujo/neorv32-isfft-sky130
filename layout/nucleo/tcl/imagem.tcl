@@ -3,7 +3,7 @@
 #
 # Chamado pelo abre_gui do comum.sh (nao rode direto). Variaveis de ambiente:
 #   IMG_ODB      banco de dados do layout no fim da etapa
-#   IMG_MODO     floorplan | pdn   (uma visao por etapa; novas entram aqui)
+#   IMG_MODO     floorplan | pdn | posicionamento (uma visao por etapa)
 #   IMG_DIR      pasta de saida (resultados/<rodada>_layout_nucleo/imagens)
 #   IMG_PREFIXO  prefixo dos arquivos (ex.: 02_floorplan)
 #
@@ -108,6 +108,31 @@ switch $modo {
         #    que pedaco de met4 cruza a met5 ali sem via?
         if { [info exists ::env(IMG_ZOOM)] && $::env(IMG_ZOOM) ne "" } {
             salva ${pre}_zoom_pdn0110.png $::env(IMG_ZOOM)
+        }
+    }
+
+    posicionamento {
+        # 1) chip inteiro so com as celulas (sem fios, sem linhas)
+        mostra "Nets/*" false
+        mostra "Rows" false
+        mostra "Instances/StdCells" true
+        mostra "Instances/Macros" true
+        salva ${pre}_celulas.png [area_die]
+
+        # 2) mapa de densidade de posicionamento (heat map do OpenROAD)
+        mostra "Heat Maps/Placement Density" true
+        salva ${pre}_densidade.png [area_die]
+        mostra "Heat Maps/Placement Density" false
+
+        # 3) zoom no canal entre IMEM (em cima) e DMEM (embaixo), na ponta
+        #    direita, onde ele encontra a regiao central da logica
+        set ci [caixa_macro sram_8kbyte_1rw_32x2048_8]
+        set cd [caixa_macro sram_4kbyte_1rw_32x1024_8]
+        if { $ci ne {} && $cd ne {} } {
+            set y0 [expr {[lindex $cd 3] - 40}]
+            set y1 [expr {[lindex $ci 1] + 40}]
+            set x1 [expr {[lindex $ci 2] + 120}]
+            salva ${pre}_zoom_canal.png [list [expr {$x1 - 300}] $y0 $x1 $y1]
         }
     }
 
