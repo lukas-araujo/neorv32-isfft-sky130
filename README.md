@@ -9,7 +9,7 @@ geradas pela **OpenRAM**.
 | Macros SRAM, RTL, simulação, EVM = Kria | ✅ | `DIARIO.md` (congelado) |
 | Síntese Genus, pós-síntese Xcelium, LEC Conformal | ✅ | `DIARIO.md` |
 | Ressíntese para o layout + LibreLane → GDSII | ▶ | `DIARIO_GDSII.md` |
-| UVM no IP da ISFFT (8 testes, 12/12 mutações no Verilator) | ▶ | `DIARIO_UVM.md` |
+| UVM no IP da ISFFT (8/8 no Xcelium, cobertura funcional 94,4 %, 12/12 mutações) | ▶ | `DIARIO_UVM.md` |
 | Síntese com DFT no IP da ISFFT | ⏳ | `DIARIO_DFT.md` |
 
 Números de referência (Genus, 50 MHz): 1,91 mm² (62% macros), slack

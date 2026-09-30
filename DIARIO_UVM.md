@@ -563,6 +563,92 @@ no `CLAUDE.md` (regra: todo script da VM usa o PATH completo).
 
 ---
 
+## 2026-09-30 — 4ª sessão: ✅ regressão no Xcelium (VM)
+
+Resultados em `resultados/2026-09-30_uvm_regressao/` (commit `e88aeb3` do
+Lukas, trazidos com `sim/traz_uvm.sh`). Blocos 0 a 3 do
+`run_first_uvm.tcl`, semente 1. Tabelas para slide:
+`doc/tabelas_uvm.md`.
+
+**Pedido do Lukas:** só registrar e fazer as tabelas; melhorias ficam para
+depois (lista no fim desta sessão).
+
+### O que a 1ª sessão deixou em aberto sobre o Xcelium — respondido
+
+| Dúvida | Resposta | Fonte |
+|---|---|---|
+| Versão do UVM do `-uvm` | **CDNS-UVM-1.1d** (23.09-s013) — nem 1.2 nem IEEE 1800.2. O código rodou sem mudança | linha `[TESTE] UVM:` dos logs |
+| `${UVM_DIR}`/`${UVM_WORK}` dentro do `.f` | expandidos pelo `xrun` | `compila.log` sem `*E` |
+| `-coverage all` com classes UVM | funcionou; covergroups aparecem no IMC | `cobertura_funcional.txt` |
+| Sintaxe do IMC (`merge`, `report`) | funcionou (IMC 24.09; aviso de versão × 23.09 e `REPDEP`, inofensivos) | `imc.log` |
+| Lista do DUT (U13) | 58 do `frontend/` + 2 macros + referência, gerada na VM | `isfft_dut.f` |
+
+### Regressão
+
+| Teste | Palavras bit a bit | Pior erro numérico | Tempo simulado | Resultado |
+|---|---|---|---|---|
+| `fumaca` | 32 | 2,79 LSB | 7 µs | ✅ |
+| `registradores` | — | — | 3 µs | ✅ |
+| `kria` | 96 | 1,48 LSB | 10 µs | ✅ EVM 3,4122 / 0,7822 / 0,5965 % = placa |
+| `aleatorio` | 1.280 | 2,97 LSB | 123 µs | ✅ |
+| `truncado` | 1.280 | 2,95 LSB | 123 µs | ✅ |
+| `contrapressao` | 1.920 | 2,97 LSB | 183 µs | ✅ |
+| `soft_reset` | 256 (2 épocas) | 2,81 LSB | 29 µs | ✅ |
+| `kria_regressao` | 1.280 | 2,94 LSB (informativo) | 187 µs | ✅ |
+
+**8/8**, 192 matrizes / 6.144 palavras, 0 erros de dado e de `tlast`, 0
+`UVM_ERROR`/`UVM_WARNING`/`UVM_FATAL`. ~1 s por teste.
+(`reports/regressao.txt`, `[SB_RESUMO]` de cada log)
+
+Os percentuais de cobertura por teste e os tempos simulados diferem dos do
+Verilator (2ª sessão): o sorteio não é o mesmo entre simuladores. O que
+precisa bater (passou, EVM, palavras comparadas nos testes determinísticos)
+bate.
+
+### Cobertura (IMC, merge das 8 rodadas)
+
+| Métrica | Resultado | Fonte |
+|---|---|---|
+| Funcional | **94,4 %** (51/54 bins): saída 6/6, registradores 19/19, ocupação 15/15, entrada 11/14 | `cobertura_funcional.txt` |
+| Asserções (por `bind`) | 8/8 exercitadas, 0 falhas | idem |
+| Código, núcleo `top_isfft` (local) | 99,6 % (279/280); estágios da FFT/IFFT 99,3–99,9 % | `cobertura_resumo.txt` |
+| Código, wrapper `isfft_axi_v4` (local) | 70,7 % (848/1.200), média 81,5 % | idem |
+| Código, modelos das macros (OpenRAM) | 57,5 % / 58,5 % | idem |
+
+Bins não cobertos:
+
+| Bin | Por que faltou (leitura, não conferida) |
+|---|---|
+| `cg_ent.cp_esperas.curta` (DUT segura `tready` 1–3 ciclos) | o buffer de entrada só enche com a saída travada; a espera aí é longa |
+| `cg_ent.cp_pos_trunc.primeira` (truncado de 1 palavra) | tamanho sorteado de 1 a 31: ponta rara (8 truncados no total) |
+| `cg_ent.cp_pos_trunc.penult` (truncado de 31 palavras) | idem |
+
+### Avisos do Xcelium
+
+| Aviso | O que é | Efeito |
+|---|---|---|
+| `*W,CGDEFN` (4 por teste) | os covergroups não têm nome de instância explícito; o Xcelium inventa um | nenhum; cosmético |
+| `imc: *W,REPDEP` | `report` é o comando antigo do IMC; recomenda `report_metrics` | nenhum |
+
+### Para depois (não mexido agora, pedido do Lukas)
+
+| Item | Ideia |
+|---|---|
+| Truncado nas pontas (2 bins) | sortear o tamanho com peso em 1 e 31 |
+| Espera curta na entrada (1 bin) | ver se é alcançável; se não, tirar o bin e justificar |
+| Wrapper com 70,7 % de código | relatório de código detalhado no IMC para achar o que falta |
+| Modelos da OpenRAM na cobertura de código | excluir (não são nossos) com um arquivo de configuração de cobertura |
+| `CGDEFN` | `option.name` nos 4 grupos (conferido: o Verilator 5.052 aceita) |
+| Mais sementes | bloco 2 com `SEMENTES` > 1 |
+
+**Vira slide?** Sim: `doc/tabelas_uvm.md` (8 tabelas).
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| U18 | Regressão UVM no Xcelium aceita como referência (8/8, cobertura funcional 94,4 %) | 🟡 | Primeira rodada na VM; buracos conhecidos e listados |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -584,6 +670,7 @@ no `CLAUDE.md` (regra: todo script da VM usa o PATH completo).
 | U15 | Scripts do UVM no notebook em `sim/`; espelho mínimo da VM | 🟡 | 2026-09-30 |
 | U16 | Cobertura por instância; Verilator 5.052 | ✅ | 2026-09-30 |
 | U17 | PATH completo da VM no `run_first_uvm.tcl` | ✅ | 2026-09-30 |
+| U18 | Regressão no Xcelium: 8/8, funcional 94,4 % | 🟡 | 2026-09-30 |
 
 ---
 
@@ -591,8 +678,8 @@ no `CLAUDE.md` (regra: todo script da VM usa o PATH completo).
 
 - [x] ~~Integrar no repositório e na pasta da VM~~ — 2ª sessão
 - [x] ~~Refazer a conferência no Verilator na estrutura nova~~ — 8/8, 12/12
-- [ ] **Rodar na VM:** bloco 0 (compilar) e bloco 1 (fumaça)
-- [ ] Bloco 2 (regressão) e bloco 3 (cobertura no IMC) — conferir a sintaxe do IMC na VM
+- [x] ~~Rodar na VM: blocos 0 a 3~~ — 4ª sessão: 8/8, IMC funcionou
+- [ ] Fechar os 3 bins de entrada (ver "Para depois", 4ª sessão)
+- [ ] Cobertura de código do wrapper (70,7 %) e excluir os modelos da OpenRAM
 - [ ] Confirmar U3, U4, U13, U14, U15
-- [ ] Olhar os buracos de cobertura depois do merge (bloco 3)
 - [ ] Síntese com DFT só no IP da ISFFT (FE-D39) — depois do UVM
