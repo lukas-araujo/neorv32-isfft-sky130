@@ -4,7 +4,7 @@ Dois níveis (L15 do `DIARIO_GDSII.md`):
 
 | Pasta | Nível | Fluxo | Situação |
 |---|---|---|---|
-| `nucleo/` | 1 — `asic_top` (netlist do Genus + 4 macros) | `Classic` | etapas 1–3 passaram; 4 pronta para rodar |
+| `nucleo/` | 1 — `asic_top` (netlist do Genus + 4 macros) | `Classic` | etapas 1–4 passaram; 5 pronta para rodar |
 | `chip/` | 2 — padring + núcleo como macro | `Chip` | a fazer |
 
 ## Como rodar o núcleo, uma etapa por vez
@@ -18,6 +18,7 @@ bash layout/nucleo/01_leitura.sh     # começa uma rodada nova; lê o netlist
 bash layout/nucleo/02_floorplan.sh   # die, macros, linhas  -> abre a GUI
 bash layout/nucleo/03_pdn.sh         # rede de alimentação  -> abre a GUI
 bash layout/nucleo/04_posicionamento.sh  # células nas linhas -> abre a GUI
+bash layout/nucleo/05_cts.sh         # árvore de relógio + reparo de timing
 ```
 
 Cada script roda **um trecho** do fluxo, sempre na mesma rodada, e

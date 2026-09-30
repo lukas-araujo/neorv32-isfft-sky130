@@ -48,7 +48,7 @@ if [ "${SO_GUI:-0}" != 1 ]; then
     d="$(dirname "$st")"
     {
       echo "== $passo ($(basename "$d"))"
-      grep -hE "target density|Finished with Overflow|RSZ-00(3[4-9]|4[0-9]|5[0-9])|Inserted|Resized|[Dd]isplacement|PPL-00|DPL-|ERROR|WARNING (GPL|DPL|RSZ|PPL)" \
+      grep -hE "target density|GPL-100[1-5]|GPL-0056|GPL-0089|RSZ-00(3[4-9]|4[0-9]|5[0-9])|Inserted|Resized|[Dd]isplacement|PPL-00|DPL-|ERROR|WARNING (GPL|DPL|RSZ|PPL)" \
         "$d"/*.log 2>/dev/null | sort | uniq -c | head -30 || true
       echo
     } >> "$resumo"
@@ -62,5 +62,5 @@ echo
 echo "Conferir: celulas em todo o espaco livre, mais densas perto das macros"
 echo "e no meio; nenhuma celula em cima de macro ou do halo; o canal"
 echo "IMEM/DMEM ocupado (os pinos das memorias puxam a logica para la)."
-echo "No terminal: 'Finished with Overflow' perto de 0,1 e nenhum ERROR."
-echo "Proximo: etapa 5 (arvore de relogio) -- script ainda nao escrito."
+echo "No resumo: GPL-1005 (congestionamento estimado; ideal <= 1) e nenhum ERROR."
+echo "Proximo: bash layout/nucleo/05_cts.sh"

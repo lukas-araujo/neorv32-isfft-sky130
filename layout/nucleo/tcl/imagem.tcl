@@ -3,7 +3,7 @@
 #
 # Chamado pelo abre_gui do comum.sh (nao rode direto). Variaveis de ambiente:
 #   IMG_ODB      banco de dados do layout no fim da etapa
-#   IMG_MODO     floorplan | pdn | posicionamento (uma visao por etapa)
+#   IMG_MODO     floorplan | pdn | posicionamento | cts (uma visao por etapa)
 #   IMG_DIR      pasta de saida (resultados/<rodada>_layout_nucleo/imagens)
 #   IMG_PREFIXO  prefixo dos arquivos (ex.: 02_floorplan)
 #
@@ -134,6 +134,24 @@ switch $modo {
             set x1 [expr {[lindex $ci 2] + 120}]
             salva ${pre}_zoom_canal.png [list [expr {$x1 - 300}] $y0 $x1 $y1]
         }
+    }
+
+    cts {
+        # 1) visualizador da arvore de relogio: raiz em cima, folhas embaixo,
+        #    altura = latencia de cada pino
+        if { [catch { save_clocktree_image ${pre}_arvore.png -clock clk_i -width $::LARG -height [expr {$::LARG * 3 / 4}] } e] } {
+            puts "\[imagem\] aviso: save_clocktree_image falhou ($e)"
+        } else {
+            puts "\[imagem\] salvo: [file tail ${pre}_arvore.png]"
+        }
+
+        # 2) chip com os buffers da arvore (clkbuf_*) destacados
+        mostra "Nets/*" false
+        mostra "Rows" false
+        if { [catch { select -type Inst -name "clkbuf_*" -highlight 0 } e] } {
+            puts "\[imagem\] aviso: select dos clkbuf falhou ($e)"
+        }
+        salva ${pre}_buffers.png [area_die]
     }
 
     default {

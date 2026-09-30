@@ -1338,6 +1338,120 @@ descoberta; provavelmente a janela do 02 foi fechada antes de salvar).
 
 ---
 
+## 2026-09-30 (15ª sessão) — ✅ Etapa 4 (posicionamento) passou; congestionamento a vigiar
+
+Rodada `2026-09-30_0934`, passos `30-…` a `41-…`. Fontes:
+`04_posicionamento.txt`, `04_posicionamento_metricas.json`, `logs_1132.tar.gz`.
+
+### Posicionamento global (RePlAce)
+
+| Item | Valor | Fonte |
+|---|---|---|
+| Densidade alvo | **0,8125** (utilização 71,2 % + 10, cálculo do LibreLane) | `GPL-0023` |
+| Área livre / densidade mínima possível | 1.358.455 µm² / 0,60 | `GPL-1003/1004` |
+| Fim | iteração 1.422, overflow 0,0991 (alvo 0,1) | tabela do Nesterov |
+| Modo roteabilidade | 13 rodadas; congestionamento estimado (RUDY) mínimo **1,18**, final 1,19; ~35–40 % dos tiles acima da capacidade | `GPL-0040…0047`, `GPL-0056`, `GPL-1005` |
+| Resultado do modo roteabilidade | "Reverting to minimal observed routing congestion, **could not reach target**" | `GPL-0089` |
+| Inflação de área para abrir espaço | +17,27 % (809.509 → 981.658 µm²) | `GPL-1012/1014` |
+| Tempo | 1 min 22 s (e 32 s do `SkipIO`) | `runtime.txt` |
+
+⚠️ **Congestionamento estimado > 1.** O RUDY é uma estimativa grosseira
+(espalha cada rede pela caixa que a envolve), mas diz que falta trilha em
+boa parte do chip na densidade 0,81. O veredito de verdade é o roteamento
+global (etapa 6), e o `GRT_ALLOW_CONGESTION` está `false`: se não couber,
+o GRT para. Plano B já medido pelos próprios números: a densidade mínima é
+0,60, então dá para baixar o alvo (`PL_TARGET_DENSITY_PCT` ≈ 65) e espalhar
+as células; custa fio mais longo. Seguimos para a CTS e decidimos com o GRT.
+
+### Pinos de E/S
+
+| Item | Valor | Fonte |
+|---|---|---|
+| Pinos | 4 (`clk_i`, `rstn_i`, `uart0_txd_o`, `uart0_rxd_i`), todos com carga | `PPL-0002/0003`; cabeçalho do `asic_top` no netlist |
+| Posições livres na borda | 6.542 | `PPL-0001` |
+| HPWL das redes de E/S | 6.472,86 µm | `PPL-0012` |
+
+### Reparo do projeto (`RepairDesignPostGPL`)
+
+| Item | Valor | Fonte |
+|---|---|---|
+| Violações encontradas (antes do reparo) | slew 2.697, fanout 1.707, capacitância 43 | `RSZ-0034/35/36` |
+| **Buffers inseridos** | **12.930 em 2.818 redes** (+117.892 µm²) | `RSZ-0038`; classe `timing_repair_buffer` |
+| Células redimensionadas | 301 | `RSZ-0039` |
+| Buffers nas portas | 2 de entrada + 1 de saída | `RSZ-0027/0028` |
+| Tie cells | 10 `conb_1` novas (uma por carga, `DESIGN_REPAIR_TIE_FANOUT`) | `RSZ-0042` |
+| Aviso | "found 2 floating nets": são `vccd1` e `vssd1` (o resizer não vê a PDN) — inofensivo | `RSZ-0020` |
+| Legalização depois dos buffers | deslocamento médio 3,1 µm, máx. 191,8 µm; HPWL +10 % | "Placement Analysis" |
+| Tempo | **6 min 03 s** (o passo mais lento até aqui) | `runtime.txt` |
+
+Por que tanto buffer: o Genus não tinha limite de fanout e o PDK manda
+**fanout máximo 10** (`MAX_FANOUT_CONSTRAINT`). As 1.707 redes acima disso
+(reset, habilitações de registradores, seleções de mux) viram árvores de
+buffers. A utilização das células padrão foi de 0,491 para **0,569**.
+**Vira slide?** Sim: "síntese entrega a lógica; o layout paga o fanout".
+
+### Posicionamento detalhado
+
+| Item | Valor | Fonte |
+|---|---|---|
+| Células espelhadas para encurtar fio | 31.012 | `DPL-0020` |
+| HPWL | 3.081.852 → 3.008.057 µm (−2,4 %) | `DPL-0021/0022/0023` |
+| Deslocamento | 0 (o reparo já tinha legalizado) | "Placement Analysis" |
+| Instâncias no fim | 93.145 (93.141 células padrão + 4 macros) | métricas |
+| Área das instâncias | 2.057.080 µm²; utilização 0,756 (com macros) / 0,569 (só células) | métricas |
+
+### 🐛 Timing de −166 ns em setup **e** em hold — não é do projeto
+
+**Sintoma:** `04_posicionamento_metricas.json` diz setup WS −166,6 ns e hold
+WS −166,8 ns (TT), 79.886 violações de slew; o SS continua −86,12 ns.
+**Causa** (lida no `38-openroad-stamidpnr/max.rpt` e `clock.rpt`):
+
+| O que se vê | Explicação |
+|---|---|
+| `clk_i`: fanout **19.829**, 47,15 pF, slew 209,8 ns, atraso 155,9 ns até o flip-flop | Antes da CTS o relógio é **um fio só** ligando todos os flip-flops e as 6 entradas de relógio das macros |
+| Latência 131–157 ns, "skew" 26 ns | O `nucleo.sdc` (igual ao `base.sdc` do LibreLane) faz `set_propagated_clock` sempre que `OPENLANE_SDC_IDEAL_CLOCKS` não é 1, e só o `STAPrePNR` põe 1 (`steps/openroad.py`). No meio do fluxo o relógio é propagado por esse fio único |
+| Pior caminho: flip-flop da UART → `uart0_txd_o` | 155,9 ns de relógio + 24,5 ns de CK→Q com 210 ns de slew na entrada |
+| As métricas são do passo **38** (STA), **antes** do reparo (39) | O arquivo de métricas do fim da etapa carrega o último STA que rodou |
+| SS igual ao da etapa 1 | O STA do meio do fluxo só roda o corner TT (`DEFAULT_CORNER`); o SS é o valor velho do `STAPrePNR` |
+
+**Resolvi com:** nada a fazer — a CTS (etapa 5) troca o fio por uma árvore.
+Os números valem a partir do `STAMidPNR-2` (depois do reparo pós-CTS).
+**De brinde, um bug do LibreLane:** o `clock.rpt` diz "Virtual: yes /
+Propagated: no", mas o relógio é real e propagado:
+`scripts/openroad/sta/corner.tcl` (tag 3.0.14) faz
+`if {is_propagated} { set is_virtual "yes" }` — troca as variáveis.
+**Tempo:** ~20 min. **Vira slide?** Sim: "o STA antes da CTS mente — um
+relógio com 19.829 cargas num fio só".
+
+### Imagens
+
+| Arquivo | O que mostra |
+|---|---|
+| `04_posicionamento_celulas.png` | células ocupando o meio e o canto de baixo à esquerda; o canal IMEM/DMEM com uma faixa de células |
+| `04_posicionamento_densidade.png` | mapa de densidade: vermelho no centro-direita e embaixo à esquerda; faixas vazias junto à borda esquerda e à direita da in_mem |
+| `04_posicionamento_zoom_canal.png` | canal IMEM/DMEM: células no meio do canal, com espaço livre junto às macros |
+
+### Etapa 5 — script `05_cts.sh` (escrito, não rodado)
+
+| Passo | ID no fluxo | O que faz |
+|---|---|---|
+| CTS | `OpenROAD.CTS` | TritonCTS: raiz `clkbuf_16`, buffers `clkbuf_8/4/2`, agrupamento de folhas ligado |
+| STA | `OpenROAD.STAMidPNR-1` | primeiro STA com a árvore |
+| Reparo | `OpenROAD.ResizerTimingPostCTS` | `repair_timing` de setup e de hold (margem de hold 0,1 ns, até 50 % de buffers) |
+| STA | `OpenROAD.STAMidPNR-2` | STA depois do reparo — **os números que valem** |
+
+IDs repetidos ganham sufixo `-1`, `-2`… (`flows/sequential.py`); por isso o
+`--to` é `OpenROAD.STAMidPNR-2`.
+
+### Decisões desta sessão
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L24 | Manter a densidade alvo padrão (0,81) e decidir com o roteamento global | 🟡 | RUDY 1,19 é estimativa; o GRT mede de verdade. Plano B: `PL_TARGET_DENSITY_PCT` ≈ 65 |
+| L25 | Números de timing só a partir do `STAMidPNR-2` (pós-CTS) | 🟡 | Antes disso o relógio é um fio só, e o STA do meio do fluxo é só TT |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -1365,6 +1479,8 @@ descoberta; provavelmente a janela do 02 foi fechada antes de salvar).
 | L21 | LEF das macros em 1000 unidades por µm | ✅ | 2026-09-30 |
 | L22 | PDN-0110: zoom automático antes de mover macros | ✅ | 2026-09-30 |
 | L23 | Halo das macros até a borda do núcleo | 🟡 | 2026-09-30 |
+| L24 | Densidade alvo padrão; decidir com o GRT | 🟡 | 2026-09-30 |
+| L25 | Timing só vale depois do `STAMidPNR-2` | 🟡 | 2026-09-30 |
 
 ---
 
@@ -1378,7 +1494,9 @@ descoberta; provavelmente a janela do 02 foi fechada antes de salvar).
 - [x] ~~Imagens do 02 e zoom do PDN-0110 (L22)~~
 - [x] ~~Refazer 02 + 03 com a L23 e conferir 0 `PDN-0110`~~ — 0 avisos
 - [x] ~~Script da etapa 4 (posicionamento)~~
-- [ ] Rodar a etapa 4 no notebook
+- [x] ~~Rodar a etapa 4 no notebook~~ — passou (15ª sessão)
+- [ ] Rodar a etapa 5 (CTS) no notebook
+- [ ] Etapa 6: se o GRT não couber, baixar `PL_TARGET_DENSITY_PCT` (L24)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
 - [x] ~~Refazer a etapa 1 com o netlist de 29/09~~ — rodada `2026-09-30_0934`
 - [x] ~~Etapa 2 depois da L21~~ — passou
