@@ -1,0 +1,17 @@
+ETAPA 1 -- leitura do netlist (2026-09-30_0934)
+netlist: resultados/2026-09-29_sintese_layout/deliverables/neorv32_isfft_soc.v.gz
+achatamento (L19):
+  antes: 2562 assigns, 247457 pinos | depois: 0 assigns, 247457 pinos
+  assigns com concatenacao: 1267
+  pinos so num dos lados: 0 []
+  redes comparadas: 62141 | erros: 0
+  RESULTADO: IGUAIS (mesma ligacao em todos os pinos)
+celulas proibidas no layout (L20):
+  total: 0 instancias (esperado 0; L20: avoid no Genus)
+   Chip area for module '\asic_top': 35467.766400
+Found and reported 0 problems.
+  relatorio: chk.rpt
+  relatorio: latch.rpt
+  relatorio: pre_synth_chk.rpt
+  relatorio: stat.json
+  relatorio: stat.rpt
