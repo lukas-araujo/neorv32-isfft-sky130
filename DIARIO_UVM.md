@@ -408,12 +408,148 @@ O Verilator não é o Xcelium (lição da 14ª sessão do `DIARIO.md`: o
 
 ---
 
+## 2026-09-30 — 2ª sessão: integração ao repositório git e à pasta da VM
+
+**Pedido do Lukas:** continuar o trabalho do chat anterior (1ª sessão),
+analisar, corrigir o que precisar, integrar no repositório e na pasta
+atual da VM. Recebidos: este diário, `asic_completo.tgz` (projeto do
+notebook de 26/09, antes do git), `uvm_neorv32_isfft_soc.tgz` (a `uvm/`
+montada para a VM) e `neorv32_isfft_soc.tar.xz` (a pasta da VM de hoje).
+
+### O que o chat anterior tinha feito (conferido nos arquivos)
+
+| Item | Situação |
+|---|---|
+| Ambiente (`uvm/`: 2 agentes, RAL, modelo, scoreboard, cobertura, 15 asserções, 8 testes) | 14 arquivos, ~2.600 linhas. Lido inteiro: nenhum defeito de lógica achado |
+| `sim/monta_vm_uvm.sh`, `run_uvm_verilator.sh`, `run_uvm_mutacoes.sh` | Feitos para a organização antiga (`~/Projects/asic`, `neorv32_isfft_soc/uvm/`) |
+| Resto do `asic_completo.tgz` | Fotografia de 26/09: o repositório já está à frente (L1, L9, L20...). **Só a parte do UVM foi aproveitada** |
+| Pasta da VM de hoje | Sem `uvm/` (nunca rodou na VM). `frontend/isfft_axi_v4.v` e os 57 `frontend/isfft/*.v` **iguais** aos do repositório; modelos das 2 macros iguais |
+
+### O que mudou na integração
+
+| Antes (1ª sessão) | Agora | Por quê |
+|---|---|---|
+| Fonte em `~/Projects/asic/uvm/` | `vm/verification/uvm_isfft/` (pasta dona do UVM no `CLAUDE.md`) | Repositório git como fonte única (L8) |
+| `sim/monta_vm_uvm.sh` monta `neorv32_isfft_soc/uvm/` | `sim/monta_vm.sh` (o geral) leva para `neorv32_isfft_soc/verification/uvm_isfft/`. `monta_vm_uvm.sh` **não veio** | O `monta_vm.sh` já copia tudo o que está em `vm/`; frente nova não mexe nele |
+| `isfft_dut.f` escrito pelo `monta_vm_uvm.sh` com a lista do momento | `scripts/gera_dut_f.sh` escreve `work/isfft_dut.f` **na hora**, a partir de `frontend/`, antes de qualquer bloco; o Verilator usa o mesmo script | A lista nunca fica velha se o RTL mudar; VM e Verilator leem a mesma regra. Conferido: mesma lista de 61 arquivos que a do chat anterior |
+| `ref/isfft_axi_wrapper.v` copiado na montagem | Cópia fixa em `vm/verification/uvm_isfft/ref/` (igual, byte a byte, a `rtl/isfft/ref/`); o `run_uvm_verilator.sh` avisa se divergir | O `frontend/` da VM só tem o RTL do chip; o wrapper da etapa 1 é congelado (front-end fechado) |
+| Verilator rodava sobre a pasta da VM montada | `run_uvm_verilator.sh` monta sozinho um espelho mínimo (`build/uvm_verilator/vm`) com a regra do `monta_vm.sh`; `PASTA_VM=<pasta>` usa uma pasta montada | Não depende do GHDL/NEORV32 (o UVM só usa a ISFFT) |
+| Mutações copiavam da pasta da VM | Copiam de `rtl/isfft/` do repositório | idem |
+| Sem caminho de volta | `sim/traz_uvm.sh <pasta copiada da VM> [etapa]` → `resultados/<data>_uvm/` (logs, `regressao.txt`, cobertura, `isfft_dut.f`) | Mesmo fluxo do `traz_vm.sh` (L13), que só olha `backend/synthesis/` |
+| Decisões citadas como ASIC-Dn | FE-Dn | Mesma convenção do `DIARIO_GDSII.md` |
+
+Fora da pasta do UVM, só mudaram: uma linha na tabela do `vm/LEIAME.md`
+(aponta para `verification/uvm_isfft/`), a linha do UVM no `README.md` e
+no `CLAUDE.md`, e os três `sim/*uvm*.sh` (novos).
+
+Conferências sem Cadence: `run_first_uvm.tcl` rodado com um `xrun` falso
+sobre a cópia da pasta da VM (gera a lista, monta a linha do `xrun` com os
+caminhos certos, lê o resultado do log) e `traz_uvm.sh` sobre essa saída.
+
+### 🐛 Cobertura 0% em todos os testes no Verilator 5.052
+
+**Sintoma:** regressão 8/8 PASSOU, mas `[COBERTURA] entrada 0.0% saida
+0.0% registradores 0.0% ocupacao 0.0%` em todos os testes. Na 1ª sessão
+saíam números (52–95%).
+**Causa:** a 1ª sessão usou um Verilator **5.053-devel**; aqui compilei a
+versão **5.052** (tag). Num teste mínimo (covergroup em classe e em módulo,
+2 de 3 bins amostrados) o 5.052 devolve `get_coverage() = 0` e
+`get_inst_coverage() = 66,7%`: a cobertura do **tipo** não é calculada, a
+da **instância** é. Primeiro suspeitei do `--coverage-user` (a
+documentação diz que ele instrumenta os covergroups): com ele, o mesmo 0.
+Não era isso; o flag saiu de novo.
+**Resolvi com:** `option.per_instance = 1` nos 4 grupos e o resumo lê
+`get_inst_coverage()`. Há uma instância de cada grupo, então o número é o
+mesmo; e no Xcelium, com `per_instance = 1`, a instância também aparece
+separada no IMC.
+**Tempo gasto:** ~20 min.
+**Vira slide?** Não. Lição: "0% em tudo" é sinal de ferramenta, não de
+teste — conferir com um caso mínimo.
+
+### ✅ Regressão no Verilator 5.052 (estrutura nova, semente 1)
+
+`UVM_SRC=<verilator>/test_regress/t/uvm bash sim/run_uvm_verilator.sh`.
+Compilação 165 s; logs em `build/uvm_verilator/vm/verification/uvm_isfft/reports/`.
+
+| Teste | Palavras bit a bit | Pior erro (LSB) | Entrada | Saída | Registradores | Ocupação | Resultado |
+|---|---|---|---|---|---|---|---|
+| `fumaca` | 32 | 2,66 | 35,7% | 50,0% | 52,6% | 53,3% | ✅ |
+| `registradores` | — | — | 0% | 0% | 78,9% | 20,0% | ✅ |
+| `kria` | 96 | 1,48 | 50,0% | 50,0% | 52,6% | 66,7% | ✅ EVM 3,4122 / 0,7822 / 0,5965 % = placa |
+| `aleatorio` | 1.280 | 3,05 | 57,1% | 83,3% | 52,6% | 66,7% | ✅ |
+| `truncado` | 1.280 | 3,05 | 71,4% | 83,3% | 57,9% | 66,7% | ✅ |
+| `contrapressao` | 1.920 | 3,10 | 64,3% | 100% | 52,6% | 93,3% | ✅ |
+| `soft_reset` | 256 (2 épocas) | 2,82 | 78,6% | 83,3% | 57,9% | 80,0% | ✅ |
+| `kria_regressao` | 1.280 | 2,99 (só informativo) | 71,4% | 100% | 57,9% | 93,3% | ✅ |
+
+0 `UVM_ERROR`, 0 `UVM_WARNING` nos 8 logs. Palavras, épocas, tempos
+simulados e EVM iguais aos da 1ª sessão. Os percentuais de cobertura
+**não** se comparam com a tabela da 1ª sessão (outra versão e outra
+função); valem os de agora. O número que conta é o do merge no IMC
+(bloco 3), na VM.
+
+### ✅ Mutações no Verilator 5.052: 12 de 12 detectadas
+
+`UVM_SRC=... bash sim/run_uvm_mutacoes.sh` (versão correta PASSOU antes;
+arquivo mutado tirado de `rtl/isfft/`). Entre parênteses, quantos erros
+de cada tipo.
+
+| Mutação | Quem pegou |
+|---|---|
+| W1 `next_in` fora de fase | `SB_DADO`(10), `SB_NUM`(1) |
+| W2 pré-busca sem limite | `SVA`(20) — para no limite de 20 erros (U11) |
+| W3 buffer de saída fora de ordem | `SB_DADO`(10), `SVA`(9), `SB_NUM`(1) |
+| W4 busca pelo ponteiro de entrega | `SB_NUM`(10), `SB_DADO`(10) |
+| W5 `core_x` sem esperar a macro | `SB_DADO`(10), `SB_NUM`(1) |
+| W6 `tlast` uma matriz depois | `SB_TLAST`(21) — só o modelo de `tlast` |
+| W7 rollback quebrado | `SB_DADO`(10), `SB_NUM`(8), `WATCHDOG`(1) |
+| W8 `clr_err` ignorado | `STATUS`(2), RAL(2) |
+| W9 soft reset não zera `MAT_IN` | RAL(1) |
+| W10 ID errado | RAL(1) |
+| N1 ping-pong lê a mesma linha 2× (núcleo) | `SB_NUM`(10) — só a numérica |
+| N2 real/imag trocados (núcleo) | `SB_NUM`(3), `KRIA`(3) — só a numérica e a Kria |
+
+Mesmo quadro da 1ª sessão: a estrutura nova não perdeu nenhuma checagem.
+
+### Na VM, na ordem
+
+Pacote `build/vm_uvm/uvm_isfft_vm.tgz` (só `verification/uvm_isfft/`,
+`DIARIO_UVM.md` e o `LEIAME.md` com a linha nova): extrair **dentro de**
+`/prj/ci/workarea/aluno12/projetos/` — ele cai em `neorv32_isfft_soc/`
+sem tocar em `frontend/`, `tech/` nem `backend/`. (Montar a pasta inteira
+com `sim/monta_vm.sh` dá o mesmo resultado nessa parte.)
+
+1. `cd .../neorv32_isfft_soc/verification/uvm_isfft/scripts`
+2. Bloco 0 (compilar; descomentar o 0 e comentar o 1) — esperado: nenhum
+   `*E`. Olhar a linha `isfft_dut.f: 58 arquivos do frontend...`.
+3. Bloco 1 (fumaça) — `TESTE PASSOU`, `[TESTE] UVM: ...` diz a versão.
+4. Bloco 2 (regressão, `SEMENTES=1` primeiro) — 8 PASSOU.
+5. Bloco 3 (IMC) — sintaxe ainda não testada em lugar nenhum.
+6. Trazer: copiar a pasta para o notebook e
+   `bash sim/traz_uvm.sh <pasta> uvm_regressao`.
+
+Pontos do Xcelium ainda não provados (lista da 1ª sessão): versão do UVM
+do `-uvm`, `${UVM_DIR}`/`${UVM_WORK}` dentro do `.f`, `-coverage all` com
+classes, sintaxe do IMC.
+
+### Decisões da sessão
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| U2 | ~~`uvm/` + `monta_vm_uvm.sh`~~ → fonte em `vm/verification/uvm_isfft/`, montada pelo `sim/monta_vm.sh`; na VM, `neorv32_isfft_soc/verification/uvm_isfft/` | ✅ | Organização do repositório (`CLAUDE.md`, L8) |
+| U13 | Lista do DUT gerada na hora (`gera_dut_f.sh`), igual na VM e no Verilator | 🟡 | Não envelhece quando o RTL muda; uma regra só |
+| U14 | Wrapper da etapa 1 como cópia fixa em `ref/`, conferida contra `rtl/isfft/ref/` | 🟡 | O `frontend/` da VM não tem a referência; o arquivo é congelado |
+| U15 | Scripts do notebook do UVM em `sim/` (`run_uvm_verilator.sh`, `run_uvm_mutacoes.sh`, `traz_uvm.sh`); Verilator com espelho mínimo da VM | 🟡 | Mesmo lugar das outras bancadas (`run_gls_yosys.sh`, `traz_vm.sh`); não precisa do GHDL |
+| U16 | Cobertura lida por instância (`per_instance = 1`, `get_inst_coverage`); Verilator de referência = **5.052** (tag) | ✅ | O 5.052 dá 0 no `get_coverage()`; com uma instância por grupo o número é o mesmo |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
 |---|---|---|---|
 | U1 | UVM só no IP; DUT = `frontend/` da VM | ✅ | 2026-09-26 |
-| U2 | `uvm/` no projeto + `monta_vm_uvm.sh`; `run_first_uvm.tcl` separado; diário novo | ✅ | 2026-09-26 |
+| U2 | ~~`uvm/` + `monta_vm_uvm.sh`~~ → `vm/verification/uvm_isfft/` + `monta_vm.sh`; `run_first_uvm.tcl` separado; diário novo | ✅ | 2026-09-30 |
 | U3 | Referência bit a bit = wrapper da etapa 1 | 🟡 | 2026-09-26 |
 | U4 | Checagem numérica: ≤ 4 LSB máx., ≤ 1,5 LSB médio; EVM só na Kria | 🟡 | 2026-09-26 |
 | U5 | RAL com predição explícita + `predict` dos contadores | ✅ | 2026-09-26 |
@@ -423,14 +559,20 @@ O Verilator não é o Xcelium (lição da 14ª sessão do `DIARIO.md`: o
 | U9 | Clock de 50 MHz | ✅ | 2026-09-26 |
 | U10 | Limites em ciclos (watchdog 500 mil), sem `set_timeout` | ✅ | 2026-09-26 |
 | U11 | Limite de 20 erros por teste | ✅ | 2026-09-26 |
-| U12 | 12 mutações, todas detectadas | ✅ | 2026-09-26 |
+| U12 | 12 mutações, todas detectadas (de novo no 5.052, 2ª sessão) | ✅ | 2026-09-26 |
+| U13 | Lista do DUT gerada na hora (`gera_dut_f.sh`) | 🟡 | 2026-09-30 |
+| U14 | Wrapper da etapa 1 como cópia fixa em `ref/` | 🟡 | 2026-09-30 |
+| U15 | Scripts do UVM no notebook em `sim/`; espelho mínimo da VM | 🟡 | 2026-09-30 |
+| U16 | Cobertura por instância; Verilator 5.052 | ✅ | 2026-09-30 |
 
 ---
 
 ## Pendências abertas
 
+- [x] ~~Integrar no repositório e na pasta da VM~~ — 2ª sessão
+- [x] ~~Refazer a conferência no Verilator na estrutura nova~~ — 8/8, 12/12
 - [ ] **Rodar na VM:** bloco 0 (compilar) e bloco 1 (fumaça)
 - [ ] Bloco 2 (regressão) e bloco 3 (cobertura no IMC) — conferir a sintaxe do IMC na VM
-- [ ] Confirmar U3 e U4
+- [ ] Confirmar U3, U4, U13, U14, U15
 - [ ] Olhar os buracos de cobertura depois do merge (bloco 3)
 - [ ] Síntese com DFT só no IP da ISFFT (FE-D39) — depois do UVM
