@@ -1010,6 +1010,30 @@ checagens, células proibidas (Corrigir), timing (Informativo).
 
 ---
 
+## 2026-09-29 (11ª sessão) — Forma de registrar e a GUI do Conformal
+
+**Pedido do Lukas:** não gerar mais imagens de tabela; os resultados de
+cada etapa ficam como **tabelas no diário**. As imagens do layout que os
+scripts salvam da GUI do OpenROAD continuam. Regra no `CLAUDE.md`. Os
+geradores já feitos (`doc/gera_tabela_*.py`) ficam no repositório, mas não
+serão mais atualizados.
+
+**Pergunta: a GUI do Conformal LEC mostra algo relevante?**
+
+| Situação | GUI ajuda? | Por quê |
+|---|---|---|
+| LEC deu PASS (nosso caso até agora) | Não | O relatório já diz tudo: pontos comparados, equivalentes, não-equivalentes (0), abortados (0), não mapeados, caixas-pretas |
+| Pontos **não-equivalentes** | Sim | *Diagnosis*: vetor de teste que mostra a diferença e o cone de lógica dos dois lados em esquemático, lado a lado |
+| Pontos **não mapeados** (ex.: flip-flop podado ou renomeado) | Sim | *Mapping Manager*: lista o que não casou e sugere correspondência por nome |
+| Abortados | Às vezes | Mostra o cone grande demais; em geral resolve-se no dofile (`analyze_datapath`, particionar) |
+
+Para relatório e slide basta o texto do relatório (a tabela da 5ª sessão:
+19.828 pontos, 169/169 módulos, PASS). Abrir: `lec -xl` sem `-nogui`, ou
+no prompt do Conformal digitar `gui`. Vale abrir **se** o LEC da etapa 9
+(netlist do Genus × netlist do layout) falhar.
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |

@@ -35,6 +35,10 @@ Lukas.
 - **Atualize o diário a cada etapa**, no formato dele (🐛 Sintoma /
   Causa / Resolvi com / Tempo / Vira slide?; tabela de decisões da sessão
   + índice no fim). Decisão nova = 🟡 até o Lukas confirmar.
+- **Resultado de etapa = tabela Markdown no diário.** Não gerar imagens
+  (PNG/SVG) de tabelas ou resumos — pedido do Lukas (29/09). As imagens do
+  próprio layout (as que os scripts `layout/nucleo/NN_*.sh` salvam da GUI
+  do OpenROAD) continuam.
 - **Números vêm de arquivo, não de memória.** Leia o relatório/log antes
   de afirmar; diga de onde veio.
 - Comandos do Genus, Xcelium e Conformal vão **dentro do `run_first.tcl`**
