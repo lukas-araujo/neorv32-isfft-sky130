@@ -22,7 +22,7 @@ diários.
 |---|---|---|---|
 | Front-end (fechado) | `DIARIO.md` | D (citado como FE-Dn) | — (só correções) |
 | Back-end / GDSII | `DIARIO_GDSII.md` | L | `macros/`, `openram/`, `tech/`, `vm/backend/synthesis/`, `layout/` |
-| UVM do IP da ISFFT | `DIARIO_UVM.md` (criar) | U | `vm/verification/uvm_isfft/` |
+| UVM do IP da ISFFT | `DIARIO_UVM.md` | U | `vm/verification/uvm_isfft/`, `sim/run_uvm_*.sh`, `sim/traz_uvm.sh` |
 | DFT do IP da ISFFT | `DIARIO_DFT.md` (criar) | T | `vm/backend/dft_isfft/` |
 
 Fora das suas pastas: **só leitura**. Se precisar mudar algo de outra
@@ -94,7 +94,7 @@ git pull --rebase origin main && git push origin main
 |---|---|
 | Notebook (Linux-Batata) | Ubuntu 24.04, i7-1165G7 (4 núcleos / 8 threads), 32 GB, 3 TB. OSS CAD Suite (GHDL, Icarus, Yosys), OpenRAM, LibreLane (Nix). Repositório em `~/Projects/neorv32-isfft-sky130` |
 | VM goku (aluno12) | Genus 22.1, Xcelium 23.09, Conformal 23.2, Tempus. **Sem** PVS/Pegasus/Quantus. Sem permissão de instalação; só envia arquivos e roda ferramentas |
-| Sessão do Claude (nuvem) | Sem ferramentas EDA de fábrica: `pip install --break-system-packages yowasp-yosys` e `apt-get install -y iverilog` resolvem Yosys e Icarus. NEORV32 (commit `8bdbe48`) clonável do GitHub se precisar do `sim/convert.sh` |
+| Sessão do Claude (nuvem) | Sem ferramentas EDA de fábrica: `pip install --break-system-packages yowasp-yosys` e `apt-get install -y iverilog` resolvem Yosys e Icarus. NEORV32 (commit `8bdbe48`) clonável do GitHub se precisar do `sim/convert.sh`. UVM: Verilator **5.052** compilado do fonte (tag `v5.052`, com `z3`; ~20 min) e `UVM_SRC=<verilator>/test_regress/t/uvm` |
 
 ## Armadilhas já pagas (não repita)
 

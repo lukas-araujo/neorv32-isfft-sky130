@@ -9,7 +9,7 @@ geradas pela **OpenRAM**.
 | Macros SRAM, RTL, simulação, EVM = Kria | ✅ | `DIARIO.md` (congelado) |
 | Síntese Genus, pós-síntese Xcelium, LEC Conformal | ✅ | `DIARIO.md` |
 | Ressíntese para o layout + LibreLane → GDSII | ▶ | `DIARIO_GDSII.md` |
-| UVM no IP da ISFFT | ⏳ | `DIARIO_UVM.md` |
+| UVM no IP da ISFFT (8 testes, 12/12 mutações no Verilator) | ▶ | `DIARIO_UVM.md` |
 | Síntese com DFT no IP da ISFFT | ⏳ | `DIARIO_DFT.md` |
 
 Números de referência (Genus, 50 MHz): 1,91 mm² (62% macros), slack
@@ -41,6 +41,7 @@ e avisar nos outros.
 | `vm/backend/synthesis/` | Scripts Genus / Xcelium / Conformal do **chip** | GDSII |
 | `vm/backend/dft_isfft/` | Síntese com DFT do IP da ISFFT | DFT |
 | `vm/verification/uvm_isfft/` | Ambiente UVM do IP da ISFFT | UVM |
+| `sim/run_uvm_*.sh`, `sim/traz_uvm.sh` | UVM no Verilator (conferência aberta, mutações) e retorno dos resultados da VM | UVM |
 | `layout/` | Configuração do LibreLane (notebook) | GDSII |
 | `resultados/<data>_<etapa>/` | Relatórios e entregáveis que voltaram da VM ou do LibreLane | quem rodou |
 | `doc/` | Diagramas e figuras | todos (cada um os seus arquivos) |
