@@ -3,7 +3,7 @@
 #
 # Chamado pelo abre_gui do comum.sh (nao rode direto). Variaveis de ambiente:
 #   IMG_ODB      banco de dados do layout no fim da etapa
-#   IMG_MODO     floorplan | pdn | posicionamento | cts (uma visao por etapa)
+#   IMG_MODO     floorplan | pdn | posicionamento | cts | roteamento
 #   IMG_DIR      pasta de saida (resultados/<rodada>_layout_nucleo/imagens)
 #   IMG_PREFIXO  prefixo dos arquivos (ex.: 02_floorplan)
 #
@@ -152,6 +152,30 @@ switch $modo {
             puts "\[imagem\] aviso: select dos clkbuf falhou ($e)"
         }
         salva ${pre}_buffers.png [area_die]
+    }
+
+    roteamento {
+        # 1) mapa de congestao do roteamento (demanda / capacidade de
+        #    trilhas por ladrilho): vermelho = onde faltou ou quase faltou
+        mostra "Nets/*" false
+        mostra "Heat Maps/Routing Congestion" true
+        salva ${pre}_congestao.png [area_die]
+        mostra "Heat Maps/Routing Congestion" false
+
+        # 2) chip inteiro com os fios de sinal
+        mostra "Nets/Signal" true
+        mostra "Nets/Clock" true
+        salva ${pre}_chip.png [area_die]
+
+        # 3) zoom no canal IMEM/DMEM: 140 pinos das duas macros da CPU
+        set ci [caixa_macro sram_8kbyte_1rw_32x2048_8]
+        set cd [caixa_macro sram_4kbyte_1rw_32x1024_8]
+        if { $ci ne {} && $cd ne {} } {
+            set y0 [expr {[lindex $cd 3] - 20}]
+            set y1 [expr {[lindex $ci 1] + 20}]
+            set x1 [expr {[lindex $ci 2] + 60}]
+            salva ${pre}_zoom_canal.png [list [expr {$x1 - 150}] $y0 $x1 $y1]
+        }
     }
 
     default {

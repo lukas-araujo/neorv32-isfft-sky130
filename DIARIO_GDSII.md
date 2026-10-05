@@ -1514,8 +1514,9 @@ máx.), no `config.json`:
   caracterizadas; os 3 RC continuam cobrindo a incerteza do fio.
 - `STA_CORNERS` fica com os 9: o STA final (etapa 7) **relata** SS e FF
   (o número do SS vira resultado: "a 50 MHz só no típico; no pior caso o
-  chip pediria ~40 ns"). O checker de timing do sky130 só reprova no TT
+  chip pediria ~40 ns"). O checker de **setup** do sky130 só reprova no TT
   (`TIMING_VIOLATION_CORNERS = ["*tt*"]`, `librelane/config/pdk_compat.py`).
+  ⚠️ O de **hold** reprova em todos — corrigido na 17ª sessão (L27).
 - `RSZ_CORNERS` vale para todos os passos de reparo (`RepairDesign*`,
   `ResizerTiming*`). O passo 39 (reparo pós-posicionamento) já rodou com os
   9 corners e não é refeito: a etapa 5 continua do fim da etapa 4.
@@ -1540,6 +1541,130 @@ retoma do fim da etapa 4; as pastas novas começam em `45-…`). Depois,
 | # | Decisão | Status | Motivo |
 |---|---|---|---|
 | L26 | Reparo de timing só nos corners TT (`RSZ_CORNERS`); SS e FF só relatados no STA final | 🟡 | Síntese e `.lib` das macros só em TT; o reparo em 9 corners pôs 19.485 buffers e travou a legalização |
+
+---
+
+## 2026-10-05 (17ª sessão) — ✅ Etapa 5 (CTS) passou com a L26
+
+Rodada `2026-09-30_0934`, passos `45-…` a `48-…` (refeitos depois da L26;
+os `42`–`44` são a tentativa que falhou). Fontes: `05_cts.txt`,
+`05_cts_metricas.json`, `logs_1715.tar.gz`, `imagens/05_cts_buffers.png`
+(commit `cdae648`).
+
+### Árvore de relógio (passo 45)
+
+| Item | Valor | Fonte |
+|---|---|---|
+| Redes | `clk_i` → 6 entradas de relógio das macros; `clk_i_regs` → 19.823 flip-flops | `CTS-0011` |
+| Topologia | árvore H, folhas agrupadas: 19.823 → 1.713 grupos | `CTS-0027`, `CTS-0019` |
+| Buffers | 3 (macros) + **2.120** (registradores) | `CTS-0018` |
+| Profundidade | 2 buffers até as macros; **7** até qualquer flip-flop (mín. = máx.: árvore balanceada) | `CTS-0012/0013` |
+| Latência (TT) | 1,44 ns (`out_mem`) a 2,08 ns (banco de registradores) | `48-…/clock.rpt` |
+| Skew de setup (TT) | **0,87 ns** (com o fio único eram ~26 ns) | métrica `clock__skew__worst_setup` |
+| Tempo | 2 min 35 s | `runtime.txt` |
+
+Igual à tentativa anterior (a L26 só muda o reparo, que vem depois).
+
+### Reparo de timing pós-CTS (passo 47) — com a L26
+
+| | Antes (9 corners, 16ª sessão) | Agora (só TT, L26) | Fonte |
+|---|---|---|---|
+| Setup | 990 pontos violando, WNS −20,84 ns; não conseguiu | **"No setup violations found"** | `RSZ-0098` |
+| Hold (margem 0,1 ns) | 18.624 pontos, 19.485 buffers | **383 pontos, 383 buffers** (+0,2 % de área); WNS −0,046 → **+0,100 ns** | `RSZ-0046/0032`, tabela |
+| Legalização | `DPL-0036`: 379 instâncias sem lugar | deslocamento médio 0,1 µm, máx. 25,3 µm | log do 47 |
+| Tempo | — | 42 s | `runtime.txt` |
+
+O pior ponto de hold antes do reparo era um `shiftFIFO…mem_reg` da IFFT
+(cadeia de registrador a registrador, quase sem lógica no meio).
+
+### Timing no fim da etapa (STA, passo 48, corner TT)
+
+| Métrica | Valor | Fonte |
+|---|---|---|
+| Setup WS | **+0,93 ns**, 0 violações | `timing__setup__ws__corner:nom_tt` |
+| Hold WS | **+0,098 ns**, 0 violações | `timing__hold__ws__corner:nom_tt` |
+| Instâncias | 97.889 (96.843 células + 4 macros + 1.042 endcaps…); 3.120 buffers e 199 inversores de relógio; 13.316 buffers de reparo; 383 de hold | métricas `design__instance__count__class:*` |
+| Utilização (só células) | 0,600 (era 0,569 na etapa 4) | `design__instance__utilization__stdcell` |
+
+**A 50 MHz no TT, com relógio real, o núcleo fecha setup e hold.**
+Comparação: Genus +2,41 ns (relógio ideal, sem fio) → layout +0,93 ns
+(árvore com 0,87 ns de skew + fio estimado).
+
+⚠️ Os números de SS e FF do mesmo arquivo de métricas (setup −86,12 /
+−28,81 ns, hold FF 369 violações) **são velhos**: são exatamente os da
+etapa 1 (`STAPrePNR`). O STA do meio do fluxo só recalcula o TT (15ª
+sessão); SS e FF só voltam no STA final (etapa 7).
+
+### O que sobra de violação no TT — e de onde vem
+
+| Violação | Quantas | Origem (conferida) | Precisa consertar? |
+|---|---|---|---|
+| Fanout > 10 | 1.423 | **buffers da árvore de relógio** com 11 a 15 cargas: a distribuição do `CTS-0016` (11:434, 12:588, 13:313, 14:84, 15:4) soma exatamente 1.423. A CTS agrupa as folhas pelo limite de capacitância, não pelo de fanout | Não: as redes de relógio ficam fora do reparo de fanout; o que importa nelas é o skew e a transição |
+| Transição máxima | 57 | **todas em pinos de entrada das macros** (`addr`, `wmask`): 15 IMEM, 14 DMEM, 12 `in_mem`, 16 `out_mem`. O `.lib` da OpenRAM declara `max_transition 0.04` (40 ps) nesses pinos, que é o fim da tabela de caracterização (`index_1("0.00125, 0.005, 0.04")`); o sinal real chega com 0,14–0,23 ns | Não dá: nenhum buffer do sky130 entrega 40 ps com fio. O limite é da tabela do modelo analítico, não do circuito. O checker de transição do LibreLane não reprova (`corner_override = [""]`) |
+
+**Vira slide?** Sim, os dois: "violação que não é do circuito: o limite
+vem da tabela da OpenRAM" e "fanout do relógio não se conta como o dos
+dados".
+
+### 🐛 Correção da 16ª sessão: o checker de hold reprova em qualquer corner
+
+Na 16ª sessão escrevi que "o checker de timing do sky130 só reprova no
+TT". **Vale para setup, não para hold.** Conferido em
+`librelane/steps/checker.py` (tag 3.0.14):
+
+| Checker | Corners que reprovam | Por quê |
+|---|---|---|
+| `Checker.SetupViolations` | `*tt*` | herda `TIMING_VIOLATION_CORNERS` do sky130 (`pdk_compat.py`) |
+| `Checker.HoldViolations` | **`*` (todos)** | `corner_override = ["*"]` |
+| `Checker.MaxSlewViolations` / `MaxCapViolations` | nenhum (só aviso) | `corner_override = [""]` |
+
+Os checkers rodam no fim do fluxo e o erro é adiado (`DeferredStepError`):
+o fluxo vai até o fim e só então acusa. Ou seja, se depois do roteamento
+sobrar hold no **FF**, o fluxo termina com erro.
+
+Isso tem fundamento físico: **setup se resolve baixando o relógio; hold
+não** — violação de hold quebra o chip em qualquer frequência. Duas
+saídas, a decidir com o número real do FF (STA final, etapa 7):
+
+| Opção | O que é | Custo |
+|---|---|---|
+| A | Reparar hold também no FF: `RSZ_CORNERS` com TT + FF (sem o SS, que é só setup) | Buffers a mais (na 16ª foram 18.624 pontos com margem 0,1 ns misturando SS e FF); talvez com margem menor |
+| B | `HOLD_VIOLATION_CORNERS: ["*tt*"]` e o FF só relatado | Coerente com a L26 (macros só têm `.lib` TT), mas deixa um risco real sem tratar |
+
+Recomendação: **A**, se couber. Hold é o tipo de violação que um projeto
+de verdade nunca deixa passar; e os caminhos que violam são de registrador
+a registrador (sem macro), onde o `.lib` do FF das células vale.
+
+### Imagens
+
+`05_cts_buffers.png`: buffers de relógio (verde) espalhados de forma
+uniforme por toda a área de células, inclusive no canal IMEM/DMEM e nas
+faixas em volta das macros. A imagem da árvore (`05_cts_arvore.png`) não
+veio: o `save_clocktree_image` deve ter falhado (o aviso fica no terminal;
+não está no log da rodada).
+
+### Etapa 6 — script `06_roteamento.sh` (escrito, não rodado)
+
+| Passo | O que faz |
+|---|---|
+| `OpenROAD.GlobalRouting` | FastRoute: escolhe ladrilhos e camadas de cada rede. Sem `GRT_ALLOW_CONGESTION`: se faltar trilha, para (L24) |
+| `CheckAntennas`, `RepairDesignPostGRT`, diodos, `RepairAntennas` | antena e slew/cap com o fio estimado |
+| `ResizerTimingPostGRT` → `STAMidPNR-3` | reparo e STA com o fio do roteamento global (TT, L26) |
+| `OpenROAD.DetailedRouting` | TritonRoute: cada fio e via nas trilhas; o passo mais lento |
+| `CheckAntennas-1`, `Checker.TrDRC`, `DisconnectedPins`, `WireLength` | 0 DRV de roteamento, nenhum pino solto |
+
+`ATE_GLOBAL=1` para só no `STAMidPNR-3`, para olhar a congestão antes de
+gastar tempo no detalhado. Imagens novas no `tcl/imagem.tcl` (modo
+`roteamento`): mapa de congestão, chip roteado, zoom no canal IMEM/DMEM.
+
+### Decisões desta sessão
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L25 | Timing só vale depois do `STAMidPNR-2` | 🟡 | Números do 48 coerentes: TT setup +0,93 / hold +0,098 ns |
+| L26 | Reparo só no TT | 🟡 funcionou (setup ok, 383 buffers de hold) — ⚠️ hold no FF a decidir (L27) | Saiu de 19.485 para 383 buffers |
+| L27 | Hold no FF: reparar (A) ou só relatar (B) | 🟡 recomendo A | O checker de hold reprova em todos os corners; decidir com o número do STA final |
+| L28 | Fanout do relógio e transição dos pinos das macros: aceitos, documentados | 🟡 | Origem conferida; nenhum dos dois é defeito do circuito |
 
 ---
 
@@ -1572,7 +1697,9 @@ retoma do fim da etapa 4; as pastas novas começam em `45-…`). Depois,
 | L23 | Halo das macros até a borda do núcleo | 🟡 | 2026-09-30 |
 | L24 | Densidade alvo padrão; decidir com o GRT | 🟡 | 2026-09-30 |
 | L25 | Timing só vale depois do `STAMidPNR-2` | 🟡 | 2026-09-30 |
-| L26 | Reparo de timing só no TT (`RSZ_CORNERS`) | 🟡 | 2026-09-30 |
+| L26 | Reparo de timing só no TT (`RSZ_CORNERS`) | 🟡 funcionou (hold no FF: L27) | 2026-09-30 |
+| L27 | Hold no FF: reparar (A) ou só relatar (B) | 🟡 | 2026-10-05 |
+| L28 | Fanout do relógio e transição das macros aceitos | 🟡 | 2026-10-05 |
 
 ---
 
@@ -1587,7 +1714,9 @@ retoma do fim da etapa 4; as pastas novas começam em `45-…`). Depois,
 - [x] ~~Refazer 02 + 03 com a L23 e conferir 0 `PDN-0110`~~ — 0 avisos
 - [x] ~~Script da etapa 4 (posicionamento)~~
 - [x] ~~Rodar a etapa 4 no notebook~~ — passou (15ª sessão)
-- [ ] Rodar a etapa 5 (CTS) no notebook — 1ª tentativa parou no reparo (16ª sessão); refazer com L26
+- [x] ~~Rodar a etapa 5 (CTS)~~ — passou com a L26 (17ª sessão)
+- [ ] Rodar a etapa 6 (`06_roteamento.sh`; `ATE_GLOBAL=1` primeiro)
+- [ ] Decidir L27 (hold no FF) com o STA final
 - [ ] Etapa 6: se o GRT não couber, baixar `PL_TARGET_DENSITY_PCT` (L24)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
 - [x] ~~Refazer a etapa 1 com o netlist de 29/09~~ — rodada `2026-09-30_0934`
