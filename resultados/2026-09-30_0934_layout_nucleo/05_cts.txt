@@ -1,0 +1,60 @@
+== OpenROAD.CTS (45-openroad-cts)
+      1 [INFO CTS-0007] Net "clk_i" found for clock "clk_i".
+      1 [INFO CTS-0008] TritonCTS found 2 clock nets.
+      1 [INFO CTS-0011]  Clock net "clk_i" for macros has 6 sinks.
+      1 [INFO CTS-0011]  Clock net "clk_i_regs" for registers has 19823 sinks.
+      1 [INFO CTS-0012]     Minimum number of buffers in the clock path: 2.
+      1 [INFO CTS-0012]     Minimum number of buffers in the clock path: 7.
+      1 [INFO CTS-0013]     Maximum number of buffers in the clock path: 2.
+      1 [INFO CTS-0013]     Maximum number of buffers in the clock path: 7.
+      1 [INFO CTS-0015]     Created 2120 clock nets.
+      1 [INFO CTS-0015]     Created 3 clock nets.
+      1 [INFO CTS-0016]     Fanout distribution for the current clock = 3:2..
+      1 [INFO CTS-0016]     Fanout distribution for the current clock = 3:2, 4:2, 5:2, 6:87, 7:184, 8:30, 9:63, 10:176, 11:434, 12:588, 13:313, 14:84, 15:4..
+      1 [INFO CTS-0017]     Max level of the clock tree: 1.
+      1 [INFO CTS-0017]     Max level of the clock tree: 8.
+      1 [INFO CTS-0018]     Created 2120 clock buffers.
+      1 [INFO CTS-0018]     Created 3 clock buffers.
+      1 [INFO CTS-0019]  Total number of sinks after clustering: 1713.
+      2 [INFO CTS-0020]  Wire segment unit: 13600  dbu (13 um).
+      1 [INFO CTS-0023]  Original sink region: [(863655, 100190), (1915350, 1399255)].
+      1 [INFO CTS-0024]  Normalized sink region: [(63.504, 7.36691), (140.835, 102.886)].
+      1 [INFO CTS-0024]  Normalized sink region: [(8.211, 3.59333), (143.396, 105.935)].
+      1 [INFO CTS-0025]     Width:  135.1849.
+      1 [INFO CTS-0025]     Width:  77.3305.
+      1 [INFO CTS-0026]     Height: 102.3418.
+      1 [INFO CTS-0026]     Height: 95.5195.
+      1 [INFO CTS-0027] Generating H-Tree topology for net clk_i.
+      1 [INFO CTS-0027] Generating H-Tree topology for net clk_i_regs.
+      1 [INFO CTS-0028]  Total number of sinks: 19823.
+      1 [INFO CTS-0028]  Total number of sinks: 6.
+      1 [INFO CTS-0029]  Macro  sinks will be clustered in groups of up to 4 and with maximum cluster diameter of 1621.7 um.
+      2 [INFO CTS-0030]  Number of static layers: 0.
+      2 [INFO CTS-0032]  Stop criterion found. Max number of sinks is 10.
+      1 [INFO CTS-0033] Balancing latency for clock clk_i
+      1 [INFO CTS-0034]     Segment length (rounded): 12.
+      1 [INFO CTS-0034]     Segment length (rounded): 16.
+      1 [INFO CTS-0034]     Segment length (rounded): 24.
+      1 [INFO CTS-0034]     Segment length (rounded): 26.
+      1 [INFO CTS-0034]     Segment length (rounded): 34.
+      2 [INFO CTS-0034]     Segment length (rounded): 4.
+      1 [INFO CTS-0034]     Segment length (rounded): 6.
+
+== OpenROAD.STAMidPNR-1 (46-openroad-stamidpnr-1)
+report_clock_latency
+0.000000 0.000000 source latency
+1.437411         network latency u_isfft.u_out_mem/clk0
+        2.079010 network latency u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_regfile_inst.n10563_q_reg[7]/CLK
+
+== OpenROAD.ResizerTimingPostCTS (47-openroad-resizertimingpostcts)
+      1 [INFO RSZ-0032] Inserted 383 hold buffers.
+      1 [INFO RSZ-0046] Found 383 endpoints with hold violations.
+      1 [INFO RSZ-0098] No setup violations found
+      1 Iteration | Resized | Buffers | Cloned Gates |   Area   |   WNS   |   TNS   | Endpoint
+
+== OpenROAD.STAMidPNR-2 (48-openroad-stamidpnr-2)
+report_clock_latency
+0.000000 0.000000 source latency
+1.437411         network latency u_isfft.u_out_mem/clk0
+        2.079010 network latency u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_regfile_inst.n10563_q_reg[7]/CLK
+
