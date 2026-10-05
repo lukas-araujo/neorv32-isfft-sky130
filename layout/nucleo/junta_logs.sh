@@ -8,7 +8,8 @@
 # guardar a prova de uma etapa -- rode:
 #
 #   bash layout/nucleo/junta_logs.sh
-#   git add resultados/ && git commit -m "gdsii: logs do layout" && git push
+#   (ele imprime o git add / git commit prontos, com a data de hoje e a
+#    ultima etapa que rodou)
 #
 # Entra: *.log, *.rpt, *.txt, *.json, *.csv, *.tcl, *.sdc de todas as
 # etapas + o flow.log da rodada. NAO entra: .odb, .def, .v, .gds, .spef,
@@ -25,7 +26,11 @@ RUN="$NUCLEO/runs/$TAG"
 
 DEST="$REPO/resultados/${TAG}_layout_nucleo"
 mkdir -p "$DEST"
-ARQ="$DEST/logs_$(date +%H%M).tar.gz"
+# Nome = data e hora EM QUE os logs foram juntados (a rodada pode durar
+# dias: a pasta leva a data de quando a rodada COMECOU, o .tar.gz a de hoje)
+AGORA="$(date +%Y-%m-%d_%H%M)"
+ARQ="$DEST/logs_${AGORA}.tar.gz"
+ULTIMA="$(ls "$RUN" | grep '^[0-9]' | sort -n | tail -1)"
 
 ( cd "$NUCLEO/runs" && find "$TAG" -type f \
     \( -name '*.log' -o -name '*.rpt' -o -name '*.txt' -o -name '*.json' \
@@ -38,4 +43,4 @@ ls "$RUN" | grep '^[0-9]' | sort -n | sed 's/^/  /'
 echo
 echo "Proximo:"
 echo "  git add resultados/${TAG}_layout_nucleo"
-echo "  git commit -m \"gdsii: logs do layout ($TAG)\" && git push"
+echo "  git commit -m \"gdsii: logs do layout ate ${ULTIMA} (juntados em ${AGORA}, rodada ${TAG})\" && git push"

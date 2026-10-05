@@ -19,8 +19,10 @@
 #     OpenROAD.DetailedPlacement   encaixa cada celula num sitio da linha,
 #                                  sem sobreposicao
 #
-#   Densidade alvo: nao definida no config; o LibreLane usa
-#   utilizacao (com macros, 71,2 %) + 10 = ~81 %. O log diz o valor usado.
+#   Densidade alvo: PL_TARGET_DENSITY_PCT = 65 no config (L29). Sem ela o
+#   LibreLane usa utilizacao + 10, e a utilizacao CONTA AS MACROS (71,2 %):
+#   deu ~81 % e o roteamento global congestionou (DIARIO_GDSII, 18a sessao).
+#   O log diz o valor usado (GPL-0023).
 #
 #   Imagens: celulas no chip inteiro + mapa de densidade + zoom no canal
 #   IMEM/DMEM (onde chegam os 140 pinos das memorias da CPU).

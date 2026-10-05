@@ -1668,6 +1668,93 @@ gastar tempo no detalhado. Imagens novas no `tcl/imagem.tcl` (modo
 
 ---
 
+## 2026-10-05 (18ª sessão) — 🐛 Etapa 6: roteamento global com congestão; densidade alvo 65 % (L29)
+
+Rodada `2026-09-30_0934`, passo `49-openroad-globalrouting`. Fonte:
+`resultados/2026-09-30_0934_layout_nucleo/logs_1909.tar.gz` (commit
+`cad07e5`).
+
+### 🐛 `[ERROR GRT-0116] Global routing finished with congestion`
+
+**Sintoma:** o FastRoute rodou as 50 iterações extras para tirar o
+excesso e não zerou. Relatório final (log do passo 49, `GRT-0096`):
+
+| Camada | Direção | Capacidade (trilhas, já com 30 % de redução) | Demanda | Uso | Excesso (*overflow*) |
+|---|---|---|---|---|---|
+| met1 | H | 352.940 | 221.648 | 62,8 % | 1.017 |
+| met2 | V | 368.279 | 241.812 | 65,7 % | 1.822 |
+| met3 | H | 259.176 | 138.715 | 53,5 % | 888 |
+| met4 | V | 164.713 | 62.711 | 38,1 % | 764 |
+| met5 | H | 36.506 | 12.631 | 34,6 % | 191 |
+| **Total** | | **1.181.614** | **677.517** | **57,3 %** | **4.682** |
+
+Comprimento de fio estimado 6,68 m; 776.929 vias (`global_route__*`).
+
+**Leitura:** na média sobra trilha (57 % de uso), mas há **regiões
+locais** onde a demanda passa da capacidade, e o excesso se concentra nas
+camadas de baixo (met1/met2), as das ligações curtas entre células
+vizinhas. É o que o RUDY já tinha avisado na etapa 4 (congestão estimada
+1,19, ~40 % dos ladrilhos acima da capacidade, `GPL-0089` "could not
+reach target"). Com `GRT_ALLOW_CONGESTION = false` o fluxo para aqui, o
+que é bom: o roteamento detalhado num chip congestionado leva horas e
+termina com violações.
+
+**Causa (conferida no código):** a densidade alvo do posicionamento não
+estava no `config.json`. O LibreLane calcula
+`utilização + 5 × GPL_CELL_PADDING + 10` (`steps/openroad.py`,
+`_GlobalPlacement`), e a utilização que ele usa é a métrica
+`design__instance__utilization`, que **conta as macros**: 0,712. Deu
+**81,25 %**. Só com as células padrão a utilização era 0,491 (14ª
+sessão). Ou seja, as macros, que ocupam 62 % da área, empurraram a lógica
+para se amontoar a 81 % de densidade local, quando havia espaço para
+espalhar.
+**Resolvi com (L29):** `"PL_TARGET_DENSITY_PCT": 65` no `config.json`.
+- Abaixo dos 81 % que congestionaram.
+- Acima da utilização final das células (0,600 depois da CTS, 17ª sessão):
+  os buffers de reparo (~13 mil) e de relógio (~2 mil) entram **depois**
+  do posicionamento global e precisam de lugar perto de onde já está a
+  lógica.
+- Era o plano B da L24 (15ª sessão), agora com a causa explicada.
+- Custo esperado: fio mais longo (células mais espalhadas); conferir o
+  timing do TT depois da CTS de novo.
+
+**Tempo gasto:** ~20 min.
+**Vira slide?** Sim: "densidade × congestão" — o mapa de densidade da
+etapa 4 ao lado do relatório do GRT, e a pegadinha da utilização que
+conta as macros.
+
+**Para continuar** (a densidade muda o posicionamento: refazer 4, 5 e 6
+na mesma rodada; cada script retoma da etapa anterior mais recente):
+```bash
+git pull
+bash layout/nucleo/04_posicionamento.sh
+bash layout/nucleo/05_cts.sh
+ATE_GLOBAL=1 bash layout/nucleo/06_roteamento.sh
+bash layout/nucleo/junta_logs.sh      # e o git add/commit que ele imprime
+```
+Plano C, se ainda congestionar: densidade 60 % (o mínimo possível era
+0,60, 15ª sessão) ou `GRT_ALLOW_CONGESTION` e deixar o TritonRoute tentar.
+
+### `junta_logs.sh`: nome do arquivo com a data de hoje
+
+**Pedido do Lukas:** o nome saía com "data errada". O script usava só a
+hora (`logs_1909.tar.gz`) e sugeria a mensagem de commit com o nome da
+**rodada** (`2026-09-30_0934`, a data em que ela começou). Com a rodada
+durando dias, ficava ambíguo. Agora:
+- arquivo `logs_AAAA-MM-DD_HHMM.tar.gz` (quando os logs foram juntados);
+- mensagem sugerida: `gdsii: logs do layout ate <última etapa> (juntados
+  em <data_hora>, rodada <tag>)`.
+Testado com uma rodada falsa.
+
+### Decisões desta sessão
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L24 | ~~Densidade padrão e decidir com o GRT~~ → decidido: o GRT congestionou | ✅ substituída por L29 | 4.682 de excesso no roteamento global |
+| L29 | `PL_TARGET_DENSITY_PCT = 65` | 🟡 | A densidade automática (81 %) contava as macros na utilização |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -1695,11 +1782,12 @@ gastar tempo no detalhado. Imagens novas no `tcl/imagem.tcl` (modo
 | L21 | LEF das macros em 1000 unidades por µm | ✅ | 2026-09-30 |
 | L22 | PDN-0110: zoom automático antes de mover macros | ✅ | 2026-09-30 |
 | L23 | Halo das macros até a borda do núcleo | 🟡 | 2026-09-30 |
-| L24 | Densidade alvo padrão; decidir com o GRT | 🟡 | 2026-09-30 |
+| L24 | ~~Densidade alvo padrão; decidir com o GRT~~ → L29 | ✅ decidida | 2026-09-30 |
 | L25 | Timing só vale depois do `STAMidPNR-2` | 🟡 | 2026-09-30 |
 | L26 | Reparo de timing só no TT (`RSZ_CORNERS`) | 🟡 funcionou (hold no FF: L27) | 2026-09-30 |
 | L27 | Hold no FF: reparar (A) ou só relatar (B) | 🟡 | 2026-10-05 |
 | L28 | Fanout do relógio e transição das macros aceitos | 🟡 | 2026-10-05 |
+| L29 | Densidade alvo 65 % (a automática contava as macros) | 🟡 | 2026-10-05 |
 
 ---
 
@@ -1715,9 +1803,8 @@ gastar tempo no detalhado. Imagens novas no `tcl/imagem.tcl` (modo
 - [x] ~~Script da etapa 4 (posicionamento)~~
 - [x] ~~Rodar a etapa 4 no notebook~~ — passou (15ª sessão)
 - [x] ~~Rodar a etapa 5 (CTS)~~ — passou com a L26 (17ª sessão)
-- [ ] Rodar a etapa 6 (`06_roteamento.sh`; `ATE_GLOBAL=1` primeiro)
+- [ ] Refazer 4 → 5 → 6 (global) com a L29 — 1ª tentativa do GRT congestionou (18ª sessão)
 - [ ] Decidir L27 (hold no FF) com o STA final
-- [ ] Etapa 6: se o GRT não couber, baixar `PL_TARGET_DENSITY_PCT` (L24)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
 - [x] ~~Refazer a etapa 1 com o netlist de 29/09~~ — rodada `2026-09-30_0934`
 - [x] ~~Etapa 2 depois da L21~~ — passou
