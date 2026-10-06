@@ -1,0 +1,46 @@
+== OpenROAD.GlobalRouting (93-openroad-globalrouting)
+      1 [INFO GRT-0018] Total wirelength: 5479014 um
+      1 [INFO GRT-0096] Final congestion report:
+      1 [INFO GRT-0101] Running extra iterations to remove overflow.
+      1 [INFO GRT-0102] Start extra iteration 10/50
+      1 [INFO GRT-0102] Start extra iteration 11/50
+      1 [INFO GRT-0102] Start extra iteration 12/50
+      1 [INFO GRT-0102] Start extra iteration 13/50
+      1 [INFO GRT-0102] Start extra iteration 14/50
+      1 [INFO GRT-0102] Start extra iteration 1/50
+      1 [INFO GRT-0102] Start extra iteration 15/50
+      1 [INFO GRT-0102] Start extra iteration 16/50
+      1 [INFO GRT-0102] Start extra iteration 17/50
+      1 [INFO GRT-0102] Start extra iteration 18/50
+      1 [INFO GRT-0102] Start extra iteration 19/50
+      1 [INFO GRT-0102] Start extra iteration 20/50
+      1 [INFO GRT-0102] Start extra iteration 21/50
+      1 [INFO GRT-0102] Start extra iteration 22/50
+      1 [INFO GRT-0102] Start extra iteration 23/50
+      1 [INFO GRT-0102] Start extra iteration 24/50
+      1 [INFO GRT-0102] Start extra iteration 2/50
+      1 [INFO GRT-0102] Start extra iteration 25/50
+      1 [INFO GRT-0102] Start extra iteration 26/50
+      1 [INFO GRT-0102] Start extra iteration 27/50
+      1 [INFO GRT-0102] Start extra iteration 28/50
+      1 [INFO GRT-0102] Start extra iteration 29/50
+      1 [INFO GRT-0102] Start extra iteration 30/50
+      1 [INFO GRT-0102] Start extra iteration 31/50
+      1 [INFO GRT-0102] Start extra iteration 3/50
+      1 [INFO GRT-0102] Start extra iteration 4/50
+      1 [INFO GRT-0102] Start extra iteration 5/50
+      1 [INFO GRT-0102] Start extra iteration 6/50
+      1 [INFO GRT-0102] Start extra iteration 7/50
+      1 [INFO GRT-0102] Start extra iteration 8/50
+      1 [INFO GRT-0102] Start extra iteration 9/50
+      1 Layer         Resource        Demand        Usage (%)    Max H / Max V / Total Overflow
+   tempo: 00:02:10.334
+   global_route__vias                            663981
+   global_route__wirelength                      5479014
+
+== OpenROAD.RepairAntennas (96-openroad-repairantennas)
+   tempo: 00:06:56.182
+
+== OpenROAD.STAMidPNR-3 (97-openroad-stamidpnr-3)
+   tempo: 00:00:35.463
+
