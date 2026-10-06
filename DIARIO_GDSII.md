@@ -1929,6 +1929,12 @@ bash layout/nucleo/05_cts.sh
 ATE_GLOBAL=1 bash layout/nucleo/06_roteamento.sh
 bash layout/nucleo/junta_logs.sh     # e o git add/commit que ele imprime
 ```
+As imagens atuais foram movidas para `imagens/antes_L31/` antes de
+refazer (os scripts sobrescrevem pelo nome): 02 e 03 são do floorplan com
+a L23 (30/09); 04 e 05 da densidade 65 % (L29, 06/10); `06_congestao_mapa`
+do diagnóstico. As da densidade 81 % ficam no histórico do git (commit
+`4aab297`). Com as novas, dá o slide antes/depois da L31.
+
 Conferir nas imagens do 02 a DMEM no canto e o canal largo; no 03, 0
 `PDN-0110`; no 06, o excesso do GRT. Se ainda sobrar excesso, rodar o
 `diag_congestao.sh` de novo para comparar a tabela.
