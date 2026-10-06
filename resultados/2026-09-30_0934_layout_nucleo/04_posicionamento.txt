@@ -1,47 +1,59 @@
-== OpenROAD.GlobalPlacementSkipIO (31-openroad-globalplacementskipio)
-      1 [INFO GPL-0023] Placement target density:       0.8125
+== OpenROAD.GlobalPlacementSkipIO (51-openroad-globalplacementskipio)
+      1 [INFO GPL-0023] Placement target density:       0.6500
+      1 [INFO GPL-1001] Global placement finished at iteration 460
+      1 [INFO GPL-1002] Placed Cell Area            809508.5939
+      1 [INFO GPL-1003] Available Free Area         1358455.3664
+      1 [INFO GPL-1004] Minimum Feasible Density        0.6000 (cell_area / free_area)
 
-== OpenROAD.IOPlacement (32-openroad-ioplacement)
+== OpenROAD.IOPlacement (52-openroad-ioplacement)
       1 [INFO PPL-0001] Number of available slots 6542
       1 [INFO PPL-0002] Number of I/O             4
       1 [INFO PPL-0003] Number of I/O w/sink      4
       1 [INFO PPL-0004] Number of I/O w/o sink    0
       1 [INFO PPL-0005] Slots per section         200
       1 [INFO PPL-0008] Successfully assigned pins to sections.
-      1 [INFO PPL-0012] I/O nets HPWL: 6472.86 um.
+      1 [INFO PPL-0012] I/O nets HPWL: 7278.42 um.
 
-== OpenROAD.GlobalPlacement (35-openroad-globalplacement)
-      1 [INFO GPL-0023] Placement target density:       0.8125
-     13 [INFO GPL-0052] Placement target density:       0.8125
+== OpenROAD.GlobalPlacement (55-openroad-globalplacement)
+      1 [INFO GPL-0023] Placement target density:       0.6500
+      7 [INFO GPL-0052] Placement target density:       0.6500
       1 [INFO GPL-0055] Reverting inflation values and target density from the iteration with minimum observed routing congestion.
+      1 [INFO GPL-0056] Minimum observed routing congestion: 1.1781
+      1 [INFO GPL-0089] Routability finished. Reverting to minimal observed routing congestion, could not reach target.
+      1 [INFO GPL-1001] Global placement finished at iteration 993
+      1 [INFO GPL-1002] Placed Cell Area            866075.2682
+      1 [INFO GPL-1003] Available Free Area         1358455.3664
+      1 [INFO GPL-1003] Routability mode iteration count: 617
+      1 [INFO GPL-1004] Minimum Feasible Density        0.6000 (cell_area / free_area)
+      1 [INFO GPL-1005] Routability final weighted congestion: 1.1783
 
-== OpenROAD.RepairDesignPostGPL (39-openroad-repairdesignpostgpl)
-      1 average displacement        3.1 u
+== OpenROAD.RepairDesignPostGPL (59-openroad-repairdesignpostgpl)
+      1 average displacement        2.5 u
       1 + detailed_placement -max_displacement  500 100 
-      1 [INFO DPL-0020] Mirrored 31012 instances
-      1 [INFO DPL-0021] HPWL before          3081851.6 u
-      1 [INFO DPL-0022] HPWL after           3008053.3 u
+      1 [INFO DPL-0020] Mirrored 31067 instances
+      1 [INFO DPL-0021] HPWL before          3219786.8 u
+      1 [INFO DPL-0022] HPWL after           3143711.0 u
       1 [INFO DPL-0023] HPWL delta               -2.4 %
       1 [INFO RSZ-0027] Inserted 2 sky130_fd_sc_hd__clkdlybuf4s25_1 input buffers.
       1 [INFO RSZ-0028] Inserted 1 sky130_fd_sc_hd__clkdlybuf4s25_1 output buffers.
-      1 [INFO RSZ-0034] Found 2697 slew violations.
+      1 [INFO RSZ-0034] Found 1639 slew violations.
       1 [INFO RSZ-0035] Found 1707 fanout violations.
-      1 [INFO RSZ-0036] Found 43 capacitance violations.
-      1 [INFO RSZ-0038] Inserted 12930 buffers in 2818 nets.
-      1 [INFO RSZ-0039] Resized 301 instances.
+      1 [INFO RSZ-0036] Found 25 capacitance violations.
+      1 [INFO RSZ-0038] Inserted 12763 buffers in 1969 nets.
+      1 [INFO RSZ-0039] Resized 378 instances.
       1 [INFO RSZ-0042] Inserted 2 tie sky130_fd_sc_hd__conb_1 instances.
       1 [INFO RSZ-0042] Inserted 8 tie sky130_fd_sc_hd__conb_1 instances.
       1 Iteration |   Area    | Resized | Buffers | Nets repaired | Remaining
-      1 max displacement          191.8 u
-      1 total displacement     287483.7 u
+      1 max displacement          169.3 u
+      1 total displacement     232142.3 u
       1 [WARNING RSZ-0020] found 2 floating nets.
 
-== OpenROAD.DetailedPlacement (41-openroad-detailedplacement)
+== OpenROAD.DetailedPlacement (61-openroad-detailedplacement)
       1 average displacement        0.0 u
       1 + detailed_placement -max_displacement  500 100 
-      1 [INFO DPL-0020] Mirrored 31012 instances
-      1 [INFO DPL-0021] HPWL before          3081851.6 u
-      1 [INFO DPL-0022] HPWL after           3008057.1 u
+      1 [INFO DPL-0020] Mirrored 31066 instances
+      1 [INFO DPL-0021] HPWL before          3219786.8 u
+      1 [INFO DPL-0022] HPWL after           3143703.0 u
       1 [INFO DPL-0023] HPWL delta               -2.4 %
       1 max displacement            0.0 u
       1 total displacement          0.0 u
