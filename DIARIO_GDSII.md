@@ -2074,6 +2074,68 @@ na última iteração, e `Checker.TrDRC` sem erro.
 
 ---
 
+## 2026-10-06 (22ª sessão) — 🐛 Etapa 6: o reparo pós-GRT funcionou; o de antena caiu com `GRT-0183`
+
+Rodada `2026-09-30_0934`, passos `98-…` a `102-…`. Fonte:
+`logs_2026-10-06_1552.tar.gz` (commit `7e9b7fa`).
+
+### L32 funcionou
+
+| Passo | Resultado | Fonte |
+|---|---|---|
+| 98 `GlobalRouting` | passou (mesmo estado do 93) | log do 98 |
+| 99 `CheckAntennas` | 804 redes / 1.006 pinos (igual ao 94) | `ANT-0001/0002` |
+| **100 `RepairDesignPostGRT`** (L32) | 155 violações de transição e 19 de capacitância encontradas → **38 buffers em 144 redes, 82 células redimensionadas** | `RSZ-0034/0036/0038/0039` |
+| 101 `DiodesOnPorts` | — | — |
+| 102 `RepairAntennas` | **caiu** | abaixo |
+
+### 🐛 `[ERROR GRT-0183] Net clknet_leaf_861_clk_i_regs: heap underflow during 3D maze routing`
+
+**Sintoma:** o reparo de antena (`repair_antennas … -iterations 3`)
+caiu na 1ª iteração, ao re-rotear as redes alteradas:
+
+| | Rodada que passou (96, sem L32) | Esta (102, com L32) |
+|---|---|---|
+| Violações no início | 920 | 915 |
+| Jumpers (troca de camada no fio) | 908 em 720 redes | 908 em 726 redes |
+| Violações depois dos jumpers | 342 | 306 |
+| Diodos | 834 | 771 |
+| Re-roteamento depois dos diodos | ok (195 → 18 → 12 → 1 → 0 nas iterações) | **`GRT-0183`** numa rede da árvore de relógio |
+| Tempo | 6 min 56 s | 6 min 05 s até cair |
+
+**Causa:** erro interno do roteador global do OpenROAD (o FastRoute ficou
+sem candidatos — "heap underflow" — no roteamento em labirinto 3D de uma
+rede). Não é erro de configuração nem de projeto: o mesmo procedimento
+passou na rodada anterior, e a diferença é só o estado de entrada (os 38
+buffers e 82 células do reparo pós-GRT). A rede é uma folha da árvore de
+relógio (`clknet_leaf_861…`), que recebeu jumpers na 1ª fase.
+**Resolvi com (L33, tentativa):** `"GRT_ANTENNA_REPAIR_DIODE_ONLY": true`
+— só diodos, sem jumpers. O jumper muda a topologia do fio (sobe de
+camada perto do pino) e exige re-rotear a rede no labirinto 3D; o diodo
+só acrescenta uma célula ligada à rede. Menos re-roteamento, menos chance
+de cair no mesmo erro. Custo: mais diodos (área e um pouco de capacitância
+nas redes).
+**Plano B**, se cair de novo: `RUN_POST_GRT_DESIGN_REPAIR` de volta para
+`false` (o caminho que já passou, 21ª sessão) e tratar as 163 transições
+depois do roteamento detalhado.
+**Vira slide?** Talvez: "ferramenta aberta também quebra — e o log diz em
+que rede".
+
+### Para continuar
+
+```bash
+git pull
+bash layout/nucleo/06_roteamento.sh
+bash layout/nucleo/junta_logs.sh     # e o git add/commit que ele imprime
+```
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L32 | Reparo pós-GRT | 🟡 funcionou (155 + 19 violações reparadas) | — |
+| L33 | Reparo de antena só com diodos (`GRT_ANTENNA_REPAIR_DIODE_ONLY`) | 🟡 tentativa | `GRT-0183` no re-roteamento depois dos jumpers/diodos |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -2109,7 +2171,8 @@ na última iteração, e `Checker.TrDRC` sem erro.
 | L29 | Densidade alvo 65 % (a automática contava as macros) | 🟡 ajudou, não basta | 2026-10-05 |
 | L30 | Diagnóstico da congestão fora do fluxo (`diag_congestao.sh`) | ✅ | 2026-10-06 |
 | L31 | DMEM no canto (55; 55): canal IMEM/DMEM de 453,7 µm | 🟡 funcionou (GRT sem excesso) | 2026-10-06 |
-| L32 | `RUN_POST_GRT_DESIGN_REPAIR` ligado | 🟡 | 2026-10-06 |
+| L32 | `RUN_POST_GRT_DESIGN_REPAIR` ligado | 🟡 funcionou | 2026-10-06 |
+| L33 | Antena só com diodos (`GRT_ANTENNA_REPAIR_DIODE_ONLY`) | 🟡 tentativa | 2026-10-06 |
 
 ---
 
