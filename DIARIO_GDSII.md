@@ -1755,6 +1755,80 @@ Testado com uma rodada falsa.
 
 ---
 
+## 2026-10-06 (19ª sessão) — Etapas 4–5 refeitas com a L29; GRT ainda congestionado (menos); diagnóstico de onde
+
+Rodada `2026-09-30_0934`, passos `50-…` a `66-…`. Fonte:
+`resultados/2026-09-30_0934_layout_nucleo/logs_2026-10-06_0055.tar.gz`
+(commit `abe4120`). Primeira vez com o nome novo do `junta_logs.sh`.
+
+### O que a densidade 65 % mudou
+
+| Item | Densidade 81 % (passos 35–49) | Densidade 65 % (passos 55–66) | Fonte |
+|---|---|---|---|
+| Densidade alvo usada | 0,8125 | **0,6500** | `GPL-0023` |
+| Congestão estimada no posicionamento (RUDY, média do 0,5 % pior) | 1,21 | 1,21 | `GPL-0043` |
+| Ladrilhos acima da capacidade (estimativa) | 40,1 % | 39,6 % | `GPL-0042` |
+| Buffers do reparo pós-posicionamento | 12.930 em 2.818 redes | 12.763 em 1.969 redes | `RSZ-0038` |
+| Buffers de hold (TT) | 383 | 369 | `RSZ-0032` |
+| Setup / hold no TT depois da CTS | +0,93 / +0,098 ns | **+0,98 / +0,102 ns** | métricas do 48 / 65 |
+| Utilização das células no fim da CTS | 0,600 | 0,599 | idem |
+| **Excesso no roteamento global (total)** | **4.682** | **2.038** (−56 %) | `GRT-0096` |
+| met1 / met2 / met3 / met4 / met5 | 1.017 / 1.822 / 888 / 764 / 191 | 359 / 939 / 157 / 339 / 244 | idem |
+| Excesso máximo numa aresta (H / V) | 11 / 9 | 7 / 7 | idem |
+| Uso médio das trilhas | 57,3 % | 55,5 % | idem |
+| Fio estimado | 6,68 m | 6,38 m (−4,5 %) | `GRT-0018` |
+
+**Leitura:** espalhar ajudou (menos da metade do excesso, e até o fio
+encurtou: com mais espaço o posicionador acha lugares melhores), mas não
+zerou. A estimativa do posicionador (RUDY) **não mudou** — ela mede a
+congestão relativa à densidade escolhida e não serve para comparar as
+duas rodadas; o número que vale é o do GRT. O timing no TT continua
+fechando, um pouco melhor.
+
+### 🔍 A redução de 30 % do GRT não está valendo (achado de leitura)
+
+O log do GRT diz "Global adjustment: 30%", mas o
+`set_layer_adjustments.tcl` do LibreLane aplica os 30 % em todas as
+camadas e **depois** sobrescreve camada a camada com o
+`GRT_LAYER_ADJUSTMENTS` do PDK: `0.99 0 0 0 0 0` (li1 99 %, met1 a met5
+**0 %**; `_env.tcl` do passo 66). Ou seja, as metais já roteiam com 100 %
+da capacidade, e a "redução de recursos" de 31–48 % da tabela `GRT-0053`
+é de **obstrução** (macros cobrem met1–met4; malha de alimentação em
+met4/met5), não de margem. Não há folga para tirar por aí.
+
+### Próximo passo: ver **onde** está o excesso
+
+Quando o GRT para com `GRT-0116`, o passo não grava estado, então não dá
+para abrir a GUI no fim dele. Script novo: `layout/nucleo/diag_congestao.sh`
+(+ `tcl/diag_congestao.tcl`, `resume_congestao.py`):
+- refaz o mesmo `global_route` fora do fluxo (lê o `_env.tcl` do último
+  `GlobalRouting`: mesmo `.odb`, mesmas camadas e ajustes), mas com
+  `-allow_congestion -congestion_report_file`;
+- salva `06_congestao.rpt` (regiões), `06_congestao.txt` (excesso por
+  camada e as 15 regiões de 100 × 100 µm com mais excesso, dizendo se
+  ficam junto de alguma macro), `imagens/06_congestao_mapa.png` (mapa de
+  calor);
+- não mexe na rodada.
+
+O resumo foi testado com um relatório sintético (formato do DRC Viewer
+do OpenROAD); se o formato real for outro, ele imprime as primeiras
+linhas para eu ajustar.
+
+| Se o excesso estiver… | Então |
+|---|---|
+| concentrado junto das macros (canal IMEM/DMEM, faixas de 44 µm das memórias da ISFFT) | mexer no floorplan: canais mais largos / macros afastadas |
+| espalhado e baixo (máx. ~7 por aresta, 0,17 % da capacidade) | `GRT_ALLOW_CONGESTION: true` e deixar o roteamento detalhado resolver (comum com excesso pequeno; o veredito vira o número de DRV do TritonRoute) |
+| concentrado no meio da lógica da ISFFT | densidade 60 % ou espaçamento só naquela região |
+
+### Decisões desta sessão
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L29 | Densidade 65 % | 🟡 ajudou (−56 % de excesso), não basta | Fica; o resto depende do diagnóstico |
+| L30 | Diagnosticar a congestão fora do fluxo antes de decidir (L31) | 🟡 | Três remédios diferentes conforme o lugar |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -1787,7 +1861,8 @@ Testado com uma rodada falsa.
 | L26 | Reparo de timing só no TT (`RSZ_CORNERS`) | 🟡 funcionou (hold no FF: L27) | 2026-09-30 |
 | L27 | Hold no FF: reparar (A) ou só relatar (B) | 🟡 | 2026-10-05 |
 | L28 | Fanout do relógio e transição das macros aceitos | 🟡 | 2026-10-05 |
-| L29 | Densidade alvo 65 % (a automática contava as macros) | 🟡 | 2026-10-05 |
+| L29 | Densidade alvo 65 % (a automática contava as macros) | 🟡 ajudou, não basta | 2026-10-05 |
+| L30 | Diagnóstico da congestão fora do fluxo (`diag_congestao.sh`) | 🟡 | 2026-10-06 |
 
 ---
 
@@ -1803,7 +1878,8 @@ Testado com uma rodada falsa.
 - [x] ~~Script da etapa 4 (posicionamento)~~
 - [x] ~~Rodar a etapa 4 no notebook~~ — passou (15ª sessão)
 - [x] ~~Rodar a etapa 5 (CTS)~~ — passou com a L26 (17ª sessão)
-- [ ] Refazer 4 → 5 → 6 (global) com a L29 — 1ª tentativa do GRT congestionou (18ª sessão)
+- [x] ~~Refazer 4 → 5 → 6 com a L29~~ — excesso 4.682 → 2.038 (19ª sessão)
+- [ ] Rodar `diag_congestao.sh` e decidir o remédio
 - [ ] Decidir L27 (hold no FF) com o STA final
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
 - [x] ~~Refazer a etapa 1 com o netlist de 29/09~~ — rodada `2026-09-30_0934`
