@@ -1948,6 +1948,132 @@ Conferir nas imagens do 02 a DMEM no canto e o canal largo; no 03, 0
 
 ---
 
+## 2026-10-06 (21ª sessão) — ✅ Roteamento global sem excesso com a L31
+
+Rodada `2026-09-30_0934`, passos `67-…` a `97-…` (etapas 2 a 6-global
+refeitas com a DMEM no canto). Fontes: `06_roteamento_global.txt`,
+`06_roteamento_global_metricas.json`, `logs_2026-10-06_1500.tar.gz`,
+imagens `06_roteamento_global_*` (commit `4d00d69`).
+
+### Roteamento global (passo 93)
+
+| Camada | Uso das trilhas | Excesso | Antes da L31 (passo 66) |
+|---|---|---|---|
+| met1 | 52,8 % | **0** | 359 |
+| met2 | 53,2 % | **0** | 939 |
+| met3 | 44,9 % | **0** | 157 |
+| met4 | 29,9 % | **0** | 339 |
+| met5 | 27,0 % | **0** | 244 |
+| **Total** | **47,2 %** (era 55,5 %) | **0** (era 2.038) | |
+
+| Item | Antes da L31 | Depois | Fonte |
+|---|---|---|---|
+| Fio estimado | 6,38 m | **5,48 m** (−14 %) | `GRT-0018` |
+| Vias | — | 663.981 | `GRT-0111` |
+| Redes roteadas | 77.227 | 77.124 | `GRT-0014` |
+| Tempo do GRT | — | 2 min 10 s | `runtime.txt` |
+
+O fio encurtou 14 %: a lógica da CPU, agora entre as duas memórias, fica
+perto dos pinos que usa. O mapa de calor (`06_roteamento_global_congestao.png`)
+não mostra mais nada sobre as macros; o mais quente é uma faixa horizontal
+no meio do chip, entre o canal IMEM/DMEM e a lógica da ISFFT, sem excesso.
+**Vira slide?** Sim: `antes_L31/06_congestao_mapa.png` ×
+`06_roteamento_global_congestao.png`.
+
+A estimativa do posicionador (RUDY, `GPL-0043`) continuou em ~1,18–1,22 e
+"could not reach target" (`GPL-0089`), e mesmo assim o GRT fechou sem
+excesso: a estimativa não enxerga as macros como parede, que era o
+problema real. Lição: o veredito é o GRT.
+
+### Antenas (passos 94–96)
+
+| Momento | Violações | Fonte |
+|---|---|---|
+| Checagem depois do GRT (94) | 804 redes / 1.006 pinos | `ANT-0001/0002` |
+| Reparo com diodo `diode_2` (96), iterações | 195 → 18 → 12 → 1 | `GRT-0012` |
+| Checagem final do 96 | **0 / 0** | `ANT-0001/0002` |
+
+O reparo de antena (6 min 56 s) foi o passo mais demorado do trecho.
+
+### Etapas 2–5 refeitas (conferência rápida)
+
+| Item | Valor | Fonte |
+|---|---|---|
+| PDN | "All shapes … connected" nas duas redes | `PSM-0040`, passo 75 |
+| Densidade alvo | 0,65 | `GPL-0023`, passo 82 |
+| Buffers de reparo pós-posicionamento | 12.640 em 1.968 redes | `RSZ-0038`, passo 86 |
+| Buffers de relógio | 3 + 2.089 | `CTS-0018`, passo 89 |
+| Reparo pós-CTS | sem violação de setup; 382 pontos de hold, 383 buffers | `RSZ-0098/0046/0032`, passo 91 |
+
+### Timing com o fio do roteamento global (STA, passo 97, TT)
+
+| Métrica | Fim da CTS (92) | Com o fio do GRT (97) | Fonte |
+|---|---|---|---|
+| Setup WS | +1,57 ns | **+1,13 ns**, 0 violações | métricas |
+| Hold WS | +0,099 ns | **+0,088 ns**, 0 violações | idem |
+| Skew de setup | — | 0,72 ns | idem |
+| Utilização das células | 0,598 | 0,600 | idem |
+
+### ⚠️ Transição e capacitância com o fio real: 230 e 11 no TT
+
+Com o fio do GRT (antes era fio estimado pela distância), a checagem de
+transição (`97-…/checks.rpt`) acusa 230 pinos:
+
+| Origem | Pinos | Exemplo |
+|---|---|---|
+| Pinos de entrada das macros (o limite de 40 ps do `.lib` da OpenRAM, L28) | 67 | — |
+| **Células da ISFFT** | **163** | `u_isfft.inst_isfft_matriz.g247863/B2`: 3,35 ns, limite 0,75 ns |
+
+E 11 de capacitância (saídas de células da ISFFT e alguns `dout` das
+macros). As 163 são **reais**: redes com fio longo que só agora apareceram.
+O passo que repara isso com o fio do GRT, `OpenROAD.RepairDesignPostGRT`,
+estava **desligado** (`RUN_POST_GRT_DESIGN_REPAIR`, padrão `false` no
+`classic.py`, marcado como "experimental"). Por isso o trecho só teve 5
+passos (93–97): `RepairDesignPostGRT`, `HeuristicDiodeInsertion` e
+`ResizerTimingPostGRT` estão atrás de chaves desligadas.
+
+**Decisão (L32):** `"RUN_POST_GRT_DESIGN_REPAIR": true`. Custa refazer o
+roteamento global (~12 min com antenas) antes do detalhado. Se travar
+(o LibreLane avisa que pode), voltar para `false` e tratar a transição
+depois do roteamento detalhado. `RUN_POST_GRT_RESIZER_TIMING` fica
+desligado: o setup do TT já fecha com +1,13 ns.
+
+### 🐛 Imagens trocadas no rebase
+
+**Sintoma:** depois do `git pull --rebase`, as imagens **novas** do 02 ao
+05 (DMEM no canto) apareceram dentro de `imagens/antes_L31/`, por cima
+das antigas, e `imagens/` ficou sem elas.
+**Causa:** o meu commit tinha **movido** as imagens para `antes_L31/`; o
+do Lukas **modificava** os mesmos nomes. O git detecta o movimento e
+aplica a modificação no caminho novo — sem conflito, sem aviso.
+**Resolvi com:** as novas tiradas do commit `4d00d69` de volta para
+`imagens/`; as antigas tiradas do `ebcc2c8` de volta para `antes_L31/`
+(conferido: a planta antiga é idêntica, byte a byte, à de 30/09).
+**Lição:** antes de refazer etapas, guardar o "antes" por **cópia** no
+mesmo commit em que o Lukas sobe as novas, ou pedir para ele copiar
+antes de rodar.
+**Vira slide?** Não.
+
+### Para continuar
+
+```bash
+git pull
+bash layout/nucleo/06_roteamento.sh       # sem ATE_GLOBAL: global de novo (com o reparo) + detalhado
+bash layout/nucleo/junta_logs.sh          # e o git add/commit que ele imprime
+```
+O detalhado (TritonRoute) é o passo mais longo do fluxo: dezenas de
+minutos a algumas horas com 4 núcleos. Critério: `Number of violations = 0`
+na última iteração, e `Checker.TrDRC` sem erro.
+
+### Decisões desta sessão
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L31 | DMEM no canto | 🟡 funcionou: excesso 2.038 → 0, fio −14 % | — |
+| L32 | Reparo de transição/capacitância depois do GRT (`RUN_POST_GRT_DESIGN_REPAIR`) | 🟡 | 163 pinos de células com transição de até 3,35 ns (limite 0,75) com o fio do GRT |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -1982,7 +2108,8 @@ Conferir nas imagens do 02 a DMEM no canto e o canal largo; no 03, 0
 | L28 | Fanout do relógio e transição das macros aceitos | 🟡 | 2026-10-05 |
 | L29 | Densidade alvo 65 % (a automática contava as macros) | 🟡 ajudou, não basta | 2026-10-05 |
 | L30 | Diagnóstico da congestão fora do fluxo (`diag_congestao.sh`) | ✅ | 2026-10-06 |
-| L31 | DMEM no canto (55; 55): canal IMEM/DMEM de 453,7 µm | 🟡 | 2026-10-06 |
+| L31 | DMEM no canto (55; 55): canal IMEM/DMEM de 453,7 µm | 🟡 funcionou (GRT sem excesso) | 2026-10-06 |
+| L32 | `RUN_POST_GRT_DESIGN_REPAIR` ligado | 🟡 | 2026-10-06 |
 
 ---
 
@@ -2000,7 +2127,8 @@ Conferir nas imagens do 02 a DMEM no canto e o canal largo; no 03, 0
 - [x] ~~Rodar a etapa 5 (CTS)~~ — passou com a L26 (17ª sessão)
 - [x] ~~Refazer 4 → 5 → 6 com a L29~~ — excesso 4.682 → 2.038 (19ª sessão)
 - [x] ~~Rodar `diag_congestao.sh`~~ — 94 % do excesso nas macros da CPU (20ª sessão)
-- [ ] Refazer 2 → 6 (global) com a L31
+- [x] ~~Refazer 2 → 6 (global) com a L31~~ — 0 de excesso (21ª sessão)
+- [ ] Etapa 6 completa: global com reparo (L32) + roteamento detalhado
 - [ ] Decidir L27 (hold no FF) com o STA final
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
 - [x] ~~Refazer a etapa 1 com o netlist de 29/09~~ — rodada `2026-09-30_0934`
