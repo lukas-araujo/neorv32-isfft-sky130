@@ -1,0 +1,264 @@
+[diag] ajuste da camada li1: 0.99
+[diag] ajuste da camada met1: 0.0
+[diag] ajuste da camada met2: 0.0
+[diag] ajuste da camada met3: 0.0
+[diag] ajuste da camada met4: 0.0
+[diag] ajuste da camada met5: 0.0
+[WARNING GRT-0300] Timing is not available, setting critical nets percentage to 0.
+[INFO GRT-0020] Min routing layer: met1
+[INFO GRT-0021] Max routing layer: met5
+[INFO GRT-0022] Global adjustment: 30%
+[INFO GRT-0023] Grid origin: (0, 0)
+[INFO GRT-0088] Layer li1     Track-Pitch = 0.4600  line-2-Via Pitch: 0.3400
+[INFO GRT-0088] Layer met1    Track-Pitch = 0.3400  line-2-Via Pitch: 0.3400
+[INFO GRT-0088] Layer met2    Track-Pitch = 0.4600  line-2-Via Pitch: 0.3500
+[INFO GRT-0088] Layer met3    Track-Pitch = 0.6800  line-2-Via Pitch: 0.6150
+[INFO GRT-0088] Layer met4    Track-Pitch = 0.9200  line-2-Via Pitch: 1.0400
+[INFO GRT-0088] Layer met5    Track-Pitch = 3.4000  line-2-Via Pitch: 3.1100
+[INFO GRT-0003] Macros: 4
+[INFO GRT-0004] Blockages: 284902
+[INFO GRT-0019] Found 0 clock nets.
+[INFO GRT-0001] Minimum degree: 2
+[INFO GRT-0002] Maximum degree: 15
+
+[INFO GRT-0053] Routing resources analysis:
+          Routing      Original      Derated      Resource
+Layer     Direction    Resources     Resources    Reduction (%)
+---------------------------------------------------------------
+li1        Vertical            0             0          0.00%
+met1       Horizontal     524843        352202          32.89%
+met2       Vertical       553122        368279          33.42%
+met3       Horizontal     377711        259176          31.38%
+met4       Vertical       273277        164713          39.73%
+met5       Horizontal      69876         36506          47.76%
+---------------------------------------------------------------
+
+[INFO GRT-0101] Running extra iterations to remove overflow.
+[INFO GRT-0102] Start extra iteration 1/50
+[INFO GRT-0102] Start extra iteration 2/50
+[INFO GRT-0102] Start extra iteration 3/50
+[INFO GRT-0102] Start extra iteration 4/50
+[INFO GRT-0102] Start extra iteration 5/50
+[INFO GRT-0102] Start extra iteration 6/50
+[INFO GRT-0102] Start extra iteration 7/50
+[INFO GRT-0102] Start extra iteration 8/50
+[INFO GRT-0102] Start extra iteration 9/50
+[INFO GRT-0102] Start extra iteration 10/50
+[INFO GRT-0102] Start extra iteration 11/50
+[INFO GRT-0102] Start extra iteration 12/50
+[INFO GRT-0102] Start extra iteration 13/50
+[INFO GRT-0102] Start extra iteration 14/50
+[INFO GRT-0102] Start extra iteration 15/50
+[INFO GRT-0102] Start extra iteration 16/50
+[INFO GRT-0102] Start extra iteration 17/50
+[INFO GRT-0102] Start extra iteration 18/50
+[INFO GRT-0102] Start extra iteration 19/50
+[INFO GRT-0102] Start extra iteration 20/50
+[INFO GRT-0102] Start extra iteration 21/50
+[INFO GRT-0102] Start extra iteration 22/50
+[INFO GRT-0102] Start extra iteration 23/50
+[INFO GRT-0102] Start extra iteration 24/50
+[INFO GRT-0102] Start extra iteration 25/50
+[INFO GRT-0102] Start extra iteration 26/50
+[INFO GRT-0102] Start extra iteration 27/50
+[INFO GRT-0102] Start extra iteration 28/50
+[INFO GRT-0102] Start extra iteration 29/50
+[INFO GRT-0102] Start extra iteration 30/50
+[INFO GRT-0102] Start extra iteration 31/50
+[INFO GRT-0102] Start extra iteration 32/50
+[INFO GRT-0102] Start extra iteration 33/50
+[INFO GRT-0102] Start extra iteration 34/50
+[INFO GRT-0102] Start extra iteration 35/50
+[INFO GRT-0102] Start extra iteration 36/50
+[INFO GRT-0102] Start extra iteration 37/50
+[INFO GRT-0102] Start extra iteration 38/50
+[INFO GRT-0102] Start extra iteration 39/50
+[INFO GRT-0102] Start extra iteration 40/50
+[INFO GRT-0102] Start extra iteration 41/50
+[INFO GRT-0102] Start extra iteration 42/50
+[INFO GRT-0102] Start extra iteration 43/50
+[INFO GRT-0102] Start extra iteration 44/50
+[INFO GRT-0102] Start extra iteration 45/50
+[INFO GRT-0102] Start extra iteration 46/50
+[INFO GRT-0102] Start extra iteration 47/50
+[INFO GRT-0102] Start extra iteration 48/50
+[INFO GRT-0102] Start extra iteration 49/50
+[WARNING GRT-0273] Disabled NDR (to reduce congestion) for net: clk_i
+[INFO GRT-0102] Start extra iteration 1/50
+[INFO GRT-0102] Start extra iteration 2/50
+[INFO GRT-0102] Start extra iteration 3/50
+[INFO GRT-0102] Start extra iteration 4/50
+[INFO GRT-0102] Start extra iteration 5/50
+[INFO GRT-0102] Start extra iteration 6/50
+[INFO GRT-0102] Start extra iteration 7/50
+[INFO GRT-0102] Start extra iteration 8/50
+[INFO GRT-0102] Start extra iteration 9/50
+[INFO GRT-0102] Start extra iteration 10/50
+[INFO GRT-0102] Start extra iteration 11/50
+[INFO GRT-0102] Start extra iteration 12/50
+[INFO GRT-0102] Start extra iteration 13/50
+[INFO GRT-0102] Start extra iteration 14/50
+[INFO GRT-0102] Start extra iteration 15/50
+[INFO GRT-0102] Start extra iteration 16/50
+[INFO GRT-0102] Start extra iteration 17/50
+[INFO GRT-0102] Start extra iteration 18/50
+[INFO GRT-0102] Start extra iteration 19/50
+[INFO GRT-0102] Start extra iteration 20/50
+[INFO GRT-0102] Start extra iteration 21/50
+[INFO GRT-0102] Start extra iteration 22/50
+[INFO GRT-0102] Start extra iteration 23/50
+[INFO GRT-0102] Start extra iteration 24/50
+[INFO GRT-0102] Start extra iteration 25/50
+[INFO GRT-0102] Start extra iteration 26/50
+[INFO GRT-0102] Start extra iteration 27/50
+[INFO GRT-0102] Start extra iteration 28/50
+[INFO GRT-0102] Start extra iteration 29/50
+[INFO GRT-0102] Start extra iteration 30/50
+[INFO GRT-0102] Start extra iteration 31/50
+[INFO GRT-0102] Start extra iteration 32/50
+[INFO GRT-0102] Start extra iteration 33/50
+[INFO GRT-0102] Start extra iteration 34/50
+[INFO GRT-0102] Start extra iteration 35/50
+[INFO GRT-0102] Start extra iteration 36/50
+[INFO GRT-0102] Start extra iteration 37/50
+[INFO GRT-0102] Start extra iteration 38/50
+[INFO GRT-0102] Start extra iteration 39/50
+[INFO GRT-0102] Start extra iteration 40/50
+[INFO GRT-0102] Start extra iteration 41/50
+[INFO GRT-0102] Start extra iteration 42/50
+[INFO GRT-0102] Start extra iteration 43/50
+[INFO GRT-0102] Start extra iteration 44/50
+[INFO GRT-0102] Start extra iteration 45/50
+[INFO GRT-0102] Start extra iteration 46/50
+[INFO GRT-0102] Start extra iteration 47/50
+[INFO GRT-0102] Start extra iteration 48/50
+[INFO GRT-0102] Start extra iteration 49/50
+[WARNING GRT-0273] Disabled NDR (to reduce congestion) for net: delaynet_2_clk_i
+[INFO GRT-0102] Start extra iteration 1/50
+[INFO GRT-0102] Start extra iteration 2/50
+[INFO GRT-0102] Start extra iteration 3/50
+[INFO GRT-0102] Start extra iteration 4/50
+[INFO GRT-0102] Start extra iteration 5/50
+[INFO GRT-0102] Start extra iteration 6/50
+[INFO GRT-0102] Start extra iteration 7/50
+[INFO GRT-0102] Start extra iteration 8/50
+[INFO GRT-0102] Start extra iteration 9/50
+[INFO GRT-0102] Start extra iteration 10/50
+[INFO GRT-0102] Start extra iteration 11/50
+[INFO GRT-0102] Start extra iteration 12/50
+[INFO GRT-0102] Start extra iteration 13/50
+[INFO GRT-0102] Start extra iteration 14/50
+[INFO GRT-0102] Start extra iteration 15/50
+[INFO GRT-0102] Start extra iteration 16/50
+[INFO GRT-0102] Start extra iteration 17/50
+[INFO GRT-0102] Start extra iteration 18/50
+[INFO GRT-0102] Start extra iteration 19/50
+[INFO GRT-0102] Start extra iteration 20/50
+[INFO GRT-0102] Start extra iteration 21/50
+[INFO GRT-0102] Start extra iteration 22/50
+[INFO GRT-0102] Start extra iteration 23/50
+[INFO GRT-0102] Start extra iteration 24/50
+[INFO GRT-0102] Start extra iteration 25/50
+[INFO GRT-0102] Start extra iteration 26/50
+[INFO GRT-0102] Start extra iteration 27/50
+[INFO GRT-0102] Start extra iteration 28/50
+[INFO GRT-0102] Start extra iteration 29/50
+[INFO GRT-0102] Start extra iteration 30/50
+[INFO GRT-0102] Start extra iteration 31/50
+[INFO GRT-0102] Start extra iteration 32/50
+[INFO GRT-0102] Start extra iteration 33/50
+[INFO GRT-0102] Start extra iteration 34/50
+[INFO GRT-0102] Start extra iteration 35/50
+[INFO GRT-0102] Start extra iteration 36/50
+[INFO GRT-0102] Start extra iteration 37/50
+[INFO GRT-0102] Start extra iteration 38/50
+[INFO GRT-0102] Start extra iteration 39/50
+[INFO GRT-0102] Start extra iteration 40/50
+[INFO GRT-0102] Start extra iteration 41/50
+[INFO GRT-0102] Start extra iteration 42/50
+[INFO GRT-0102] Start extra iteration 43/50
+[INFO GRT-0102] Start extra iteration 44/50
+[INFO GRT-0102] Start extra iteration 45/50
+[INFO GRT-0102] Start extra iteration 46/50
+[INFO GRT-0102] Start extra iteration 47/50
+[INFO GRT-0102] Start extra iteration 48/50
+[INFO GRT-0102] Start extra iteration 49/50
+[WARNING GRT-0273] Disabled NDR (to reduce congestion) for net: clknet_0_clk_i_regs
+[INFO GRT-0102] Start extra iteration 1/50
+[INFO GRT-0102] Start extra iteration 2/50
+[INFO GRT-0102] Start extra iteration 3/50
+[INFO GRT-0102] Start extra iteration 4/50
+[INFO GRT-0102] Start extra iteration 5/50
+[INFO GRT-0102] Start extra iteration 6/50
+[INFO GRT-0102] Start extra iteration 7/50
+[INFO GRT-0102] Start extra iteration 8/50
+[INFO GRT-0102] Start extra iteration 9/50
+[INFO GRT-0102] Start extra iteration 10/50
+[INFO GRT-0102] Start extra iteration 11/50
+[INFO GRT-0102] Start extra iteration 12/50
+[INFO GRT-0102] Start extra iteration 13/50
+[INFO GRT-0102] Start extra iteration 14/50
+[INFO GRT-0102] Start extra iteration 15/50
+[INFO GRT-0102] Start extra iteration 16/50
+[INFO GRT-0102] Start extra iteration 17/50
+[INFO GRT-0102] Start extra iteration 18/50
+[INFO GRT-0102] Start extra iteration 19/50
+[INFO GRT-0102] Start extra iteration 20/50
+[INFO GRT-0102] Start extra iteration 21/50
+[INFO GRT-0102] Start extra iteration 22/50
+[INFO GRT-0102] Start extra iteration 23/50
+[INFO GRT-0102] Start extra iteration 24/50
+[INFO GRT-0102] Start extra iteration 25/50
+[INFO GRT-0102] Start extra iteration 26/50
+[INFO GRT-0102] Start extra iteration 27/50
+[INFO GRT-0102] Start extra iteration 28/50
+[INFO GRT-0102] Start extra iteration 29/50
+[INFO GRT-0102] Start extra iteration 30/50
+[INFO GRT-0102] Start extra iteration 31/50
+[INFO GRT-0102] Start extra iteration 32/50
+[INFO GRT-0102] Start extra iteration 33/50
+[INFO GRT-0102] Start extra iteration 34/50
+[INFO GRT-0102] Start extra iteration 35/50
+[INFO GRT-0102] Start extra iteration 36/50
+[INFO GRT-0102] Start extra iteration 37/50
+[INFO GRT-0102] Start extra iteration 38/50
+[INFO GRT-0102] Start extra iteration 39/50
+[INFO GRT-0102] Start extra iteration 40/50
+[INFO GRT-0102] Start extra iteration 41/50
+[INFO GRT-0102] Start extra iteration 42/50
+[INFO GRT-0102] Start extra iteration 43/50
+[INFO GRT-0102] Start extra iteration 44/50
+[INFO GRT-0102] Start extra iteration 45/50
+[INFO GRT-0102] Start extra iteration 46/50
+[INFO GRT-0102] Start extra iteration 47/50
+[INFO GRT-0102] Start extra iteration 48/50
+[INFO GRT-0102] Start extra iteration 49/50
+[INFO GRT-0102] Start extra iteration 50/50
+[INFO GRT-0197] Via related to pin nodes: 512524
+[INFO GRT-0198] Via related Steiner nodes: 15277
+[INFO GRT-0199] Via filling finished.
+[INFO GRT-0111] Final number of vias: 717730
+[INFO GRT-0112] Final usage 3D: 2805794
+
+[INFO GRT-0096] Final congestion report:
+Layer         Resource        Demand        Usage (%)    Max H / Max V / Total Overflow
+---------------------------------------------------------------------------------------
+li1                  0             0            0.00%             0 /  0 /  0
+met1            352202        219831           62.42%             2 /  1 / 460
+met2            368279        235751           64.01%             1 /  2 / 934
+met3            259176        131974           50.92%             2 /  1 / 185
+met4            164713         54981           33.38%             1 /  2 / 172
+met5             36506         10067           27.58%             1 /  1 / 188
+---------------------------------------------------------------------------------------
+Total          1180876        652604           55.26%             7 /  7 / 1939
+
+[INFO GRT-0018] Total wirelength: 6330053 um
+[INFO GRT-0014] Routed nets: 77227
+[WARNING GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[INFO GRT-0303] Global routing runtime = 00:10:52
+[ERROR GUI-0013] Unable to find visible display control at Rows.
+[diag] aviso: Rows (GUI-0013)
+[ERROR GUI-0013] Unable to find visible display control at Instances/StdCells.
+[diag] aviso: Instances/StdCells (GUI-0013)
+[diag] salvo: /home/lukas/Projects/neorv32-isfft-sky130/resultados/2026-09-30_0934_layout_nucleo/imagens/06_congestao_mapa.png
+[WARNING GUI-0076] qglx_findConfig: Failed to finding matching FBConfig for QSurfaceFormat(version 2.0, options QFlags<QSurfaceFormat::FormatOption>(), depthBufferSize -1, redBufferSize 1, greenBufferSize 1, blueBufferSize 1, alphaBufferSize -1, stencilBufferSize -1, samples -1, swapBehavior QSurfaceFormat::SingleBuffer, swapInterval 1, colorSpace QSurfaceFormat::DefaultColorSpace, profile  QSurfaceFormat::NoProfile)
