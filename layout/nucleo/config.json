@@ -73,7 +73,7 @@
     "sram_4kbyte_1rw_32x1024_8": {
       "instances": {
         "u_cpu.neorv32_top_inst.memory_system_neorv32_dmem_enabled_neorv32_dmem_inst.u_sram.u_macro": {
-          "location": [55, 464],
+          "location": [55, 55],
           "orientation": "S"
         }
       },

@@ -1845,6 +1845,103 @@ LibreLane: chama direto os comandos do roteamento global (`read_db`,
 
 ---
 
+## 2026-10-06 (20ª sessão) — 🔍 Onde está a congestão: canal IMEM/DMEM estreito e fios atravessando a DMEM; DMEM para o canto (L31)
+
+Fonte: `diag_congestao.sh` (19ª sessão) rodado no notebook (commit
+`ee3049b`): `resultados/2026-09-30_0934_layout_nucleo/06_congestao.rpt`
+(1.883 regiões), `06_congestao.txt`, `imagens/06_congestao_mapa.png`.
+Mesmo `.odb` de entrada do passo 66 (densidade 65 %).
+
+### Primeiro resumo (`06_congestao.txt`)
+
+| Achado | Valor |
+|---|---|
+| Regiões congestionadas / excesso somado | 1.883 / 1.939 (o GRT do fluxo deu 2.038; aqui sem a última tentativa de reparo — mesma ordem) |
+| Regiões com **capacidade 0** | **1.598 de 1.883** (85 %) |
+| Excesso a até 60 µm de alguma macro, ou sobre ela | **1.822 de 1.939 (94 %)** |
+| As 15 piores regiões de 100 × 100 µm | todas sobre a IMEM ou a DMEM, x = 400–900 µm, y = 500–1.100 µm |
+
+O relatório não traz a camada (`on Layer -`: a congestão é medida no
+grafo 2D, antes de escolher camada); por isso a coluna "Camadas" saiu `-`.
+
+### Segunda leitura: em que parte de cada macro (análise do `.rpt`)
+
+Cada região classificada pela posição em relação às macros do
+`config.json` + `SIZE` do LEF; H = congestão horizontal, V = vertical.
+
+| Onde | Excesso | % | H | V |
+|---|---|---|---|---|
+| DMEM, 0–50 µm abaixo da borda de cima (a dos pinos) | 316 | 16,3 % | 152 | 164 |
+| IMEM, 0–50 µm acima da borda de baixo (a dos pinos) | 267 | 13,8 % | 120 | 147 |
+| IMEM, 50–100 µm | 200 | 10,3 % | 132 | 68 |
+| DMEM, 50–100 µm | 188 | 9,7 % | 82 | 106 |
+| **canal IMEM/DMEM** (fora das macros) | 150 | 7,7 % | 149 | 1 |
+| lógica do centro/direita | 143 | 7,4 % | 30 | 113 |
+| DMEM, 100–150 µm | 118 | 6,1 % | 19 | 99 |
+| IMEM, 100–150 µm | 118 | 6,1 % | 84 | 34 |
+| **DMEM, 150–350 µm** (quatro faixas) | 349 | 18,0 % | 1 | **348** (84 + 84 + 84 + 96) |
+| IMEM, 150–250 µm | 84 | 4,3 % | 64 | 20 |
+| `in_mem` | 6 | 0,3 % | 0 | 6 |
+
+Nenhuma macro tem pino longe da borda (LEF: todos os pinos de sinal
+encostados na borda, em met3/met4). Então o excesso **sobre** as macros é
+fio passando por cima delas — e sobre uma macro da OpenRAM só a **met5**
+está livre (OBS de met1 a met4), e a met5 é **horizontal**:
+
+| Padrão | O que é |
+|---|---|
+| ~60 % até 150 µm para dentro da IMEM e da DMEM, dos dois lados do canal, + 7,7 % no próprio canal | o **canal** de 44,7 µm úteis entre IMEM e DMEM não comporta os 140 pinos das duas macros + as células que ficam nele + o tráfego que passa ao longo dele; o roteador "transborda" para cima das macros |
+| **84 de excesso vertical em cada faixa de 50 µm da DMEM, de cima a baixo** | um feixe de ~84 fios **atravessando a DMEM inteira na vertical**: da lógica posicionada **abaixo** da DMEM (y 40–449) até o canal, onde estão os pinos. Atravessar uma macro na vertical é **impossível** (met2 e met4 bloqueadas; a met5 é horizontal): o roteamento detalhado não teria como resolver |
+
+**Causa:** o floorplan (L5/L17/L23). A DMEM estava em y = 464, deixando
+~410 µm de área de células **embaixo** dela, de costas para os pinos (a
+DMEM em `S` tem todos os pinos em cima, virados para o canal). O
+posicionador pôs lógica ali (tinha espaço), e essa lógica precisa falar
+com a IMEM/DMEM pelo canal: ou dá a volta pela direita da DMEM, ou passa
+por cima. E o canal, de 44,7 µm, já estava cheio.
+**Vira slide?** Sim, o melhor até aqui: "a macro é uma parede" — mapa de
+calor + a tabela por faixa, mostrando o feixe vertical de 84 fios.
+
+### Resolvi com (L31): DMEM no canto de baixo
+
+| | Antes | Depois |
+|---|---|---|
+| DMEM (canto, orientação) | (55; 464), `S` | **(55; 55)**, `S` |
+| Borda de baixo do halo da DMEM | 449 (sobravam ~409 µm de lógica embaixo) | 40,0 — alcança a borda do núcleo (40,8), como manda a L23 |
+| Canal IMEM/DMEM (útil, tirando os halos) | 44,7 µm | **453,7 µm** |
+| Área de células na coluna da esquerda | embaixo da DMEM (de costas para os pinos) + canal estreito | toda no canal, **de frente** para os pinos das duas macros |
+
+A área total de células não muda: a faixa de baixo vira canal. Toda a
+lógica da coluna da esquerda fica entre as duas memórias, com acesso
+direto aos 140 pinos, e nenhum fio precisa atravessar macro.
+
+**Custo:** refazer da etapa 2 (floorplan) em diante, na mesma rodada
+(como na L23). A densidade continua 65 % (L29).
+
+### Para continuar
+
+```bash
+git pull
+bash layout/nucleo/02_floorplan.sh
+bash layout/nucleo/03_pdn.sh
+bash layout/nucleo/04_posicionamento.sh
+bash layout/nucleo/05_cts.sh
+ATE_GLOBAL=1 bash layout/nucleo/06_roteamento.sh
+bash layout/nucleo/junta_logs.sh     # e o git add/commit que ele imprime
+```
+Conferir nas imagens do 02 a DMEM no canto e o canal largo; no 03, 0
+`PDN-0110`; no 06, o excesso do GRT. Se ainda sobrar excesso, rodar o
+`diag_congestao.sh` de novo para comparar a tabela.
+
+### Decisões desta sessão
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L30 | Diagnóstico fora do fluxo | ✅ | Mostrou a causa: 94 % do excesso nas macros IMEM/DMEM |
+| L31 | DMEM para (55; 55): canal IMEM/DMEM de 44,7 → 453,7 µm, sem lógica atrás da DMEM | 🟡 | Canal estreito + feixe vertical de ~84 fios atravessando a DMEM |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -1878,7 +1975,8 @@ LibreLane: chama direto os comandos do roteamento global (`read_db`,
 | L27 | Hold no FF: reparar (A) ou só relatar (B) | 🟡 | 2026-10-05 |
 | L28 | Fanout do relógio e transição das macros aceitos | 🟡 | 2026-10-05 |
 | L29 | Densidade alvo 65 % (a automática contava as macros) | 🟡 ajudou, não basta | 2026-10-05 |
-| L30 | Diagnóstico da congestão fora do fluxo (`diag_congestao.sh`) | 🟡 | 2026-10-06 |
+| L30 | Diagnóstico da congestão fora do fluxo (`diag_congestao.sh`) | ✅ | 2026-10-06 |
+| L31 | DMEM no canto (55; 55): canal IMEM/DMEM de 453,7 µm | 🟡 | 2026-10-06 |
 
 ---
 
@@ -1895,7 +1993,8 @@ LibreLane: chama direto os comandos do roteamento global (`read_db`,
 - [x] ~~Rodar a etapa 4 no notebook~~ — passou (15ª sessão)
 - [x] ~~Rodar a etapa 5 (CTS)~~ — passou com a L26 (17ª sessão)
 - [x] ~~Refazer 4 → 5 → 6 com a L29~~ — excesso 4.682 → 2.038 (19ª sessão)
-- [ ] Rodar `diag_congestao.sh` e decidir o remédio
+- [x] ~~Rodar `diag_congestao.sh`~~ — 94 % do excesso nas macros da CPU (20ª sessão)
+- [ ] Refazer 2 → 6 (global) com a L31
 - [ ] Decidir L27 (hold no FF) com o STA final
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
 - [x] ~~Refazer a etapa 1 com o netlist de 29/09~~ — rodada `2026-09-30_0934`
