@@ -1820,6 +1820,22 @@ linhas para eu ajustar.
 | espalhado e baixo (máx. ~7 por aresta, 0,17 % da capacidade) | `GRT_ALLOW_CONGESTION: true` e deixar o roteamento detalhado resolver (comum com excesso pequeno; o veredito vira o número de DRV do TritonRoute) |
 | concentrado no meio da lógica da ISFFT | densidade 60 % ou espaçamento só naquela região |
 
+### 🐛 `diag_congestao.sh`: `can't read "::env(SCRIPTS_DIR)"`
+
+**Sintoma:** primeira rodada no notebook parou na linha 13 do
+`tcl/diag_congestao.tcl` (`source $::env(SCRIPTS_DIR)/…/io.tcl`), e o
+resumo em Python não achou o `06_congestao.rpt`.
+**Causa:** o `_env.tcl` de um passo só tem as variáveis de
+**configuração**. As que o LibreLane injeta na hora de rodar
+(`SCRIPTS_DIR`, `_SDC_IN`, `_LIB_CORNER_*`, `_PNR_EXCLUDED_CELLS`…) não
+estão lá (`steps/tclstep.py`). Eu tinha testado a sintaxe, não o ambiente.
+**Resolvi com:** o Tcl do diagnóstico não usa mais os scripts do
+LibreLane: chama direto os comandos do roteamento global (`read_db`,
+`set_routing_layers`, os ajustes por camada, `set_macro_extension`,
+`global_route`), que só precisam de 7 variáveis — todas no `_env.tcl`
+(conferido). O `.sh` agora para com mensagem clara se o `.rpt` não sair.
+**Vira slide?** Não.
+
 ### Decisões desta sessão
 
 | # | Decisão | Status | Motivo |

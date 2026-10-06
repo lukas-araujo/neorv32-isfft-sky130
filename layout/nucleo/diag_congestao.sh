@@ -29,6 +29,7 @@ else
   openroad -no_splash -gui "$NUCLEO/tcl/diag_congestao.tcl" | tee "$R/06_congestao.log"
 fi
 
+[ -s "$DIAG_RPT" ] || { echo "ERRO: o OpenROAD nao escreveu $DIAG_RPT (veja o erro acima, ou ${R#$REPO/}/06_congestao.log)"; exit 1; }
 python3 "$NUCLEO/resume_congestao.py" "$DIAG_RPT" "$CONFIG" | tee "$R/06_congestao.txt"
 echo ">>> em ${R#$REPO/}: 06_congestao.rpt, 06_congestao.txt, imagens/06_congestao_mapa.png"
 echo "Depois: git add resultados/ && git commit -m 'gdsii: diagnostico da congestao' && git push"
