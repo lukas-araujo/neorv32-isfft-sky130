@@ -1,0 +1,57 @@
+== Timing por corner (OpenROAD.STAPostPNR, parasitas extraidos)
+| Corner | Setup WS (ns) | Viol. setup | Hold WS (ns) | Viol. hold | Transicao | Capacit. |
+|---|---|---|---|---|---|---|
+| max_ff_n40C_1v95 | 7.1287102683087165 | 0 | -0.11188827958613994 | 176 | 1536 | 94 |
+| max_ss_100C_1v60 | -23.007651546279813 | 1571 | 0.38005422107361014 | 0 | 51328 | 561 |
+| max_tt_025C_1v80 | -0.368130425451908 | 2 | 0.028544278859609962 | 0 | 7083 | 119 |
+| min_ff_n40C_1v95 | 7.35738779613951 | 0 | -0.07582534814652146 | 179 | 619 | 58 |
+| min_ss_100C_1v60 | -21.840235127479698 | 1372 | 0.4096909594203481 | 0 | 40026 | 284 |
+| min_tt_025C_1v80 | 0.2615951973526953 | 0 | 0.04782840925353154 | 0 | 2915 | 62 |
+| nom_ff_n40C_1v95 | 7.258310602441447 | 0 | -0.09599366018226088 | 174 | 1156 | 78 |
+| nom_ss_100C_1v60 | -22.505022482571995 | 1469 | 0.3995079935504922 | 0 | 46383 | 430 |
+| nom_tt_025C_1v80 | -0.09617018564816876 | 1 | 0.036397108579481814 | 0 | 4796 | 92 |
+
+== OpenROAD.FillInsertion (117-openroad-fillinsertion)
+      1 [INFO DPL-0001] Placed 141258 filler instances.
+   tempo: 00:00:10.368
+   design__instance__count__class:fill_cell      142300
+   power__internal__total                        75787800
+   power__leakage__total                         0.000123774
+   power__switching__total                       0.0129532
+   power__total                                  75787800
+
+== OpenROAD.RCX (119-openroad-rcx)
+   tempo: 00:00:37.348
+   design__instance__count__class:fill_cell      142300
+   power__internal__total                        75787800
+   power__leakage__total                         0.000123774
+   power__switching__total                       0.0129532
+   power__total                                  75787800
+
+== OpenROAD.STAPostPNR (120-openroad-stapostpnr)
+   tempo: 00:02:03.216
+   design__instance__count__class:fill_cell      142300
+   power__internal__total                        75787760
+   power__leakage__total                         0.0001247157488251105
+   power__switching__total                       0.019808709621429443
+   power__total                                  75787760
+
+== OpenROAD.IRDropReport (121-openroad-irdropreport)
+      1 Average IR drop  : 8.58e+02 V
+      1 Average IR drop  : 8.83e+02 V
+      1 Average voltage  : 8.58e+02 V
+      1 Average voltage  : -8.81e+02 V
+      1 Worstcase IR drop: 8.53e+06 V
+      1 Worstcase IR drop: 8.90e+06 V
+      1 Worstcase voltage: 8.53e+06 V
+      1 Worstcase voltage: -8.90e+06 V
+   tempo: 00:00:38.419
+   design__instance__count__class:fill_cell      142300
+   ir__drop__avg                                 883
+   ir__drop__worst                               8900000
+   ir__voltage__worst                            -8900000
+   power__internal__total                        75787760
+   power__leakage__total                         0.0001247157488251105
+   power__switching__total                       0.019808709621429443
+   power__total                                  75787760
+
