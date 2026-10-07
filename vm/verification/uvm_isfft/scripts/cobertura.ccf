@@ -1,0 +1,23 @@
+# cobertura.ccf -- configuracao da cobertura de CODIGO do xrun (-covfile)
+#
+# O que entra na cobertura de codigo: o -covdut isfft_axi_v4 (no
+# run_first_uvm.tcl) pega o IP e tudo o que esta abaixo dele. Daqui sai o
+# que esta abaixo dele mas NAO e RTL do chip (DIARIO_UVM, U20):
+#
+#   - modelos .v da OpenRAM (u_in_mem, u_out_mem): sao modelo comportamental
+#     de simulacao, nao vao para o silicio (no netlist a macro e caixa-preta)
+#   - checkers de assercao ligados por 'bind' (as 3 u_sva): o bind poe o
+#     modulo do tb DENTRO da hierarquia do DUT, e o -covdut contaria o
+#     codigo deles como se fosse do chip
+#
+# So a cobertura de CODIGO (bloco, expressao, FSM, toggle) sai. As
+# assercoes continuam contando (status 8/8 no IMC), porque assercao e
+# cobertura funcional, que o deselect_coverage nao mexe.
+#
+# Por modulo, nao por caminho: vale para qualquer instancia e nao quebra
+# se a hierarquia mudar.
+
+deselect_coverage -all -module sram_1rw1r_64x64_wpr2
+deselect_coverage -all -module sram_1rw1r_64x256
+deselect_coverage -all -module isfft_v4_sva
+deselect_coverage -all -module sram_1rw1r_sva

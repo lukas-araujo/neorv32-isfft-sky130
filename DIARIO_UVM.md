@@ -735,12 +735,68 @@ exclusão justificada.
 | `cp_pos_trunc.primeira` (posição 0) | 0 | `meio` **8** (8 truncados em toda a regressão) |
 | `cp_pos_trunc.penult` (posição 30) | 0 | idem |
 
+### O que as abas Block / Expression / Toggle mostraram (telas do IMC)
+
+| Aba | Achado | Leitura |
+|---|---|---|
+| Expression | As **12** expressões da subárvore (28/38 itens) estão **todas** em `u_in_mem`/`u_out_mem` (modelo da OpenRAM, linhas 55–91; ex.: linha 70, `!csb0 && !web0 && !csb1 && (addr0 == addr1)`, 3/5) | O wrapper e o núcleo têm **0 expressões pontuadas**. O Xcelium, por padrão, só pontua condições com `&&`/`\|\|` dentro de `if`; o `isfft_axi_v4.v` usa `&` e `assign` (ex.: linha 161, `assign s00_axis_tready = ~dp_rst & (in_used != IN_DEPTH)`; linha 311, `else if (core_next_out & core_armado)`). Depois da U20, expressão fica 0/0 — **não é 100 %, é "não medido"** (U21) |
+| Block | Bloco não coberto no `write_fsm.v` do núcleo, linha 55: `if (ifft_next_out == 1'b1)` com **0 %** — "a IFFT já está mandando a próxima matriz emendada" | Em toda a regressão, a FSM de escrita nunca viu duas matrizes **emendadas** saindo da IFFT. Buraco de **estímulo** (vazão máxima na entrada com a saída livre), não de código morto. A investigar |
+| Toggle | `reset` dos `perm*` do Spiral com 0/1 (só uma das duas transições); `writeSel` dos `memMod` com 0 % | `writeSel` é `1'b1` fixo no Spiral (FE, 3ª sessão): constante, exclusão justificada. O `reset` sobe no começo e cai, mas nunca **volta a subir**: o soft reset (`dp_rst`) não chega ao núcleo pelo mesmo fio? A conferir no RTL |
+
+### U20 aplicada: `scripts/cobertura.ccf`
+
+**Decisão do Lukas:** excluir os modelos da OpenRAM e as 3 `u_sva`.
+
+**Como:** na **compilação**, com um arquivo de configuração de cobertura
+(`-covfile`), e não com refinamento no IMC:
+
+| | `.ccf` (compilação) | Refinamento no IMC (`.vRefine`) |
+|---|---|---|
+| O que faz | o item **não entra** no modelo de cobertura | o item é medido e depois **marcado** como excluído, com comentário |
+| Para quê | o que não é projeto (modelo de simulação, checker do tb) | o que é projeto mas é inalcançável (constantes do Spiral), com justificativa revisável |
+| Custo | refazer a regressão (blocos 2 e 3; ~10 s por teste) | nenhum |
+
+```
+deselect_coverage -all -module sram_1rw1r_64x64_wpr2
+deselect_coverage -all -module sram_1rw1r_64x256
+deselect_coverage -all -module isfft_v4_sva
+deselect_coverage -all -module sram_1rw1r_sva
+```
+
+Por **módulo** (nomes conferidos: `tb/isfft_tb_top.sv` linhas 118–127,
+`tb/isfft_sva.sv` linhas 24 e 72), não por caminho. `-all` = bloco,
+expressão, FSM e toggle; as asserções são cobertura funcional e
+continuam contando.
+
+Mudanças no `run_first_uvm.tcl`:
+- `XRUN_OPTS` com `-covfile ${UVM_DIR}/scripts/cobertura.ccf`;
+- bloco 0 mostra as linhas do log sobre o `.ccf`;
+- bloco 2 apaga `cov_work/scope` antes da regressão (rodadas com o
+  modelo antigo misturariam dois modelos no merge);
+- bloco 3 mostra o que sobrou de `u_in_mem`/`u_out_mem`/`u_sva`.
+
+**Não conferido aqui** (sem Xcelium na nuvem): a sintaxe do `.ccf`. O
+bloco 0 mostra se o `xrun` aceitou. Se reclamar do `-module`, a saída é
+`-instance isfft_axi_v4.u_in_mem...` etc.
+
+**Esperado depois de refazer os blocos 0, 2 e 3:**
+
+| Item | Antes | Esperado |
+|---|---|---|
+| Regressão | 8/8 | 8/8 (nada mudou no estímulo) |
+| Funcional | 94,4 % (51/54) | igual |
+| Asserções | 8/8 no DUT | 8/8 (se cair, o `-all` levou as asserções junto) |
+| `u_in_mem`, `u_out_mem`, `u_sva` no código | 59–95 % | ausentes ou n/a |
+| Expressão no `isfft_axi_v4` (subárvore) | 28/38 | **0/0** (ver U21) |
+| Wrapper local | 848/1.200 | igual (a exclusão é só dos filhos) |
+
 ### Decisões da sessão
 
 | # | Decisão | Status | Motivo |
 |---|---|---|---|
 | U19 | Cobertura de código relatada pelo número **local** de cada módulo (wrapper: 848/1.200), não pela subárvore | 🟡 | A subárvore do wrapper é 92 % núcleo Spiral |
-| U20 | Excluir da cobertura de código: modelos da OpenRAM e as 3 instâncias `u_sva` (bind); toggles constantes do Spiral só com justificativa | 🟡 | Não são RTL do chip; o `bind` põe o tb dentro do `-covdut` |
+| U20 | Excluir da cobertura de código: modelos da OpenRAM e as 3 instâncias `u_sva` (bind), na compilação (`cobertura.ccf`); toggles constantes do Spiral só com justificativa (refinamento) | ✅ | Decisão do Lukas. Não são RTL do chip; o `bind` põe o tb dentro do `-covdut` |
+| U21 | Ligar a pontuação de expressão para `&`, `\|` e `assign` (no `.ccf`) | 🟡 proposta | Hoje o wrapper tem 0 expressões medidas: a métrica não diz nada sobre ele |
 
 ---
 
@@ -767,7 +823,8 @@ exclusão justificada.
 | U17 | PATH completo da VM no `run_first_uvm.tcl` | ✅ | 2026-09-30 |
 | U18 | Regressão no Xcelium: 8/8, funcional 94,4 % | 🟡 | 2026-09-30 |
 | U19 | Cobertura de código pelo número local de cada módulo | 🟡 | 2026-10-07 |
-| U20 | Excluir modelos da OpenRAM e `u_sva` (bind) da cobertura de código | 🟡 | 2026-10-07 |
+| U20 | Excluir modelos da OpenRAM e `u_sva` (bind) da cobertura de código (`cobertura.ccf`) | ✅ | 2026-10-07 |
+| U21 | Pontuar expressões com `&`/`\|`/`assign` | 🟡 | 2026-10-07 |
 
 ---
 
@@ -779,6 +836,9 @@ exclusão justificada.
 - [ ] Fechar os 3 bins de entrada (ver "Para depois", 4ª sessão)
 - [ ] Cobertura de código do wrapper (70,7 %) e excluir os modelos da OpenRAM
 - [x] ~~Ver a cobertura na GUI do IMC~~ — 5ª sessão
-- [ ] Wrapper por métrica, **local** (relatório do IMC, não print)
-- [ ] Confirmar U3, U4, U13, U14, U15, U19, U20
+- [ ] VM: blocos 0, 2 e 3 com o `cobertura.ccf` (U20) e trazer com `traz_uvm.sh`
+- [ ] Wrapper por métrica, **local** (relatório do IMC, não print; falta a sintaxe: `help report`)
+- [ ] Bloco 0% no `write_fsm.v:55` (matrizes emendadas na IFFT): estímulo novo?
+- [ ] `reset` do Spiral só com uma transição: conferir o caminho do soft reset
+- [ ] Confirmar U3, U4, U13, U14, U15, U19, U21
 - [ ] Síntese com DFT só no IP da ISFFT (FE-D39) — depois do UVM

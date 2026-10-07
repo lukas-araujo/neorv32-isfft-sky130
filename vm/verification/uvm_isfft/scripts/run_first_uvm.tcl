@@ -48,11 +48,14 @@ isfft_soft_reset_test isfft_kria_regressao_test"
 #  -coverage all    : cobertura de codigo (bloco, expressao, FSM, toggle) +
 #                     funcional (covergroups) + assercoes
 #  -covdut          : cobertura de codigo so dentro do IP (nao do tb)
+#  -covfile         : tira do -covdut o que nao e RTL do chip: modelos da
+#                     OpenRAM e as 3 u_sva do bind (cobertura.ccf, U20)
 export XRUN_OPTS="-64bit -sv -uvm -timescale 1ns/1ps \
   -xmlibdirname ${UVM_WORK}/xcelium.d \
   -f ${UVM_DIR}/scripts/isfft_uvm.f \
   -top isfft_tb_top \
   -coverage all -covdut ${IP_NAME} \
+  -covfile ${UVM_DIR}/scripts/cobertura.ccf \
   -covworkdir ${UVM_WORK}/cov_work -covoverwrite \
   +UVM_NO_RELNOTES"
 
@@ -65,12 +68,15 @@ resultado () {
 # BLOCO 0 -- COMPILAR E ELABORAR (sem simular)
 #
 # Esperado: sem *E no log; "xmelab: *W" do PDK/OpenRAM podem aparecer.
+# Avisos do cobertura.ccf: nenhum (um modulo nao achado vira *W com o nome).
 #=============================================================================
 
 #cd ${UVM_WORK}
 #xrun ${XRUN_OPTS} -elaborate -l ${UVM_RPT}/compila.log
 #echo "--- erros de compilacao/elaboracao (esperado: nenhum) ---"
 #grep -E "\*E,|\*F," ${UVM_RPT}/compila.log | head -20
+#echo "--- linhas sobre o cobertura.ccf (esperado: nenhum aviso) ---"
+#grep -i -E "ccf|covfile|deselect" ${UVM_RPT}/compila.log | head -20
 
 #=============================================================================
 # BLOCO 1 -- TESTE DE FUMACA (1 matriz)
@@ -98,6 +104,9 @@ grep -E "UVM: |SB_RESUMO|COBERTURA|UVM_ERROR @|UVM_FATAL @|\*E," ${UVM_RPT}/isff
 
 #export SEMENTES=1
 #cd ${UVM_WORK}
+## Rodadas antigas fora: com outro modelo de cobertura (ex.: antes do
+## cobertura.ccf) o merge do bloco 3 misturaria dois modelos.
+#rm -rf ${UVM_WORK}/cov_work/scope
 #rm -f ${UVM_RPT}/regressao.txt
 #for t in ${TESTES}; do
 #  for s in $(seq 1 ${SEMENTES}); do
@@ -132,6 +141,8 @@ grep -E "UVM: |SB_RESUMO|COBERTURA|UVM_ERROR @|UVM_FATAL @|\*E," ${UVM_RPT}/isff
 #EOF
 #imc -exec ${UVM_WORK}/imc_cobertura.cmd -logfile ${UVM_RPT}/imc.log
 #head -40 ${UVM_RPT}/cobertura_resumo.txt
+#echo "--- codigo dos modelos da OpenRAM e das u_sva (esperado: n/a ou ausentes, U20) ---"
+#grep -E "u_in_mem|u_out_mem|u_sva" ${UVM_RPT}/cobertura_resumo.txt
 
 #=============================================================================
 # BLOCO 4 -- DEPURAR UM TESTE NO SIMVISION
