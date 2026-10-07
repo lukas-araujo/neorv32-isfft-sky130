@@ -2136,6 +2136,91 @@ bash layout/nucleo/junta_logs.sh     # e o git add/commit que ele imprime
 
 ---
 
+## 2026-10-07 (23ª sessão) — ✅ Etapa 6 passou: roteamento detalhado com 0 violações
+
+Rodada `2026-09-30_0934`, passos `103-…` a `116-…`. Fontes:
+`06_roteamento.txt`, `06_roteamento_metricas.json`,
+`logs_2026-10-07_0821.tar.gz`, imagens `06_roteamento_*` (commit
+`4ab3bbc`).
+
+### Antes do detalhado (passos 103–108)
+
+| Passo | Resultado | Fonte |
+|---|---|---|
+| 103 roteamento global | 0 de excesso (igual ao 93) | log |
+| 105 reparo pós-GRT (L32) | fio 5,479 → 5,482 m; 6 min 13 s | métricas, `runtime.txt` |
+| 107 reparo de antena **só com diodos (L33)** | 915 → 159 → 7 → 1 violações; **1.833 + 251 + 7 diodos**; 3 min 14 s, **sem `GRT-0183`** | `GRT-0012/0015` |
+| 108 STA com o fio do GRT (TT) | setup +1,11 ns, hold +0,083 ns, 0 violações | métricas |
+
+A L33 contornou o erro do OpenROAD.
+
+### Roteamento detalhado (TritonRoute, passo 109)
+
+| Item | Valor | Fonte |
+|---|---|---|
+| **Violações de roteamento (DRV) no fim** | **0** | `route__drc_errors` |
+| Violações por iteração | 169 → 88 → 62 → 49 → 49 → **0** (5ª); na fase seguinte 299 → 278 → … → 33 → 5 → 4 → 2 → 1 → **0** (22ª e 23ª) | `route__drc_errors__iter:*` |
+| Fio desenhado | **3,99 m** (o GRT estimava 5,48 m) | `route__wirelength` |
+| Fio mais longo | 1.878 µm | `route__wirelength__max` |
+| Vias | 710.304, todas de corte simples | `route__vias*` |
+| Redes | 77.293 (+ 2 de alimentação) | `route__net*` |
+| **Tempo** | **4 h 45 min** | `runtime.txt` |
+
+O roteador limpa as violações em fases: depois de zerar na 5ª iteração,
+ele recomeça uma fase de otimização (as violações sobem para 299 e voltam
+a cair) e termina com 0. O fio real ficou 27 % menor que a estimativa do
+GRT (que conta os ladrilhos, não o caminho exato).
+
+### Checagens do fim da etapa (passos 111–116)
+
+| Checagem | Resultado | Fonte |
+|---|---|---|
+| `Checker.TrDRC` | passou (0 DRV) | passo 112 |
+| Pinos desconectados (`Checker.DisconnectedPins`) | **0** (0 críticos) | `design__disconnected_pin__count` |
+| `Checker.WireLength` | passou | passo 116 |
+| Antena depois do detalhado | **1 rede, 1 pino**: `net8308`, pino `fanout8295/A`, met2, razão 487,9 para 400 permitidos (1,22×) | `111-…/reports/antenna_summary.rpt` |
+| Diodos de antena no chip | 2.359 células, 5.903 µm² | métricas |
+| Instâncias / utilização das células | 99.704 / 0,602 | métricas |
+
+A violação de antena que sobrou é pequena (22 % acima) e numa rede só; o
+checker de antena não reprova o fluxo. Fica registrada; se quiser zerar,
+um diodo nessa rede resolve (a decidir depois do DRC/LVS, etapa 8).
+
+### Timing ainda com o fio do GRT (STA 108, TT)
+
+| | Valor |
+|---|---|
+| Setup / hold | +1,11 / +0,083 ns, 0 violações |
+| Transição | 93 (64 em pinos das macros, L28; 29 em células) |
+| Capacitância | 5 |
+| Fanout | 1.472 (árvore de relógio, L28) |
+
+O número que vale é o da etapa 7, com os parasitas **extraídos** do fio
+desenhado (RCX).
+
+**Vira slide?** Sim: "4 h 45 min, 710 mil vias, 0 violações" e a curva
+de violações por iteração.
+
+### Etapa 7 — script `07_sta.sh` (escrito, não rodado)
+
+| Passo | O que faz |
+|---|---|
+| `OpenROAD.FillInsertion` | células de preenchimento nos buracos das linhas |
+| `Odb.CellFrequencyTables` | contagem de células por tipo |
+| `OpenROAD.RCX` | extrai R e C do fio desenhado (SPEF por corner de RC) |
+| `OpenROAD.STAPostPNR` | STA final nos 9 corners — decide a **L27** (hold no FF) |
+| `OpenROAD.IRDropReport` | queda de tensão (indicativa: sem pads) |
+
+O `07_sta.txt` sai com uma tabela por corner (setup, hold, transição,
+capacitância).
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L33 | Antena só com diodos | 🟡 funcionou (sem `GRT-0183`) | — |
+| L34 | 1 violação de antena restante (`net8308`, 1,22×) aceita por ora | 🟡 | Uma rede; decidir junto com o DRC/LVS |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -2172,7 +2257,8 @@ bash layout/nucleo/junta_logs.sh     # e o git add/commit que ele imprime
 | L30 | Diagnóstico da congestão fora do fluxo (`diag_congestao.sh`) | ✅ | 2026-10-06 |
 | L31 | DMEM no canto (55; 55): canal IMEM/DMEM de 453,7 µm | 🟡 funcionou (GRT sem excesso) | 2026-10-06 |
 | L32 | `RUN_POST_GRT_DESIGN_REPAIR` ligado | 🟡 funcionou | 2026-10-06 |
-| L33 | Antena só com diodos (`GRT_ANTENNA_REPAIR_DIODE_ONLY`) | 🟡 tentativa | 2026-10-06 |
+| L33 | Antena só com diodos (`GRT_ANTENNA_REPAIR_DIODE_ONLY`) | 🟡 funcionou | 2026-10-06 |
+| L34 | 1 violação de antena restante aceita por ora | 🟡 | 2026-10-07 |
 
 ---
 
@@ -2191,7 +2277,8 @@ bash layout/nucleo/junta_logs.sh     # e o git add/commit que ele imprime
 - [x] ~~Refazer 4 → 5 → 6 com a L29~~ — excesso 4.682 → 2.038 (19ª sessão)
 - [x] ~~Rodar `diag_congestao.sh`~~ — 94 % do excesso nas macros da CPU (20ª sessão)
 - [x] ~~Refazer 2 → 6 (global) com a L31~~ — 0 de excesso (21ª sessão)
-- [ ] Etapa 6 completa: global com reparo (L32) + roteamento detalhado
+- [x] ~~Etapa 6 completa~~ — 0 DRV, 0 pinos soltos, 4 h 45 min (23ª sessão)
+- [ ] Etapa 7 (`07_sta.sh`): RCX + STA final; decidir L27
 - [ ] Decidir L27 (hold no FF) com o STA final
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
 - [x] ~~Refazer a etapa 1 com o netlist de 29/09~~ — rodada `2026-09-30_0934`
