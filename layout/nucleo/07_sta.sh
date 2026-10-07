@@ -18,17 +18,33 @@
 #   qualquer corner (DIARIO_GDSII, 17a sessao). A tabela por corner sai no
 #   07_sta.txt.
 #
+#   REPARO=1 (24a sessao, L27 + L36): volta ao fim do reparo de antena
+#   (OpenROAD.RepairAntennas) e roda de novo, ate o IRDropReport:
+#     OpenROAD.ResizerTimingPostGRT  hold nos corners TT e FF (RSZ_CORNERS)
+#                                    e setup com margem de 1,5 ns
+#     OpenROAD.STAMidPNR-3, OpenROAD.DetailedRouting (~5 h) e as checagens
+#     da etapa 6; depois a etapa 7 inteira
+#   Os arquivos saem com "_reparo" no nome; os da 1a rodada ficam para
+#   comparar (antes x depois).
+#
 # Uso:  bash layout/nucleo/07_sta.sh   (SO_GUI=1 / SEM_GUI=1 como no 02)
+#       REPARO=1 bash layout/nucleo/07_sta.sh
 #=============================================================================
 source "$(dirname "$0")/comum.sh"
 confere_ambiente
 
-if [ "${SO_GUI:-0}" != 1 ]; then
-  roda_trecho Checker.WireLength OpenROAD.FillInsertion OpenROAD.IRDropReport
-  echo ">>> metricas do fim da etapa:"
-  guarda_metricas OpenROAD.IRDropReport 07_sta
+if [ "${REPARO:-0}" = 1 ]; then
+  ANTES=OpenROAD.RepairAntennas; DE=OpenROAD.ResizerTimingPostGRT; NOME=07_sta_reparo
+else
+  ANTES=Checker.WireLength;      DE=OpenROAD.FillInsertion;        NOME=07_sta
+fi
 
-  resumo="$(pasta_resultados)/07_sta.txt"
+if [ "${SO_GUI:-0}" != 1 ]; then
+  roda_trecho "$ANTES" "$DE" OpenROAD.IRDropReport
+  echo ">>> metricas do fim da etapa:"
+  guarda_metricas OpenROAD.IRDropReport "$NOME"
+
+  resumo="$(pasta_resultados)/$NOME.txt"
   st="$(estado_de OpenROAD.STAPostPNR)"
   {
     echo "== Timing por corner (OpenROAD.STAPostPNR, parasitas extraidos)"
@@ -45,18 +61,25 @@ for c in cs:
           f"{g('design__max_slew_violation__count')} | {g('design__max_cap_violation__count')} |")
 PY
     echo
-    for passo in OpenROAD.FillInsertion OpenROAD.RCX OpenROAD.STAPostPNR OpenROAD.IRDropReport; do
+    PASSOS="OpenROAD.FillInsertion OpenROAD.RCX OpenROAD.STAPostPNR OpenROAD.IRDropReport"
+    [ "${REPARO:-0}" = 1 ] && PASSOS="OpenROAD.ResizerTimingPostGRT OpenROAD.STAMidPNR-3 \
+      OpenROAD.DetailedRouting OpenROAD.CheckAntennas-1 Checker.TrDRC \
+      Checker.DisconnectedPins $PASSOS"
+    for passo in $PASSOS; do
       s="$(estado_de "$passo")"; [ -n "$s" ] || continue
       d="$(dirname "$s")"
       echo "== $passo ($(basename "$d"))"
-      grep -hE "RCX-0|DPL-|[Ff]iller|ERROR|WARNING (RCX|PSM|STA-0)|PSM-00(69|70|71|72|73)|[Ww]orst|[Aa]verage" \
+      grep -hE "RCX-0|DPL-|[Ff]iller|ERROR|WARNING (RCX|PSM|STA-0|RSZ|DRT)|PSM-00(69|70|71|72|73)|[Ww]orst|[Aa]verage|RSZ-00(32|33|39|40|41|59|62)|[Ii]nserted|[Rr]esized|[Nn]umber of violations|ANT-" \
         "$d"/*.log 2>/dev/null | sort | uniq -c | head -20 || true
       [ -f "$d/runtime.txt" ] && echo "   tempo: $(cat "$d/runtime.txt")"
       python3 - "$s" <<'PY'
 import json, sys
 m = json.load(open(sys.argv[1]))["metrics"]
 for k in sorted(m):
-    if any(x in k for x in ("ir__", "power__", "design__instance__count__class:fill")) and "corner" not in k:
+    if any(x in k for x in ("ir__", "power__", "design__instance__count__class:fill",
+                            "hold_buffer", "setup_buffer", "route__drc_errors", "route__wirelength",
+                            "antenna_violation", "disconnected_pin", "setup__ws", "hold__ws")) \
+       and "corner" not in k and "iter:" not in k:
         print(f"   {k:45s} {m[k]}")
 PY
       echo
@@ -65,7 +88,7 @@ PY
   echo ">>> resumo (tambem em ${resumo#$REPO/}):"
   sed 's/^/    /' "$resumo"
 fi
-abre_gui OpenROAD.IRDropReport final 07_final
+abre_gui OpenROAD.IRDropReport final "${NOME%_sta*}${NOME#07_sta}_final"
 
 echo
 echo "Conferir: setup e hold >= 0 nos corners TT; e ver o hold do FF (L27)."

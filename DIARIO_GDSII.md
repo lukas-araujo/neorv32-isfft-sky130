@@ -2219,6 +2219,176 @@ capacitância).
 | L33 | Antena só com diodos | 🟡 funcionou (sem `GRT-0183`) | — |
 | L34 | 1 violação de antena restante (`net8308`, 1,22×) aceita por ora | 🟡 | Uma rede; decidir junto com o DRC/LVS |
 
+## 2026-10-07 (24ª sessão) — ⚠️ Etapa 7: com o fio extraído, setup do TT −0,10 ns e hold do FF −0,11 ns
+
+Rodada `2026-09-30_0934`, passos `117-…` a `121-…`. Fontes: `07_sta.txt`,
+`07_sta_metricas.json`, `logs_2026-10-07_0832.tar.gz` (`120-openroad-
+stapostpnr/summary.rpt`, `*/violator_list.rpt`, `*/clock.rpt`,
+`*/power.rpt`; `121-…/irdrop.rpt`), imagem `07_final.png` (commit
+`2225af1`). O fluxo não parou: os checkers de timing só rodam no fim do
+fluxo (depois do LVS, etapa 8) — lá **reprovariam**.
+
+### Passos e tempos
+
+| Passo | Resultado | Tempo | Fonte |
+|---|---|---|---|
+| 117 `FillInsertion` | 141.258 células de preenchimento (142.300 com as que já havia) | 10 s | `DPL-0001`, `runtime.txt` |
+| 118 `CellFrequencyTables` | tabelas de células | — | `118-…/cell.rpt` |
+| 119 `RCX` | SPEF min/nom/max do fio desenhado | 37 s | `runtime.txt` |
+| 120 `STAPostPNR` | 9 corners (tabela abaixo) | 2 min 3 s | `summary.rpt` |
+| 121 `IRDropReport` | número sem sentido (ver abaixo) | 38 s | `irdrop.rpt` |
+
+### Timing por corner com os parasitas extraídos
+
+| Corner | Setup WS (ns) | Viol. setup | Hold WS (ns) | Viol. hold | fmax (MHz) |
+|---|---|---|---|---|---|
+| min_tt | +0,262 | 0 | +0,048 | 0 | 50,66 |
+| **nom_tt** | **−0,096** | **1** | +0,036 | 0 | **49,76** |
+| **max_tt** | **−0,368** | **2** | +0,029 | 0 | **49,10** |
+| min_ff | +7,36 | 0 | **−0,076** | **179** | 85,77 |
+| nom_ff | +7,26 | 0 | **−0,096** | **174** | 83,99 |
+| max_ff | +7,13 | 0 | **−0,112** | **176** | 82,70 |
+| min_ss | −21,84 | 1.372 | +0,410 | 0 | 23,90 |
+| nom_ss | −22,51 | 1.469 | +0,400 | 0 | 23,53 |
+| max_ss | −23,01 | 1.571 | +0,380 | 0 | 23,25 |
+
+(`summary.rpt`; fmax = `report_clock_min_period` de cada `clock.rpt`)
+
+**Leitura:** o relógio de 50 MHz fecha "no fio da navalha" no TT. O
+mesmo chip faz ~84 MHz no FF (rápido, frio, 1,95 V) e ~23 MHz no SS (lento,
+quente, 1,60 V): **um fator 3,6** entre os cantos do processo.
+
+### 🐛 Setup do TT: +1,11 ns com o fio estimado → −0,10 ns com o fio extraído
+
+- **Sintoma:** no STA 108 (fio do GRT, etapa 6) o setup do nom_tt tinha
+  +1,113 ns; no STA final, −0,096 ns (nom) e −0,368 ns (max). 1 e 2
+  caminhos violando.
+- **Causa:** o caminho é **o mesmo** da síntese: controle da CPU
+  (`n7868_q_reg[16]`) → multiplicador/divisor (`n12685_q_reg[63]` e
+  `[62]`), a subtração de 32 bits em *ripple carry* (tabelas da síntese,
+  §5). A estimativa do GRT não conta o acoplamento entre fios vizinhos; o
+  RCX conta. Diferença medida: **1,21 ns** (nom) a ~1,5 ns (max) num
+  caminho de ~15 ns (≈ 8–10 %). Na síntese a folga era +2,41 ns, mas com
+  2 ns de incerteza de relógio; o layout usa 0,25 ns e a árvore de relógio
+  real (latência 2,39–3,36 ns, skew 0,98 ns no nom_tt).
+- **Resolvi com (L36, proposta):** ligar o `OpenROAD.ResizerTimingPostGRT`
+  (`RUN_POST_GRT_RESIZER_TIMING`) com **margem de setup de 1,5 ns**
+  (`GRT_RESIZER_SETUP_SLACK_MARGIN`): o resizer, vendo o fio estimado,
+  conserta até sobrar 1,5 ns — o tamanho do erro da estimativa. No caminho
+  em *ripple carry*, o esperado é ele trocar `fa_1` por `fa_2`/`fa_4`.
+- **Tempo:** 20 min de análise.
+- **Vira slide?** Sim: "o fio estimado mente ~1,2 ns" — estimado × extraído
+  no mesmo caminho.
+
+### 🐛 Hold no FF: 529 violações (176–179 por corner), pior −0,112 ns
+
+- **Sintoma:** os 3 corners FF com hold negativo; o checker de hold do
+  sky130 reprova em **qualquer** corner (17ª sessão).
+- **Causa:** a L26 tirou o FF do reparo (`RSZ_CORNERS` só TT). No FF as
+  células são rápidas e o dado chega cedo demais. Onde (`max_ff`,
+  `violator_list.rpt`):
+
+| Bloco (destino) | Violações |
+|---|---|
+| núcleo Spiral da ISFFT (`inst_isfft_matriz`: FFT/IFFT, registradores de *pipeline*) | 151 |
+| CPU / SoC NEORV32 | 16 |
+| wrapper da ISFFT (`ob_q0/ob_q1`, `reserved`: saída do `out_mem`) | 8 |
+| conversor `u_up` | 1 |
+| **Total** | **176** |
+
+  O pior: `ob_q1_reg[32]` → `ob_q0_reg[32]` (−0,112 ns), registradores
+  vizinhos, sem lógica no meio; o skew de hold do relógio é −1,47 ns no
+  nom_tt (`skew.min.rpt`).
+- **Resolvi com (L27 → opção A, proposta):** `RSZ_CORNERS` = TT + FF.
+  São só ~180 destinos e −0,11 ns: poucos buffers de atraso. Margem de
+  hold 0,1 ns (`GRT_RESIZER_HOLD_SLACK_MARGIN`; o padrão é 0,05 e o fio
+  extraído tirou ~0,05 ns do hold do TT: +0,083 → +0,036).
+- **Por que não a B** (relatar só o TT): hold não depende do período —
+  um hold violado no FF quebra o chip em **qualquer** frequência. Setup no
+  SS se resolve baixando o relógio; hold, não.
+- **Vira slide?** Sim: setup × hold, "um se resolve com relógio mais lento,
+  o outro não".
+
+### SS fora (L35)
+
+Setup no SS de −22 a −23 ns: o chip faria 23 MHz nesse canto. Fazer
+50 MHz no SS exigiria refazer a CPU (o pior caminho precisa de 43,0 ns
+no max_ss, `report_clock_min_period`). O checker de setup do sky130 só olha o TT
+(`TIMING_VIOLATION_CORNERS = ["*tt*"]`); o SS fica **relatado**, com a
+fmax por corner na tabela acima.
+
+### Potência e 🐛 IR drop sem sentido
+
+| Grupo (nom_tt, sem atividade de simulação) | Potência |
+|---|---|
+| Registradores | 39,5 mW |
+| Árvore de relógio | 28,7 mW |
+| Combinacional | 1,0 mW |
+| **Lógica (sem macros)** | **~69 mW** |
+| Macros | **75,8 MW** ← impossível |
+
+(`120-…/nom_tt_025C_1v80/power.rpt`)
+
+- **Sintoma:** queda de tensão de pior caso de **8,9 × 10⁶ V** em 1,8 V
+  (`irdrop.rpt`, "494487040 %").
+- **Causa:** a mesma pendência herdada do front-end: o `.lib` das macros
+  da OpenRAM tem `internal_power` fora de escala (na síntese: 2.767 W). O
+  PDNSim distribui essa potência na grade e o resultado é lixo. A grade
+  em si está ligada: `PSM-0040 All shapes on net vccd1/vssd1 are
+  connected`.
+- **Resolvi com (L37, proposta):** IR drop do LibreLane **não vale** até
+  corrigir a potência das macros. Fica como pendência (dá para refazer só
+  o PDNSim com `set_pdnsim_inst_power` nas 4 macros). Não bloqueia o GDSII.
+- **Vira slide?** Sim, como lição: "número absurdo → olhar a entrada, não
+  a ferramenta".
+
+### Contagens do chip pronto (fim da etapa 7)
+
+| Item | Valor |
+|---|---|
+| Instâncias | 240.962 (98.658 células lógicas + 142.300 preenchimento + 4 macros) |
+| Buffers de reparo de timing | 13.064 (383 de hold) |
+| Árvore de relógio | 3.045 buffers + 122 inversores |
+| Diodos de antena | 2.359 |
+| Utilização (com macros / só células) | 77,5 % / 60,2 % |
+| Fio | 3,99 m; 1 violação de antena (L34) |
+
+(`07_sta_metricas.json`)
+
+### Reparo: `REPARO=1 bash layout/nucleo/07_sta.sh`
+
+Volta ao estado do passo 107 (fim do reparo de antena, etapa 6) e roda
+de novo `ResizerTimingPostGRT` → `STAMidPNR-3` → roteamento detalhado
+(~5 h) → etapa 7. Não refaz CTS nem posicionamento: o reparo pós-GRT é o
+último ponto em que o OpenROAD ainda insere células antes do fio
+desenhado.
+
+| Mudança no `config.json` | Valor | Decisão |
+|---|---|---|
+| `RSZ_CORNERS` | 3 TT + **3 FF** | L27 (A) |
+| `RUN_POST_GRT_RESIZER_TIMING` | `true` | L36 |
+| `GRT_RESIZER_SETUP_SLACK_MARGIN` | **1,5 ns** (padrão 0,025) | L36 |
+| `GRT_RESIZER_HOLD_SLACK_MARGIN` | 0,1 ns (padrão 0,05) | L27 |
+
+Saída: `07_sta_reparo.txt`, `07_sta_reparo_metricas.json`,
+`imagens/07_reparo_final.png`; os arquivos da 1ª rodada ficam para a
+tabela antes × depois. Conferir: setup ≥ 0 nos 3 TT, hold ≥ 0 nos 6
+TT/FF, DRV = 0 de novo, antena.
+
+Riscos: (1) a margem de 1,5 ns pode fazer o resizer mexer em muitos
+caminhos da CPU (o limite é `GRT_RESIZER_SETUP_MAX_BUFFER_PCT` = 50 %);
+(2) o passo refaz o GRT depois do reparo — o `GRT-0183` da 22ª sessão
+foi no reparo de antena, não no GRT completo.
+
+### Decisões desta sessão
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L27 | Hold no FF: **A** (FF no `RSZ_CORNERS`, margem 0,1 ns) | 🟡 | Hold não melhora com relógio mais lento; 176 destinos, −0,11 ns |
+| L35 | SS fora do reparo; só relatado (fmax 23 MHz) | 🟡 | 50 MHz no SS exige outra CPU; o checker olha só o TT |
+| L36 | `ResizerTimingPostGRT` ligado com margem de setup de 1,5 ns | 🟡 | Estimado × extraído: −1,21 ns no mesmo caminho |
+| L37 | IR drop do LibreLane não vale até corrigir a potência das macros | 🟡 | 75,8 MW nas macros (`.lib` da OpenRAM) |
+
 ---
 
 ## Índice de decisões
@@ -2251,7 +2421,7 @@ capacitância).
 | L24 | ~~Densidade alvo padrão; decidir com o GRT~~ → L29 | ✅ decidida | 2026-09-30 |
 | L25 | Timing só vale depois do `STAMidPNR-2` | 🟡 | 2026-09-30 |
 | L26 | Reparo de timing só no TT (`RSZ_CORNERS`) | 🟡 funcionou (hold no FF: L27) | 2026-09-30 |
-| L27 | Hold no FF: reparar (A) ou só relatar (B) | 🟡 | 2026-10-05 |
+| L27 | Hold no FF: ~~reparar (A) ou só relatar (B)~~ → **A** (FF no `RSZ_CORNERS`) | 🟡 | 2026-10-07 |
 | L28 | Fanout do relógio e transição das macros aceitos | 🟡 | 2026-10-05 |
 | L29 | Densidade alvo 65 % (a automática contava as macros) | 🟡 ajudou, não basta | 2026-10-05 |
 | L30 | Diagnóstico da congestão fora do fluxo (`diag_congestao.sh`) | ✅ | 2026-10-06 |
@@ -2259,6 +2429,9 @@ capacitância).
 | L32 | `RUN_POST_GRT_DESIGN_REPAIR` ligado | 🟡 funcionou | 2026-10-06 |
 | L33 | Antena só com diodos (`GRT_ANTENNA_REPAIR_DIODE_ONLY`) | 🟡 funcionou | 2026-10-06 |
 | L34 | 1 violação de antena restante aceita por ora | 🟡 | 2026-10-07 |
+| L35 | SS só relatado (fmax 23 MHz), fora do reparo | 🟡 | 2026-10-07 |
+| L36 | `ResizerTimingPostGRT` com margem de setup de 1,5 ns | 🟡 | 2026-10-07 |
+| L37 | IR drop do LibreLane não vale (potência das macros) | 🟡 | 2026-10-07 |
 
 ---
 
@@ -2278,8 +2451,11 @@ capacitância).
 - [x] ~~Rodar `diag_congestao.sh`~~ — 94 % do excesso nas macros da CPU (20ª sessão)
 - [x] ~~Refazer 2 → 6 (global) com a L31~~ — 0 de excesso (21ª sessão)
 - [x] ~~Etapa 6 completa~~ — 0 DRV, 0 pinos soltos, 4 h 45 min (23ª sessão)
-- [ ] Etapa 7 (`07_sta.sh`): RCX + STA final; decidir L27
-- [ ] Decidir L27 (hold no FF) com o STA final
+- [x] ~~Etapa 7 (`07_sta.sh`): RCX + STA final~~ — setup TT −0,10 ns, hold FF −0,11 ns (24ª sessão)
+- [x] ~~Decidir L27 (hold no FF) com o STA final~~ — A (24ª sessão)
+- [ ] `REPARO=1 bash layout/nucleo/07_sta.sh` (L27 + L36, ~5 h) e conferir setup TT / hold TT+FF ≥ 0
+- [ ] Script da etapa 8 (DRC/LVS/antena, macros como caixa-preta, L3)
+- [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
 - [x] ~~Refazer a etapa 1 com o netlist de 29/09~~ — rodada `2026-09-30_0934`
 - [x] ~~Etapa 2 depois da L21~~ — passou

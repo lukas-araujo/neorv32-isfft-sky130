@@ -12,9 +12,10 @@
 #                                   (desligado por padrao no LibreLane;
 #                                   ligado no config.json, L32)
 #     Odb.DiodesOnPorts, Odb.HeuristicDiodeInsertion, OpenROAD.RepairAntennas
-#     OpenROAD.ResizerTimingPostGRT reparo de timing (desligado por padrao:
-#                                   RUN_POST_GRT_RESIZER_TIMING; o setup do TT
-#                                   ja fecha, entao fica desligado)
+#     OpenROAD.ResizerTimingPostGRT reparo de timing com o fio do GRT
+#                                   (desligado por padrao; ligado na 24a
+#                                   sessao, L36: margem de setup de 1,5 ns
+#                                   porque o fio extraido e mais lento)
 #     OpenROAD.STAMidPNR-3          STA com o fio do roteamento global
 #     ---- ate aqui: ATE_GLOBAL=1 para parar e olhar a congestao ----
 #     OpenROAD.DetailedRouting      TritonRoute: desenha cada fio e cada via

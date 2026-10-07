@@ -20,8 +20,9 @@
 #   (ResizerTimingPostCTS), porem, usa RSZ_CORNERS -- e sem ele usaria os 9
 #   corners do STA_CORNERS: consertar setup no SS e hold no FF custou
 #   19.485 buffers e o posicionamento nao fechou (DIARIO_GDSII, 16a sessao).
-#   config.json: RSZ_CORNERS = so os 3 TT (L26). SS e FF voltam no STA final
-#   (etapa 7) so como relatorio: o checker do sky130 reprova so no TT.
+#   config.json: RSZ_CORNERS = os 3 TT (L26) + os 3 FF (L27, 24a sessao: o
+#   STA final mostrou hold negativo no FF e o checker de hold reprova em
+#   qualquer corner). O SS continua fora: 50 MHz no SS nao e meta (L35).
 #
 #   Imagens: arvore de relogio (visualizador do OpenROAD) + chip com os
 #   buffers de relogio destacados.
