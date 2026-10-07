@@ -649,6 +649,101 @@ Bins não cobertos:
 
 ---
 
+## 2026-10-07 — 5ª sessão: a cobertura de 30/09 na GUI do IMC
+
+**Pedido do Lukas:** abrir o merge da regressão de 30/09 na interface
+gráfica do IMC e ver onde estão os buracos, antes de mexer em qualquer
+coisa. Fonte desta sessão: telas do IMC 24.09 na VM (`work/cov_merged`,
+o mesmo merge do `imc.log` de 30/09) e os relatórios em
+`resultados/2026-09-30_uvm_regressao/reports/`.
+
+### 🐛 `imc -load cov_merged`: procurou em `cov_work/scope/`
+
+**Sintoma:** `*E,CNTRDDR: Cannot read directory 'cov_work/scope/cov_merged'`
+e `*E,INVDM: Valid model file not found`, rodando de dentro de `work/`,
+onde o `cov_merged` existe.
+**Causa:** o IMC trata nome relativo como **nome de rodada** e procura em
+`cov_work/scope/<nome>`, onde o Xcelium grava cada teste.
+**Resolvi com:** caminho absoluto: `imc -load $PWD/cov_merged &`. O
+comentário do bloco 3 já usava `${UVM_WORK}/cov_merged` (absoluto).
+**Tempo gasto:** 2 min. **Vira slide?** Não.
+
+### 🔑 A GUI soma a subárvore; o relatório em texto, só o módulo
+
+| Instância | GUI (módulo + filhos) | `cobertura_resumo.txt` (só o módulo) |
+|---|---|---|
+| `isfft_axi_v4` | 87,05 % / 93,21 % (23.210 / 24.902) | 81,51 % / **70,67 % (848 / 1.200)** |
+| `inst_isfft_matriz` | 94,52 % / 95,41 % (21.902 / 22.955) | 99,82 % / 99,64 % (279 / 280) |
+| `inst_ifft_1d` | 92,08 % / 95,2 % (10.765 / 11.308) | 99,87 % / 99,87 % (781 / 782) |
+
+O núcleo Spiral tem 22.955 dos 24.902 itens da subárvore do
+`isfft_axi_v4`: o número de cima é quase só o núcleo, e esconde o
+wrapper. **Leitura:** cobertura de código de um bloco se relata pelo
+número **local** (U19).
+**Vira slide?** Sim: "93 % ou 71 %? Depende de contar os filhos".
+
+### `isfft_axi_v4` com os filhos, por métrica (Details → Metrics)
+
+| Métrica | Coberto | % |
+|---|---|---|
+| Bloco | 657 / 731 | 89,88 % |
+| Expressão | 28 / 38 | 73,68 % |
+| Toggle | 22.509 / 24.117 | 93,33 % |
+| FSM | 8 / 8 | 100 % |
+| Asserções | 8 / 8 | 100 % |
+
+Toggle é 97 % dos itens. No `inst_ifft_1d` (Details): 264 blocos (83,46 %),
+10.528 toggles de ~11.300 (97,44 %), expressão e FSM 0/0.
+
+| Visão "Verification Metrics" (tudo) | Coberto |
+|---|---|
+| Bloco | 1.131 / 1.228 (92,1 %) |
+| Expressão | 56 / 76 (73,68 %) |
+| Toggle | 39.191 / 41.990 (93,33 %) |
+| FSM | 16 / 16 |
+| Asserções | **15 / 15**: 8 dentro do DUT (`bind`) + 7 de protocolo nas interfaces do tb |
+| Covergroups | 102 / 108 (94,44 %) |
+
+(Essa visão soma "Types" e "Instances": o mesmo item aparece duas vezes.
+Não usar para relatório.)
+
+### O que conta como DUT e não é nosso
+
+| Instância | Coberto (com filhos) | O que é |
+|---|---|---|
+| `u_in_mem` / `u_out_mem` | 59,25 % / 60,61 % | modelos `.v` da OpenRAM |
+| `u_sva` (3: no wrapper e dentro das duas macros) | 88,37 % / 94,12 % / 95,24 % | **nossas asserções**: o `bind` as coloca dentro do `-covdut isfft_axi_v4`, e o código delas entra na cobertura de código do DUT |
+
+O status das asserções é 100 % nas três. O que fica abaixo de 100 % é o
+**código** delas, que não é RTL do chip. **Achado novo**, entra nas
+exclusões junto com os modelos da OpenRAM (U20).
+
+### Núcleo: o que falta é toggle de constante
+
+Mais baixos: `stage3` 77,0 % (1.206 / 1.566) e `stage6` 94,9 %; dentro do
+`codeBlockIsnt41913`, `instD8inst0`/`instD6inst0` com 16,67 % (9/54) e
+`m41072…m41123` com 56 % (`cobertura_resumo.txt`). São os multiplicadores
+pelos fatores de rotação da DFT8 (constantes): bits que não mudam por
+construção. **Leitura, a conferir no Source:** não falta estímulo; é
+exclusão justificada.
+
+### Os 3 bins de entrada, com as contagens (`cobertura_funcional.txt`, l. 114–126)
+
+| Bin | Acertos | Os vizinhos |
+|---|---|---|
+| `cp_esperas.curta` (1–3 ciclos) | 0 | `nenhuma` 6.298, `longa` **6** |
+| `cp_pos_trunc.primeira` (posição 0) | 0 | `meio` **8** (8 truncados em toda a regressão) |
+| `cp_pos_trunc.penult` (posição 30) | 0 | idem |
+
+### Decisões da sessão
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| U19 | Cobertura de código relatada pelo número **local** de cada módulo (wrapper: 848/1.200), não pela subárvore | 🟡 | A subárvore do wrapper é 92 % núcleo Spiral |
+| U20 | Excluir da cobertura de código: modelos da OpenRAM e as 3 instâncias `u_sva` (bind); toggles constantes do Spiral só com justificativa | 🟡 | Não são RTL do chip; o `bind` põe o tb dentro do `-covdut` |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -671,6 +766,8 @@ Bins não cobertos:
 | U16 | Cobertura por instância; Verilator 5.052 | ✅ | 2026-09-30 |
 | U17 | PATH completo da VM no `run_first_uvm.tcl` | ✅ | 2026-09-30 |
 | U18 | Regressão no Xcelium: 8/8, funcional 94,4 % | 🟡 | 2026-09-30 |
+| U19 | Cobertura de código pelo número local de cada módulo | 🟡 | 2026-10-07 |
+| U20 | Excluir modelos da OpenRAM e `u_sva` (bind) da cobertura de código | 🟡 | 2026-10-07 |
 
 ---
 
@@ -681,5 +778,7 @@ Bins não cobertos:
 - [x] ~~Rodar na VM: blocos 0 a 3~~ — 4ª sessão: 8/8, IMC funcionou
 - [ ] Fechar os 3 bins de entrada (ver "Para depois", 4ª sessão)
 - [ ] Cobertura de código do wrapper (70,7 %) e excluir os modelos da OpenRAM
-- [ ] Confirmar U3, U4, U13, U14, U15
+- [x] ~~Ver a cobertura na GUI do IMC~~ — 5ª sessão
+- [ ] Wrapper por métrica, **local** (relatório do IMC, não print)
+- [ ] Confirmar U3, U4, U13, U14, U15, U19, U20
 - [ ] Síntese com DFT só no IP da ISFFT (FE-D39) — depois do UVM
