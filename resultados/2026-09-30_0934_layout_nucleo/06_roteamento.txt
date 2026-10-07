@@ -1,0 +1,212 @@
+== OpenROAD.GlobalRouting (103-openroad-globalrouting)
+      1 [INFO GRT-0018] Total wirelength: 5479014 um
+      1 [INFO GRT-0096] Final congestion report:
+      1 [INFO GRT-0101] Running extra iterations to remove overflow.
+      1 [INFO GRT-0102] Start extra iteration 10/50
+      1 [INFO GRT-0102] Start extra iteration 11/50
+      1 [INFO GRT-0102] Start extra iteration 12/50
+      1 [INFO GRT-0102] Start extra iteration 13/50
+      1 [INFO GRT-0102] Start extra iteration 14/50
+      1 [INFO GRT-0102] Start extra iteration 1/50
+      1 [INFO GRT-0102] Start extra iteration 15/50
+      1 [INFO GRT-0102] Start extra iteration 16/50
+      1 [INFO GRT-0102] Start extra iteration 17/50
+      1 [INFO GRT-0102] Start extra iteration 18/50
+      1 [INFO GRT-0102] Start extra iteration 19/50
+      1 [INFO GRT-0102] Start extra iteration 20/50
+      1 [INFO GRT-0102] Start extra iteration 21/50
+      1 [INFO GRT-0102] Start extra iteration 22/50
+      1 [INFO GRT-0102] Start extra iteration 23/50
+      1 [INFO GRT-0102] Start extra iteration 24/50
+      1 [INFO GRT-0102] Start extra iteration 2/50
+      1 [INFO GRT-0102] Start extra iteration 25/50
+      1 [INFO GRT-0102] Start extra iteration 26/50
+      1 [INFO GRT-0102] Start extra iteration 27/50
+      1 [INFO GRT-0102] Start extra iteration 28/50
+      1 [INFO GRT-0102] Start extra iteration 29/50
+      1 [INFO GRT-0102] Start extra iteration 30/50
+      1 [INFO GRT-0102] Start extra iteration 31/50
+      1 [INFO GRT-0102] Start extra iteration 3/50
+      1 [INFO GRT-0102] Start extra iteration 4/50
+      1 [INFO GRT-0102] Start extra iteration 5/50
+      1 [INFO GRT-0102] Start extra iteration 6/50
+      1 [INFO GRT-0102] Start extra iteration 7/50
+      1 [INFO GRT-0102] Start extra iteration 8/50
+      1 [INFO GRT-0102] Start extra iteration 9/50
+      1 Layer         Resource        Demand        Usage (%)    Max H / Max V / Total Overflow
+   tempo: 00:01:33.138
+   global_route__vias                            663981
+   global_route__wirelength                      5479014
+
+== OpenROAD.RepairDesignPostGRT (105-openroad-repairdesignpostgrt)
+      1 [INFO GRT-0018] Total wirelength: 5479014 um
+      1 [INFO GRT-0018] Total wirelength: 5482470 um
+      2 [INFO GRT-0096] Final congestion report:
+      2 [INFO GRT-0101] Running extra iterations to remove overflow.
+      2 [INFO GRT-0102] Start extra iteration 10/50
+      2 [INFO GRT-0102] Start extra iteration 11/50
+      2 [INFO GRT-0102] Start extra iteration 12/50
+      2 [INFO GRT-0102] Start extra iteration 13/50
+      2 [INFO GRT-0102] Start extra iteration 14/50
+      2 [INFO GRT-0102] Start extra iteration 1/50
+      2 [INFO GRT-0102] Start extra iteration 15/50
+      2 [INFO GRT-0102] Start extra iteration 16/50
+      2 [INFO GRT-0102] Start extra iteration 17/50
+      2 [INFO GRT-0102] Start extra iteration 18/50
+      2 [INFO GRT-0102] Start extra iteration 19/50
+      2 [INFO GRT-0102] Start extra iteration 20/50
+      2 [INFO GRT-0102] Start extra iteration 21/50
+      2 [INFO GRT-0102] Start extra iteration 22/50
+      2 [INFO GRT-0102] Start extra iteration 23/50
+      2 [INFO GRT-0102] Start extra iteration 24/50
+      2 [INFO GRT-0102] Start extra iteration 2/50
+      2 [INFO GRT-0102] Start extra iteration 25/50
+      2 [INFO GRT-0102] Start extra iteration 26/50
+      2 [INFO GRT-0102] Start extra iteration 27/50
+      2 [INFO GRT-0102] Start extra iteration 28/50
+      2 [INFO GRT-0102] Start extra iteration 29/50
+      2 [INFO GRT-0102] Start extra iteration 30/50
+      2 [INFO GRT-0102] Start extra iteration 31/50
+      1 [INFO GRT-0102] Start extra iteration 32/50
+      1 [INFO GRT-0102] Start extra iteration 33/50
+      1 [INFO GRT-0102] Start extra iteration 34/50
+      2 [INFO GRT-0102] Start extra iteration 3/50
+      1 [INFO GRT-0102] Start extra iteration 35/50
+      1 [INFO GRT-0102] Start extra iteration 36/50
+      1 [INFO GRT-0102] Start extra iteration 37/50
+      1 [INFO GRT-0102] Start extra iteration 38/50
+      1 [INFO GRT-0102] Start extra iteration 39/50
+      2 [INFO GRT-0102] Start extra iteration 4/50
+      2 [INFO GRT-0102] Start extra iteration 5/50
+      2 [INFO GRT-0102] Start extra iteration 6/50
+   tempo: 00:06:12.570
+   global_route__vias                            663493
+   global_route__wirelength                      5482470
+   route__wirelength__estimated                  3313720.0
+
+== OpenROAD.RepairAntennas (107-openroad-repairantennas)
+   tempo: 00:03:14.312
+
+== OpenROAD.STAMidPNR-3 (108-openroad-stamidpnr-3)
+   tempo: 00:00:25.949
+
+== OpenROAD.DetailedRouting (109-openroad-detailedrouting)
+      1 [INFO ANT-0001] Found 169 pin violations.
+      1 [INFO ANT-0001] Found 1 pin violations.
+      1 [INFO ANT-0001] Found 25 pin violations.
+      1 [INFO ANT-0002] Found 148 net violations.
+      1 [INFO ANT-0002] Found 1 net violations.
+      1 [INFO ANT-0002] Found 21 net violations.
+      4 [INFO DRT-0195] Start 0th optimization iteration.
+      3 [INFO DRT-0195] Start 10th optimization iteration.
+      3 [INFO DRT-0195] Start 11th optimization iteration.
+      3 [INFO DRT-0195] Start 12th optimization iteration.
+      1 [INFO DRT-0195] Start 13th guides tiles iteration.
+      2 [INFO DRT-0195] Start 13th optimization iteration.
+      2 [INFO DRT-0195] Start 14th guides tiles iteration.
+      1 [INFO DRT-0195] Start 14th optimization iteration.
+      2 [INFO DRT-0195] Start 15th guides tiles iteration.
+      1 [INFO DRT-0195] Start 15th optimization iteration.
+      3 [INFO DRT-0195] Start 16th guides tiles iteration.
+      3 [INFO DRT-0195] Start 17th optimization iteration.
+      3 [INFO DRT-0195] Start 18th guides tiles iteration.
+      2 [INFO DRT-0195] Start 19th guides tiles iteration.
+      1 [INFO DRT-0195] Start 19th stubborn tiles iteration.
+      4 [INFO DRT-0195] Start 1st optimization iteration.
+      3 [INFO DRT-0195] Start 20th guides tiles iteration.
+      2 [INFO DRT-0195] Start 21st guides tiles iteration.
+      1 [INFO DRT-0195] Start 21st stubborn tiles iteration.
+      2 [INFO DRT-0195] Start 22nd stubborn tiles iteration.
+      1 [INFO DRT-0195] Start 23rd guides tiles iteration.
+      4 [INFO DRT-0195] Start 2nd optimization iteration.
+      1 [INFO DRT-0195] Start 3rd guides tiles iteration.
+      3 [INFO DRT-0195] Start 3rd optimization iteration.
+      1 [INFO DRT-0195] Start 4th guides tiles iteration.
+      3 [INFO DRT-0195] Start 4th optimization iteration.
+      3 [INFO DRT-0195] Start 5th optimization iteration.
+      1 [INFO DRT-0195] Start 5th stubborn tiles iteration.
+      3 [INFO DRT-0195] Start 6th optimization iteration.
+      3 [INFO DRT-0195] Start 7th optimization iteration.
+      3 [INFO DRT-0195] Start 8th optimization iteration.
+      3 [INFO DRT-0195] Start 9th optimization iteration.
+      4 [INFO DRT-0199]   Number of violations = 0.
+      3 [INFO DRT-0199]   Number of violations = 1.
+   tempo: 04:45:16.540
+   antenna__violating__nets                      1
+   antenna__violating__pins                      1
+   antenna_diodes_count                          268
+   design__instance__area__class:antenna_cell    5903.16
+   design__instance__count__class:antenna_cell   2359
+   global_route__vias                            56
+   route__drc_errors                             0
+   route__drc_errors__iter:0                     169
+   route__drc_errors__iter:1                     88
+   route__drc_errors__iter:10                    120
+   route__drc_errors__iter:11                    101
+   route__drc_errors__iter:12                    33
+   route__drc_errors__iter:13                    5
+   route__drc_errors__iter:14                    5
+   route__drc_errors__iter:15                    4
+   route__drc_errors__iter:16                    4
+   route__drc_errors__iter:17                    4
+   route__drc_errors__iter:18                    2
+   route__drc_errors__iter:19                    2
+   route__drc_errors__iter:2                     62
+   route__drc_errors__iter:20                    1
+   route__drc_errors__iter:21                    1
+   route__drc_errors__iter:22                    0
+   route__drc_errors__iter:23                    0
+   route__drc_errors__iter:3                     49
+   route__drc_errors__iter:4                     49
+   route__drc_errors__iter:5                     0
+   route__drc_errors__iter:6                     299
+   route__drc_errors__iter:7                     278
+   route__drc_errors__iter:8                     241
+   route__drc_errors__iter:9                     207
+   route__net                                    77293
+   route__net__special                           2
+   route__vias                                   710304
+   route__vias__multicut                         0
+   route__vias__singlecut                        710304
+   route__wirelength                             3987206
+   route__wirelength__iter:0                     3987199
+   route__wirelength__iter:1                     3987193
+   route__wirelength__iter:10                    3987122
+   route__wirelength__iter:11                    3987106
+   route__wirelength__iter:12                    3987177
+   route__wirelength__iter:13                    3987164
+   route__wirelength__iter:14                    3987165
+   route__wirelength__iter:15                    3987169
+   route__wirelength__iter:16                    3987169
+   route__wirelength__iter:17                    3987169
+   route__wirelength__iter:18                    3987171
+   route__wirelength__iter:19                    3987171
+   route__wirelength__iter:2                     3987183
+   route__wirelength__iter:20                    3987176
+   route__wirelength__iter:21                    3987176
+   route__wirelength__iter:22                    3987177
+   route__wirelength__iter:23                    3989969
+   route__wirelength__iter:3                     3987189
+   route__wirelength__iter:4                     3987189
+   route__wirelength__iter:5                     3987206
+   route__wirelength__iter:6                     3986985
+   route__wirelength__iter:7                     3986980
+   route__wirelength__iter:8                     3986989
+   route__wirelength__iter:9                     3986988
+
+== OpenROAD.CheckAntennas-1 (111-openroad-checkantennas-1)
+      1 [INFO ANT-0001] Found 1 pin violations.
+      1 [INFO ANT-0002] Found 1 net violations.
+   tempo: 00:00:51.122
+   antenna__violating__nets                      1
+   antenna__violating__pins                      1
+
+== Checker.TrDRC (112-checker-trdrc)
+   tempo: 00:00:00.001
+
+== Checker.DisconnectedPins (114-checker-disconnectedpins)
+   tempo: 00:00:00.001
+
+== Checker.WireLength (116-checker-wirelength)
+   tempo: 00:00:00.001
+
