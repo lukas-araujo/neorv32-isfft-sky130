@@ -21,7 +21,10 @@
 #   REPARO=1 (24a sessao, L27 + L36): volta ao fim do reparo de antena
 #   (OpenROAD.RepairAntennas) e roda de novo, ate o IRDropReport:
 #     OpenROAD.ResizerTimingPostGRT  hold nos corners TT e FF (RSZ_CORNERS)
-#                                    e setup com margem de 1,5 ns
+#                                    e setup com margem de 1,5 ns; hold com
+#                                    margem 0,05 ns e teto de 2 % de buffers
+#                                    (L38: com 0,1 ns e sem teto, 18.041
+#                                    destinos, +7,4 % de area e GRT-0232)
 #     OpenROAD.STAMidPNR-3, OpenROAD.DetailedRouting (~5 h) e as checagens
 #     da etapa 6; depois a etapa 7 inteira
 #   Os arquivos saem com "_reparo" no nome; os da 1a rodada ficam para

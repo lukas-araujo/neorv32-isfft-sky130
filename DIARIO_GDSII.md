@@ -2389,6 +2389,80 @@ foi no reparo de antena, não no GRT completo.
 | L36 | `ResizerTimingPostGRT` ligado com margem de setup de 1,5 ns | 🟡 | Estimado × extraído: −1,21 ns no mesmo caminho |
 | L37 | IR drop do LibreLane não vale até corrigir a potência das macros | 🟡 | 75,8 MW nas macros (`.lib` da OpenRAM) |
 
+## 2026-10-08 (25ª sessão) — 🐛 Reparo pós-GRT: o hold com margem de 0,1 ns inseriu buffers até congestionar (`GRT-0232`)
+
+`REPARO=1 bash layout/nucleo/07_sta.sh`, passo
+`122-openroad-resizertimingpostgrt`. Fonte:
+`logs_2026-10-07_2329.tar.gz` (`openroad-resizertimingpostgrt.log`,
+`*.process_stats.json`, commit `711dc9c`). Parou no próprio passo 122: o
+roteamento detalhado nem começou.
+
+### O que deu certo: setup (L36)
+
+| | Antes | Depois | Fonte |
+|---|---|---|---|
+| Destinos com setup < 1,5 ns (fio do GRT, 6 corners) | 2 | 0 | `RSZ-0094`, tabela de setup |
+| Pior folga de setup (estimada) | +1,127 ns | **+1,567 ns** | idem |
+| O que o resizer fez | — | **8 células aumentadas** (`RSZ-0051`), 0 buffers, 9 iterações | idem |
+
+Os 2 destinos são os do multiplicador/divisor (`n12685_q_reg[63]`/`[62]`).
+Com 1,5 ns de folga estimada, o fio extraído (−1,2 a −1,5 ns) deve deixar
+o TT ≥ 0 — confirma no STA final.
+
+### 🐛 O que deu errado: hold
+
+- **Sintoma:** `[ERROR GRT-0232] Routing congestion too high`, depois de
+  **1 h 16 min** no passo (`process_stats.json`).
+- **Causa:** com margem de hold de 0,1 ns nos 6 corners (TT + FF), o
+  resizer achou **18.041 destinos** abaixo da margem (`RSZ-0046`) — quase
+  todos os registradores do núcleo Spiral, ligados Q → D quase direto.
+  Progresso do reparo (tabela de hold do log):
+
+| Iteração | Pior folga de hold (estimada) | Soma negativa (TNS) | Área a mais |
+|---|---|---|---|
+| 0 | −0,054 ns | −2,73 ns | 0 |
+| 100 | −0,011 ns | −0,38 ns | +0,1 % |
+| ~190 | **≥ 0** | 0 | **+0,1 %** (~300 buffers) |
+| 1.220 | +0,028 ns | 0 | +0,8 % |
+| 14.600 | +0,028 ns (parada) | 0 | **+7,4 %** |
+
+  Zerar a violação **real** custou ~300 buffers. Os outros ~14.000 foram
+  para tentar pôr 18 mil caminhos acima de **+0,1 ns**; a pior folga
+  travou em +0,028 ns (o reparo de hold não pode estragar a margem de
+  setup de 1,5 ns) e os buffers foram enchendo o chip até o roteamento
+  global de dentro do reparo não fechar.
+- **Resolvi com (L38, proposta):** margem de hold **0,05 ns** (o padrão
+  do LibreLane) e **teto de 2 % de buffers**
+  (`GRT_RESIZER_HOLD_MAX_BUFFER_PCT`; o padrão é 50 %). 2 % das ~99 mil
+  células ≈ 2.000 buffers ≈ +0,8 % de área — a esse ponto o GRT ainda
+  estava sem excesso. Com o teto, o reparo para com um aviso em vez de
+  entupir o chip.
+- **Por que 0,05 e não 0:** o fio extraído tirou ~0,06 ns do hold no FF
+  (estimado −0,054 × RCX −0,112 ns). Margem zero deixaria o FF negativo
+  de novo. Se ainda sobrar violação pequena no STA final, ela aparece na
+  tabela por corner e decidimos lá.
+- **Tempo:** 1 h 16 min de máquina + 15 min de análise.
+- **Vira slide?** Sim: "margem de hold é cara" — 0,1 ns de margem custou
+  50 × mais buffers que a violação real (14.600 × 300).
+
+### Para continuar
+
+```
+git pull
+REPARO=1 bash layout/nucleo/07_sta.sh     # de novo do passo 107; ~5–6 h
+bash layout/nucleo/junta_logs.sh
+```
+
+No log do passo `ResizerTimingPostGRT` (sai em ~30 min), conferir:
+`RSZ-0046` (quantos destinos), a pior folga de hold chegando a ≥ 0 e,
+se aparecer, `RSZ-0060` (teto de buffers atingido — esperado, não é
+erro).
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L36 | Margem de setup de 1,5 ns no pós-GRT | 🟡 funcionou (8 células, +1,567 ns estimado) | — |
+| L38 | Hold pós-GRT: margem 0,05 ns + teto de 2 % de buffers | 🟡 | Com 0,1 ns: 18.041 destinos, +7,4 % de área, `GRT-0232` |
+
 ---
 
 ## Índice de decisões
@@ -2430,8 +2504,9 @@ foi no reparo de antena, não no GRT completo.
 | L33 | Antena só com diodos (`GRT_ANTENNA_REPAIR_DIODE_ONLY`) | 🟡 funcionou | 2026-10-06 |
 | L34 | 1 violação de antena restante aceita por ora | 🟡 | 2026-10-07 |
 | L35 | SS só relatado (fmax 23 MHz), fora do reparo | 🟡 | 2026-10-07 |
-| L36 | `ResizerTimingPostGRT` com margem de setup de 1,5 ns | 🟡 | 2026-10-07 |
+| L36 | `ResizerTimingPostGRT` com margem de setup de 1,5 ns | 🟡 setup ok (8 células) | 2026-10-07 |
 | L37 | IR drop do LibreLane não vale (potência das macros) | 🟡 | 2026-10-07 |
+| L38 | Hold pós-GRT: margem 0,05 ns + teto de 2 % de buffers | 🟡 | 2026-10-08 |
 
 ---
 
@@ -2453,7 +2528,7 @@ foi no reparo de antena, não no GRT completo.
 - [x] ~~Etapa 6 completa~~ — 0 DRV, 0 pinos soltos, 4 h 45 min (23ª sessão)
 - [x] ~~Etapa 7 (`07_sta.sh`): RCX + STA final~~ — setup TT −0,10 ns, hold FF −0,11 ns (24ª sessão)
 - [x] ~~Decidir L27 (hold no FF) com o STA final~~ — A (24ª sessão)
-- [ ] `REPARO=1 bash layout/nucleo/07_sta.sh` (L27 + L36, ~5 h) e conferir setup TT / hold TT+FF ≥ 0
+- [ ] `REPARO=1 bash layout/nucleo/07_sta.sh` (L27 + L36 + L38, ~5–6 h) e conferir setup TT / hold TT+FF ≥ 0 — 1ª tentativa: `GRT-0232` (25ª sessão)
 - [ ] Script da etapa 8 (DRC/LVS/antena, macros como caixa-preta, L3)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
