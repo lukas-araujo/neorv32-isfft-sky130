@@ -1,0 +1,242 @@
+== Timing por corner (OpenROAD.STAPostPNR, parasitas extraidos)
+| Corner | Setup WS (ns) | Viol. setup | Hold WS (ns) | Viol. hold | Transicao | Capacit. |
+|---|---|---|---|---|---|---|
+| max_ff_n40C_1v95 | 7.270465324458803 | 0 | -0.028015812684942343 | 15 | 1985 | 152 |
+| max_ss_100C_1v60 | -21.6849548899719 | 1631 | 0.543664240126148 | 0 | 50243 | 647 |
+| max_tt_025C_1v80 | 0.31997871924446214 | 0 | 0.12786794207611046 | 0 | 7153 | 188 |
+| min_ff_n40C_1v95 | 7.4731618564217355 | 0 | -0.011695311716772329 | 7 | 1045 | 95 |
+| min_ss_100C_1v60 | -20.69608898393385 | 1376 | 0.5525295932731141 | 0 | 39053 | 370 |
+| min_tt_025C_1v80 | 0.8579484032716497 | 0 | 0.13871926222569303 | 0 | 3235 | 107 |
+| nom_ff_n40C_1v95 | 7.367318519331037 | 0 | -0.015235146908600554 | 9 | 1623 | 119 |
+| nom_ss_100C_1v60 | -21.241160542805815 | 1503 | 0.5498610611356538 | 0 | 45286 | 517 |
+| nom_tt_025C_1v80 | 0.5622436009241053 | 0 | 0.13372214825052717 | 0 | 5102 | 142 |
+
+== OpenROAD.ResizerTimingPostGRT (125-openroad-resizertimingpostgrt)
+      1 average displacement        0.1 u
+      1 [INFO DPL-0020] Mirrored 34003 instances
+      1 [INFO DPL-0021] HPWL before          3328960.5 u
+      1 [INFO DPL-0022] HPWL after           3244181.7 u
+      1 [INFO DPL-0023] HPWL delta               -2.5 %
+      1 [INFO RSZ-0032] Inserted 242 hold buffers.
+      1 [INFO RSZ-0051] Resized 8 instances: 8 up, 0 up match, 0 down, 0 VT
+      1 Iteration | Resized | Buffers | Cloned Gates |   Area   |   WNS   |   TNS   | Endpoint
+      1    Iter   | Removed | Resized | Inserted | Cloned |  Pin  |   Area   |    WNS   |   TNS      |  Viol  | Worst
+   tempo: 00:15:22.415
+   design__instance__count__class:fill_cell      1042
+   design__instance__count__hold_buffer          242
+   design__instance__count__setup_buffer         0
+   global_route__wirelength                      5528880
+   power__internal__total                        75787800
+   power__leakage__total                         0.000123774
+   power__switching__total                       0.0115647
+   power__total                                  75787800
+   route__antenna_violation__count               1
+   route__wirelength__estimated                  3328960
+   timing__hold__ws                              0.0994234
+   timing__setup__ws                             1.574
+
+== OpenROAD.STAMidPNR-3 (126-openroad-stamidpnr-3)
+      1 Worst Negative Slack (Hold)
+      1 Worst Negative Slack (Setup)
+      1 Worst Slack (Hold)
+      1 Worst Slack (Setup)
+      1 Writing metric clock__skew__worst_hold__corner:nom_tt_025C_1v80: -0.984128806302603
+      1 Writing metric clock__skew__worst_setup__corner:nom_tt_025C_1v80: 0.7730292180732323
+   tempo: 00:00:28.512
+   design__instance__count__class:fill_cell      1042
+   design__instance__count__hold_buffer          242
+   design__instance__count__setup_buffer         0
+   global_route__wirelength                      5528880
+   power__internal__total                        75787800
+   power__leakage__total                         0.000123774
+   power__switching__total                       0.0128361
+   power__total                                  75787800
+   route__antenna_violation__count               1
+   route__wirelength__estimated                  3328960
+   timing__hold__ws                              0.14619
+   timing__setup__ws                             1.62675
+
+== OpenROAD.DetailedRouting (127-openroad-detailedrouting)
+      1 [INFO ANT-0001] Found 0 pin violations.
+      1 [INFO ANT-0001] Found 23 pin violations.
+      1 [INFO ANT-0001] Found 409 pin violations.
+      1 [INFO ANT-0002] Found 0 net violations.
+      1 [INFO ANT-0002] Found 20 net violations.
+      1 [INFO ANT-0002] Found 342 net violations.
+      3 [INFO DRT-0199]   Number of violations = 0.
+      2 [INFO DRT-0199]   Number of violations = 1.
+      1 [INFO DRT-0199]   Number of violations = 10183.
+      1 [INFO DRT-0199]   Number of violations = 113.
+      1 [INFO DRT-0199]   Number of violations = 120.
+      1 [INFO DRT-0199]   Number of violations = 121.
+      1 [INFO DRT-0199]   Number of violations = 1220.
+      2 [INFO DRT-0199]   Number of violations = 13.
+      2 [INFO DRT-0199]   Number of violations = 16.
+      1 [INFO DRT-0199]   Number of violations = 22.
+      1 [INFO DRT-0199]   Number of violations = 2315.
+      2 [INFO DRT-0199]   Number of violations = 24.
+      1 [INFO DRT-0199]   Number of violations = 25448.
+      1 [INFO DRT-0199]   Number of violations = 2668.
+   tempo: 02:04:42.925
+   design__instance__count__class:fill_cell      1042
+   design__instance__count__hold_buffer          242
+   design__instance__count__setup_buffer         0
+   global_route__wirelength                      5528880
+   power__internal__total                        75787800
+   power__leakage__total                         0.000123774
+   power__switching__total                       0.0128361
+   power__total                                  75787800
+   route__antenna_violation__count               1
+   route__drc_errors                             0
+   route__wirelength                             3963523
+   route__wirelength__estimated                  3328960
+   timing__hold__ws                              0.14619
+   timing__setup__ws                             1.62675
+
+== OpenROAD.CheckAntennas-1 (129-openroad-checkantennas-1)
+      1 [INFO ANT-0001] Found 0 pin violations.
+      1 [INFO ANT-0002] Found 0 net violations.
+   tempo: 00:00:49.451
+   design__instance__count__class:fill_cell      1042
+   design__instance__count__hold_buffer          242
+   design__instance__count__setup_buffer         0
+   global_route__wirelength                      5528880
+   power__internal__total                        75787800
+   power__leakage__total                         0.000123774
+   power__switching__total                       0.0128361
+   power__total                                  75787800
+   route__antenna_violation__count               0
+   route__drc_errors                             0
+   route__wirelength                             3963523
+   route__wirelength__estimated                  3328960
+   timing__hold__ws                              0.14619
+   timing__setup__ws                             1.62675
+
+== Checker.TrDRC (130-checker-trdrc)
+   tempo: 00:00:00.001
+   design__instance__count__class:fill_cell      1042
+   design__instance__count__hold_buffer          242
+   design__instance__count__setup_buffer         0
+   global_route__wirelength                      5528880
+   power__internal__total                        75787800
+   power__leakage__total                         0.000123774
+   power__switching__total                       0.0128361
+   power__total                                  75787800
+   route__antenna_violation__count               0
+   route__drc_errors                             0
+   route__wirelength                             3963523
+   route__wirelength__estimated                  3328960
+   timing__hold__ws                              0.14619
+   timing__setup__ws                             1.62675
+
+== Checker.DisconnectedPins (132-checker-disconnectedpins)
+   tempo: 00:00:00.001
+   design__critical_disconnected_pin__count      0
+   design__disconnected_pin__count               0
+   design__instance__count__class:fill_cell      1042
+   design__instance__count__hold_buffer          242
+   design__instance__count__setup_buffer         0
+   global_route__wirelength                      5528880
+   power__internal__total                        75787800
+   power__leakage__total                         0.000123774
+   power__switching__total                       0.0128361
+   power__total                                  75787800
+   route__antenna_violation__count               0
+   route__drc_errors                             0
+   route__wirelength                             3963523
+   route__wirelength__estimated                  3328960
+   timing__hold__ws                              0.14619
+   timing__setup__ws                             1.62675
+
+== OpenROAD.FillInsertion (135-openroad-fillinsertion)
+      1 [INFO DPL-0001] Placed 139308 filler instances.
+   tempo: 00:00:07.862
+   design__critical_disconnected_pin__count      0
+   design__disconnected_pin__count               0
+   design__instance__count__class:fill_cell      140350
+   design__instance__count__hold_buffer          242
+   design__instance__count__setup_buffer         0
+   global_route__wirelength                      5528880
+   power__internal__total                        75787800
+   power__leakage__total                         0.000123774
+   power__switching__total                       0.0128361
+   power__total                                  75787800
+   route__antenna_violation__count               0
+   route__drc_errors                             0
+   route__wirelength                             3963523
+   route__wirelength__estimated                  3328960
+   route__wirelength__max                        2379.43
+   timing__hold__ws                              0.14619
+   timing__setup__ws                             1.62675
+
+== OpenROAD.RCX (137-openroad-rcx)
+   tempo: 00:00:31.225
+   design__critical_disconnected_pin__count      0
+   design__disconnected_pin__count               0
+   design__instance__count__class:fill_cell      140350
+   design__instance__count__hold_buffer          242
+   design__instance__count__setup_buffer         0
+   global_route__wirelength                      5528880
+   power__internal__total                        75787800
+   power__leakage__total                         0.000123774
+   power__switching__total                       0.0128361
+   power__total                                  75787800
+   route__antenna_violation__count               0
+   route__drc_errors                             0
+   route__wirelength                             3963523
+   route__wirelength__estimated                  3328960
+   route__wirelength__max                        2379.43
+   timing__hold__ws                              0.14619
+   timing__setup__ws                             1.62675
+
+== OpenROAD.STAPostPNR (138-openroad-stapostpnr)
+   tempo: 00:02:21.756
+   design__critical_disconnected_pin__count      0
+   design__disconnected_pin__count               0
+   design__instance__count__class:fill_cell      140350
+   design__instance__count__hold_buffer          242
+   design__instance__count__setup_buffer         0
+   global_route__wirelength                      5528880
+   power__internal__total                        75787760
+   power__leakage__total                         0.0001247253967449069
+   power__switching__total                       0.01924254186451435
+   power__total                                  75787760
+   route__antenna_violation__count               0
+   route__drc_errors                             0
+   route__wirelength                             3963523
+   route__wirelength__estimated                  3328960
+   route__wirelength__max                        2379.43
+   timing__hold__ws                              -0.028015812684942343
+   timing__setup__ws                             -21.6849548899719
+
+== OpenROAD.IRDropReport (139-openroad-irdropreport)
+      1 Average IR drop  : 8.59e+02 V
+      1 Average IR drop  : 8.84e+02 V
+      1 Average voltage  : 8.59e+02 V
+      1 Average voltage  : -8.82e+02 V
+      1 Worstcase IR drop: 8.53e+06 V
+      1 Worstcase IR drop: 8.90e+06 V
+      1 Worstcase voltage: 8.53e+06 V
+      1 Worstcase voltage: -8.90e+06 V
+   tempo: 00:00:43.478
+   design__critical_disconnected_pin__count      0
+   design__disconnected_pin__count               0
+   design__instance__count__class:fill_cell      140350
+   design__instance__count__hold_buffer          242
+   design__instance__count__setup_buffer         0
+   global_route__wirelength                      5528880
+   ir__drop__avg                                 884
+   ir__drop__worst                               8900000
+   ir__voltage__worst                            -8900000
+   power__internal__total                        75787760
+   power__leakage__total                         0.0001247253967449069
+   power__switching__total                       0.01924254186451435
+   power__total                                  75787760
+   route__antenna_violation__count               0
+   route__drc_errors                             0
+   route__wirelength                             3963523
+   route__wirelength__estimated                  3328960
+   route__wirelength__max                        2379.43
+   timing__hold__ws                              -0.028015812684942343
+   timing__setup__ws                             -21.6849548899719
+
