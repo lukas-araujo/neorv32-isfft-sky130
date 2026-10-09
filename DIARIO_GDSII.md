@@ -2526,6 +2526,115 @@ interromper (Ctrl+C) e me mandar o log.
 | L38 | ~~Hold pós-GRT: margem 0,05 ns + teto de 2 %~~ → L39 | ❌ não convergiu | Teto vale por passada; pior folga trava em +0,028 ns |
 | L39 | Hold pós-GRT: margem **0,02 ns**, sem teto | 🟡 | Abaixo do ponto de trava (+0,028 ns) |
 
+## 2026-10-09 (27ª sessão) — ✅ Reparo pós-GRT com a L39: TT fecha com folga; sobram 15 holds de ≤ 28 ps no FF
+
+`REPARO=1 bash layout/nucleo/07_sta.sh`, passos `125-…` a `139-…`.
+Fontes: `07_sta_reparo.txt`, `07_sta_reparo_metricas.json`,
+`logs_2026-10-09_1803.tar.gz` (`125-…/openroad-resizertimingpostgrt.log`,
+`138-…/*/violator_list.rpt`, `*/clock.rpt`, `*/skew.min.rpt`), imagem
+`07_reparo_final.png` (commit `7f158ce`).
+
+### O reparo (passo 125)
+
+| Item | Valor | Fonte |
+|---|---|---|
+| Setup | 8 células aumentadas; +1,567 ns estimado | `RSZ-0051` |
+| Hold: destinos abaixo de 0,02 ns | **585** (com 0,05: 15.260; com 0,1: 18.041) | `RSZ-0046` |
+| Hold: buffers inseridos | **242**, +0,3 % de área; pior folga estimada +0,020 ns | `RSZ-0032`, linha `final` |
+| Tempo do passo | **15 min** (as 3 tentativas anteriores: 53–76 min cada) | `runtime.txt` |
+
+A L39 funcionou: com a margem alcançável o reparo **termina sozinho**.
+
+### Roteamento detalhado e checagens (passos 126–134)
+
+| Item | 1ª rodada (23ª sessão) | Com o reparo | Fonte |
+|---|---|---|---|
+| DRV no fim | 0 | **0** | `route__drc_errors` |
+| Tempo do TritonRoute | 4 h 45 min | **2 h 05 min** | `runtime.txt` |
+| Fio | 3,99 m | 3,96 m | `route__wirelength` |
+| Antena depois do detalhado | 1 (`net8308`, L34) | **0** | `CheckAntennas-1` |
+| Diodos de antena | 2.359 | 2.773 | métricas |
+| Pinos desconectados | 0 | 0 | métricas |
+| Células lógicas | 98.658 | 99.718 | métricas |
+
+A violação de antena da L34 sumiu sozinha: o roteamento mudou e ela não
+voltou. Por que o detalhado levou menos da metade do tempo não dá para
+afirmar pelos logs (as violações por iteração mudaram de perfil); fica
+como observação.
+
+### STA final com o fio extraído (passo 138) — antes × depois
+
+| Corner | Setup antes | **Setup depois** | Hold antes | **Hold depois** | fmax depois |
+|---|---|---|---|---|---|
+| min_tt | +0,262 | **+0,858** | +0,048 | **+0,139** | 52,24 MHz |
+| nom_tt | −0,096 (1) | **+0,562** | +0,036 | **+0,134** | 51,45 MHz |
+| max_tt | −0,368 (2) | **+0,320** | +0,029 | **+0,128** | 50,81 MHz |
+| min_ff | +7,36 | +7,47 | −0,076 (179) | **−0,012 (7)** | 88,80 MHz |
+| nom_ff | +7,26 | +7,37 | −0,096 (174) | **−0,015 (9)** | 87,22 MHz |
+| max_ff | +7,13 | +7,27 | −0,112 (176) | **−0,028 (15)** | 85,98 MHz |
+| min/nom/max_ss | −21,8 / −22,5 / −23,0 | −20,7 / −21,2 / −21,7 | > +0,38 | > +0,54 | 24,0–24,6 MHz |
+
+(ns; entre parênteses, caminhos violando. `07_sta.txt` × `07_sta_reparo.txt`;
+fmax de `report_clock_min_period`)
+
+**Leitura:** o TT, que é o que o checker de setup olha, fechou com
+**+0,32 ns** no pior corner de RC. Estimado × extraído no setup agora:
++1,63 → +0,56 ns (−1,07 ns), coerente com a 24ª sessão. O hold do FF
+caiu de 529 para **31 violações** (15 destinos diferentes), a pior de
+**−28 ps**.
+
+### Os 15 holds que sobraram (max_ff)
+
+| Onde | Destinos | Pior |
+|---|---|---|
+| SLINK TX → conversor `u_up` (`m_data_o`) e `u_up` interno | 4 | −28 ps |
+| Núcleo Spiral (FFT estágios 0, 1, 6; IFFT estágio 8) | 8 | −22 ps |
+| CPU: SYSINFO → barramento; gerador de relógio do SoC | 3 | −21 ps |
+| Ponte XBUS→AXI → `u_isfft.w_data` | 1 | −1 ps |
+
+(`138-…/max_ff_n40C_1v95/violator_list.rpt`)
+
+### 🟡 L40: aceitar os 15 holds de ≤ 28 ps (por ora)
+
+- **Por que é aceitável:** o SDC do layout põe **0,25 ns de incerteza de
+  relógio também no hold** (`skew.min.rpt`: "−0,250000 clock
+  uncertainty"). Uma folga de −0,028 ns quer dizer que o caminho ainda
+  tem +0,22 ns de sobra antes de o dado chegar cedo demais **de
+  verdade**, no canto mais rápido do processo.
+- **O custo de não aceitar:** reparo de hold **depois** do roteamento
+  (ECO: `repair_timing -hold` com os parasitas extraídos + roteamento
+  incremental). O Classic do LibreLane não tem esse passo; seria um
+  script nosso.
+- **Consequência no fluxo:** o `Checker.HoldViolations` olha todos os
+  corners e vai **reprovar no fim da etapa 8**. É um erro adiado: o fluxo
+  roda tudo (GDS, DRC, LVS) e só então lista. Não escondi o checker.
+- **Vira slide?** Sim: "−28 ps dentro de 250 ps de margem".
+
+### Etapa 8 — script `08_verificacao.sh` (escrito, não rodado)
+
+| Passo | O que faz |
+|---|---|
+| `Magic.StreamOut` / `KLayout.StreamOut` | o GDS do chip, por duas ferramentas |
+| `KLayout.Render` | PNG do GDS → `imagens/08_gds_klayout.png` |
+| `Magic.WriteLEF` | LEF do núcleo (para o padring, etapa 11) |
+| `KLayout.XOR` + checker | os dois GDS têm de ser iguais |
+| `Magic.DRC` + checker | DRC com as macros como caixa-preta (DEF + LEF, `MAGIC_DRC_USE_GDS` false, L3) |
+| `KLayout.DRC` | **desligado** (L41): lê o miolo das macros da OpenRAM (~1,2 milhão de erros conhecidos, L3) |
+| `Magic.SpiceExtraction` + `Netgen.LVS` + checker | layout × Verilog, macros como caixa-preta |
+| `Checker.IllegalOverlap` | células sobrepostas |
+| `Checker.Setup/HoldViolations`, `MaxSlew/MaxCap` | veredito do timing (hold do FF reprova, L40) |
+| `Misc.ReportManufacturability` | resumo DRC/LVS/antena |
+
+Sai `08_verificacao.txt` (métricas de DRC/LVS/XOR, resumo dos logs,
+`manufacturability.rpt`, fim do `error.log`) e `08_verificacao_metricas.json`.
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L39 | Hold pós-GRT: margem 0,02 ns | 🟡 funcionou (242 buffers, 15 min) | — |
+| L40 | 15 holds de ≤ 28 ps no FF aceitos por ora | 🟡 | Dentro dos 0,25 ns de incerteza; ECO pós-roteamento fica como opção |
+| L41 | `KLayout.DRC` desligado; DRC só pelo Magic com macros caixa-preta | 🟡 | Consequência da L3 |
+| L34 | ~~1 violação de antena aceita~~ | ✅ resolvida sozinha (0 no reparo) | — |
+
 ---
 
 ## Índice de decisões
@@ -2565,12 +2674,14 @@ interromper (Ctrl+C) e me mandar o log.
 | L31 | DMEM no canto (55; 55): canal IMEM/DMEM de 453,7 µm | 🟡 funcionou (GRT sem excesso) | 2026-10-06 |
 | L32 | `RUN_POST_GRT_DESIGN_REPAIR` ligado | 🟡 funcionou | 2026-10-06 |
 | L33 | Antena só com diodos (`GRT_ANTENNA_REPAIR_DIODE_ONLY`) | 🟡 funcionou | 2026-10-06 |
-| L34 | 1 violação de antena restante aceita por ora | 🟡 | 2026-10-07 |
+| L34 | ~~1 violação de antena restante aceita por ora~~ | ✅ sumiu no reparo (0) | 2026-10-09 |
 | L35 | SS só relatado (fmax 23 MHz), fora do reparo | 🟡 | 2026-10-07 |
-| L36 | `ResizerTimingPostGRT` com margem de setup de 1,5 ns | 🟡 setup ok (8 células) | 2026-10-07 |
+| L36 | `ResizerTimingPostGRT` com margem de setup de 1,5 ns | 🟡 funcionou (TT +0,32 ns) | 2026-10-07 |
 | L37 | IR drop do LibreLane não vale (potência das macros) | 🟡 | 2026-10-07 |
 | L38 | ~~Hold pós-GRT: margem 0,05 ns + teto de 2 %~~ → L39 | ❌ não convergiu | 2026-10-08 |
-| L39 | Hold pós-GRT: margem 0,02 ns, sem teto | 🟡 | 2026-10-09 |
+| L39 | Hold pós-GRT: margem 0,02 ns, sem teto | 🟡 funcionou (242 buffers) | 2026-10-09 |
+| L40 | 15 holds de ≤ 28 ps no FF aceitos por ora | 🟡 | 2026-10-09 |
+| L41 | `KLayout.DRC` desligado (macros, L3) | 🟡 | 2026-10-09 |
 
 ---
 
@@ -2592,8 +2703,10 @@ interromper (Ctrl+C) e me mandar o log.
 - [x] ~~Etapa 6 completa~~ — 0 DRV, 0 pinos soltos, 4 h 45 min (23ª sessão)
 - [x] ~~Etapa 7 (`07_sta.sh`): RCX + STA final~~ — setup TT −0,10 ns, hold FF −0,11 ns (24ª sessão)
 - [x] ~~Decidir L27 (hold no FF) com o STA final~~ — A (24ª sessão)
-- [ ] `REPARO=1 bash layout/nucleo/07_sta.sh` (L27 + L36 + L39, ~5–6 h) e conferir setup TT / hold TT+FF ≥ 0 — 3 tentativas com `GRT-0232` (25ª e 26ª sessões)
-- [ ] Script da etapa 8 (DRC/LVS/antena, macros como caixa-preta, L3)
+- [x] ~~`REPARO=1 bash layout/nucleo/07_sta.sh`~~ — TT ok, 15 holds ≤ 28 ps no FF (27ª sessão)
+- [x] ~~Script da etapa 8~~ — `08_verificacao.sh` (27ª sessão)
+- [ ] Rodar a etapa 8 (`08_verificacao.sh`): DRC, LVS, XOR
+- [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
 - [x] ~~Refazer a etapa 1 com o netlist de 29/09~~ — rodada `2026-09-30_0934`
