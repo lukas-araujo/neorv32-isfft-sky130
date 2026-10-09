@@ -2463,6 +2463,69 @@ erro).
 | L36 | Margem de setup de 1,5 ns no pós-GRT | 🟡 funcionou (8 células, +1,567 ns estimado) | — |
 | L38 | Hold pós-GRT: margem 0,05 ns + teto de 2 % de buffers | 🟡 | Com 0,1 ns: 18.041 destinos, +7,4 % de área, `GRT-0232` |
 
+## 2026-10-09 (26ª sessão) — 🐛 Reparo pós-GRT de novo com `GRT-0232`: o teto de buffers não segura, a margem é que não converge
+
+`REPARO=1` rodou **duas vezes** (passos `123-…` e `124-…`, 53 min e
+59 min), as duas com o mesmo erro. Fonte: `logs_2026-10-09_1524.tar.gz`
+(`124-…/openroad-resizertimingpostgrt.log`, `*.process_stats.json`,
+commit `8affe3e`).
+
+### O que repetiu
+
+| | 25ª sessão (margem 0,1) | 26ª sessão (margem 0,05 + teto 2 %) | Fonte |
+|---|---|---|---|
+| Setup | 8 células, +1,567 ns | igual | `RSZ-0051` |
+| Destinos de hold abaixo da margem | 18.041 | 15.260 | `RSZ-0046` |
+| Pior folga de hold ≥ 0 | iteração ~190 | iteração ~190 | tabela de hold |
+| Pior folga ≥ +0,025 ns | — | **iteração 790** (+0,5 % de área) | idem |
+| Pior folga trava em | +0,028 ns | **+0,028 ns** (desde a iteração 1.110) | idem |
+| Parou em | 14.600 iterações, +7,4 % | 13.060 iterações, +6,5 % | idem |
+| Erro | `GRT-0232` | `GRT-0232` (+ `GRT-0704`: sugere baixar o ajuste de camada de 30 % para 21 %) | idem |
+
+### 🐛 Por que o teto de 2 % não funcionou
+
+- **Sintoma:** com `GRT_RESIZER_HOLD_MAX_BUFFER_PCT = 2` (≈ 2.000
+  buffers), a área subiu +6,5 % (bem mais que 2.000 buffers).
+- **Causa (lida no log):** a coluna "Buffers" da tabela de hold **volta a
+  zero 81 vezes** — o reparo trabalha em passadas e o contador é da
+  passada. O maior valor em uma passada foi 1.349, nunca chegou a 2.000.
+  O teto vale por passada, não para o reparo inteiro.
+- **A causa de verdade (dos dois erros):** a pior folga trava em
+  **+0,028 ns** (destino `…stage5.instPerm7842.memSys.memMod1.mem_reg[4][13]`)
+  e o reparo só para quando **todos** os destinos passam da margem. Com
+  margem 0,1 ou 0,05 ns ele **nunca termina**: fica dando passadas,
+  pondo buffer em outros caminhos, até o roteamento global não fechar.
+- **Resolvi com (L39, proposta):** margem de hold **0,02 ns**, abaixo do
+  ponto em que trava (+0,028). Pelo log, a pior folga passa de +0,02 ns
+  por volta da iteração 590 (+0,4 % de área) — o reparo deve terminar
+  sozinho ali. Tirei o teto (não servia).
+- **O que fica em risco:** o fio extraído tirou ~0,06 ns do hold no FF
+  (24ª sessão). Com margem 0,02 ns, alguns caminhos podem ficar até
+  ~−0,04 ns no STA final. Se ficarem, a decisão é no STA final: poucos
+  caminhos → reparo pós-roteamento (`repair_timing -hold` no `.odb` final
+  + ECO do roteador) ou aceitar como limite do modelo.
+- **Tempo:** ~1 h 52 min de máquina nas duas tentativas + 15 min de
+  análise.
+- **Vira slide?** Sim: "o otimizador não para sozinho se a meta for
+  impossível" — a margem tem que ser alcançável.
+
+### Para continuar
+
+```
+git pull
+REPARO=1 bash layout/nucleo/07_sta.sh
+```
+
+Uns 15 min depois de começar (10 min de GRT + reparo), conferir no log do
+`ResizerTimingPostGRT`: a tabela de hold termina com `final` e o passo
+segue para o `STAMidPNR-3`. Se em 30 min a coluna "Area" passar de +1 %,
+interromper (Ctrl+C) e me mandar o log.
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L38 | ~~Hold pós-GRT: margem 0,05 ns + teto de 2 %~~ → L39 | ❌ não convergiu | Teto vale por passada; pior folga trava em +0,028 ns |
+| L39 | Hold pós-GRT: margem **0,02 ns**, sem teto | 🟡 | Abaixo do ponto de trava (+0,028 ns) |
+
 ---
 
 ## Índice de decisões
@@ -2506,7 +2569,8 @@ erro).
 | L35 | SS só relatado (fmax 23 MHz), fora do reparo | 🟡 | 2026-10-07 |
 | L36 | `ResizerTimingPostGRT` com margem de setup de 1,5 ns | 🟡 setup ok (8 células) | 2026-10-07 |
 | L37 | IR drop do LibreLane não vale (potência das macros) | 🟡 | 2026-10-07 |
-| L38 | Hold pós-GRT: margem 0,05 ns + teto de 2 % de buffers | 🟡 | 2026-10-08 |
+| L38 | ~~Hold pós-GRT: margem 0,05 ns + teto de 2 %~~ → L39 | ❌ não convergiu | 2026-10-08 |
+| L39 | Hold pós-GRT: margem 0,02 ns, sem teto | 🟡 | 2026-10-09 |
 
 ---
 
@@ -2528,7 +2592,7 @@ erro).
 - [x] ~~Etapa 6 completa~~ — 0 DRV, 0 pinos soltos, 4 h 45 min (23ª sessão)
 - [x] ~~Etapa 7 (`07_sta.sh`): RCX + STA final~~ — setup TT −0,10 ns, hold FF −0,11 ns (24ª sessão)
 - [x] ~~Decidir L27 (hold no FF) com o STA final~~ — A (24ª sessão)
-- [ ] `REPARO=1 bash layout/nucleo/07_sta.sh` (L27 + L36 + L38, ~5–6 h) e conferir setup TT / hold TT+FF ≥ 0 — 1ª tentativa: `GRT-0232` (25ª sessão)
+- [ ] `REPARO=1 bash layout/nucleo/07_sta.sh` (L27 + L36 + L39, ~5–6 h) e conferir setup TT / hold TT+FF ≥ 0 — 3 tentativas com `GRT-0232` (25ª e 26ª sessões)
 - [ ] Script da etapa 8 (DRC/LVS/antena, macros como caixa-preta, L3)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
