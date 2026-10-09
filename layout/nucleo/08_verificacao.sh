@@ -10,9 +10,11 @@
 #     Magic.WriteLEF               LEF do nucleo (para o padring, etapa 11)
 #     Odb.CheckDesignAntennaProperties
 #     KLayout.XOR, Checker.XOR     os dois GDS tem de ser iguais
-#     Magic.DRC, Checker.MagicDRC  regras de desenho; MAGIC_DRC_USE_GDS =
-#                                  false: le o DEF + LEF, entao as macros
-#                                  entram como caixa-preta (L3)
+#     Magic.DRC, Checker.MagicDRC  regras de desenho. 1a vez (28a sessao)
+#                                  com MAGIC_DRC_USE_GDS = false (DEF + LEF):
+#                                  1.182 erros, alarme falso do abstrato.
+#                                  Agora: GDS + macros caixa-preta pelas
+#                                  maglef (L42, ver 08_drc_gds.sh)
 #     KLayout.DRC                  DESLIGADO (RUN_KLAYOUT_DRC = false, L41):
 #                                  le o GDS com o miolo das macros da
 #                                  OpenRAM, que tem ~1,2 milhao de erros

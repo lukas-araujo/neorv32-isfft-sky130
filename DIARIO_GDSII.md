@@ -2635,6 +2635,117 @@ Sai `08_verificacao.txt` (métricas de DRC/LVS/XOR, resumo dos logs,
 | L41 | `KLayout.DRC` desligado; DRC só pelo Magic com macros caixa-preta | 🟡 | Consequência da L3 |
 | L34 | ~~1 violação de antena aceita~~ | ✅ resolvida sozinha (0 no reparo) | — |
 
+## 2026-10-09 (28ª sessão) — Etapa 8: ✅ LVS passou; ⚠️ DRC 1.182 e XOR 15,7 milhões — os dois são da forma de olhar, não do desenho
+
+`bash layout/nucleo/08_verificacao.sh`, passos `140-…` a `157-…`.
+Fontes: `08_verificacao.txt`, `08_verificacao_metricas.json`,
+`logs_2026-10-09_1924.tar.gz` (`147-magic-drc/reports/drc.magic.rpt`,
+`145-klayout-xor/klayout-xor.log`, `141-…/klayout-streamout.log`,
+`flow.log`, `154-…/state_in.json`), commit `7909258`.
+
+### Veredito do fluxo
+
+| Checagem | Resultado | Fonte |
+|---|---|---|
+| **LVS** (Netgen, layout × Verilog, macros caixa-preta) | ✅ **"Circuits match uniquely"**, 0 erros em todas as categorias | `151-…`, `design__lvs_*` |
+| Antena | ✅ 0 | `manufacturability.rpt` |
+| Células sobrepostas | ✅ 0 | `magic__illegal_overlap__count` |
+| Rede de alimentação | ✅ 0 violações (vccd1, vssd1) | `design__power_grid_violation__count` |
+| Setup (TT) | ✅ sem violação no TT; SS só aviso (L35) | `flow.log` |
+| Hold | ❌ reprovou (esperado, L40): 15 + 9 + 7 no FF | `154-…/state_in.json`; o passo não grava `state_out` |
+| Slew / cap | só avisos (todos os corners) | `flow.log` |
+| **DRC (Magic)** | ⚠️ **1.182** | `magic__drc_error__count` |
+| DRC (KLayout) | desligado (L41) | — |
+| **XOR (Magic × KLayout)** | ⚠️ **15.679.857** diferenças | `design__xor_difference__count` |
+
+| Passo | Tempo |
+|---|---|
+| `Magic.StreamOut` | 16 min 21 s |
+| `KLayout.StreamOut` | 6 s |
+| `KLayout.XOR` | 3 min 39 s |
+| `Magic.DRC` | 5 min |
+| `Magic.SpiceExtraction` | 1 min 55 s |
+| `Netgen.LVS` | 37 s |
+
+**O LVS passar é o resultado mais importante da etapa:** o desenho liga
+exatamente o que o netlist do Genus manda (as macros como caixa-preta).
+
+### 🐛 DRC: 1.182 erros, três tipos — nenhum é defeito do nosso desenho
+
+| Regra | Caixas | Onde | Por quê |
+|---|---|---|---|
+| `nwell.4` (nwell sem tap N+ ligado a metal) | **1.052** | **todas** as linhas de células, em pedaços de ~315 µm (o ladrilho do DRC) | DRC sobre DEF + **LEF**: a célula padrão abstrata tem `nwell` (pino `VPB` no LEF) mas não tem a difusão do tap. Os 20 mil taps estão lá, o Magic é que não os vê |
+| `met4.4a` (área mínima de met4) | 128 | 64 na borda de baixo da `in_mem` (y = 100) e 64 da `out_mem` (y = 1002) | pinos `dout0[0..63]` das macros 1rw1r: **saída da porta 0, que não usamos** (escrevemos pela 0, lemos pela 1). No LEF, cada pino é um quadrado de 0,38 × 0,38 µm (0,144 µm² < 0,24); sem fio ligado, o quadrado fica sozinho |
+| `met3.6` (área mínima de met3) | 2 | x = 55 µm, na IMEM e na DMEM | pino `dout0[32]` das macros 1rw: o **33º bit** (L1, `spare_wen0`), que não tem uso |
+
+(`drc.magic.rpt`; pinos conferidos no LEF: `sram_1rw1r_64x64_wpr2.lef`
+`dout0[0]` = `RECT 170.465 0.0 170.845 0.38` em met4 = x 1.380,465 µm do
+relatório; `sram_4kbyte_1rw_32x1024_8.lef` `dout0[32]` em met3,
+orientação S)
+
+O próprio script do LibreLane avisa: `[INFO] COUNT: 1182` / "Should be
+divided by 3 or 4" — o Magic conta cada erro em mais de uma caixa.
+
+- **Resolvi com (L42, proposta):** DRC de novo **no GDS**
+  (`MAGIC_DRC_USE_GDS` true), com as macros como caixa-preta pela vista
+  abstrata do Magic (`MAGIC_DRC_MAGLEFS`, que o `drc.tcl` do LibreLane
+  carrega antes do GDS). Assim as células padrão entram **reais** (com os
+  taps) e o miolo da OpenRAM continua de fora (L3). Script novo:
+  `08_drc_gds.sh` (gera as 4 maglef a partir do LEF e roda só
+  `Magic.DRC` + checker).
+- **O que deve sobrar (L43, proposta):** os 130 quadradinhos dos pinos
+  sem uso continuam no abstrato. No GDS real da macro o pino é parte de um
+  fio interno maior — não é erro de fábrica. Ficam documentados como
+  isenção (*waiver*), com a lista.
+- **Vira slide?** Sim: "o DRC olha o que você mostra para ele" — abstrato
+  × real, e por que 1.052 erros em todas as linhas eram um sinal de que o
+  problema era a vista, não o desenho.
+
+### 🐛 XOR: 15,7 milhões de diferenças entre o GDS do Magic e o do KLayout
+
+- **Sintoma:** diferença em quase todas as camadas, sempre com o GDS do
+  **Magic tendo mais** formas. Algumas camadas só existem no do Magic:
+
+| Camada | Magic | KLayout | O que é |
+|---|---|---|---|
+| 33/42, 33/43 | 1.026.968 / 2.616.854 | 0 / 0 | camadas da célula de bit da OpenRAM |
+| 22/21, 22/22 | 1.196.648 / 485.696 | 0 / 0 | idem |
+| 235/0, 115/42, 115/43 | 127.920 / 200.208 / 400.416 | 0 | idem |
+| 68/20 (met1) | 3.780.124 | 1.568.791 | metal 1 |
+| 236/0, 67/16, 81/23 | iguais | iguais | — |
+
+(`klayout-xor.log`, "Polygons (raw)" de cada entrada, contagem achatada)
+
+- **Causa provável:** as camadas que faltam no do KLayout são exatamente
+  as que o Magic avisou como "Unknown layer/datatype" ao ler o GDS da
+  OpenRAM (`error.log`) — ou seja, existem **dentro das macros**. O Magic
+  guarda o GDS da macro como veio (`gds readonly`); o KLayout, pelo jeito,
+  não trouxe o miolo das macros (o `KLayout.StreamOut` levou 6 s e diz
+  "All LEF cells have matching GDS cells"). Não dá para afirmar só pelos
+  logs: os GDS (centenas de MB) ficam no notebook.
+- **Diagnóstico (L44):** `diag_xor.sh` conta as formas por camada nos
+  dois GDS separando **dentro das 4 macros** × **resto do chip** (contagem
+  hierárquica, sem achatar: segundos). Se o "resto do chip" bater, o nosso
+  desenho é igual nos dois e o XOR só acusa a leitura das macros.
+  Testado aqui com um GDS sintético (`klayout` do pip).
+- **Vira slide?** Talvez: "duas ferramentas, dois GDS" — por que o fluxo
+  faz XOR.
+
+### Para continuar
+
+```
+git pull
+bash layout/nucleo/diag_xor.sh          # minutos
+bash layout/nucleo/08_drc_gds.sh        # DRC no GDS (tempo ainda desconhecido)
+bash layout/nucleo/junta_logs.sh
+```
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L42 | DRC do Magic no GDS + macros caixa-preta por maglef | 🟡 | DEF + LEF dá alarme falso de `nwell.4` em todas as linhas |
+| L43 | 130 erros de área mínima nos pinos sem uso das macros = isenção | 🟡 | Quadrados do LEF; no GDS da macro o pino é fio interno |
+| L44 | Diagnóstico do XOR por contagem dentro/fora das macros | 🟡 | 15,7 milhões de diferenças, todas com cara de macro |
+
 ---
 
 ## Índice de decisões
@@ -2682,6 +2793,9 @@ Sai `08_verificacao.txt` (métricas de DRC/LVS/XOR, resumo dos logs,
 | L39 | Hold pós-GRT: margem 0,02 ns, sem teto | 🟡 funcionou (242 buffers) | 2026-10-09 |
 | L40 | 15 holds de ≤ 28 ps no FF aceitos por ora | 🟡 | 2026-10-09 |
 | L41 | `KLayout.DRC` desligado (macros, L3) | 🟡 | 2026-10-09 |
+| L42 | DRC do Magic no GDS + macros caixa-preta (maglef) | 🟡 | 2026-10-09 |
+| L43 | 130 erros de área mínima em pinos sem uso das macros = isenção | 🟡 | 2026-10-09 |
+| L44 | Diagnóstico do XOR dentro/fora das macros (`diag_xor.sh`) | 🟡 | 2026-10-09 |
 
 ---
 
@@ -2705,7 +2819,8 @@ Sai `08_verificacao.txt` (métricas de DRC/LVS/XOR, resumo dos logs,
 - [x] ~~Decidir L27 (hold no FF) com o STA final~~ — A (24ª sessão)
 - [x] ~~`REPARO=1 bash layout/nucleo/07_sta.sh`~~ — TT ok, 15 holds ≤ 28 ps no FF (27ª sessão)
 - [x] ~~Script da etapa 8~~ — `08_verificacao.sh` (27ª sessão)
-- [ ] Rodar a etapa 8 (`08_verificacao.sh`): DRC, LVS, XOR
+- [x] ~~Rodar a etapa 8 (`08_verificacao.sh`)~~ — LVS ✅; DRC 1.182 e XOR 15,7 M a explicar (28ª sessão)
+- [ ] `diag_xor.sh` (L44) e `08_drc_gds.sh` (L42)
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou

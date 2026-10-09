@@ -39,6 +39,8 @@ layout/**/runs/
 layout/**/entrada/
 # rodada em andamento (criada pelo 01_leitura.sh)
 layout/**/.rodada_atual
+# vistas abstratas das macros para o DRC (geradas pelo 08_drc_gds.sh, L42)
+layout/nucleo/maglef/
 
 # --- Editor / sistema --------------------------------------------------------
 *~
