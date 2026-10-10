@@ -2919,7 +2919,7 @@ reais", com o porquê de cada degrau.
 
 ### Para continuar
 
-Faltam as etapas 9–12 (DIARIO, 17ª sessão): 9 LEC e simulação do netlist
+Faltam as etapas 9–12 (roteiro da 7ª sessão): 9 LEC e simulação do netlist
 do layout (VM), 10 `chip_top.v` com os pads, 11 padring (fluxo Chip), 12
 DRC/LVS finais. Pendentes opcionais: ECO de hold (L40), IR drop (L37).
 
