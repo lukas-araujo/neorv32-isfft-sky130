@@ -2746,6 +2746,106 @@ bash layout/nucleo/junta_logs.sh
 | L43 | 130 erros de área mínima nos pinos sem uso das macros = isenção | 🟡 | Quadrados do LEF; no GDS da macro o pino é fio interno |
 | L44 | Diagnóstico do XOR por contagem dentro/fora das macros | 🟡 | 15,7 milhões de diferenças, todas com cara de macro |
 
+## 2026-10-10 (29ª sessão) — 🐛 XOR: o GDS do KLayout saiu com as macros vazias (LEF sem `FOREIGN`)
+
+Fonte: saída do `diag_xor.sh` e do `08_drc_gds.sh` colada pelo Lukas no
+chat (o `08_xor_diag.txt` ficou no notebook); código do LibreLane 3.0.14
+(`scripts/klayout/stream_out.py`, `steps/klayout.py`); teste aqui com o
+`klayout` do pip e o LEF/GDS da `sram_1rw1r_64x64_wpr2`.
+
+### O diagnóstico (L44) respondeu
+
+| | GDS do Magic | GDS do KLayout |
+|---|---|---|
+| Células no arquivo | 826 | 169 |
+| IMEM (`sram_8kbyte…`) | 12.693.546 formas, 16 subcélulas | **0 formas, 0 subcélulas** |
+| DMEM (`sram_4kbyte…`) | 6.532.834 | **0** |
+| `out_mem` (`sram_1rw1r_64x256`) | 7.881.205 | **0** |
+| `in_mem` (`sram_1rw1r_64x64_wpr2`) | 2.251.863 | **0** |
+
+**Fora das macros** (o nosso desenho), as contagens batem em quase todas
+as camadas: poço, difusão, poly, li1, contatos, vias, pinos, fronteira
+(236/0), diodos (81/23). Diferem só:
+
+| Camada | Magic (fora) | KLayout (fora) | Leitura |
+|---|---|---|---|
+| met1–met5 desenho (68/20 … 72/20) | 822.221 / 171.785 / 33.178 / 6.879 / 429 | 1.568.791 / 673.511 / 123.387 / 27.216 / 1.661 | o Magic **funde** retângulos que se tocam num polígono só; o KLayout escreve cada trecho do DEF. Mesma área, contagem diferente |
+| rótulos de pino met4/met5 (71/5, 72/5) | 74 / 24 | 2 / 2 | rótulos dos pinos de alimentação: cada ferramenta escreve de um jeito |
+
+A contagem não prova que a geometria fora das macros é idêntica (isso é o
+XOR), mas mostra que **as 15,7 milhões de diferenças são as macros**.
+
+### 🐛 Por que as macros saíram vazias no KLayout
+
+- **Causa:** os LEF da OpenRAM **não têm a linha `FOREIGN`** (os das
+  células padrão têm: `FOREIGN sky130_fd_sc_hd__a2bb2o_1 ;`). O
+  `stream_out.py` do LibreLane:
+  1. lê o DEF com os LEF. Célula com `FOREIGN` vira célula **fantasma**
+     (só o nome, "o desenho está num GDS externo"); sem `FOREIGN`, o
+     KLayout **desenha a macro com a geometria do LEF**;
+  2. limpa todas as células (fica vazia, mas não é fantasma);
+  3. lê os GDS com `KLAYOUT_CONFLICT_RESOLUTION = RenameCell`: a célula
+     fantasma é preenchida; a que já existe gera conflito, e o conteúdo do
+     GDS entra como **`sram_…$1`**. A instância do chip continua na célula
+     vazia.
+  4. a checagem "All LEF cells have matching GDS cells" só procura
+     fantasmas — a vazia passa.
+- **Reproduzido aqui** com o LEF e o GDS reais da `in_mem`:
+
+| LEF | Subcélulas da macro depois do GDS | Células renomeadas |
+|---|---|---|
+| original (sem `FOREIGN`) | **0** | `sram_1rw1r_64x64_wpr2$1` |
+| com `FOREIGN sram_1rw1r_64x64_wpr2 ;` | **16** (igual ao GDS do Magic) | nenhuma |
+
+- **Resolvi com (L45, proposta):** `macros/lef_foreign.py` põe
+  `FOREIGN <nome> ;` depois de `CLASS BLOCK ;` nos 4 LEF (idempotente,
+  `--check`). Nenhuma coordenada muda. Aplicado e versionado.
+  Alternativa que não escolhi: `KLAYOUT_CONFLICT_RESOLUTION = AddToCell`
+  no config — funciona, mas esconde o defeito do LEF, que é o que está
+  errado (e outra ferramenta pode tropeçar nele de novo).
+- **Por que o Magic não teve o problema:** o Magic lê o GDS com
+  `gds readonly` e casa a macro pelo nome; ele não desenha nada a partir do
+  LEF antes.
+- **Tempo:** 30 min.
+- **Vira slide?** Sim: "o XOR existe para isso" — duas ferramentas, uma
+  delas esqueceu 29 milhões de formas, e o motivo era uma linha no LEF.
+
+### 🐛 `08_drc_gds.sh`: "a etapa Checker.XOR ainda não rodou"
+
+- **Causa:** checker que reprova (erro adiado) **não grava
+  `state_out.json`** — o mesmo que já se viu no `Checker.HoldViolations`
+  (28ª sessão). O script procurava o estado do `Checker.XOR`.
+- **Resolvi com:** parte do `KLayout.XOR`. As maglef foram geradas
+  (4 `.mag`), então a 1ª metade do script funcionou.
+
+### Scripts
+
+| Arquivo | Mudança |
+|---|---|
+| `macros/lef_foreign.py` | novo (L45) |
+| `macros/*/*.lef` | + `FOREIGN` |
+| `layout/nucleo/comum.sh` | + `gera_maglef` e `resume_drc_magic` |
+| `layout/nucleo/08_verificacao.sh` | gera as maglef antes; confere o `FOREIGN`; resumo do DRC por regra; copia o `drc.magic.rpt` para `resultados/` |
+| `layout/nucleo/08_drc_gds.sh` | parte do `KLayout.XOR`; só para refazer o DRC sozinho |
+| `CLAUDE.md` | armadilhas: `FOREIGN` e "checker reprovado não grava estado" |
+
+### Para continuar: etapa 8 inteira de novo
+
+```
+git pull
+bash layout/nucleo/08_verificacao.sh     # GDS (16 min) + XOR + DRC no GDS (tempo novo) + LVS
+bash layout/nucleo/junta_logs.sh
+```
+
+Esperado: XOR **0** (ou só diferenças de rótulo); DRC sem `nwell.4`, com os
+130 de área mínima nos pinos sem uso (L43); LVS de novo limpo; hold do FF
+reprovando (L40).
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L44 | Diagnóstico do XOR dentro/fora das macros | ✅ funcionou | Macros vazias no GDS do KLayout |
+| L45 | `FOREIGN` nos LEF das macros (`lef_foreign.py`) | 🟡 | Sem ele o KLayout esvazia as macros; reproduzido |
+
 ---
 
 ## Índice de decisões
@@ -2795,7 +2895,8 @@ bash layout/nucleo/junta_logs.sh
 | L41 | `KLayout.DRC` desligado (macros, L3) | 🟡 | 2026-10-09 |
 | L42 | DRC do Magic no GDS + macros caixa-preta (maglef) | 🟡 | 2026-10-09 |
 | L43 | 130 erros de área mínima em pinos sem uso das macros = isenção | 🟡 | 2026-10-09 |
-| L44 | Diagnóstico do XOR dentro/fora das macros (`diag_xor.sh`) | 🟡 | 2026-10-09 |
+| L44 | Diagnóstico do XOR dentro/fora das macros (`diag_xor.sh`) | ✅ macros vazias no KLayout | 2026-10-09 |
+| L45 | `FOREIGN` nos LEF das macros (`macros/lef_foreign.py`) | 🟡 | 2026-10-10 |
 
 ---
 
@@ -2820,7 +2921,8 @@ bash layout/nucleo/junta_logs.sh
 - [x] ~~`REPARO=1 bash layout/nucleo/07_sta.sh`~~ — TT ok, 15 holds ≤ 28 ps no FF (27ª sessão)
 - [x] ~~Script da etapa 8~~ — `08_verificacao.sh` (27ª sessão)
 - [x] ~~Rodar a etapa 8 (`08_verificacao.sh`)~~ — LVS ✅; DRC 1.182 e XOR 15,7 M a explicar (28ª sessão)
-- [ ] `diag_xor.sh` (L44) e `08_drc_gds.sh` (L42)
+- [x] ~~`diag_xor.sh` (L44)~~ — macros vazias no GDS do KLayout → L45 (29ª sessão)
+- [ ] Etapa 8 de novo com L42 + L45 (`08_verificacao.sh`): XOR, DRC no GDS, LVS
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou

@@ -128,3 +128,41 @@ abre_gui () {
   echo ">>> imagens em: ${IMG_DIR#$REPO/}"
   ls -1 "$IMG_DIR" | grep "^$3" | sed 's/^/    /' || true
 }
+
+#-----------------------------------------------------------------------------
+# gera_maglef: vista abstrata (.mag) das macros a partir do LEF, para o DRC
+# do Magic no GDS tratar as macros como caixa-preta (L42). Sai em
+# layout/nucleo/maglef/ (fora do git). Refaz sempre: segundos.
+#-----------------------------------------------------------------------------
+gera_maglef () {
+  command -v magic >/dev/null || { echo "ERRO: magic fora do PATH (nix-shell do LibreLane)"; exit 1; }
+  local rc ml tcl m n
+  rc="$(find -L "$PDK_ROOT" -name sky130A.magicrc -path '*8afc8346*' 2>/dev/null | head -1 || true)"
+  [ -n "$rc" ] || rc="$(find -L "$PDK_ROOT" -name sky130A.magicrc 2>/dev/null | head -1 || true)"
+  [ -n "$rc" ] || { echo "ERRO: nao achei sky130A.magicrc em $PDK_ROOT"; exit 1; }
+  ml="$NUCLEO/maglef"
+  mkdir -p "$ml"
+  rm -f "$ml"/*.mag
+  tcl="$ml/gera.tcl"
+  {
+    for m in $(python3 -c "import json,sys; print(' '.join(json.load(open(sys.argv[1]))['MACROS']))" "$CONFIG"); do
+      echo "lef read $REPO/macros/$m/$m.lef"
+      echo "load $m"
+      echo "save $ml/$m.mag"
+    done
+    echo "quit -noprompt"
+  } > "$tcl"
+  echo ">>> maglef das macros (Magic, $rc)"
+  ( cd "$ml" && magic -dnull -noconsole -rcfile "$rc" "$tcl" > "$ml/gera.log" 2>&1 ) || true
+  n="$(ls "$ml"/*.mag 2>/dev/null | wc -l)"
+  [ "$n" -eq 4 ] || { echo "ERRO: esperava 4 .mag em $ml (veja $ml/gera.log)"; exit 1; }
+  ls -1 "$ml"/*.mag | sed 's/^/    /'
+}
+
+#-----------------------------------------------------------------------------
+# resume_drc_magic <drc.magic.rpt>: caixas por regra
+#-----------------------------------------------------------------------------
+resume_drc_magic () {
+  awk '/^[A-Za-z].*\(.*\)$/{r=$0;next} /um /{c[r]++} END{for(k in c) printf "%6d  %s\n", c[k], k}' "$1" | sort -rn
+}
+

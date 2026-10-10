@@ -7,6 +7,7 @@ UNITS
 END UNITS
 MACRO sram_1rw1r_64x256
    CLASS BLOCK ;
+   FOREIGN sram_1rw1r_64x256 ;
    SIZE 747.12 BY 397.445 ;
    SYMMETRY X Y R90 ;
    PIN din0[0]

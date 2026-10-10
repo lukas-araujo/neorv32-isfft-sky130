@@ -7,6 +7,7 @@ UNITS
 END UNITS
 MACRO sram_4kbyte_1rw_32x1024_8
    CLASS BLOCK ;
+   FOREIGN sram_4kbyte_1rw_32x1024_8 ;
    SIZE 808.845 BY 351.29 ;
    SYMMETRY X Y R90 ;
    PIN din0[0]

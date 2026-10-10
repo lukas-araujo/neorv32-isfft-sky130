@@ -117,5 +117,9 @@ export PATH=/tools/cadence/QUANTUS221/bin:/tools/cadence/QUANTUS221/tools/bin:/t
 - Mutação só prova algo quando a versão correta passa primeiro.
 - `.gitignore` não aceita comentário no fim da linha.
 - LEF das macros da OpenRAM vem com `DATABASE MICRONS 2000`; o OpenROAD
-  só aceita 1000 no sky130 (`macros/lef_unidades.py`). Macro nova: rodar
-  `lib_33bits.py` e `lef_unidades.py`.
+  só aceita 1000 no sky130 (`macros/lef_unidades.py`).
+- LEF da OpenRAM vem **sem `FOREIGN`**: o GDS do KLayout sai com as macros
+  vazias (XOR com milhões de diferenças). `macros/lef_foreign.py`.
+  Macro nova: rodar `lib_33bits.py`, `lef_unidades.py` e `lef_foreign.py`.
+- Checker do LibreLane que reprova (erro adiado) **não grava
+  `state_out.json`**: para recomeçar depois dele, parta do passo anterior.

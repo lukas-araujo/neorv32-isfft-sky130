@@ -38,6 +38,10 @@
 source "$(dirname "$0")/comum.sh"
 confere_ambiente
 
+gera_maglef      # macros caixa-preta no DRC do Magic sobre o GDS (L42)
+python3 "$REPO/macros/lef_foreign.py" --check >/dev/null \
+  || { echo "ERRO: LEF de macro sem FOREIGN: rode python3 macros/lef_foreign.py (L45)"; exit 1; }
+
 r=0
 roda_trecho OpenROAD.IRDropReport Magic.StreamOut Misc.ReportManufacturability || r=$?
 echo ">>> librelane terminou com codigo $r (checker adiado reprovando da != 0)"
@@ -76,6 +80,13 @@ PY
     if [ -f "$d/runtime.txt" ]; then echo "   tempo: $(cat "$d/runtime.txt")"; fi
     echo
   done
+  s="$(estado_de Magic.DRC)"
+  if [ -n "$s" ] && [ -f "$(dirname "$s")/reports/drc.magic.rpt" ]; then
+    echo "== Magic.DRC: caixas por regra"
+    resume_drc_magic "$(dirname "$s")/reports/drc.magic.rpt"
+    cp "$(dirname "$s")/reports/drc.magic.rpt" "$RES/08_drc_magic.rpt"
+    echo
+  fi
   m="$(dirname "$(estado_de Misc.ReportManufacturability)")/manufacturability.rpt"
   if [ -f "$m" ]; then echo "== manufacturability.rpt"; cat "$m"; echo; fi
   # checkers que reprovaram (adiados): ficam no error.log da rodada
