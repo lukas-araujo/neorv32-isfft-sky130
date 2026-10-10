@@ -16,13 +16,13 @@
    design__power_grid_violation__count           0
    design__power_grid_violation__count__net:vccd1 0
    design__power_grid_violation__count__net:vssd1 0
-   design__xor_difference__count                 15679857
-   magic__drc_error__count                       1182
+   design__xor_difference__count                 0
+   magic__drc_error__count                       130
    magic__illegal_overlap__count                 0
    route__antenna_violation__count               0
    route__drc_errors                             0
 
-== Magic.StreamOut (140-magic-streamout)
+== Magic.StreamOut (158-magic-streamout)
       1   Processed 77939 nets total.
       1   Processed 6 vias total.
       1   Processed 6 pins total.
@@ -38,57 +38,58 @@
       1 Error while reading cell "sram_8kbyte_1rw_32x2048_8_row_addr_dff" (byte position 60958166): Warning: cell "sram_8kbyte_1rw_32x2048_8_contact_7" placed on top of itself.  Ignoring the extra one.
       1 Error while reading cell "sram_8kbyte_1rw_32x2048_8_row_addr_dff" (byte position 60958100): Warning: cell "sram_8kbyte_1rw_32x2048_8_contact_13" placed on top of itself.  Ignoring the extra one.
       1 Error while reading cell "sram_8kbyte_1rw_32x2048_8_row_addr_dff" (byte position 60957770): Warning: cell "sram_8kbyte_1rw_32x2048_8_contact_20" placed on top of itself.  Ignoring the extra one.
-   tempo: 00:16:21.387
+   tempo: 00:20:46.287
 
-== KLayout.StreamOut (141-klayout-streamout)
-   tempo: 00:00:05.946
+== KLayout.StreamOut (159-klayout-streamout)
+   tempo: 00:00:08.754
 
-== KLayout.XOR (145-klayout-xor)
-     18 XOR differences: 0
-      2 XOR differences: 200208
-      1 XOR differences: 9970
-      1 XOR differences: 9893
-      1 XOR differences: 9559
-      1 XOR differences: 823
-      1 XOR differences: 78796
-      1 XOR differences: 67513
-      1 XOR differences: 597357
-      1 XOR differences: 549142
-      1 XOR differences: 485696
-      1 XOR differences: 432980
-      1 XOR differences: 400416
-      1 XOR differences: 285090
-      1 XOR differences: 2618878
-   tempo: 00:03:38.877
+== KLayout.XOR (163-klayout-xor)
+     56 XOR differences: 0
+      1 Total XOR differences: 0
+      1 Total elapsed: 752.280s  Memory: 1294.00M
+      1 %OL_METRIC_I design__xor_difference__count 0
+   tempo: 00:02:56.429
 
-== Magic.DRC (147-magic-drc)
+== Magic.DRC (165-magic-drc)
+      1 [INFO] Saving mag view with DRC errors (/home/lukas/Projects/neorv32-isfft-sky130/layout/nucleo/runs/2026-09-30_0934/165-magic-drc/views/asic_top.drc.mag)
+      1 Error while reading cell "WF_sram_1rw1r_64x64_wpr2_row_addr_dff" (byte position 8257694): Warning: cell "WF_sram_1rw1r_64x64_wpr2_contact_22" placed on top of itself.  Ignoring the extra one.
+      1 Error while reading cell "WF_sram_1rw1r_64x64_wpr2_row_addr_dff" (byte position 8257628): Warning: cell "WF_sram_1rw1r_64x64_wpr2_contact_21" placed on top of itself.  Ignoring the extra one.
+      1 Error while reading cell "WF_sram_1rw1r_64x64_wpr2_row_addr_dff" (byte position 8257562): Warning: cell "WF_sram_1rw1r_64x64_wpr2_contact_18" placed on top of itself.  Ignoring the extra one.
+      1 Error while reading cell "WF_sram_1rw1r_64x64_wpr2_row_addr_dff" (byte position 8257496): Warning: cell "WF_sram_1rw1r_64x64_wpr2_contact_13" placed on top of itself.  Ignoring the extra one.
+      1 Error while reading cell "WF_sram_1rw1r_64x64_wpr2_row_addr_dff" (byte position 8257166): Warning: cell "WF_sram_1rw1r_64x64_wpr2_contact_22" placed on top of itself.  Ignoring the extra one.
+      1 Error while reading cell "WF_sram_1rw1r_64x64_wpr2_row_addr_dff" (byte position 8257100): Warning: cell "WF_sram_1rw1r_64x64_wpr2_contact_21" placed on top of itself.  Ignoring the extra one.
+      1 Error while reading cell "WF_sram_1rw1r_64x64_wpr2_row_addr_dff" (byte position 8257034): Warning: cell "WF_sram_1rw1r_64x64_wpr2_contact_18" placed on top of itself.  Ignoring the extra one.
+      1 Error while reading cell "WF_sram_1rw1r_64x64_wpr2_row_addr_dff" (byte position 8256968): Warning: cell "WF_sram_1rw1r_64x64_wpr2_contact_13" placed on top of itself.  Ignoring the extra one.
+      1 Error while reading cell "WF_sram_1rw1r_64x64_wpr2_row_addr_dff" (byte position 8256110): Warning: cell "WF_sram_1rw1r_64x64_wpr2_contact_22" placed on top of itself.  Ignoring the extra one.
+      1 Error while reading cell "WF_sram_1rw1r_64x64_wpr2_row_addr_dff" (byte position 8256044): Warning: cell "WF_sram_1rw1r_64x64_wpr2_contact_21" placed on top of itself.  Ignoring the extra one.
+      1 Error while reading cell "WF_sram_1rw1r_64x64_wpr2_row_addr_dff" (byte position 8255978): Warning: cell "WF_sram_1rw1r_64x64_wpr2_contact_18" placed on top of itself.  Ignoring the extra one.
+      1 Error while reading cell "WF_sram_1rw1r_64x64_wpr2_row_addr_dff" (byte position 8255912): Warning: cell "WF_sram_1rw1r_64x64_wpr2_contact_13" placed on top of itself.  Ignoring the extra one.
+      1 Error while reading cell "WF_sram_1rw1r_64x64_wpr2_row_addr_dff" (byte position 8255582): Warning: cell "WF_sram_1rw1r_64x64_wpr2_contact_22" placed on top of itself.  Ignoring the extra one.
+      1 Error while reading cell "WF_sram_1rw1r_64x64_wpr2_row_addr_dff" (byte position 8255516): Warning: cell "WF_sram_1rw1r_64x64_wpr2_contact_21" placed on top of itself.  Ignoring the extra one.
+   tempo: 00:31:39.331
+
+== Magic.SpiceExtraction (167-magic-spiceextraction)
       1   Processed 77939 nets total.
       1   Processed 6 vias total.
       1   Processed 6 pins total.
       1   Processed 2 special nets total.
       1   Processed 2 non-default rules total.
       1   Processed 240072 subcell instances total.
-      1 [INFO] Saving mag view with DRC errors (/home/lukas/Projects/neorv32-isfft-sky130/layout/nucleo/runs/2026-09-30_0934/147-magic-drc/views/asic_top.drc.mag)
-   tempo: 00:04:59.389
+   tempo: 00:01:51.558
 
-== Magic.SpiceExtraction (149-magic-spiceextraction)
-      1   Processed 77939 nets total.
-      1   Processed 6 vias total.
-      1   Processed 6 pins total.
-      1   Processed 2 special nets total.
-      1   Processed 2 non-default rules total.
-      1   Processed 240072 subcell instances total.
-   tempo: 00:01:55.256
-
-== Netgen.LVS (151-netgen-lvs)
+== Netgen.LVS (169-netgen-lvs)
       1 Circuits match uniquely.
-   tempo: 00:00:36.916
+   tempo: 00:00:37.179
 
-== Checker.IllegalOverlap (150-checker-illegaloverlap)
+== Checker.IllegalOverlap (168-checker-illegaloverlap)
    tempo: 00:00:00.001
 
-== Misc.ReportManufacturability (157-misc-reportmanufacturability)
-   tempo: 00:00:00.003
+== Misc.ReportManufacturability (175-misc-reportmanufacturability)
+   tempo: 00:00:00.002
+
+== Magic.DRC: caixas por regra
+   128  Metal4 minimum area < 9600 (met4.4a)
+     2  Metal3 minimum area < 9600 (met3.6)
 
 == manufacturability.rpt
 * Antenna
@@ -100,11 +101,12 @@ Passed ✅
 * DRC
 Failed 𐄂
 KLayout DRC errors: N/A
-Magic DRC errors: 1182
+Magic DRC errors: 130
 Check the report directories of KLayout.DRC and Magic.DRC.
 
 
 == error.log (ultimas linhas)
+
 Error while reading cell "sky130_fd_bd_sram__openram_dp_cell" (byte position 5214708): Unknown layer/datatype in boundary, layer=235 type=0
 
 Error while reading cell "sky130_fd_bd_sram__openram_dp_cell_replica" (byte position 5254512): Unknown layer/datatype in boundary, layer=33 type=42
@@ -133,5 +135,4 @@ Error while reading cell "sky130_fd_bd_sram__openram_dp_cell_cap_row" (byte posi
 
 Error while reading cell "sky130_fd_bd_sram__openram_dp_cell_cap_row" (byte position 5781356): Unknown layer/datatype in boundary, layer=22 type=21
 
-15679857 XOR differences found. - deferred
-1182 Magic DRC errors found. - deferred
+130 Magic DRC errors found. - deferred

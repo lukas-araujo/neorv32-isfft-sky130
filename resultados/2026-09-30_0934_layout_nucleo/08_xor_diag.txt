@@ -1,0 +1,73 @@
+== GDS_A: /home/lukas/Projects/neorv32-isfft-sky130/layout/nucleo/runs/2026-09-30_0934/140-magic-streamout/asic_top.gds
+   celulas de topo: ['asic_top']; celulas: 826
+   macro sram_8kbyte_1rw_32x2048_8: 1 instancia(s), 12693546 formas, 42 camadas, 16 subcelulas diretas
+   macro sram_4kbyte_1rw_32x1024_8: 1 instancia(s), 6532834 formas, 42 camadas, 16 subcelulas diretas
+   macro sram_1rw1r_64x256: 1 instancia(s), 7881205 formas, 39 camadas, 16 subcelulas diretas
+   macro sram_1rw1r_64x64_wpr2: 1 instancia(s), 2251863 formas, 39 camadas, 16 subcelulas diretas
+
+== GDS_B: /home/lukas/Projects/neorv32-isfft-sky130/layout/nucleo/runs/2026-09-30_0934/141-klayout-streamout/asic_top.klayout.gds
+   celulas de topo: ['asic_top']; celulas: 169
+   macro sram_8kbyte_1rw_32x2048_8: 1 instancia(s), 0 formas, 0 camadas, 0 subcelulas diretas
+   macro sram_4kbyte_1rw_32x1024_8: 1 instancia(s), 0 formas, 0 camadas, 0 subcelulas diretas
+   macro sram_1rw1r_64x256: 1 instancia(s), 0 formas, 0 camadas, 0 subcelulas diretas
+   macro sram_1rw1r_64x64_wpr2: 1 instancia(s), 0 formas, 0 camadas, 0 subcelulas diretas
+
+| Camada | A dentro das macros | B dentro das macros | A fora | B fora |
+|---|---|---|---|---|
+| 115/42 | 200208 | 0 | 0 | 0 |  <-- difere
+| 115/43 | 400416 | 0 | 0 | 0 |  <-- difere
+| 122/16 | 210784 | 0 | 238584 | 238584 |  <-- difere
+| 22/21 | 1196648 | 0 | 0 | 0 |  <-- difere
+| 22/22 | 485696 | 0 | 0 | 0 |  <-- difere
+| 235/0 | 127920 | 0 | 0 | 0 |  <-- difere
+| 235/4 | 167634 | 0 | 1 | 1 |  <-- difere
+| 236/0 | 0 | 0 | 183501 | 183501 |
+| 33/42 | 1026968 | 0 | 0 | 0 |  <-- difere
+| 33/43 | 2616854 | 0 | 0 | 0 |  <-- difere
+| 64/16 | 202272 | 0 | 238582 | 238582 |  <-- difere
+| 64/18 | 202668 | 0 | 0 | 0 |  <-- difere
+| 64/20 | 313957 | 0 | 240068 | 240068 |  <-- difere
+| 64/5 | 202272 | 0 | 237904 | 237904 |  <-- difere
+| 64/59 | 202272 | 0 | 237906 | 237906 |  <-- difere
+| 65/20 | 611164 | 0 | 525398 | 525398 |  <-- difere
+| 65/44 | 184826 | 0 | 40092 | 40092 |  <-- difere
+| 65/5 | 156 | 0 | 0 | 0 |  <-- difere
+| 66/15 | 0 | 0 | 20 | 20 |
+| 66/16 | 200208 | 0 | 0 | 0 |  <-- difere
+| 66/20 | 1383227 | 0 | 734009 | 734009 |  <-- difere
+| 66/44 | 2544472 | 0 | 3148979 | 3148979 |  <-- difere
+| 66/5 | 212998 | 0 | 0 | 0 |  <-- difere
+| 66/83 | 1183560 | 0 | 0 | 0 |  <-- difere
+| 67/16 | 2388 | 0 | 535847 | 535847 |  <-- difere
+| 67/20 | 1927420 | 0 | 1452280 | 1452280 |  <-- difere
+| 67/44 | 1585340 | 0 | 2643915 | 2643915 |  <-- difere
+| 67/5 | 44478 | 0 | 521916 | 521916 |  <-- difere
+| 68/16 | 852192 | 0 | 482238 | 482238 |  <-- difere
+| 68/20 | 2957903 | 0 | 822221 | 1568791 |  <-- difere
+| 68/44 | 790515 | 0 | 356154 | 356154 |  <-- difere
+| 68/5 | 3035426 | 0 | 480882 | 480882 |  <-- difere
+| 69/16 | 172912 | 0 | 1 | 1 |  <-- difere
+| 69/20 | 1399744 | 0 | 171785 | 673511 |  <-- difere
+| 69/44 | 21521 | 0 | 66093 | 66093 |  <-- difere
+| 69/5 | 321274 | 0 | 1 | 1 |  <-- difere
+| 70/16 | 0 | 0 | 3 | 3 |
+| 70/20 | 48830 | 0 | 33178 | 123387 |  <-- difere
+| 70/44 | 11820 | 0 | 26816 | 26816 |  <-- difere
+| 70/5 | 2784 | 0 | 3 | 3 |  <-- difere
+| 71/16 | 0 | 0 | 74 | 74 |
+| 71/20 | 14837 | 0 | 6879 | 27216 |  <-- difere
+| 71/44 | 0 | 0 | 1112 | 1112 |
+| 71/5 | 1618 | 0 | 74 | 2 |  <-- difere
+| 72/16 | 0 | 0 | 24 | 24 |
+| 72/20 | 0 | 0 | 429 | 1661 |  <-- difere
+| 72/5 | 0 | 0 | 24 | 2 |  <-- difere
+| 78/44 | 171864 | 0 | 241107 | 241107 |  <-- difere
+| 81/14 | 0 | 0 | 1 | 0 |  <-- difere
+| 81/2 | 224312 | 0 | 0 | 0 |  <-- difere
+| 81/23 | 0 | 0 | 2773 | 2773 |
+| 81/4 | 144146 | 0 | 240068 | 240068 |  <-- difere
+| 83/44 | 533000 | 0 | 240108 | 240108 |  <-- difere
+| 92/44 | 152872 | 0 | 0 | 0 |  <-- difere
+| 93/44 | 391121 | 0 | 260114 | 260114 |  <-- difere
+| 94/20 | 345689 | 0 | 260114 | 260114 |  <-- difere
+| 95/20 | 328262 | 0 | 183176 | 183176 |  <-- difere
