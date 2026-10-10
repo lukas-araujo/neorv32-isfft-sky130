@@ -2929,6 +2929,86 @@ DRC/LVS finais. Pendentes opcionais: ECO de hold (L40), IR drop (L37).
 | L43 | 130 de área mínima em pinos sem uso = isenção | 🟡 | Confirmados os mesmos 130, todos em pinos sem uso |
 | L45 | `FOREIGN` nos LEF | 🟡 funcionou (XOR 0) | — |
 
+## 2026-10-10 (31ª sessão) — Etapa 9 preparada: LEC e simulação do netlist do layout na VM
+
+Pedido do Lukas: "bora testar na VM!". Nada rodou ainda; esta sessão monta
+os arquivos. Fontes: `vm/backend/synthesis/scripts/run_first.tcl` (blocos
+2 e 3 da síntese, reaproveitados), `layout/nucleo/01_leitura.sh` (de onde
+vem o netlist que entrou no layout), `state_out.json` do passo 175 (o
+netlist final é o `135-openroad-fillinsertion/asic_top.nl.v`), código do
+LibreLane 3.0.14 (`write_verilog -remove_cells [get_physical_cells]`).
+
+### O que a etapa 9 prova
+
+| Pergunta | Golden | Revised | Ferramenta | Bloco |
+|---|---|---|---|---|
+| O layout é o mesmo circuito que entrou nele? | netlist do Genus **achatado** (o que o `01_leitura.sh` deu ao LibreLane) | netlist do layout | Conformal | **4a** |
+| O layout funciona? | — | netlist do layout + firmware das 3 matrizes | Xcelium | **4b** |
+| A cadeia inteira de uma vez? | RTL | netlist do layout | Conformal | 4c (opcional) |
+
+A cadeia fica fechada assim: RTL ≡ Genus (LEC da síntese, PASS, 12ª
+sessão) → Genus ≡ Genus achatado (conferência pino a pino do
+`01_leitura.sh`, L19) → **Genus achatado ≡ layout** (4a). O golden achatado
+tem os **mesmos nomes de flip-flop** do layout (o OpenROAD não renomeia o
+que já existe), então o Conformal mapeia por nome.
+
+### 🟡 L46: o netlist do layout vai sem as células só físicas
+
+- O `asic_top.nl.v` final tem **todas** as instâncias do desenho: ~142 mil
+  de preenchimento, ~20 mil taps, 2.773 diodos. Elas não têm função lógica
+  e as `sky130_ef_sc_hd__decap_12` nem têm modelo `.v` no pacote da VM (o
+  Xcelium pararia na elaboração).
+- `tira_fisicas.py` tira `fill`, `decap`, `tapvpwrvgnd` e `diode` — a mesma
+  escolha do LibreLane para o netlist "lógico" — e **confere** que
+  flip-flops e macros do layout batem com os do golden (19.823 e 4). Se não
+  baterem, o script para.
+- Testado aqui com um netlist sintético no formato do OpenROAD (instâncias
+  em várias linhas, nomes escapados).
+
+### Arquivos
+
+| Arquivo | O quê |
+|---|---|
+| `layout/nucleo/09_netlist.sh` | novo: pega o netlist final, tira as físicas, confere, compacta em `vm/backend/synthesis/netlist_layout/`, resumo em `09_netlist.txt`; `SIM_ICARUS=1` simula no Icarus antes da VM |
+| `layout/nucleo/tira_fisicas.py` | novo (L46) |
+| `vm/backend/synthesis/scripts/layout_lec.do` | novo: dofile do LEC da etapa 9 (golden trocado por `sed`) |
+| `vm/backend/synthesis/scripts/run_first.tcl` | PATH completo (CLAUDE.md); bloco 1 (Genus) **comentado**; blocos 4a e 4b **descomentados**, 4c comentado |
+| `sim/run_gls_yosys.sh` | `NETLIST=<arquivo>`: pula a síntese e simula o netlist dado |
+| `sim/traz_vm.sh` | traz `sim_layout/`; data da pasta = a dos relatórios da etapa 9 |
+
+Conferido aqui: as substituições do dofile (os dois casos, 4a e 4c, sem
+nenhum `@` sobrando) e a sintaxe dos scripts. O `lec` e o `xrun` só na VM.
+
+### O que esperar
+
+| Bloco | Esperado | Por quê |
+|---|---|---|
+| 4a | 0 não equivalentes, 0 abortados, ~19.828 pontos equivalentes | igual ao LEC da síntese (19.823 flip-flops + saída + 4 macros) |
+| 4b | as 3 somas = RTL (`0xeb88508e`, `0xba7fc58e`, `0xb29c0211`), `[TB] PASSOU`, ~188 mil ciclos | mesma simulação do netlist do Genus (5ª sessão) |
+
+Riscos: (1) o Conformal pode não mapear pelos nomes escapados e cair no
+mapeamento por função (mais lento, mas funciona); (2) a simulação tem
+~100 mil células e 188 mil ciclos: deve levar mais que a do Genus.
+
+### Para continuar
+
+No notebook:
+```
+git pull
+bash layout/nucleo/09_netlist.sh          # (SIM_ICARUS=1 para conferir no Icarus antes)
+git add vm/backend/synthesis/netlist_layout resultados/2026-09-30_0934_layout_nucleo/09_netlist.txt
+git commit -m 'gdsii: netlist do layout para a VM (etapa 9)' && git push
+bash sim/monta_vm.sh
+```
+Na VM: levar `backend/synthesis/scripts/` e `backend/synthesis/netlist_layout/`
+e `source run_first.tcl` (roda 4a e depois 4b). Volta com
+`bash sim/traz_vm.sh <pasta> layout_etapa9`.
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L46 | Netlist do layout para LEC/simulação sem fill/decap/tap/diodo | 🟡 | Sem função lógica; `ef_` sem modelo `.v`; mesma escolha do LibreLane |
+| L47 | Golden do LEC da etapa 9 = netlist do Genus achatado (RTL × layout como extra, 4c) | 🟡 | Mesmos nomes de flip-flop → mapeamento por nome; a cadeia RTL→Genus já tem LEC |
+
 ---
 
 ## Índice de decisões
@@ -2980,6 +3060,8 @@ DRC/LVS finais. Pendentes opcionais: ECO de hold (L40), IR drop (L37).
 | L43 | 130 erros de área mínima em pinos sem uso das macros = isenção | 🟡 | 2026-10-09 |
 | L44 | Diagnóstico do XOR dentro/fora das macros (`diag_xor.sh`) | ✅ macros vazias no KLayout | 2026-10-09 |
 | L45 | `FOREIGN` nos LEF das macros (`macros/lef_foreign.py`) | 🟡 funcionou (XOR 0) | 2026-10-10 |
+| L46 | Netlist do layout sem células só físicas (`tira_fisicas.py`) | 🟡 | 2026-10-10 |
+| L47 | Golden do LEC da etapa 9 = Genus achatado (+ RTL no 4c) | 🟡 | 2026-10-10 |
 
 ---
 
@@ -3006,7 +3088,7 @@ DRC/LVS finais. Pendentes opcionais: ECO de hold (L40), IR drop (L37).
 - [x] ~~Rodar a etapa 8 (`08_verificacao.sh`)~~ — LVS ✅; DRC 1.182 e XOR 15,7 M a explicar (28ª sessão)
 - [x] ~~`diag_xor.sh` (L44)~~ — macros vazias no GDS do KLayout → L45 (29ª sessão)
 - [x] ~~Etapa 8 de novo com L42 + L45~~ — XOR 0, DRC 130 isentos, LVS limpo (30ª sessão)
-- [ ] Etapa 9: LEC e simulação do netlist do layout (VM)
+- [ ] Etapa 9: `09_netlist.sh` no notebook, blocos 4a/4b na VM (31ª sessão: preparado)
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou

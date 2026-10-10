@@ -22,7 +22,9 @@
 # Arquivo acima de 500 kB e compactado (.gz): o netlist tem 8 MB, o
 # genus.log ~4 MB. 'zcat' ou 'zless' para ler.
 #
-# Data da pasta: a do netlist (quando o Genus rodou), nao a de hoje.
+# Data da pasta: a do netlist (quando o Genus rodou), nao a de hoje; com
+# resultado da etapa 9 do layout (reports/layout_lec_*, sim_layout/), a
+# data deles.
 #=============================================================================
 set -u
 PROJ="$(cd "$(dirname "$0")/.." && pwd)"
@@ -42,6 +44,10 @@ else echo "ERRO: nao achei backend/synthesis/ nem reports/ em $ORIG"; exit 1; fi
 NET=$(ls "$S"/deliverables/*.v 2>/dev/null | head -1)
 [ -n "$NET" ] || { echo "ERRO: sem netlist em $S/deliverables/ -- o Genus rodou?"; exit 1; }
 DATA=$(date -r "$NET" +%Y-%m-%d)
+# Etapa 9 do layout (LEC/simulacao do netlist do layout): a data e a dos
+# relatorios novos, nao a do netlist do Genus (que e de 29/09)
+NOVO=$(ls -t "$S"/reports/layout_lec_* "$S"/sim_layout/xrun_*.log 2>/dev/null | head -1)
+[ -n "$NOVO" ] && DATA=$(date -r "$NOVO" +%Y-%m-%d)
 DEST="$PROJ/resultados/${DATA}_${ETAPA}"
 
 if [ -e "$DEST" ]; then
@@ -63,13 +69,13 @@ for f in "$S"/reports/*.rpt;                  do copia "$f" "$DEST/reports"; don
 for f in "$S"/deliverables/*.v "$S"/deliverables/*.sdc "$S"/deliverables/*.do; do
   copia "$f" "$DEST/deliverables"; done
 copia "$S/work/genus.log"                        "$DEST/logs"
-for f in "$S"/sim_rtl/xrun_*.log "$S"/sim_postsyn/xrun_*.log \
+for f in "$S"/sim_rtl/xrun_*.log "$S"/sim_postsyn/xrun_*.log "$S"/sim_layout/xrun_*.log \
          "$S"/reports/*lec*.log "$S"/work/*lec*.log; do
   copia "$f" "$DEST/logs"; done
 # xrun.log: o proprio xrun grava em cada pasta de simulacao. Tem o mesmo
 # conteudo do log do tee MAIS a linha de comando completa (defines e
 # arquivos). Vem renomeado para nao sobrescrever um ao outro.
-for p in sim_rtl sim_postsyn; do
+for p in sim_rtl sim_postsyn sim_layout; do
   [ -f "$S/$p/xrun.log" ] || continue
   cp "$S/$p/xrun.log" "$DEST/logs/xrun_${p#sim_}_comando.log"
 done

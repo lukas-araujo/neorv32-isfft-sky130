@@ -14,6 +14,9 @@
 # Uso:
 #   bash sim/run_gls_yosys.sh [pasta_vm]      (padrao: build/vm/neorv32_isfft_soc)
 #   MODO=rtl bash sim/run_gls_yosys.sh        (so o tb_gate sobre o RTL, rapido)
+#   NETLIST=<arquivo.v> bash sim/run_gls_yosys.sh
+#                     pula a sintese e simula ESTE netlist (ex.: o do layout,
+#                     preparado pelo layout/nucleo/09_netlist.sh)
 #
 # Precisa: yosys (OSS CAD Suite) ou yowasp-yosys (pip), iverilog.
 # Tempo: sintese ~1 min; simulacao de portas ~20 min (188 mil ciclos).
@@ -27,7 +30,9 @@ MODO="${MODO:-portas}"
 [ -f "$VM/backend/synthesis/scripts/tb_gate.v" ] || { echo "Pasta da VM nao encontrada: $VM (rode sim/monta_vm.sh)"; exit 1; }
 command -v iverilog >/dev/null || { echo "ERRO: iverilog fora do PATH"; exit 1; }
 YOSYS="$(command -v yosys || command -v yowasp-yosys || true)"
-[ "$MODO" = rtl ] || [ -n "$YOSYS" ] || { echo "ERRO: yosys/yowasp-yosys fora do PATH"; exit 1; }
+NETLIST="${NETLIST:-}"
+[ "$MODO" = rtl ] || [ -n "$NETLIST" ] || [ -n "$YOSYS" ] || { echo "ERRO: yosys/yowasp-yosys fora do PATH"; exit 1; }
+[ -z "$NETLIST" ] || [ -f "$NETLIST" ] || { echo "ERRO: NETLIST nao existe: $NETLIST"; exit 1; }
 
 rm -rf "$B"; mkdir -p "$B/src" "$B/modelos"
 SCR="$VM/backend/synthesis/scripts"
@@ -54,6 +59,10 @@ fi
 #-----------------------------------------------------------------------------
 # Sintese (yowasp roda em caixa de areia: arquivos no diretorio atual)
 #-----------------------------------------------------------------------------
+if [ -n "$NETLIST" ]; then
+  echo "=== Netlist pronto (sem sintese): $NETLIST ==="
+  cp "$NETLIST" "$B/netlist_yosys.v"
+else
 cp "$VM"/frontend/*.v "$VM"/frontend/isfft/*.v "$B/src/"
 cp "$T"/lib/*.lib "$B/"
 LIB=sky130_fd_sc_hd__tt_025C_1v80.lib
@@ -81,6 +90,7 @@ echo "  macros no netlist: $(grep -cE '^\s*sram_(8kbyte|4kbyte|1rw1r)\S* ' "$B/n
 echo "  celulas evitadas:  $(grep -cE 'sky130_fd_sc_hd__(sdf|sedf|sdlclkp|lpflow|probe)' "$B/netlist_yosys.v") (esperado 0)"
 echo "  constantes soltas: $(grep -oE "1'b[01]" "$B/netlist_yosys.v" | wc -l) (esperado 0)"
 echo "  spare_wen0 ligado: $(grep -c '\.spare_wen0' "$B/netlist_yosys.v") (esperado 2)"
+fi
 
 #-----------------------------------------------------------------------------
 # Simulacao de portas: mesma ordem e mesmos defines do bloco 2 do run_first
