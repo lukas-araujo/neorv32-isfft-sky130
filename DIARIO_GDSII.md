@@ -2846,6 +2846,89 @@ reprovando (L40).
 | L44 | Diagnóstico do XOR dentro/fora das macros | ✅ funcionou | Macros vazias no GDS do KLayout |
 | L45 | `FOREIGN` nos LEF das macros (`lef_foreign.py`) | 🟡 | Sem ele o KLayout esvazia as macros; reproduzido |
 
+## 2026-10-10 (30ª sessão) — ✅ Etapa 8 fechada: XOR 0, LVS limpo, DRC só com os 130 previstos
+
+`bash layout/nucleo/08_verificacao.sh` com a L42 (DRC no GDS) e a L45
+(`FOREIGN`), passos `158-…` a `175-…`. Fontes: `08_verificacao.txt`,
+`08_verificacao_metricas.json`, `08_drc_magic.rpt`, `08_xor_diag.txt`,
+`logs_2026-10-10_0007.tar.gz`, imagem `08_gds_klayout.png` (commit
+`9216761`).
+
+### Antes × depois
+
+| Checagem | 28ª sessão | **30ª sessão** | Fonte |
+|---|---|---|---|
+| XOR Magic × KLayout | 15.679.857 | **0** (56 camadas, todas 0) | `klayout-xor.log`, `design__xor_difference__count` |
+| DRC (Magic) | 1.182 (DEF + LEF) | **130** (GDS + macros caixa-preta) | `magic__drc_error__count` |
+| ↳ `nwell.4` | 1.052 | **0** | `08_drc_magic.rpt` |
+| ↳ `met4.4a` (área mínima) | 128 | 128 | idem |
+| ↳ `met3.6` (área mínima) | 2 | 2 | idem |
+| LVS | limpo | **limpo** ("Circuits match uniquely") | `169-…` |
+| Antena / sobreposição / alimentação | 0 / 0 / 0 | 0 / 0 / 0 | métricas |
+| Hold (FF) | reprova (L40) | reprova (L40) | `172-…` sem `state_out` |
+
+As 130 caixas de DRC são **as mesmas** da 28ª sessão (comparadas
+coordenada a coordenada): 64 em y = 100 µm (`in_mem`) + 64 em y = 1.002 µm
+(`out_mem`), os pinos `dout0` sem uso, e 2 em x = 55 µm (IMEM e DMEM), o
+`dout0[32]`. As duas hipóteses se confirmaram:
+
+- **L42:** com as células padrão reais (GDS), os taps aparecem e o `nwell.4`
+  vai a zero. Os 1.052 eram da vista abstrata.
+- **L45:** com `FOREIGN`, o GDS do KLayout tem as macros e os dois GDS são
+  **idênticos** em todas as 56 camadas.
+
+### Tempos da etapa 8
+
+| Passo | Tempo |
+|---|---|
+| `Magic.StreamOut` | 20 min 46 s |
+| `KLayout.StreamOut` | 9 s |
+| `KLayout.XOR` | 2 min 56 s |
+| `Magic.DRC` (no GDS) | **31 min 39 s** (no DEF: 5 min) |
+| `Magic.SpiceExtraction` | 1 min 52 s |
+| `Netgen.LVS` | 37 s |
+
+### 🟡 L43: os 130 de área mínima ficam como isenção
+
+| Regra | Caixas | Pino (LEF) | Por que não é defeito |
+|---|---|---|---|
+| `met4.4a` | 64 | `dout0[0..63]` da `in_mem` (y = 100 µm) | saída da porta 0 das 1rw1r, que só escreve; no LEF o pino é um quadrado de 0,38 × 0,38 µm (0,144 µm² < 0,24 µm²) sem fio |
+| `met4.4a` | 64 | `dout0[0..63]` da `out_mem` (y = 1.002 µm) | idem |
+| `met3.6` | 2 | `dout0[32]` da IMEM e da DMEM (x = 55 µm) | 33º bit (L1), sem uso |
+
+No GDS de verdade da macro o pino é o fim de um fio interno da OpenRAM —
+a área mínima é cumprida lá dentro. O erro existe só porque a macro entra
+como caixa-preta (L3). Para eliminar de fato, seria preciso ligar um
+pedaço de metal em cada pino sem uso (*stub*), o que não muda nada no
+chip; fica registrado como isenção.
+
+**Vira slide?** Sim, a tabela antes × depois: "1.182 → 130 → 0 defeitos
+reais", com o porquê de cada degrau.
+
+### Estado do layout do núcleo
+
+| Item | Situação |
+|---|---|
+| GDS do núcleo | ✅ `asic_top.gds` (Magic) = `asic_top.klayout.gds` (XOR 0) |
+| DRC | ✅ 0 defeitos reais; 130 isentos (L43) |
+| LVS | ✅ limpo (macros caixa-preta) |
+| Antena | ✅ 0 |
+| Setup TT | ✅ +0,32 ns no pior corner |
+| Hold | ⚠️ 15 caminhos ≤ 28 ps no FF (L40) |
+| IR drop | ❓ sem número válido (L37) |
+
+### Para continuar
+
+Faltam as etapas 9–12 (DIARIO, 17ª sessão): 9 LEC e simulação do netlist
+do layout (VM), 10 `chip_top.v` com os pads, 11 padring (fluxo Chip), 12
+DRC/LVS finais. Pendentes opcionais: ECO de hold (L40), IR drop (L37).
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L42 | DRC no GDS + macros caixa-preta | 🟡 funcionou (`nwell.4` 1.052 → 0) | — |
+| L43 | 130 de área mínima em pinos sem uso = isenção | 🟡 | Confirmados os mesmos 130, todos em pinos sem uso |
+| L45 | `FOREIGN` nos LEF | 🟡 funcionou (XOR 0) | — |
+
 ---
 
 ## Índice de decisões
@@ -2893,10 +2976,10 @@ reprovando (L40).
 | L39 | Hold pós-GRT: margem 0,02 ns, sem teto | 🟡 funcionou (242 buffers) | 2026-10-09 |
 | L40 | 15 holds de ≤ 28 ps no FF aceitos por ora | 🟡 | 2026-10-09 |
 | L41 | `KLayout.DRC` desligado (macros, L3) | 🟡 | 2026-10-09 |
-| L42 | DRC do Magic no GDS + macros caixa-preta (maglef) | 🟡 | 2026-10-09 |
+| L42 | DRC do Magic no GDS + macros caixa-preta (maglef) | 🟡 funcionou (`nwell.4` → 0) | 2026-10-09 |
 | L43 | 130 erros de área mínima em pinos sem uso das macros = isenção | 🟡 | 2026-10-09 |
 | L44 | Diagnóstico do XOR dentro/fora das macros (`diag_xor.sh`) | ✅ macros vazias no KLayout | 2026-10-09 |
-| L45 | `FOREIGN` nos LEF das macros (`macros/lef_foreign.py`) | 🟡 | 2026-10-10 |
+| L45 | `FOREIGN` nos LEF das macros (`macros/lef_foreign.py`) | 🟡 funcionou (XOR 0) | 2026-10-10 |
 
 ---
 
@@ -2922,7 +3005,8 @@ reprovando (L40).
 - [x] ~~Script da etapa 8~~ — `08_verificacao.sh` (27ª sessão)
 - [x] ~~Rodar a etapa 8 (`08_verificacao.sh`)~~ — LVS ✅; DRC 1.182 e XOR 15,7 M a explicar (28ª sessão)
 - [x] ~~`diag_xor.sh` (L44)~~ — macros vazias no GDS do KLayout → L45 (29ª sessão)
-- [ ] Etapa 8 de novo com L42 + L45 (`08_verificacao.sh`): XOR, DRC no GDS, LVS
+- [x] ~~Etapa 8 de novo com L42 + L45~~ — XOR 0, DRC 130 isentos, LVS limpo (30ª sessão)
+- [ ] Etapa 9: LEC e simulação do netlist do layout (VM)
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
