@@ -1,0 +1,50 @@
+== Etapa 9: netlists para a VM (rodada 2026-09-30_0934)
+   layout: layout/nucleo/runs/2026-09-30_0934/135-openroad-fillinsertion/asic_top.nl.v (36M)
+   golden: layout/nucleo/entrada/asic_top.v (31M)
+   saida:  vm/backend/synthesis/netlist_layout/ (2.1M compactados)
+
+| Celulas fisicas retiradas | Instancias |
+|---|---|
+| `sky130_fd_sc_hd__decap_3` | 103829 |
+| `sky130_fd_sc_hd__tapvpwrvgnd_1` | 20046 |
+| `sky130_fd_sc_hd__fill_1` | 19777 |
+| `sky130_fd_sc_hd__fill_2` | 16744 |
+| `sky130_fd_sc_hd__diode_2` | 2773 |
+| **Total** | **163169** |
+
+| | Golden (Genus achatado) | Layout (sem fisicas) | Confere |
+|---|---|---|---|
+| Instancias | 60027 | 76903 | — |
+| Flip-flops | 19823 | 19823 | ok |
+| Macros | 4 | 4 | ok |
+
+| Tipos de celula que so existem no layout | Instancias |
+|---|---|
+| `sky130_fd_sc_hd__clkdlybuf4s25_1` | 9141 |
+| `sky130_fd_sc_hd__clkbuf_4` | 2165 |
+| `sky130_fd_sc_hd__clkbuf_8` | 2157 |
+| `sky130_fd_sc_hd__dlygate4sd3_1` | 1029 |
+| `sky130_fd_sc_hd__clkbuf_16` | 266 |
+| `sky130_fd_sc_hd__o22ai_2` | 97 |
+| `sky130_fd_sc_hd__nor4_2` | 67 |
+| `sky130_fd_sc_hd__o21ai_2` | 25 |
+| `sky130_fd_sc_hd__bufinv_16` | 22 |
+| `sky130_fd_sc_hd__o22ai_4` | 20 |
+| `sky130_fd_sc_hd__clkbuf_1` | 19 |
+| `sky130_fd_sc_hd__clkinvlp_4` | 14 |
+| `sky130_fd_sc_hd__a22oi_2` | 13 |
+| `sky130_fd_sc_hd__a22o_4` | 12 |
+| `sky130_fd_sc_hd__buf_8` | 6 |
+| `sky130_fd_sc_hd__clkinv_4` | 4 |
+| `sky130_fd_sc_hd__nand2b_2` | 4 |
+| `sky130_fd_sc_hd__dlymetal6s2s_1` | 3 |
+| `sky130_fd_sc_hd__dlymetal6s4s_1` | 2 |
+| `sky130_fd_sc_hd__nor2b_2` | 2 |
+| `sky130_fd_sc_hd__nor3b_2` | 2 |
+| `sky130_fd_sc_hd__dfxtp_4` | 2 |
+| `sky130_fd_sc_hd__or2_4` | 2 |
+| `sky130_fd_sc_hd__clkinv_8` | 1 |
+| `sky130_fd_sc_hd__o311ai_2` | 1 |
+
+   portas do topo (layout): module asic_top (clk_i, rstn_i, uart0_rxd_i, uart0_txd_o); input clk_i; 
+   assign no layout: 0
