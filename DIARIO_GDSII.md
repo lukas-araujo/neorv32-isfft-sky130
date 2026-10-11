@@ -3004,6 +3004,31 @@ Na VM: levar `backend/synthesis/scripts/` e `backend/synthesis/netlist_layout/`
 e `source run_first.tcl` (roda 4a e depois 4b). Volta com
 `bash sim/traz_vm.sh <pasta> layout_etapa9`.
 
+### 🐛 1ª rodada do `09_netlist.sh`: "flip-flops não batem" (20.857 × 19.823)
+
+- **Sintoma:** o script parou: golden 19.823 flip-flops, layout 20.857
+  (saída colada pelo Lukas).
+- **Causa:** erro **meu** no padrão de flip-flop do `tira_fisicas.py`:
+  `dl*` (para pegar os latches `dlx*`/`dlr*`) pegava também as células de
+  **atraso** `dlygate4sd3_1` (1.029) e `dlymetal6s2s_1`/`dlymetal6s4s_1`
+  (3 + 2) — os buffers de hold. 19.823 + 1.034 = 20.857, exato.
+- **Resolvi com:** padrão `df*|sdf*|edf*|dlx*|dlr*|dlclkp*` (conferido
+  contra `dlygate…`, `dlymetal…` e `clkdlybuf…`, que não entram).
+- **O que a 1ª rodada já mostrou** (`09_netlist.txt`, no notebook):
+
+| Item | Valor |
+|---|---|
+| Células físicas retiradas | 163.169: `decap_3` 103.829, `tapvpwrvgnd_1` 20.046, `fill_1` 19.777, `fill_2` 16.744, `diode_2` 2.773 |
+| Instâncias lógicas | golden 60.027 → layout 76.903 (+16.876) |
+| Macros | 4 = 4 |
+| Células novas no layout (as maiores) | `clkdlybuf4s25_1` 9.141, `clkbuf_4` 2.165, `clkbuf_8` 2.157, `dlygate4sd3_1` 1.029, `clkbuf_16` 266 |
+| Netlists compactados | 2,1 MB (layout 36 MB e golden 31 MB descompactados) |
+| `assign` no layout | 0 |
+
+- **Tempo:** 5 min.
+- **Vira slide?** Não (mas a tabela de células novas sim: o que o layout
+  acrescenta à síntese).
+
 | # | Decisão | Status | Motivo |
 |---|---|---|---|
 | L46 | Netlist do layout para LEC/simulação sem fill/decap/tap/diodo | 🟡 | Sem função lógica; `ef_` sem modelo `.v`; mesma escolha do LibreLane |

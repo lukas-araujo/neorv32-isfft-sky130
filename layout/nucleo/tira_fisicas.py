@@ -26,7 +26,10 @@ import re
 import sys
 
 FISICA = re.compile(r"^sky130_(fd|ef)_sc_hd__(fill|decap|tapvpwrvgnd|diode)_\w+$")
-FF = re.compile(r"^sky130_fd_sc_hd__(df|dl|sdf|edf)\w*$")
+# flip-flops (df*, sdf*, edf*) e latches (dlx*, dlr*, dlclkp*). NAO pega as
+# celulas de atraso dlygate*/dlymetal* -- sao os buffers de hold (31a sessao:
+# o primeiro padrao, "dl*", contou 1.034 delas como flip-flop)
+FF = re.compile(r"^sky130_fd_sc_hd__(df\w*|sdf\w*|edf\w*|dl[xr]\w*|dlclkp\w*)$")
 MACRO = re.compile(r"^sram_\w+$")
 PALAVRAS = {"module", "endmodule", "input", "output", "inout", "wire", "reg",
             "assign", "supply0", "supply1", "tri", "parameter", "localparam"}
