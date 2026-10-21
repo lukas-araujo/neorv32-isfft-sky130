@@ -9,6 +9,8 @@
 //   isfft_soft_reset_test      soft reset com dados dentro do DUT
 //   isfft_kria_test            3 matrizes da Kria: EVM = placa (D32)
 //   isfft_kria_regressao_test  o tb_isfft_axi_v3 da Kria, em UVM
+//   isfft_vazao_test           80 matrizes a vazao maxima (entrada sem pausa, tready 100%)
+//   isfft_estouro_test         40 matrizes +-32.767: limite do nucleo (U23), bit a bit cobrado
 //
 // Cada teste termina com uma linha "TESTE PASSOU" ou "TESTE FALHOU" (o
 // run_first_uvm.tcl procura por ela).
@@ -229,6 +231,50 @@ package isfft_test_pkg;
             cfg.out_cfg.para_ready(5000);
             wait (0);
         endtask
+    endclass
+
+    //=========================================================================
+    // Vazao maxima: entrada sem pausa, saida sempre livre, 80 matrizes.
+    // (DIARIO_UVM, 7a sessao.) O liberador do wrapper deixa 1 ciclo vazio
+    // entre duas matrizes (33 ciclos por matriz para 32 palavras); com a
+    // entrada a 1 palavra/ciclo, o buffer de entrada (64) enche aos poucos
+    // e o DUT passa a segurar o tready por 1 ciclo de vez em quando: e o
+    // unico jeito de acertar o bin cg_ent.cp_esperas.curta (1-3 ciclos).
+    // Medido na nuvem com o tb da Kria a vazao cheia: 7 esperas curtas em
+    // 40 matrizes, 47 em 80.
+    //=========================================================================
+    class isfft_vazao_test extends isfft_aleatorio_test;
+        `uvm_component_utils(isfft_vazao_test)
+        function new(string name, uvm_component parent); super.new(name, parent); n_mat = 80; endfunction
+        virtual function void ajusta_cfg();
+            cfg.out_cfg.ready_pct = 100;
+        endfunction
+        virtual function isfft_base_vseq cria_vseq();
+            isfft_aleatorio_vseq v = isfft_aleatorio_vseq::type_id::create("vseq");
+            void'($value$plusargs("N_MAT=%d", n_mat));
+            v.n_mat = n_mat; v.pkt_mat = 4; v.trunc_pct = 0;
+            v.pausa_pct = 0; v.longa_pct = 0;
+            return v;
+        endfunction
+    endclass
+
+    //=========================================================================
+    // Estouro (U23): acima de |re|,|im| = 23.170 o nucleo Spiral pode
+    // estourar (estagio de 45 graus da IFFT das linhas sem bit de guarda).
+    // Este teste mostra o limite: 40 matrizes com toda componente em
+    // +-32.767. Cobrado: bit a bit contra a etapa 1 (o mesmo nucleo) e
+    // registradores. O erro numerico so e contado (SB_RESUMO "fora da faixa").
+    // Medido na nuvem com o nucleo sozinho: 186 de 200 matrizes estouram.
+    //=========================================================================
+    class isfft_estouro_test extends isfft_base_test;
+        `uvm_component_utils(isfft_estouro_test)
+        function new(string name, uvm_component parent); super.new(name, parent); endfunction
+        virtual function void ajusta_cfg();
+            cfg.out_cfg.ready_pct = 100;
+        endfunction
+        virtual function isfft_base_vseq cria_vseq();
+            return isfft_estouro_vseq::type_id::create("vseq");
+        endfunction
     endclass
 
 endpackage

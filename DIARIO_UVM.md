@@ -850,6 +850,186 @@ e a 1ª rodada com a U20.
 
 ---
 
+## 2026-10-21 — 7ª sessão: os buracos de cobertura, e o núcleo estoura acima de 23.170
+
+**Pedido do Lukas:** seguir com o UVM. Antes de mandar a regressão para a
+VM, investigar na nuvem os buracos que o IMC mostrou (5ª sessão), para
+que o que sair deles rode na mesma regressão.
+
+Ferramentas na nuvem: Icarus 12 (apt) para o núcleo sozinho e o tb da
+Kria com sondas; Verilator 5.052 (tag, compilado do fonte) para o UVM.
+Scripts das sondas ficaram só na nuvem (não entram no repositório): o
+que importa são os números abaixo.
+
+### 🔍 `write_fsm.v:55` (0 %): o wrapper nunca emenda duas matrizes
+
+**Sintoma:** bloco não coberto no núcleo: `if (ifft_next_out == 1'b1)`
+dentro do fim da matriz — "a IFFT já está mandando a próxima matriz
+emendada".
+**Causa (lida no RTL e medida):** o liberador do `isfft_axi_v4.v`
+(linhas 222–238) só dispara com `~launch_active`; quando a 32ª palavra
+sai, `launch_active` cai, e só no ciclo seguinte o `launch_start` pode
+subir. **Toda matriz custa 33 ciclos para 32 palavras**: o `next_out` da
+matriz seguinte chega sempre 1 ciclo depois do fim da anterior, e a FSM
+passa pelo `IDLE`. Sonda no `write_fsm` (Icarus, tb da Kria):
+
+| Cenário | Instância | Matrizes | Emendadas (linha 55) | Ciclos entre o fim de uma e o `next_out` da seguinte |
+|---|---|---|---|---|
+| tb da Kria (pausas, `tready` 75 %) | wrapper da etapa 1 (referência) | 40 | **39** | 0 |
+| idem | `isfft_axi_v4` (v3 igual) | 40 | **0** | mín. 8, máx. 4.040 |
+| entrada a 1 palavra/ciclo, `tready` 100 % | `isfft_axi_v4` | 40 / 80 | **0** | **mín. = máx. = 1** |
+
+O núcleo emenda (a referência da etapa 1 faz 39 de 40); o wrapper da Kria
+(e a v4, que copiou o liberador) é que não deixa. **Inalcançável por
+construção no chip** → exclusão justificada (refinamento no IMC), não
+teste novo. Custo da bolha: 1/33 = 3 % de vazão.
+**Vira slide?** Sim: "cobertura de código achou 1 ciclo perdido por
+matriz no wrapper".
+
+### 🔍 `cg_ent.cp_esperas.curta` (0 acertos): só a vazão máxima chega lá
+
+A mesma bolha explica: com entrada a 1 palavra/ciclo e saída livre, o
+buffer de entrada (64) ganha 1 palavra a cada 33 ciclos, enche, e o DUT
+segura o `tready` por **1 ciclo**. Sonda no tb da Kria a vazão cheia:
+**7 esperas curtas em 40 matrizes, 47 em 80**; 0 longas. Nenhum teste da
+regressão tinha entrada sem pausa **e** `tready` 100 % por muitas matrizes.
+**Resolvi com:** `isfft_vazao_test` (80 matrizes, sem pausa, `tready`
+100 %, `PKT_MAT` 4).
+
+### 🔍 `cp_pos_trunc.primeira` / `.penult`: sorteio uniforme de 1 a 31
+
+Com 8 truncados na regressão inteira, as pontas (1 e 31 palavras) têm
+~25 % de chance de aparecer. **Resolvi com:** `sorteia_trunc()` no
+`isfft_aleatorio_vseq`: os 2 primeiros truncados são as pontas
+(dirigido) e o resto tem peso 1/5 em cada ponta.
+
+### 🐛 O `isfft_vazao_test` falhou: o núcleo Spiral estoura acima de 23.170
+
+**Sintoma (Verilator):** 80 matrizes, **0 erros bit a bit**, mas
+`SB_NUM matriz 39 (amplitude 32654): erro max 4096.73 LSB, medio 1024.70`.
+**Causa:** bit a bit igual à referência e errado no numérico = defeito no
+**núcleo** (o mesmo nos dois lados — a lição das mutações N1/N2, 1ª
+sessão). Isolado no Icarus, núcleo sozinho (wrapper da etapa 1) e o modelo
+do `evm.py`:
+
+| Entrada | Amplitude | Matrizes | Estouraram |
+|---|---|---|---|
+| constante, impulso, rampa, senoide, aleatória | até 32.654 | 20 | 0 |
+| aleatória uniforme | 16.384 / 24.576 / 28.672 | 150 cada | 0 / 0 / 0 |
+| aleatória uniforme | 32.767 | 150 | **1** (0,7 %) |
+| **±A em toda componente** | 16.384 / 22.000 / **23.170** | 200 cada | **0 / 0 / 0** |
+| **±A em toda componente** | **23.500** / 24.576 / 28.672 | 200 cada | **47 / 36 / 43** |
+| ±A em toda componente | 32.767 | 200 | **186** (93 %) |
+
+Onde: o erro cai nas **colunas 1 e 5 da saída, nas 8 linhas** (16
+elementos) → estouro na **1ª** transformada (IFFT das linhas), na
+borboleta dos bins 1 e 5, espalhado pela FFT das colunas. Erro de
+~4.096 = 32.768/8 (uma volta de 16 bits, dividida pelos estágios
+seguintes). No RTL: as borboletas somam em 17 bits e descartam o bit de
+baixo (`codeBlock40889.v`, `tm52[16:1]`): sem estouro. O estágio de
+rotação multiplica pelo fator de 45° ((1−j)/√2): `re' = (a + b)/√2` chega
+a **√2 · A** — e não há bit de guarda. Limite: **32.767/√2 = 23.170**,
+exatamente onde a tabela vira.
+**Por que a 1ª sessão disse "não há saturação em escala cheia":** a
+medição foi com dado **uniforme** (59 matrizes de 8.193 a 32.767), onde o
+estouro ocorre em ~0,7 % das matrizes cheias. Medir com o pior caso (±A)
+mostrou o limite.
+**Resolvi com (U23, decisão do Lukas):** a faixa válida da entrada do IP
+passa a ser **|re|, |im| ≤ 23.170** (−3 dB da escala cheia). Sem tocar no
+RTL (front-end fechado; o núcleo é o da Kria).
+- `isfft_matriz.svh`: `FAIXA_MAX = 23170`; `AMP_CHEIA` vai até ela;
+  faixa nova `AMP_FORA` (acima) e tipo novo `MAT_SINAIS` (±A), fora do
+  sorteio geral.
+- Scoreboard: matriz com amplitude > 23.170 continua cobrada **bit a
+  bit**; o numérico só é **contado** (`SB_RESUMO`: "fora da faixa
+  válida … N matrizes, M estouraram").
+- `isfft_kria_regressao_test`: o dado cheio de 16 bits do tb da Kria vira
+  `AMP_FORA` (lá o numérico já era só informativo).
+- Teste novo **`isfft_estouro_test`**: 40 matrizes ±32.767; cobra bit a
+  bit e registradores; mostra quantas estouram.
+**Tempo gasto:** ~1 h 30 min (com a compilação do Verilator).
+**Vira slide?** Sim, o melhor da verificação: "o bit a bit passou; só o
+modelo independente viu" + a tabela do limiar 23.170 / 23.500 + a conta
+√2 · A. E vale para o sistema OTFS: o firmware tem que escalar a matriz
+para ≤ 23.170 antes de mandar ao IP.
+
+### 🔍 `reset` do Spiral com uma transição só (toggle)
+
+O soft reset chega ao núcleo: `dp_rst = ~aresetn | ctrl_soft_rst` (linha
+127) → `core_rst_cnt` → `core_rst` (linhas 145–148) → `top_isfft.reset`.
+Então, no `isfft_soft_reset_test`, o `reset` deveria subir de novo. **A
+conferir na GUI**, antes de rodar o bloco 2 (que apaga
+`cov_work/scope`): abrir só aquela rodada
+(`imc -load isfft_soft_reset_test_s1`, nome relativo = rodada em
+`cov_work/scope/`, 5ª sessão) e ver o toggle do `reset` dos `perm*`.
+
+### U21 no `cobertura.ccf`
+
+```
+set_expr_coverable_operators -all
+set_expr_coverable_statements -all
+```
+Põe `&`, `|` e `assign` na cobertura de expressão. **Não conferido**
+(sem Xcelium na nuvem): o bloco 0 mostra se o `xrun` aceitou.
+
+### Outras mudanças
+
+| Arquivo | Mudança |
+|---|---|
+| `env/isfft_cobertura.svh` | contagem dos 3 bins que faltavam no `[COBERTURA]` do log (o Verilator só dá a % do grupo) |
+| `sim/run_uvm_verilator.sh` | `O0=1`: C++ sem otimização. O maior arquivo do UVM passou de 5 GB com `-Os`/`-O1` e foi morto (OOM) na sessão de 7 GB |
+| `run_first_uvm.tcl`, `run_uvm_verilator.sh` | 10 testes (+ `isfft_vazao_test`, `isfft_estouro_test`) |
+
+### Regressão no Verilator 5.052 (com tudo acima)
+
+`O0=1 JOBS=1 UVM_SRC=... bash sim/run_uvm_verilator.sh`, semente 1;
+compilação 184 s (com `ccache` da tentativa anterior). Log:
+`build/uvm_verilator/vm/verification/uvm_isfft/reports/`.
+
+| Teste | Bit a bit | Numérico | Entrada (grupo) | Bins novos: curta / trunc. 1ª / trunc. 31ª | Resultado |
+|---|---|---|---|---|---|
+| `fumaca` | 32 | 1 matriz ok | 35,7 % | 0 / 0 / 0 | ✅ |
+| `registradores` | — | — | 0 % | 0 / 0 / 0 | ✅ |
+| `kria` | 96 | EVM 3,4122 / 0,7822 / 0,5965 % = placa | 50,0 % | 0 / 0 / 0 | ✅ |
+| `aleatorio` | 1.280 | 40 ok | 57,1 % | 0 / 0 / 0 | ✅ |
+| `truncado` | 1.280 | 40 ok | **85,7 %** (era 71,4 %) | 0 / **1** / **2** | ✅ |
+| `contrapressao` | 1.920 | 60 ok | 64,3 % | 0 / 0 / 0 | ✅ |
+| `soft_reset` | 256 (2 épocas) | 8 ok | 78,6 % | 0 / 0 / 0 | ✅ |
+| `kria_regressao` | 1.280 | (informativo) | 71,4 % | 0 / 0 / 0 | ✅ |
+| **`vazao`** | 2.560 | 80 ok | 57,1 % | **77** / 0 / 0 | ✅ |
+| **`estouro`** | 1.280 | fora da faixa: **37 de 40 estouraram** (só contado) | 57,1 % | **37** / 0 / 0 | ✅ |
+
+**10/10**, 0 `UVM_ERROR`. Somando os testes, os 3 bins que faltavam têm
+acerto: a cobertura de entrada deve fechar 14/14 no merge do IMC (a
+conferir na VM).
+
+Mutações do núcleo de novo (o scoreboard mudou):
+`sim/run_uvm_mutacoes.sh N1_nucleo_pingpong_linha N2_nucleo_re_im` →
+versão correta PASSOU; **N1: `SB_NUM`(10); N2: `SB_NUM`(3) + `KRIA`(3)**.
+A checagem numérica continua pegando o que o bit a bit não vê.
+
+### 🐛 `%Error-BADVLTPRAGMA` num comentário
+
+**Sintoma:** a compilação no Verilator parou em
+`isfft_cobertura.svh:30: Unknown verilator comment`.
+**Causa:** linha de comentário que **começa** com a palavra
+`Verilator` (`// Verilator 5.052 so da ...`) é lida como diretiva
+(*metacomment*, como `// verilator lint_off`).
+**Resolvi com:** reescrever o comentário sem começar por essa palavra.
+Regra no `CLAUDE.md`.
+**Tempo:** 5 min (mais uma compilação). **Vira slide?** Não.
+
+### Decisões da sessão
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| U21 | Pontuar expressões com `&`/`\|`/`assign` (`cobertura.ccf`) | ✅ | Decisão do Lukas; o wrapper tinha 0 expressões medidas |
+| U23 | Faixa válida da entrada do IP: \|re\|, \|im\| ≤ 23.170; acima disso o numérico só é contado; `isfft_estouro_test` mostra o limite | ✅ | Decisão do Lukas. Núcleo sem bit de guarda no estágio de 45°: limiar medido entre 23.170 (0/200) e 23.500 (47/200) |
+| U24 | `write_fsm.v:55` (matriz emendada) excluído com justificativa: o liberador nunca emenda (33 ciclos por matriz) | 🟡 | Inalcançável no chip; o núcleo emenda com o wrapper da etapa 1 |
+| U25 | `isfft_vazao_test` (vazão máxima) e truncados com as pontas dirigidas | 🟡 | Únicos jeitos medidos de acertar `cp_esperas.curta` e `cp_pos_trunc.primeira/penult` |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -874,8 +1054,11 @@ e a 1ª rodada com a U20.
 | U18 | Regressão no Xcelium: 8/8, funcional 94,4 % | 🟡 | 2026-09-30 |
 | U19 | Cobertura de código pelo número local de cada módulo | 🟡 | 2026-10-07 |
 | U20 | Excluir modelos da OpenRAM e `u_sva` (bind) da cobertura de código (`cobertura.ccf`) | ✅ | 2026-10-07 |
-| U21 | Pontuar expressões com `&`/`\|`/`assign` | 🟡 | 2026-10-07 |
+| U21 | Pontuar expressões com `&`/`\|`/`assign` | ✅ | 2026-10-21 |
 | U22 | Ferramentas da VM: as mais novas, menos o Genus (22.1) | 🟡 | 2026-10-21 |
+| U23 | Faixa válida da entrada: \|re\|,\|im\| ≤ 23.170 (núcleo estoura acima) | ✅ | 2026-10-21 |
+| U24 | `write_fsm.v:55` excluído com justificativa (wrapper nunca emenda) | 🟡 | 2026-10-21 |
+| U25 | `isfft_vazao_test` + truncados nas pontas | 🟡 | 2026-10-21 |
 
 ---
 
@@ -884,12 +1067,13 @@ e a 1ª rodada com a U20.
 - [x] ~~Integrar no repositório e na pasta da VM~~ — 2ª sessão
 - [x] ~~Refazer a conferência no Verilator na estrutura nova~~ — 8/8, 12/12
 - [x] ~~Rodar na VM: blocos 0 a 3~~ — 4ª sessão: 8/8, IMC funcionou
-- [ ] Fechar os 3 bins de entrada (ver "Para depois", 4ª sessão)
+- [x] ~~Fechar os 3 bins de entrada~~ — 7ª sessão: `isfft_vazao_test` + truncados dirigidos (a conferir no Xcelium)
 - [ ] Cobertura de código do wrapper (70,7 %) e excluir os modelos da OpenRAM
 - [x] ~~Ver a cobertura na GUI do IMC~~ — 5ª sessão
 - [ ] VM (Xcelium 26.03): blocos 0, 2 e 3 com o `cobertura.ccf` (U20) — requalifica o ambiente — e trazer com `traz_uvm.sh`
 - [ ] Wrapper por métrica, **local** (relatório do IMC, não print; falta a sintaxe: `help report`)
-- [ ] Bloco 0% no `write_fsm.v:55` (matrizes emendadas na IFFT): estímulo novo?
-- [ ] `reset` do Spiral só com uma transição: conferir o caminho do soft reset
-- [ ] Confirmar U3, U4, U13, U14, U15, U19, U21
+- [x] ~~Bloco 0% no `write_fsm.v:55`~~ — inalcançável: o liberador gasta 33 ciclos por matriz (U24)
+- [ ] Refinamento no IMC: excluir `write_fsm.v:55` (U24) e os toggles constantes do Spiral, com comentário
+- [ ] `reset` do Spiral só com uma transição: o caminho existe (linhas 127/145–148); conferir na GUI a rodada `isfft_soft_reset_test_s1` **antes** do bloco 2
+- [ ] Confirmar U3, U4, U13, U14, U15, U19, U22, U24, U25
 - [ ] Síntese com DFT só no IP da ISFFT (FE-D39) — depois do UVM

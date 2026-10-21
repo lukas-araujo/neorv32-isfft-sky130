@@ -21,3 +21,11 @@ deselect_coverage -all -module sram_1rw1r_64x64_wpr2
 deselect_coverage -all -module sram_1rw1r_64x256
 deselect_coverage -all -module isfft_v4_sva
 deselect_coverage -all -module sram_1rw1r_sva
+
+# Expressoes (U21). Por padrao o Xcelium so pontua condicoes com && e ||
+# dentro de if/case; o isfft_axi_v4.v usa & e | e assign (ex.: linha 161,
+# assign s00_axis_tready = ~dp_rst & (in_used != IN_DEPTH)), e o wrapper
+# ficava com 0 expressoes medidas. Com isto entram os operadores bit a bit
+# e as atribuicoes continuas.
+set_expr_coverable_operators -all
+set_expr_coverable_statements -all

@@ -28,6 +28,9 @@
 #   SO_RODA=1  nao recompila (usa o binario da rodada anterior)
 #   JOBS=1     compila com 1 processo (maquina com pouca memoria: o C++
 #              do UVM passa de 2,5 GB por arquivo)
+#   O0=1       C++ sem otimizacao (-O0): o maior arquivo do UVM passou de
+#              5 GB com -Os/-O1 e foi morto por falta de memoria numa sessao
+#              de 7 GB (DIARIO_UVM, 7a sessao). Simula mais devagar.
 #=============================================================================
 set -u
 PROJ="$(cd "$(dirname "$0")/.." && pwd)"
@@ -35,7 +38,7 @@ UVM_SRC="${UVM_SRC:-}"
 [ -f "$UVM_SRC/uvm_pkg_all_v2020_3_2_dpi.svh" ] || { echo "UVM_SRC sem uvm_pkg_all_v2020_3_2_dpi.svh"; exit 1; }
 command -v verilator >/dev/null || { echo "verilator fora do PATH"; exit 1; }
 
-TESTES="${*:-isfft_fumaca_test isfft_registradores_test isfft_kria_test isfft_aleatorio_test isfft_truncado_test isfft_contrapressao_test isfft_soft_reset_test isfft_kria_regressao_test}"
+TESTES="${*:-isfft_fumaca_test isfft_registradores_test isfft_kria_test isfft_aleatorio_test isfft_truncado_test isfft_contrapressao_test isfft_soft_reset_test isfft_kria_regressao_test isfft_vazao_test isfft_estouro_test}"
 B="${BUILD:-$PROJ/build/uvm_verilator}"
 mkdir -p "$B"
 
@@ -75,13 +78,15 @@ mkdir -p "$B/shim"
 echo '// macros do UVM ja definidas no uvm_pkg_all (arquivo de apoio)' > "$B/shim/uvm_macros.svh"
 
 if [ -z "${SO_RODA:-}" ]; then
+OTIM=-O1; OTIM_MAKE=()
+if [ -n "${O0:-}" ]; then OTIM=-O0; OTIM_MAKE=(-MAKEFLAGS "OPT_FAST=-O0 OPT_SLOW=-O0 OPT_GLOBAL=-O0"); fi
 echo "=== Compilando (Verilator $(verilator --version | cut -d' ' -f2)) ==="
 t0=$(date +%s)
 verilator --binary --timing --assert --vpi -j "${JOBS:-$(nproc)}" \
   -Wno-fatal -Wno-lint -Wno-style -Wno-SYMRSVDWORD -Wno-MULTITOP \
   --error-limit 200 \
   --top-module isfft_tb_top -timescale 1ns/1ps \
-  -CFLAGS -O1 \
+  -CFLAGS "$OTIM" "${OTIM_MAKE[@]}" \
   --Mdir "$B/obj" \
   +incdir+"$B/shim" +incdir+"$UVM_SRC" \
   "$UVM_SRC/uvm_pkg_all_v2020_3_2_dpi.svh" \

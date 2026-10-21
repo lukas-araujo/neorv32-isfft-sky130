@@ -39,7 +39,7 @@ bash ${UVM_DIR}/scripts/gera_dut_f.sh ${PROJECT_DIR} ${UVM_DIR} ${UVM_WORK}/isff
 # Testes da regressao (bloco 2). Cada um termina com "TESTE PASSOU/FALHOU".
 export TESTES="isfft_fumaca_test isfft_registradores_test isfft_kria_test \
 isfft_aleatorio_test isfft_truncado_test isfft_contrapressao_test \
-isfft_soft_reset_test isfft_kria_regressao_test"
+isfft_soft_reset_test isfft_kria_regressao_test isfft_vazao_test isfft_estouro_test"
 
 # Opcoes comuns do xrun
 #  -uvm             : UVM que vem com o Xcelium (o tb e compativel com 1.2 e

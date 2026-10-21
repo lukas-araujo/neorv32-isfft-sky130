@@ -168,7 +168,25 @@ package isfft_seq_pkg;
         int n_mat      = 40;
         int pkt_mat    = 0;      // 0 = sorteia 1..4
         int trunc_pct  = 0;      // chance de um pacote truncado antes de cada pacote
+        int n_trunc    = 0;      // truncados ja mandados
         function new(string name = "isfft_aleatorio_vseq"); super.new(name); endfunction
+
+        // Tamanho do truncado (DIARIO_UVM, 7a sessao). Sorteio uniforme de
+        // 1 a 31 deixava as pontas sem acerto (bins cp_pos_trunc.primeira e
+        // .penult: 0 em 8 truncados). Agora: os 2 primeiros sao as pontas
+        // (dirigido: tlast na 1a e na 31a palavra) e o resto e sorteado com
+        // peso extra nas pontas (1/5 cada).
+        function int sorteia_trunc();
+            n_trunc++;
+            if (n_trunc == 1) return 1;
+            if (n_trunc == 2) return 31;
+            case ($urandom_range(4, 0))
+                0:       return 1;
+                1:       return 31;
+                default: return $urandom_range(30, 2);
+            endcase
+        endfunction
+
         task body();
             int enviadas = 0;
             if (pkt_mat == 0) pkt_mat = $urandom_range(4, 1);
@@ -176,7 +194,7 @@ package isfft_seq_pkg;
             configura(pkt_mat);
             while (enviadas < n_mat) begin
                 isfft_matriz m[$];
-                if ($urandom_range(99) < trunc_pct) manda_truncado($urandom_range(31, 1));
+                if ($urandom_range(99) < trunc_pct) manda_truncado(sorteia_trunc());
                 for (int i = 0; i < pkt_mat && enviadas < n_mat; i++) begin
                     m.push_back(sorteia_matriz());
                     enviadas++;
@@ -247,6 +265,31 @@ package isfft_seq_pkg;
     endclass
 
     //=========================================================================
+    // Estouro (U23): n matrizes MAT_SINAIS (+-lim em toda componente) com
+    // lim acima da faixa valida. Mostra o limite do nucleo; o bit a bit
+    // contra a etapa 1 continua cobrado.
+    //=========================================================================
+    class isfft_estouro_vseq extends isfft_base_vseq;
+        `uvm_object_utils(isfft_estouro_vseq)
+        int n_mat = 40;
+        function new(string name = "isfft_estouro_vseq"); super.new(name); endfunction
+        task body();
+            isfft_matriz m[$];
+            configura(4);
+            for (int i = 0; i < n_mat; i++) begin
+                isfft_matriz x = isfft_matriz::type_id::create("sinais");
+                x.tipo = MAT_SINAIS;  x.amp = AMP_FORA;
+                x.preenche();
+                m.push_back(x);
+                if (m.size() == 4) begin manda_pacote(m); m.delete(); end
+            end
+            if (m.size() != 0) manda_pacote(m);
+            espera_esvaziar();
+            confere_registradores();
+        endtask
+    endclass
+
+    //=========================================================================
     // O tb_isfft_axi_v3 da Kria reescrito em UVM: 40 matrizes de dado
     // aleatorio cheio, PKT_MAT = 4, tready ~75% com parada longa, pacote
     // truncado de 20 palavras no meio, e limpeza de erro no fim
@@ -262,7 +305,9 @@ package isfft_seq_pkg;
                 m.delete();
                 for (int i = 0; i < 4; i++) begin
                     isfft_matriz x = isfft_matriz::type_id::create("x");
-                    x.tipo = MAT_ALEATORIA; x.amp = AMP_CHEIA; x.preenche();
+                    // Dado cheio de 16 bits, como o tb da Kria: fora da faixa
+                    // valida (U23). Aqui o numerico ja era so informativo.
+                    x.tipo = MAT_ALEATORIA; x.amp = AMP_FORA; x.preenche();
                     m.push_back(x);
                 end
                 manda_pacote(m);

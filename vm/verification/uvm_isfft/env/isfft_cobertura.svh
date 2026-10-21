@@ -26,6 +26,9 @@ class isfft_cobertura extends uvm_component;
     bit [5:0]    r_addr;
     bit [31:0]   r_data;
     int unsigned pos_ent = 0;     // posicao da palavra dentro da matriz (entrada)
+    // Contagens dos bins que faltavam em 30/09 (DIARIO_UVM, 7a sessao): no
+    // simulador aberto (5.052) so sai a % do grupo; assim o bin aparece no log
+    int unsigned n_esp_curta = 0, n_trunc_pos0 = 0, n_trunc_pos30 = 0;
     bit [6:0]    o_in_used;       // copiados da sonda a cada ciclo
     bit [8:0]    o_out_used;
     bit [1:0]    o_ob_n;
@@ -129,6 +132,9 @@ class isfft_cobertura extends uvm_component;
     function void write_ent(axis_item t);
         e_ociosos = t.ociosos; e_esperas = t.esperas; e_last = t.last; e_pos = pos_ent;
         cg_ent.sample();
+        if (e_esperas >= 1 && e_esperas <= 3) n_esp_curta++;
+        if (e_last && e_pos == 0)  n_trunc_pos0++;
+        if (e_last && e_pos == 30) n_trunc_pos30++;
         pos_ent = (t.last && pos_ent != 31) ? 0 : (pos_ent + 1) % 32;
     endfunction
 
@@ -164,5 +170,7 @@ class isfft_cobertura extends uvm_component;
         `uvm_info("COBERTURA", $sformatf("entrada %.1f%%  saida %.1f%%  registradores %.1f%%  ocupacao %.1f%%",
                   cg_ent.get_inst_coverage(), cg_sai.get_inst_coverage(),
                   cg_reg.get_inst_coverage(), cg_ocup.get_inst_coverage()), UVM_NONE)
+        `uvm_info("COBERTURA", $sformatf("acertos: espera curta (1-3) %0d, truncado na 1a palavra %0d, na 31a %0d",
+                  n_esp_curta, n_trunc_pos0, n_trunc_pos30), UVM_NONE)
     endfunction
 endclass

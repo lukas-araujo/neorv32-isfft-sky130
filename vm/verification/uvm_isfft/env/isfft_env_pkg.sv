@@ -244,6 +244,7 @@ package isfft_env_pkg;
         // resultados
         int  n_palavras = 0, n_matrizes = 0, n_erros_dado = 0, n_erros_last = 0;
         int  n_num = 0, n_erros_num = 0;
+        int  n_fora = 0, n_estouro_fora = 0;   // entrada fora da faixa valida (U23)
         real evm_lista[$];             // uma por matriz, na ordem
         isfft_mat_txn sai_lista[$];    // entrada + saida REAL do DUT, na ordem
         int  amp_lista[$];
@@ -330,7 +331,8 @@ package isfft_env_pkg;
             if (a <= isfft_matriz::limite(AMP_BAIXA)) return AMP_BAIXA;
             if (a <= isfft_matriz::limite(AMP_MEDIA)) return AMP_MEDIA;
             if (a <= isfft_matriz::limite(AMP_ALTA))  return AMP_ALTA;
-            return AMP_CHEIA;
+            if (a <= isfft_matriz::limite(AMP_CHEIA)) return AMP_CHEIA;
+            return AMP_FORA;
         endfunction
 
         function void checa_numerico(isfft_mat_txn m, bit [63:0] y[32]);
@@ -350,6 +352,13 @@ package isfft_env_pkg;
             `uvm_info("SB_NUM", $sformatf("matriz %0d: amplitude %0d  EVM %.4f%%  erro max %.2f LSB  medio %.2f",
                                           n_matrizes - 1, a, evm, emax, emed), UVM_HIGH)
             if (!cfg.checa_numerico) return;
+            // Fora da faixa valida (U23): o nucleo pode estourar por projeto.
+            // Bit a bit continua cobrado (compara); o numerico so e contado.
+            if (f == AMP_FORA) begin
+                n_fora++;
+                if (emax > cfg.erro_max_lsb || emed > cfg.erro_medio_lsb) n_estouro_fora++;
+                return;
+            end
             n_num++;
             if (emax > cfg.erro_max_lsb || emed > cfg.erro_medio_lsb) begin
                 n_erros_num++;
@@ -388,6 +397,9 @@ package isfft_env_pkg;
                                              n_matrizes, n_palavras, n_erros_dado, n_erros_last, epoca + 1), UVM_NONE)
             `uvm_info("SB_RESUMO", $sformatf("checagem numerica: %0d matrizes, %0d fora do limite (erro max <= %.1f LSB, medio <= %.1f LSB)",
                                              n_num, n_erros_num, cfg.erro_max_lsb, cfg.erro_medio_lsb), UVM_NONE)
+            if (n_fora > 0)
+                `uvm_info("SB_RESUMO", $sformatf("fora da faixa valida (|re|,|im| > %0d, U23): %0d matrizes, %0d estouraram (so contado)",
+                                                 isfft_matriz::FAIXA_MAX, n_fora, n_estouro_fora), UVM_NONE)
             if (n_faixa.first(f))
                 do
                     `uvm_info("SB_RESUMO", $sformatf("  faixa %-9s: %4d matrizes  pior erro %.2f LSB  pior EVM %.4f%%",

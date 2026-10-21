@@ -126,5 +126,9 @@ export PATH=/tools/cadence/QUANTUS261/bin:/tools/cadence/QUANTUS261/tools/bin:/t
 - LEF da OpenRAM vem **sem `FOREIGN`**: o GDS do KLayout sai com as macros
   vazias (XOR com milhões de diferenças). `macros/lef_foreign.py`.
   Macro nova: rodar `lib_33bits.py`, `lef_unidades.py` e `lef_foreign.py`.
+- Comentário que **começa** com a palavra `Verilator` (`// Verilator ...`)
+  é diretiva para o Verilator (`BADVLTPRAGMA`): reescreva a frase.
+- UVM no Verilator numa sessão de 7 GB: `O0=1 JOBS=1` no
+  `sim/run_uvm_verilator.sh` (com `-O1` o C++ do UVM passa de 5 GB).
 - Checker do LibreLane que reprova (erro adiado) **não grava
   `state_out.json`**: para recomeçar depois dele, parta do passo anterior.

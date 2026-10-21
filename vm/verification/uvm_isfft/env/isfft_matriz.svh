@@ -10,9 +10,21 @@
 // Modelo: Y = fft_colunas( ifft_linhas(X) ) / 8   (numpy: fft(ifft(m,1),0)/8)
 //=============================================================================
 
-typedef enum { AMP_BAIXA, AMP_MEDIA, AMP_ALTA, AMP_CHEIA } isfft_amp_e;
+//
+// Faixa valida da entrada (DIARIO_UVM, 7a sessao, U23): |re|, |im| <= 23.170
+// (= 32.767 / sqrt(2)). O nucleo Spiral nao tem bit de guarda no estagio
+// que multiplica pelo fator de 45 graus ((1-j)/sqrt(2)) da IFFT das linhas:
+// com uma componente acima disso, a soma a*c - b*s passa de 16 bits e da
+// a volta (erro de ~4.096 LSB na saida). Medido na nuvem com o nucleo
+// sozinho e entradas +-A: 0 estouros em 200 matrizes ate A = 23.170;
+// 47 em 200 com A = 23.500. Limitacao herdada da Kria (o mesmo nucleo).
+//
+//   AMP_CHEIA = escala cheia UTIL (ate 23.170), dentro da especificacao
+//   AMP_FORA  = acima de 23.170: so o isfft_estouro_test usa, de proposito
+typedef enum { AMP_BAIXA, AMP_MEDIA, AMP_ALTA, AMP_CHEIA, AMP_FORA } isfft_amp_e;
 typedef enum { MAT_ALEATORIA, MAT_IMPULSO, MAT_SENOIDE, MAT_RAMPA,
-               MAT_CONSTANTE, MAT_KRIA_IMPULSO, MAT_KRIA_SENOIDE, MAT_KRIA_RAMPA } isfft_tipo_e;
+               MAT_CONSTANTE, MAT_KRIA_IMPULSO, MAT_KRIA_SENOIDE, MAT_KRIA_RAMPA,
+               MAT_SINAIS } isfft_tipo_e;
 
 class isfft_matriz extends uvm_object;
     `uvm_object_utils(isfft_matriz)
@@ -32,11 +44,14 @@ class isfft_matriz extends uvm_object;
         super.new(name);
     endfunction
 
+    static const int FAIXA_MAX = 23170;   // U23: maior |re|,|im| valido
+
     static function int limite(isfft_amp_e a);
         case (a)
             AMP_BAIXA: return 64;
             AMP_MEDIA: return 1024;
             AMP_ALTA:  return 8192;
+            AMP_CHEIA: return FAIXA_MAX;
             default:   return 32767;
         endcase
     endfunction
@@ -74,6 +89,12 @@ class isfft_matriz extends uvm_object;
             MAT_CONSTANTE: begin
                 a = $signed($urandom_range(2*lim)) - lim;
                 foreach (re[i]) begin re[i] = a; im[i] = -a; end
+            end
+            // Pior caso do estagio de 45 graus: toda componente em +-lim
+            // (so no isfft_estouro_test; fora do sorteio geral)
+            MAT_SINAIS: foreach (re[i]) begin
+                re[i] = $urandom_range(1) ? lim : -lim;
+                im[i] = $urandom_range(1) ? lim : -lim;
             end
             // As 3 do processamento_otfs.ipynb (Kria), iguais ao evm.py
             MAT_KRIA_IMPULSO: begin
