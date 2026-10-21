@@ -800,6 +800,56 @@ bloco 0 mostra se o `xrun` aceitou. Se reclamar do `-module`, a saída é
 
 ---
 
+## 2026-10-21 — 6ª sessão: a VM foi atualizada; PATH novo
+
+### 🐛 `imc: command not found` (e `xrun` também)
+
+**Sintoma:** com o PATH de sempre, `imc -load $PWD/cov_merged` →
+`bash: imc: command not found`; `which xrun` também não acha.
+**Causa:** a VM goku foi **atualizada** entre 07/10 e 21/10. O `/tools`
+está montado, mas as pastas da Cadence têm outros nomes
+(`ls /tools/cadence/`):
+
+| Ferramenta | Até 07/10 | Agora | Para quê aqui |
+|---|---|---|---|
+| Xcelium | `XCELIUM2309` | **`XCELIUM2603`** | simulação, UVM |
+| vManager (traz o `imc`) | `VMANAGER2409` | **`VMANAGER2603`** | cobertura |
+| Conformal | `CONFRML232` | **`CONFRML261`** (há também `CONFRML251`) | LEC |
+| Genus | `DDI221` | `DDI221` (igual; há também `DDI261`, `DDIEXPORT23`) | síntese |
+| Modus | `MODUS231` | `MODUS261` | ATPG (DFT) |
+| Tempus (SSV) / Quantus / Pegasus | `231`/`221`/`231` | `SSV261` / `QUANTUS261` / `PEGASUS261` | |
+| PVS / Spectre | `PVS231` / `SPECTRE231` | `PVS251` / `SPECTRE251` | |
+| Virtuoso | `ICADVM201` | `IC618` | |
+
+O `imc` de 07/10 era o **24.09** (`imc.log` de 30/09), do vManager, não do
+Xcelium: por isso foi o primeiro a sumir.
+**Resolvi com:** PATH novo no `CLAUDE.md`, no `run_first_uvm.tcl` e no
+`run_first.tcl` (este é do GDSII: só a linha do PATH; registrado lá, 32ª
+sessão). Critério: a versão mais nova de cada ferramenta, **menos o
+Genus**, que fica no 22.1 (`DDI221`), o mesmo de todas as sínteses.
+Enquanto o pacote novo não chega: `/tools/cadence/VMANAGER2603/bin/imc`.
+**Tempo gasto:** 10 min. **Vira slide?** Não (mas vale a lição: o PATH
+fixo é um retrato da máquina; quando a máquina muda, o erro é "command
+not found", não um erro da ferramenta).
+
+### O que muda para a verificação
+
+| Ponto | Por quê | Como conferir |
+|---|---|---|
+| Versão do UVM do `-uvm` | O Xcelium 23.09 escolheu o **1.1d**; o 26.03 pode escolher outra. O código roda em 1.2 e IEEE 1800.2 (U8) | linha `[TESTE] UVM:` dos logs |
+| Regressão de 30/09 deixa de ser comparável ciclo a ciclo | outro simulador, outro sorteio | 8/8, EVM da Kria igual (3,4122 / 0,7822 / 0,5965 %) |
+| Merge de cobertura | rodadas do 23.09 e do 26.03 não se misturam | o bloco 2 já apaga `cov_work/scope` (5ª sessão) |
+| `cobertura.ccf` (U20) | nunca rodou: a 1ª rodada já é no 26.03 | bloco 0 |
+
+A 1ª regressão no 26.03 é ao mesmo tempo a **requalificação do ambiente**
+e a 1ª rodada com a U20.
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| U22 | Ferramentas da VM: a versão mais nova de cada uma, menos o Genus (22.1) | 🟡 | As versões antigas sumiram; o Genus 22.1 continua e é o das sínteses |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -825,6 +875,7 @@ bloco 0 mostra se o `xrun` aceitou. Se reclamar do `-module`, a saída é
 | U19 | Cobertura de código pelo número local de cada módulo | 🟡 | 2026-10-07 |
 | U20 | Excluir modelos da OpenRAM e `u_sva` (bind) da cobertura de código (`cobertura.ccf`) | ✅ | 2026-10-07 |
 | U21 | Pontuar expressões com `&`/`\|`/`assign` | 🟡 | 2026-10-07 |
+| U22 | Ferramentas da VM: as mais novas, menos o Genus (22.1) | 🟡 | 2026-10-21 |
 
 ---
 
@@ -836,7 +887,7 @@ bloco 0 mostra se o `xrun` aceitou. Se reclamar do `-module`, a saída é
 - [ ] Fechar os 3 bins de entrada (ver "Para depois", 4ª sessão)
 - [ ] Cobertura de código do wrapper (70,7 %) e excluir os modelos da OpenRAM
 - [x] ~~Ver a cobertura na GUI do IMC~~ — 5ª sessão
-- [ ] VM: blocos 0, 2 e 3 com o `cobertura.ccf` (U20) e trazer com `traz_uvm.sh`
+- [ ] VM (Xcelium 26.03): blocos 0, 2 e 3 com o `cobertura.ccf` (U20) — requalifica o ambiente — e trazer com `traz_uvm.sh`
 - [ ] Wrapper por métrica, **local** (relatório do IMC, não print; falta a sintaxe: `help report`)
 - [ ] Bloco 0% no `write_fsm.v:55` (matrizes emendadas na IFFT): estímulo novo?
 - [ ] `reset` do Spiral só com uma transição: conferir o caminho do soft reset

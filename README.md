@@ -112,7 +112,7 @@ Dependências fora do repositório:
 | LibreLane (OpenROAD, Magic, Netgen, KLayout) | 3.0.14 via Nix, `~/Projects/librelane` | layout |
 | PDK sky130 do layout | `8afc8346` (fixado pelo LibreLane), `PDK_ROOT=~/Projects/pdks/librelane` | layout |
 | PDK sky130 da OpenRAM | `e8294524` (2022.07.29), `~/Projects/pdks` | macros |
-| Cadence (VM goku) | Genus 22.1, Xcelium 23.09, Conformal 23.2 | síntese, pós-síntese, LEC |
+| Cadence (VM goku) | Genus 22.1, Xcelium 26.03, Conformal 26.1, IMC 26.03 (até out/2026: Xcelium 23.09, Conformal 23.2) | síntese, pós-síntese, LEC |
 
 ---
 

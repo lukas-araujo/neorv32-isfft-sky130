@@ -3036,6 +3036,25 @@ e `source run_first.tcl` (roda 4a e depois 4b). Volta com
 
 ---
 
+## 2026-10-21 (32ª sessão, registrada pelo chat do UVM) — PATH da VM trocado no `run_first.tcl`
+
+A VM goku foi **atualizada**: as pastas da Cadence mudaram de nome
+(`XCELIUM2309` → `XCELIUM2603`, `CONFRML232` → `CONFRML261`,
+`VMANAGER2409` → `VMANAGER2603`…; tabela completa no `DIARIO_UVM.md`, 6ª
+sessão). Com o PATH antigo, `xrun` e `imc` dão `command not found`.
+
+**Mudou neste diretório:** só a linha `export PATH` do
+`vm/backend/synthesis/scripts/run_first.tcl` (a mesma do `CLAUDE.md`).
+Nada mais.
+
+| Consequência para o GDSII | |
+|---|---|
+| Genus | continua o **22.1** (`DDI221`): as sínteses de set/2026 são reproduzíveis |
+| Conformal | 23.2 → **26.1** no LEC da etapa 9 (L47). Resultado de equivalência não depende da versão, mas o log vai dizer outra versão |
+| Xcelium | 23.09 → **26.03** na simulação do netlist do layout (etapa 9). Conferir: somas = RTL, como sempre |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
