@@ -35,16 +35,24 @@ read library -liberty -statetable -both \
     @PROJECT_DIR@/tech/lib/sram_1rw1r_64x256_TT_1p8V_25C.lib \
     @PROJECT_DIR@/tech/lib/sram_1rw1r_64x64_wpr2_TT_1p8V_25C.lib
 
+// -noelab: sem ele o "read design" ja elabora sozinho e o "elaborate design"
+// seguinte para com "Golden design has been elaborated" (33a sessao). Assim,
+// igual ao dofile do Genus: le, depois elabora com a raiz explicita.
+
 // GOLDEN
-read design -verilog2k -golden -lastmod @GOLDEN_OPT@ @GOLDEN_FILES@
+read design -verilog2k -golden -lastmod -noelab @GOLDEN_OPT@ @GOLDEN_FILES@
 elaborate design -golden -root asic_top
 
 // REVISED: o netlist do layout
-read design -verilog2k -revised -lastmod -netlist @REVISED@
+read design -verilog2k -revised -lastmod -noelab -netlist @REVISED@
 elaborate design -revised -root asic_top
 
-// Flip-flops constantes (bits de CSR que nunca mudam) -- so importa no 4c
+// Achatamento igual ao do dofile do Genus. -seq_constant: flip-flops
+// constantes (bits de CSR que nunca mudam) -- importa mais no 4c (RTL)
 set flatten model -seq_constant
+set flatten model -seq_constant_x_to 0
+set flatten model -nodff_to_dlat_zero
+set flatten model -nodff_to_dlat_feedback
 set analyze option -auto
 
 set system mode lec
@@ -57,10 +65,11 @@ add compared points -all
 compare
 
 // O que conferir:
-//   @TAG@_compare.rpt   -> 0 non-equivalent, 0 aborted
+//   tabela "Compared points" no log -> 0 non-equivalent, 0 aborted
+//   @TAG@_compare.rpt   -> so os pontos ruins (vazio = bom)
 //   @TAG@_unmapped.rpt  -> nao mapeados sao suspeitos
 //   @TAG@_blackbox.rpt  -> so as 4 macros
-report compare data   > @PROJECT_DIR@/backend/synthesis/reports/@TAG@_compare.rpt
+report compare data -class nonequivalent -class abort -class notcompared > @PROJECT_DIR@/backend/synthesis/reports/@TAG@_compare.rpt
 report verification   > @PROJECT_DIR@/backend/synthesis/reports/@TAG@_verification.rpt
 report statistics     > @PROJECT_DIR@/backend/synthesis/reports/@TAG@_statistics.rpt
 

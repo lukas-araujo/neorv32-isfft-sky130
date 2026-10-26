@@ -36,7 +36,7 @@ read library -liberty -statetable -both \
 // GOLDEN: o RTL, lido como na sintese (sem defines desde a rodada para o
 // layout: .lib das macros de 1 porta com 33 bits -- DIARIO_GDSII, L1)
 //-----------------------------------------------------------------------------
-read design -verilog2k -golden -lastmod \
+read design -verilog2k -golden -lastmod -noelab \
     @PROJECT_DIR@/frontend/*.v \
     @PROJECT_DIR@/frontend/isfft/*.v
 
@@ -45,7 +45,7 @@ elaborate design -golden -root asic_top
 //-----------------------------------------------------------------------------
 // REVISED: o netlist
 //-----------------------------------------------------------------------------
-read design -verilog2k -revised -lastmod -netlist \
+read design -verilog2k -revised -lastmod -noelab -netlist \
     @PROJECT_DIR@/backend/synthesis/deliverables/neorv32_isfft_soc.v
 
 elaborate design -revised -root asic_top

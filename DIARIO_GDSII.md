@@ -3092,12 +3092,31 @@ SETUP>
 - **Tempo:** 15 min.
 - **Vira slide?** Não.
 
+### 🐛 2ª tentativa: "Golden design has been elaborated"
+
+- **Sintoma:** com as macros resolvidas, o golden foi lido ("Total black
+  box modules referenced in Golden = 4") e o dofile parou na linha 40,
+  `elaborate design -golden`: `Error: Golden design has been elaborated`.
+- **Causa:** sem `-noelab`, o `read design` já elabora sozinho ("Golden
+  root module is set to 'asic_top'"); o `elaborate` seguinte é recusado. O
+  dofile do Genus usa `read_design … -noelab` + `elaborate_design -root`.
+- **Resolvi com:** `-noelab` nos dois `read design` dos dois dofiles.
+  Aproveitei e comparei o resto com o dofile do Genus: entraram as mesmas
+  opções de achatamento (`-seq_constant_x_to 0`, `-nodff_to_dlat_zero`,
+  `-nodff_to_dlat_feedback`); o relatório de comparação passa a listar só
+  não equivalentes/abortados/não comparados (senão são ~20 mil linhas); o
+  resumo do `lec_layout` lê a tabela "Compared points" do log.
+- **Lição (a mesma, de novo):** dofile que nunca rodou → comparar linha a
+  linha com um que já rodou **antes** de ir para a VM.
+- **Tempo:** 10 min.
+
 ### Para continuar (na VM, sem refazer nada)
 
 O `source run_first.tcl` já definiu a função `lec_layout` e as variáveis no
 terminal. No prompt `SETUP>` do Conformal, `exit -force`: o script segue
-para o bloco 4b (simulação). Depois, com o `layout_lec.do` novo em
-`backend/synthesis/scripts/`, no mesmo terminal:
+para o bloco 4b (simulação). Depois, com o `layout_lec.do` e o
+`run_first.tcl` novos em `backend/synthesis/scripts/` (`source
+run_first.tcl` de novo, ou só redefinir a função), no mesmo terminal:
 
 ```
 lec_layout layout_lec_genus "-netlist" "${NL_DIR}/asic_top_genus_flat.v"

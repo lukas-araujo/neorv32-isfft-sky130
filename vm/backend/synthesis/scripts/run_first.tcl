@@ -233,8 +233,10 @@ lec_layout () {
   lec -xl -nogui -dofile ${SYN_DIR}/work/$1.do \
       -logfile ${RPT_DIR}/$1.log 2>&1 | tee ${RPT_DIR}/$1_run.log
   echo "=== $1: resultado ==="
-  grep -iE "Equivalent|Non-equivalent|Aborted|Not-compared" ${RPT_DIR}/$1_compare.rpt | head -12
-  grep -ciE "^ *(Golden|Revised)" ${RPT_DIR}/$1_unmapped.rpt
+  # tabela que o 'compare' imprime: Equivalent / Non-equivalent / Abort
+  grep -B2 -A10 "Compared points" ${RPT_DIR}/$1_run.log | tail -14
+  echo "--- pontos ruins (${RPT_DIR}/$1_compare.rpt; vazio = bom) ---"
+  grep -vE "^\s*$|^//|^=|^-" ${RPT_DIR}/$1_compare.rpt | head -20
 }
 
 #-----------------------------------------------------------------------------
