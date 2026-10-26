@@ -3053,6 +3053,56 @@ Nada mais.
 | Conformal | 23.2 → **26.1** no LEC da etapa 9 (L47). Resultado de equivalência não depende da versão, mas o log vai dizer outra versão |
 | Xcelium | 23.09 → **26.03** na simulação do netlist do layout (etapa 9). Conferir: somas = RTL, como sempre |
 
+## 2026-10-26 (33ª sessão) — 🐛 Etapa 9 na VM: LEC parou em "Module 'sram_…' is referenced but not defined"
+
+Saída do terminal da VM colada pelo Lukas (Conformal **26.10-s200**, o da
+VM atualizada). Os dois netlists chegaram e foram descompactados
+(golden 31,7 MB, layout 29,1 MB).
+
+### 🐛 Sintoma
+
+```
+// Error: .../asic_top_genus_flat.v:194333 Module 'sram_4kbyte_1rw_32x1024_8' is referenced but not defined.
+(… as 4 macros …)
+// 'dofile .../layout_lec_genus.do' is aborted at line 33
+SETUP>
+```
+
+- **Causa:** o meu `layout_lec.do` (copiado do dofile escrito à mão da
+  síntese, o 3b, que **nunca tinha rodado**) só fazia
+  `add notranslate module <macro> -both`. Isso marca como caixa-preta um
+  módulo que o Conformal **encontra**; aqui ninguém define as macros (o
+  netlist só as instancia) e o Conformal, por padrão, para com módulo
+  indefinido. O dofile que o **Genus** escreve (o 3a, que passou na
+  síntese) faz três coisas
+  (`resultados/2026-09-29_sintese_layout/deliverables/neorv32_isfft_soc_lec_genus.do`,
+  linhas 83–94):
+
+| Comando no dofile do Genus | Para quê |
+|---|---|
+| `set_undefined_cell black_box -noascend -both` | módulo sem definição vira caixa-preta, não erro |
+| `add_notranslate_modules -library -both sram_…` | as 4 macros não são traduzidas, nos dois lados |
+| `read_library -liberty -both <sky130> <4 .lib das macros>` | as macros entram como células de biblioteca (pinos e direções vêm do `.lib`) |
+
+- **Resolvi com:** os mesmos três comandos no `layout_lec.do` e no
+  `neorv32_isfft_soc_lec.do` (o 3b tinha o mesmo defeito, só não tinha
+  aparecido).
+- **Lição:** dofile "escrito à mão e didático" que nunca rodou não é
+  referência; o que já passou na ferramenta é.
+- **Tempo:** 15 min.
+- **Vira slide?** Não.
+
+### Para continuar (na VM, sem refazer nada)
+
+O `source run_first.tcl` já definiu a função `lec_layout` e as variáveis no
+terminal. No prompt `SETUP>` do Conformal, `exit -force`: o script segue
+para o bloco 4b (simulação). Depois, com o `layout_lec.do` novo em
+`backend/synthesis/scripts/`, no mesmo terminal:
+
+```
+lec_layout layout_lec_genus "-netlist" "${NL_DIR}/asic_top_genus_flat.v"
+```
+
 ---
 
 ## Índice de decisões

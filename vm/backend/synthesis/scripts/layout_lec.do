@@ -20,14 +20,20 @@
 set log file @PROJECT_DIR@/backend/synthesis/reports/@TAG@_detail.log -replace
 set dofile abort on
 
-// Macros: caixa-preta nos dois lados, ANTES do read library
-add notranslate module sram_8kbyte_1rw_32x2048_8 -both
-add notranslate module sram_4kbyte_1rw_32x1024_8 -both
-add notranslate module sram_1rw1r_64x256         -both
-add notranslate module sram_1rw1r_64x64_wpr2     -both
+// Macros: caixa-preta nos dois lados. Como no dofile que o Genus escreve
+// (e que passou na sintese): (1) modulo sem definicao vira caixa-preta em
+// vez de erro; (2) notranslate com -library; (3) os .lib das macros entram
+// na biblioteca. So o "add notranslate module" sem o .lib parava com
+// "Module 'sram_...' is referenced but not defined" (DIARIO_GDSII, 33a sessao).
+set undefined cell black_box -noascend -both
+add notranslate modules -library -both sram_8kbyte_1rw_32x2048_8 sram_4kbyte_1rw_32x1024_8 sram_1rw1r_64x256 sram_1rw1r_64x64_wpr2
 
 read library -liberty -statetable -both \
-    @PROJECT_DIR@/tech/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+    @PROJECT_DIR@/tech/lib/sky130_fd_sc_hd__tt_025C_1v80.lib \
+    @PROJECT_DIR@/tech/lib/sram_8kbyte_1rw_32x2048_8_TT_1p8V_25C.lib \
+    @PROJECT_DIR@/tech/lib/sram_4kbyte_1rw_32x1024_8_TT_1p8V_25C.lib \
+    @PROJECT_DIR@/tech/lib/sram_1rw1r_64x256_TT_1p8V_25C.lib \
+    @PROJECT_DIR@/tech/lib/sram_1rw1r_64x64_wpr2_TT_1p8V_25C.lib
 
 // GOLDEN
 read design -verilog2k -golden -lastmod @GOLDEN_OPT@ @GOLDEN_FILES@
