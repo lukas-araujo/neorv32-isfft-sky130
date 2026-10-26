@@ -218,9 +218,12 @@ package isfft_seq_pkg;
         function new(string name = "isfft_soft_reset_vseq"); super.new(name); endfunction
         task body();
             isfft_matriz m[$];
+            int alvo, c;
             configura(2);
+            // 1) Soft reset por TEMPO, logo no comeco: com a semente 1 ele cai
+            //    antes de o nucleo sair do reset estendido (127 ciclos), e so
+            //    o buffer de entrada tem dado. Fica: "reset dentro do reset".
             for (int i = 0; i < 6; i++) m.push_back(sorteia_matriz());
-            // manda em paralelo e reseta no meio
             fork
                 manda_pacote(m);
                 begin
@@ -231,6 +234,30 @@ package isfft_seq_pkg;
             // As palavras que chegaram depois do reset formam "matrizes"
             // desalinhadas e o fim do pacote pode sair truncado (erro de
             // tlast). O DUT e o modelo contam igual -- faz parte do teste.
+            p_sequencer.cfg.espera_clk(50);
+            // 2) Soft reset por ESTADO (DIARIO_UVM, 8a sessao): so depois de
+            //    o DUT entregar 1 matriz inteira + parte da seguinte -- o
+            //    nucleo esta calculando, a FIFO de saida e o buffer de saida
+            //    tem dado. Era o caso que o 1) prometia e nao garantia (no
+            //    IMC, o reset do nucleo so tinha uma transicao).
+            m.delete();
+            for (int i = 0; i < 6; i++) m.push_back(sorteia_matriz());
+            alvo = 32 + $urandom_range(31, 0);
+            fork
+                manda_pacote(m);
+                begin
+                    c = 0;
+                    while (p_sequencer.sb.palavras_epoca() < alvo && c < 20000) begin
+                        p_sequencer.cfg.espera_clk(1);
+                        c++;
+                    end
+                    if (c >= 20000)
+                        `uvm_error("VSEQ", $sformatf("saida nao chegou a %0d palavras para o 2o soft reset", alvo))
+                    `uvm_info("VSEQ", $sformatf("2o soft reset com o nucleo trabalhando: %0d palavras ja entregues na epoca",
+                                                p_sequencer.sb.palavras_epoca()), UVM_LOW)
+                    soft_reset();
+                end
+            join
             // Depois, um pacote novo, limpo.
             p_sequencer.cfg.espera_clk(50);
             m.delete();

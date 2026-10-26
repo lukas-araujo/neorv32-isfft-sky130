@@ -1030,6 +1030,96 @@ Regra no `CLAUDE.md`.
 
 ---
 
+## 2026-10-26 — 8ª sessão: o soft reset nunca pegava o núcleo trabalhando; e uma corrida no scoreboard
+
+**Antes do bloco 2 (que apaga `cov_work/scope`):** o Lukas abriu na GUI
+só a rodada `isfft_soft_reset_test_s1` de 30/09 (Xcelium 23.09), com o
+IMC 26.03: `/tools/cadence/VMANAGER2603/bin/imc -load isfft_soft_reset_test_s1`
+(nome relativo = rodada em `cov_work/scope/`, 5ª sessão).
+
+### 🔍 Toggle do `reset` do núcleo: 0/1 até na rodada do soft reset
+
+| Sinal (Toggle, filtro `reset`) | Onde | Coberto |
+|---|---|---|
+| `aresetn` | `isfft_axi_v4`, `isfft_v4_sva` | 0/1 (só sobe uma vez — esperado) |
+| `reset` | `top_isfft`, `ifft_1d_top`, `fft_1d_top`, `write_fsm`, `read_fsm`, todos os `rc*`, `perm*`, `memArray*`, `codeBlock*`, `DirSum*` | **0/1** |
+| `resetOutCountRd2_*` | `perm*` | 1/1 |
+
+Toggle conta subida **e** descida. O `reset` do núcleo (`core_rst`) só
+desceu, nunca subiu de novo — **mesmo no teste que faz soft reset**.
+
+**Causa (medida no Verilator, `+UVM_VERBOSITY=UVM_MEDIUM`):**
+
+| | Tempo |
+|---|---|
+| `aresetn` sobe (`isfft_tb_top.sv`, linha 25: 20 ciclos) | ≈ 0,4 µs |
+| núcleo sai do reset estendido (+127 ciclos, wrapper linhas 145–148) | ≈ **2,96 µs** |
+| soft reset, sementes 1 a 5 | **2,13** / 4,21 / **2,51** / **2,69** / 3,59 µs |
+
+O atraso sorteado (`$urandom_range(300, 60)` ciclos depois do começo da
+sequência) cai em boa parte **dentro** do reset estendido: com a semente
+1 (a da regressão) o soft reset pega o núcleo ainda em reset, e só o
+buffer de entrada tinha dado. "Soft reset com dado dentro do DUT" não
+garantia o núcleo nem a FIFO de saída com dado.
+**Resolvi com (U26):** um **2º soft reset por estado**, no
+`isfft_soft_reset_vseq`: espera o DUT entregar 1 matriz inteira + 0–31
+palavras (`sb.palavras_epoca()`) e reseta — núcleo calculando, FIFO e
+buffer de saída com dado. O 1º (por tempo) fica: "reset dentro do reset"
+também é caso.
+**Vira slide?** Sim: "o teste tinha o nome certo e o estímulo errado — a
+cobertura de toggle mostrou". Boa dupla com o 33-ciclos da 7ª sessão.
+
+### 🐛 Com o 2º soft reset, "palavra extra" na época nova (sementes 2 e 3)
+
+**Sintoma (Verilator, semente 2):** depois do 2º soft reset, o DUT
+"entregou" uma palavra a mais no começo da época 2: palavra 1 do DUT =
+palavra 0 da referência, tudo deslocado de 1, `tlast` fora do lugar.
+**Primeira suspeita, descartada: defeito no RTL.** Tb dirigido no Icarus
+(v4 + wrapper da etapa 1; soft reset depois de K palavras de saída;
+depois 4 matrizes limpas comparadas), varrendo K = 32…120, `tready` 100 %
+e 60 %, 3 sementes: **0 casos ruins em 138**.
+**Causa: corrida entre dois monitores na mesma borda.** No
+`isfft_axi_v4.v` (linhas 505–513) o CTRL é gravado **e** o `bvalid` sobe
+na mesma borda E. Na borda E+1:
+- o buffer de saída ainda tinha `ob_n ≠ 0` (o `dp_rst` zera **nesta**
+  borda): sai uma **última palavra velha**, legítima;
+- o handshake de B acontece: o monitor AXI-Lite publica o soft reset.
+
+Os dois `ap.write` são da mesma borda; a ordem é arbitrária. Quando o
+scoreboard via o soft reset primeiro, a palavra velha caía na época nova.
+
+**Tentativa 1, desfeita:** publicar a escrita do monitor AXI-Lite na
+borda de **descida**. Consertou o soft reset e **quebrou o
+`isfft_registradores_test`**: o `write()` do RAL termina na borda de B, a
+sequência já começa o `mirror()`, o registrador fica *busy*, e o
+`uvm_reg_predictor` **adia** a predição da escrita → o `mirror` compara
+com o valor velho (`PKT_MAT` lido 0, espelho 1).
+**Resolvi com (U27): regra no scoreboard.** Palavra de saída amostrada
+**no mesmo instante** (`$realtime`) do soft reset é da época anterior,
+com o modelo do `tlast` de lá (guardado na troca). Vale nas duas ordens.
+O resumo diz quantas vezes aconteceu.
+
+| Conferência (Verilator, binário novo) | Resultado |
+|---|---|
+| Regressão, 10 testes, semente 1 | **10/10** |
+| `isfft_soft_reset_test`, sementes 1 a 30 | **30/30**; a corrida aconteceu (e foi tratada) em **9** (sementes 2, 3, 9, 13, 18, 22, 23, 25, 26) |
+| 2º soft reset, palavras perdidas (permitido) | sementes 4 e 5: 126 e 106 palavras da época 1 — havia dado no DUT inteiro |
+| Mutações (12, `sim/run_uvm_mutacoes.sh`) | **12/12 detectadas**, com os mesmos detectores da 2ª sessão (W1–W5 bit a bit/SVA/numérico, W6 só `SB_TLAST`, W7 + watchdog, W8–W10 RAL, N1/N2 só numérico) |
+
+**Tempo gasto:** ~1 h 30 min.
+**Vira slide?** Sim: "o primeiro suspeito era o RTL; um tb dirigido de 138
+casos o inocentou; era o testbench" — e o efeito colateral no RAL
+(predição adiada com o registrador *busy*), que é UVM de verdade.
+
+### Decisões da sessão
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| U26 | 2º soft reset disparado por estado (1 matriz + 0–31 palavras entregues) | 🟡 | O soft reset por tempo caía dentro do reset estendido do núcleo |
+| U27 | Scoreboard: palavra no mesmo instante do soft reset é da época anterior | 🟡 | Corrida entre monitores na mesma borda; mexer no monitor quebra a predição do RAL |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -1059,6 +1149,8 @@ Regra no `CLAUDE.md`.
 | U23 | Faixa válida da entrada: \|re\|,\|im\| ≤ 23.170 (núcleo estoura acima) | ✅ | 2026-10-21 |
 | U24 | `write_fsm.v:55` excluído com justificativa (wrapper nunca emenda) | 🟡 | 2026-10-21 |
 | U25 | `isfft_vazao_test` + truncados nas pontas | 🟡 | 2026-10-21 |
+| U26 | 2º soft reset por estado (núcleo trabalhando) | 🟡 | 2026-10-26 |
+| U27 | Palavra no instante do soft reset = época anterior (scoreboard) | 🟡 | 2026-10-26 |
 
 ---
 
@@ -1074,6 +1166,6 @@ Regra no `CLAUDE.md`.
 - [ ] Wrapper por métrica, **local** (relatório do IMC, não print; falta a sintaxe: `help report`)
 - [x] ~~Bloco 0% no `write_fsm.v:55`~~ — inalcançável: o liberador gasta 33 ciclos por matriz (U24)
 - [ ] Refinamento no IMC: excluir `write_fsm.v:55` (U24) e os toggles constantes do Spiral, com comentário
-- [ ] `reset` do Spiral só com uma transição: o caminho existe (linhas 127/145–148); conferir na GUI a rodada `isfft_soft_reset_test_s1` **antes** do bloco 2
-- [ ] Confirmar U3, U4, U13, U14, U15, U19, U22, U24, U25
+- [x] ~~`reset` do Spiral só com uma transição~~ — 8ª sessão: o soft reset caía dentro do reset estendido (U26)
+- [ ] Confirmar U3, U4, U13, U14, U15, U19, U22, U24, U25, U26, U27
 - [ ] Síntese com DFT só no IP da ISFFT (FE-D39) — depois do UVM

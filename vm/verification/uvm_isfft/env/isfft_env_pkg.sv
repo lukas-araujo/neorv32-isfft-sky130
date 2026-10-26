@@ -240,6 +240,15 @@ package isfft_env_pkg;
         int epoca = 0;
         // modelo do tlast e do MAT_OUT (epoca atual)
         int wcnt = 0, pkt_cnt = 0, mat_out = 0;
+        // Corrida no soft reset (DIARIO_UVM, 8a sessao): o DUT grava o CTRL e
+        // sobe o bvalid na mesma borda; na borda do handshake de B ainda pode
+        // sair uma ultima palavra VELHA no AXI-Stream. Os dois monitores
+        // amostram na mesma borda e a ordem dos ap.write e arbitraria. Regra:
+        // palavra amostrada no MESMO instante do soft reset e da epoca
+        // anterior. Guardamos o modelo do tlast dela para isso.
+        realtime t_troca = -1;
+        int      wcnt_ant, pkt_cnt_ant;
+        int      n_palavra_atrasada = 0;
 
         // resultados
         int  n_palavras = 0, n_matrizes = 0, n_erros_dado = 0, n_erros_last = 0;
@@ -268,6 +277,7 @@ package isfft_env_pkg;
         function void write_ctl(axil_item t);
             isfft_epoca e;
             if (!(t.write && t.addr == 6'h00 && t.strb[0] && t.data[1])) return;
+            t_troca = $realtime;  wcnt_ant = wcnt;  pkt_cnt_ant = pkt_cnt;
             epoca++;
             e = new();
             ep.push_back(e);
@@ -279,6 +289,24 @@ package isfft_env_pkg;
             int  pkt_eff = regs.PKT_MAT.pkt_mat.get_mirrored_value();
             bit  last_esp;
             if (pkt_eff == 0) pkt_eff = 1;
+            // Palavra da epoca anterior que chegou depois da troca, no mesmo
+            // instante (ver t_troca): vai para a epoca velha, com o modelo do
+            // tlast de la. O MAT_OUT da epoca nova nao muda (o DUT zerou).
+            if (epoca > 0 && $realtime == t_troca) begin
+                last_esp = (wcnt_ant == 31) && (pkt_cnt_ant >= pkt_eff - 1);
+                if (t.last !== last_esp) begin
+                    n_erros_last++;
+                    `uvm_error("SB_TLAST", $sformatf("palavra %0d (ultima da epoca %0d, no instante do soft reset): tlast=%0b, esperado %0b",
+                                                     wcnt_ant, epoca - 1, t.last, last_esp))
+                end
+                if (wcnt_ant == 31) pkt_cnt_ant = last_esp ? 0 : pkt_cnt_ant + 1;
+                wcnt_ant = (wcnt_ant + 1) % 32;
+                n_palavra_atrasada++;
+                `uvm_info("SB_TROCA", $sformatf("palavra no instante do soft reset contada na epoca %0d", epoca - 1), UVM_MEDIUM)
+                ep[epoca - 1].act.push_back(t);
+                compara(epoca - 1);
+                return;
+            end
             last_esp = (wcnt == 31) && (pkt_cnt >= pkt_eff - 1);
             if (t.last !== last_esp) begin
                 n_erros_last++;
@@ -395,6 +423,9 @@ package isfft_env_pkg;
             isfft_amp_e f;
             `uvm_info("SB_RESUMO", $sformatf("%0d matrizes / %0d palavras comparadas bit a bit; %0d erros de dado, %0d de tlast; %0d epocas",
                                              n_matrizes, n_palavras, n_erros_dado, n_erros_last, epoca + 1), UVM_NONE)
+            if (n_palavra_atrasada > 0)
+                `uvm_info("SB_RESUMO", $sformatf("%0d palavra(s) no instante do soft reset contada(s) na epoca anterior",
+                                                 n_palavra_atrasada), UVM_NONE)
             `uvm_info("SB_RESUMO", $sformatf("checagem numerica: %0d matrizes, %0d fora do limite (erro max <= %.1f LSB, medio <= %.1f LSB)",
                                              n_num, n_erros_num, cfg.erro_max_lsb, cfg.erro_medio_lsb), UVM_NONE)
             if (n_fora > 0)
