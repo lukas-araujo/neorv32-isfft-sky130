@@ -3122,6 +3122,82 @@ run_first.tcl` de novo, ou só redefinir a função), no mesmo terminal:
 lec_layout layout_lec_genus "-netlist" "${NL_DIR}/asic_top_genus_flat.v"
 ```
 
+## 2026-10-28 (34ª sessão) — ✅ Etapa 9 passou: o layout é o mesmo circuito (LEC) e funciona (simulação)
+
+Rodado na VM em 26/10 (blocos 4a e 4b do `run_first.tcl`, depois das
+duas correções do dofile da 33ª sessão), trazido pelo Lukas com
+`traz_vm.sh … layout_etapa9`. Fontes: `resultados/2026-10-26_layout_etapa9/`
+— `logs/layout_lec_genus_run.log.gz`, `reports/layout_lec_genus_*.rpt`,
+`logs/xrun_layout.log.gz`, `logs/xrun_layout_comando.log` (commit `156be7d`).
+Ferramentas: Conformal **26.10-s200**, Xcelium **26.03-s005** (VM nova).
+
+### 4a — LEC: netlist do Genus (achatado) × netlist do layout
+
+| Item | Golden (Genus) | Revised (layout) | Fonte |
+|---|---|---|---|
+| Pontos mapeados (PI / PO / DFF / caixa-preta) | 3 / 1 / 19.823 / 4 | 3 / 1 / 19.823 / 4 | tabela "Mapped points" |
+| Pontos não mapeados | — | — | `_unmapped.rpt`: "There is no unmapped point" |
+| Caixas-pretas | as 4 macros, nos dois lados | | `_blackbox.rpt` |
+| **Comparados: equivalentes** | **19.828** (1 saída + 19.823 flip-flops + 4 macros) | | tabela "Compared points" |
+| Não equivalentes / abortados / não comparados | **0 / 0 / 0** | | `_compare.rpt` |
+| Tempo | ~15 s de CPU | | log |
+
+**Todos os flip-flops mapearam por nome** (nenhum não mapeado): o golden
+achatado (L47) tinha exatamente os nomes que o OpenROAD manteve. Os
+~16.900 buffers, inversores e células trocadas que o layout pôs (árvore de
+relógio, reparo, hold) não mudaram a função lógica de nenhum dos 19.828
+pontos. Mesmo número do LEC da síntese (RTL × Genus, 12ª sessão).
+
+### 4b — Simulação do netlist do layout (Xcelium)
+
+| Item | Netlist do Genus (5ª sessão) | **Netlist do layout** | Fonte |
+|---|---|---|---|
+| Matriz 0 | soma = RTL (`0xeb88508e`) | **soma = RTL (`0xeb88508e`)** | `[TB]` |
+| Matriz 1 | soma = RTL (`0xba7fc58e`) | **soma = RTL (`0xba7fc58e`)** | `[TB]` |
+| Matriz 2 | soma = RTL (`0xb29c0211`) | **soma = RTL (`0xb29c0211`)** | `[TB]` |
+| Ciclos | 188.195 (RTL: 188.194) | **188.195** (3,764 ms a 50 MHz) | `[TB] fim` |
+| Veredito | PASSOU | **`[TB] PASSOU`** | |
+| Tempo total do `xrun` | — | 1 min 05 s | `TOOL: … Exiting` |
+
+Os 188.195 ciclos são os mesmos do netlist do Genus: o ciclo a mais em
+relação ao RTL vem da síntese, não do layout.
+
+Avisos do `xrun` (nenhum erro):
+
+| Aviso | Quantos | O que é |
+|---|---|---|
+| `CUVWSP` (saída não ligada) | ≥ 1.000 (limite) | as **1.069 células `clkload`** da árvore de relógio: buffers de **carga falsa** que o CTS põe para equilibrar o atraso entre ramos — a saída fica solta de propósito. O Conformal viu o mesmo: "Open output port connection (occurrence: 1079)" |
+| `NODNTW` | ≥ 1.000 | `default_nettype none` nos arquivos de células do sky130 (`primitives.v`, `sky130_fd_sc_hd.v`) — é o que o `restore_nettype.v` resolve para o netlist |
+| `DLCPTH` | 120 | `cds.lib` da instalação nova aponta para pastas VHDL que não existem; não usamos VHDL |
+
+**Vira slide?** Sim, os dois: "19.828 pontos equivalentes, 0 diferenças"
+e "as mesmas 3 somas no netlist do layout". E o `clkload` como curiosidade:
+célula que existe só para ser carga.
+
+### A cadeia de verificação fechada
+
+| Elo | Como | Resultado |
+|---|---|---|
+| RTL → Genus | LEC (Conformal) | ✅ 19.828 equivalentes (12ª sessão) |
+| Genus → Genus achatado | conferência pino a pino (`01_leitura.sh`, L19) | ✅ |
+| Genus achatado → layout | LEC (Conformal) | ✅ 19.828 equivalentes (esta sessão) |
+| Layout → GDS | LVS (Netgen) | ✅ "Circuits match uniquely" (30ª sessão) |
+| O circuito funciona? | simulação RTL, Genus e layout com as 3 matrizes da Kria | ✅ as mesmas somas nos três |
+
+**Conclusão: o GDS do núcleo é o RTL.** Do Verilog ao desenho, cada passo
+foi provado equivalente ao anterior, e o desenho roda o firmware.
+
+### Para continuar
+
+Nível 1 (núcleo `asic_top`) fechado. Próximo: **etapa 10**, `chip_top.v`
+com os pads `sky130_ef_io` + o núcleo (roteiro da 7ª sessão), e depois o
+padring (11) e o GDS final (12).
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L46 | Netlist do layout sem células só físicas | 🟡 funcionou (LEC e simulação) | — |
+| L47 | Golden do LEC = Genus achatado | 🟡 funcionou (100 % mapeado por nome) | — |
+
 ---
 
 ## Índice de decisões
@@ -3173,8 +3249,8 @@ lec_layout layout_lec_genus "-netlist" "${NL_DIR}/asic_top_genus_flat.v"
 | L43 | 130 erros de área mínima em pinos sem uso das macros = isenção | 🟡 | 2026-10-09 |
 | L44 | Diagnóstico do XOR dentro/fora das macros (`diag_xor.sh`) | ✅ macros vazias no KLayout | 2026-10-09 |
 | L45 | `FOREIGN` nos LEF das macros (`macros/lef_foreign.py`) | 🟡 funcionou (XOR 0) | 2026-10-10 |
-| L46 | Netlist do layout sem células só físicas (`tira_fisicas.py`) | 🟡 | 2026-10-10 |
-| L47 | Golden do LEC da etapa 9 = Genus achatado (+ RTL no 4c) | 🟡 | 2026-10-10 |
+| L46 | Netlist do layout sem células só físicas (`tira_fisicas.py`) | 🟡 funcionou | 2026-10-10 |
+| L47 | Golden do LEC da etapa 9 = Genus achatado (+ RTL no 4c) | 🟡 funcionou (0 não mapeados) | 2026-10-10 |
 
 ---
 
@@ -3201,7 +3277,8 @@ lec_layout layout_lec_genus "-netlist" "${NL_DIR}/asic_top_genus_flat.v"
 - [x] ~~Rodar a etapa 8 (`08_verificacao.sh`)~~ — LVS ✅; DRC 1.182 e XOR 15,7 M a explicar (28ª sessão)
 - [x] ~~`diag_xor.sh` (L44)~~ — macros vazias no GDS do KLayout → L45 (29ª sessão)
 - [x] ~~Etapa 8 de novo com L42 + L45~~ — XOR 0, DRC 130 isentos, LVS limpo (30ª sessão)
-- [ ] Etapa 9: `09_netlist.sh` no notebook, blocos 4a/4b na VM (31ª sessão: preparado)
+- [x] ~~Etapa 9~~ — LEC 19.828 equivalentes, simulação PASSOU com as 3 somas (34ª sessão)
+- [ ] Etapa 10: `chip_top.v` com pads `sky130_ef_io` + núcleo
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
