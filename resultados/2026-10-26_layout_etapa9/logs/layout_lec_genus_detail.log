@@ -1,0 +1,109 @@
+                          CONFORMAL (R)
+                   Version 26.10-s200 (09-Jul-2026) (64 bit executable)
+   Copyright (c) Cadence Design Systems, Inc., 1997-2026. All Rights Reserved
+
+
+This program is proprietary and confidential information belonging to
+Cadence Design Systems, Inc., and may be used and disclosed only as authorized
+in a license agreement controlling such use and disclosure.
+
+CPU time     : 0.14    seconds
+Elapse time  : 0       seconds
+Memory usage : 137.08  M bytes
+// Command: set dofile abort on
+// Command: set undefined cell black_box -noascend -both
+// Command: add notranslate modules -library -both sram_8kbyte_1rw_32x2048_8 sram_4kbyte_1rw_32x1024_8 sram_1rw1r_64x256 sram_1rw1r_64x64_wpr2
+// Command: read library -liberty -statetable -both \
+//              /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/tech/lib/sky130_fd_sc_hd__tt_025C_1v80.lib \
+//              /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/tech/lib/sram_8kbyte_1rw_32x2048_8_TT_1p8V_25C.lib \
+//              /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/tech/lib/sram_4kbyte_1rw_32x1024_8_TT_1p8V_25C.lib \
+//              /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/tech/lib/sram_1rw1r_64x256_TT_1p8V_25C.lib \
+//              /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/tech/lib/sram_1rw1r_64x64_wpr2_TT_1p8V_25C.lib
+// Parsing file /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/tech/lib/sky130_fd_sc_hd__tt_025C_1v80.lib ...
+// Parsing file /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/tech/lib/sram_8kbyte_1rw_32x2048_8_TT_1p8V_25C.lib ...
+// Parsing file /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/tech/lib/sram_4kbyte_1rw_32x1024_8_TT_1p8V_25C.lib ...
+// Parsing file /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/tech/lib/sram_1rw1r_64x256_TT_1p8V_25C.lib ...
+// Parsing file /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/tech/lib/sram_1rw1r_64x64_wpr2_TT_1p8V_25C.lib ...
+// Warning: (RTL9.17) Cell doesn't have any output pins or all output pins are undriven (blackboxed) (occurrence:12)
+// Warning: (RTL9.21) Liberty cell with interface_timing attribute set to true was not an empty cell (occurrence:4)
+// Note: (RTL9.26) Liberty pin with internal_node use default input_map (occurrence:6)
+// Note: (HRC1.2) Module/entity is not translated (blackboxed) (occurrence:4)
+// Note: Read Liberty library successfully
+CPU time     : 0.28    seconds
+Elapse time  : 0       seconds
+Memory usage : 159.73  M bytes
+// Command: read design -verilog2k -golden -lastmod -noelab -netlist /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/synthesis/netlist_layout/asic_top_genus_flat.v
+// Parsing file /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/synthesis/netlist_layout/asic_top_genus_flat.v ...
+CPU time     : 1.20    seconds
+Elapse time  : 1       seconds
+Memory usage : 228.44  M bytes
+// Command: elaborate design -golden -root asic_top
+// Golden root module is set to 'asic_top'
+// Warning: (RTL14) Signal has input but it has no output (occurrence:141)
+// Warning: Total black box modules referenced in Golden = 4
+CPU time     : 1.58    seconds
+Elapse time  : 2       seconds
+Memory usage : 224.47  M bytes
+// Command: read design -verilog2k -revised -lastmod -noelab -netlist /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/synthesis/netlist_layout/asic_top_layout.v
+// Parsing file /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/synthesis/netlist_layout/asic_top_layout.v ...
+CPU time     : 2.63    seconds
+Elapse time  : 3       seconds
+Memory usage : 298.68  M bytes
+// Command: elaborate design -revised -root asic_top
+// Revised root module is set to 'asic_top'
+// Warning: (RTL14) Signal has input but it has no output (occurrence:131)
+// Note: (HRC3.5b) Open output port connection is detected (occurrence:1079)
+// Warning: Total black box modules referenced in Revised = 4
+CPU time     : 3.11    seconds
+Elapse time  : 3       seconds
+Memory usage : 283.03  M bytes
+// Command: set flatten model -seq_constant
+// Command: set flatten model -seq_constant_x_to 0
+// Command: set flatten model -nodff_to_dlat_zero
+// Command: set flatten model -nodff_to_dlat_feedback
+// Command: set analyze option -auto
+// Command: set system mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// Processing Revised ...
+// Modeling Revised ...
+// Balanced modeling (auto) mapped 39646 out of 39646 DFF/DLATs
+CPU time     : 5.21    seconds
+Elapse time  : 5       seconds
+Memory usage : 455.23  M bytes
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Golden            3      1      19823  4         19831   
+--------------------------------------------------------------------------------
+Revised           3      1      19823  4         19831   
+================================================================================
+CPU time     : 6.40    seconds
+Elapse time  : 7       seconds
+Memory usage : 491.82  M bytes
+// Running automatic setup...
+// Automatic setup finished.
+CPU time     : 14.39   seconds
+Elapse time  : 15      seconds
+Memory usage : 494.04  M bytes
+// Command: report design data     > /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/synthesis/reports/layout_lec_genus_design.rpt
+// Command: report black box       > /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/synthesis/reports/layout_lec_genus_blackbox.rpt
+// Command: report unmapped points > /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/synthesis/reports/layout_lec_genus_unmapped.rpt
+// Command: add compared points -all
+// 19828 compared points added to compare list
+// Command: compare
+================================================================================
+Compared points      PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Equivalent           1      19823  4         19828   
+================================================================================
+CPU time     : 14.71   seconds
+Elapse time  : 15      seconds
+Memory usage : 494.04  M bytes
+// Command: report compare data -class nonequivalent -class abort -class notcompared > /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/synthesis/reports/layout_lec_genus_compare.rpt
+// Command: report verification   > /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/synthesis/reports/layout_lec_genus_verification.rpt
+// Command: report statistics     > /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/synthesis/reports/layout_lec_genus_statistics.rpt
+// Command: exit -force

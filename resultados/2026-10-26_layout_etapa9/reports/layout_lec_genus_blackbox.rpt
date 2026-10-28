@@ -1,0 +1,4 @@
+SYSTEM: (G R) sram_1rw1r_64x256
+SYSTEM: (G R) sram_1rw1r_64x64_wpr2
+SYSTEM: (G R) sram_4kbyte_1rw_32x1024_8
+SYSTEM: (G R) sram_8kbyte_1rw_32x2048_8

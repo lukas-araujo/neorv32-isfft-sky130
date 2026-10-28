@@ -1,0 +1,10 @@
+                          CONFORMAL (R)
+                   Version 26.10-s200 (09-Jul-2026) (64 bit executable)
+   Copyright (c) Cadence Design Systems, Inc., 1997-2026. All Rights Reserved
+
+
+This program is proprietary and confidential information belonging to
+Cadence Design Systems, Inc., and may be used and disclosed only as authorized
+in a license agreement controlling such use and disclosure.
+
+// Command: set log file /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/synthesis/reports/layout_lec_genus_detail.log -replace

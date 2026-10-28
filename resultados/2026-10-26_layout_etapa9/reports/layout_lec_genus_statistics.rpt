@@ -1,0 +1,21 @@
+Mapping and compare statistics
+================================================================================
+                     Compare Result       Golden            Revised
+--------------------------------------------------------------------------------
+Root module name                          asic_top          asic_top          
+
+Primary inputs                                 3                  3
+   Mapped                                      3                  3
+
+Primary outputs                                1                  1
+   Mapped                                      1                  1
+      Equivalent                  1
+
+Black-box key points                           4                  4
+   Mapped                                      4                  4
+      Equivalent                  4
+
+State key points                           19823              19823
+   Mapped                                  19823              19823
+      Equivalent              19823
+================================================================================
