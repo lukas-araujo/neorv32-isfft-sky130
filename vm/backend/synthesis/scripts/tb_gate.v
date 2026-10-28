@@ -3,10 +3,11 @@
 //
 // Projeto: NEORV32 + ISFFT em ASIC (sky130)
 //
-// O MESMO testbench roda duas vezes (ver run_first.tcl):
+// O MESMO testbench roda tres vezes (ver run_first.tcl e layout/chip/):
 //   0) RTL      : frontend/*.v
 //   2) netlist  : deliverables/<design>.v + celulas sky130
-// As duas usam os mesmos modelos de memoria (imem_sim_model.v + .v da
+//   -DCHIP_TOP  : layout/chip/chip_top.v (pads sky130_ef_io + nucleo)
+// Todas usam os mesmos modelos de memoria (imem_sim_model.v + .v da
 // OpenRAM), entao a unica diferenca entre elas e o circuito sob teste.
 //
 //-----------------------------------------------------------------------------
@@ -47,6 +48,28 @@ module tb_gate;
 
     wire uart_txd;
 
+`ifdef CHIP_TOP
+    //-------------------------------------------------------------------------
+    // Chip COM os pads (etapa 10 do layout, layout/chip/chip_top.v): tudo
+    // entra e sai pelo PAD dos sky130_ef_io; a alimentacao tambem e pino.
+    // Compilar com -DCHIP_TOP (USE_POWER_PINS so para os pads: ver
+    // layout/chip/pinos_alimentacao_pads.v). Niveis logicos: 1 = a
+    // tensao nominal de cada dominio (1,8 V no vccd, 3,3 V no vddio/vdda).
+    //-------------------------------------------------------------------------
+    wire clk_pad  = clk;
+    wire rstn_pad = rstn;
+    wire rx_pad   = 1'b1;
+    wire vccd_pad = 1'b1, vddio_pad = 1'b1, vdda_pad = 1'b1;
+    wire vssd_pad = 1'b0, vssio_pad = 1'b0, vssa_pad = 1'b0;
+
+    chip_top dut (
+        .clk_pad   (clk_pad),   .rstn_pad  (rstn_pad),
+        .rx_pad    (rx_pad),    .tx_pad    (uart_txd),
+        .vccd_pad  (vccd_pad),  .vssd_pad  (vssd_pad),
+        .vddio_pad (vddio_pad), .vssio_pad (vssio_pad),
+        .vdda_pad  (vdda_pad),  .vssa_pad  (vssa_pad)
+    );
+`else
     //-------------------------------------------------------------------------
     // Chip: RTL ou netlist, mesmo nome e mesmas portas
     //-------------------------------------------------------------------------
@@ -56,6 +79,7 @@ module tb_gate;
         .uart0_txd_o (uart_txd),
         .uart0_rxd_i (1'b1)
     );
+`endif
 
     //-------------------------------------------------------------------------
     // Reset: 10 ciclos, liberado na descida do clock
@@ -79,6 +103,7 @@ module tb_gate;
             avisou_x = 1'b1;
             erros = erros + 1;
             $display("[TB] ERRO: uart0_txd_o = %b no ciclo %0d -- X/Z vindo de estado nao inicializado", uart_txd, ciclos);
+            $fflush();   // sem isto o aviso fica no buffer ate a UART falar
         end
     end
 

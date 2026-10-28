@@ -3198,6 +3198,144 @@ padring (11) e o GDS final (12).
 | L46 | Netlist do layout sem células só físicas | 🟡 funcionou (LEC e simulação) | — |
 | L47 | Golden do LEC = Genus achatado | 🟡 funcionou (100 % mapeado por nome) | — |
 
+## 2026-10-28 (35ª sessão) — ✅ Etapa 10: `chip_top.v` com os pads simula igual ao núcleo
+
+Nível 2 começou. Tudo nesta sessão foi feito e simulado **aqui na nuvem**
+(Icarus 12.0); nada para rodar no notebook ou na VM ainda. Fontes:
+`resultados/2026-10-28_chip_etapa10/` (`10_simula_chip_top.log`,
+`10_mutacao_pad_tx.log`); modelos de pad do open_pdks `8afc8346` e do
+`skywater-pdk-libs-sky130_fd_io` `63752cd` (`tech/sky130_io/LEIAME.md`).
+
+### O que o PDK tem (conferido nos arquivos, não na documentação)
+
+| Célula | LEF (`SIZE`, `CLASS`) | Para quê |
+|---|---|---|
+| `sky130_ef_io__gpiov2_pad_wrapped` | 80 × 210,965 µm, `PAD INOUT` | pino digital; 39 pinos |
+| `sky130_ef_io__{vccd,vssd}_lvc_clamped_pad` | 75 × 197,965, `PAD POWER` | 1,8 V do núcleo |
+| `sky130_ef_io__{vddio,vssio}_hvc_clamped_pad` | 75 × 197,965, `PAD POWER` | 3,3 V dos pads |
+| `sky130_ef_io__{vdda,vssa}_hvc_clamped_pad` | 75 × 197,965, `PAD POWER` | domínio analógico do anel |
+| `sky130_ef_io__corner_pad` | 200 × 204, `ENDCAP` | canto |
+| `sky130_ef_io__com_bus_slice_{1,5,10,20}um` | `PAD SPACER` | preenchimento do anel |
+| `sky130_ef_io__connect_vcchib_vccd_and_vswitch_vddio_slice_20um` | 20 × 197,965, `PAD AREAIO` | liga VCCHIB→VCCD e VSWITCH→VDDIO |
+
+Nenhum desses LEF declara `SITE` (vai precisar de `PAD_FAKE_SITES`, L16, na
+etapa 11). O pad de GPIO da tabela da 6ª sessão estava certo (`_wrapped`).
+
+### O `chip_top.v` (`layout/chip/chip_top.v`)
+
+| Instância | Célula | Ligação |
+|---|---|---|
+| `u_core` | `asic_top` (o núcleo das etapas 1–9) | 4 sinais de 1,8 V |
+| `pad_clk`, `pad_rstn`, `pad_rx` | `gpiov2_pad_wrapped`, **entrada** | `IN` → núcleo |
+| `pad_tx` | `gpiov2_pad_wrapped`, **saída** | núcleo → `OUT` |
+| `tie_clk`, `tie_rstn`, `tie_rx`, `tie_tx` | `sky130_fd_sc_hd__conb_1` | constantes de 1,8 V, uma por pad |
+| `pad_vccd` … `pad_vssa` | 6 pads de alimentação (L48) | |
+| `fatia_vcchib` | `connect_vcchib_vccd_and_vswitch_vddio_slice_20um` (L50) | |
+
+Configuração dos pads de GPIO (semântica lida no modelo
+`sky130_fd_io__top_gpiov2.functional.pp.v`):
+
+| Pino | Domínio | Entrada (clk, rstn, rx) | Saída (tx) | O que faz |
+|---|---|---|---|---|
+| `DM[2:0]` | 1,8 V | `001` | `110` | 001 = só entrada (driver em Z); 110 = push-pull forte |
+| `OE_N` | 1,8 V | 1 | 0 | habilita o driver |
+| `OUT` | 1,8 V | 0 | `uart0_txd_o` | |
+| `INP_DIS` | 1,8 V | 0 | 1 | liga/desliga o buffer de entrada |
+| `IB_MODE_SEL`, `VTRIP_SEL`, `SLOW`, `HLD_OVR`, `ANALOG_*` | 1,8 V | 0 | 0 | limiar CMOS, borda rápida, sem analógico |
+| `ENABLE_VDDIO` | 1,8 V | 1 | 1 | |
+| `ENABLE_H`, `HLD_H_N` | **3,3 V** | `TIE_HI_ESD` | `TIE_HI_ESD` | pad ligado, sem "hold" |
+| `ENABLE_INP_H`, `ENABLE_VDDA_H`, `ENABLE_VSWITCH_H` | **3,3 V** | `TIE_LO_ESD` | `TIE_LO_ESD` | |
+
+Os pinos `_H` são do domínio de 3,3 V e **não podem** vir de célula de
+1,8 V: vêm das saídas `TIE_HI_ESD`/`TIE_LO_ESD` do próprio pad, como no
+Caravel.
+
+As 12 barras do anel (AMUXBUS_A/B, VSSA, VDDA, VSWITCH, VDDIO_Q, VCCHIB,
+VDDIO, VCCD, VSSIO, VSSD, VSSIO_Q) só aparecem no Verilog com
+`USE_POWER_PINS` (simulação e LVS); no layout elas se ligam por encosto
+(`connect_by_abutment` do `PadRing`). Cantos e preenchimentos não entram no
+netlist: o `PadRing` os põe sozinho.
+
+### Simulação (`layout/chip/10_simula.sh`)
+
+`tb_gate.v` com `-DCHIP_TOP`: o mesmo testbench das etapas 0, 2 e 9, agora
+ligando `chip_top`. Relógio, reset, RX e TX passam pelos pads; os 6 pinos
+de alimentação são pinos do testbench (1 = tensão nominal do domínio).
+Núcleo = **o netlist do layout** (o da etapa 9).
+
+| Item | Núcleo sozinho (etapa 9, Xcelium) | **Chip com pads (Icarus)** |
+|---|---|---|
+| Matriz 0 | `0xeb88508e` = RTL | **`0xeb88508e` = RTL** |
+| Matriz 1 | `0xba7fc58e` = RTL | **`0xba7fc58e` = RTL** |
+| Matriz 2 | `0xb29c0211` = RTL | **`0xb29c0211` = RTL** |
+| Firmware | `RESULTADO: OK` | **`RESULTADO: OK`** |
+| Ciclos | 188.195 | **188.195** |
+| Veredito | PASSOU | **`[TB] PASSOU`** |
+| Tempo | 1 min 05 s | 4.074 s (~68 min; Icarus é mais lento) |
+
+**Mutação** (a versão certa passou primeiro): `pad_tx` com `DM = 001` (só
+entrada) no lugar de `110` → `[TB] ERRO: uart0_txd_o = z no ciclo 21`. O
+teste enxerga o pad de verdade (`10_mutacao_pad_tx.log`).
+
+### 🐛 1ª tentativa: módulos não encontrados
+
+- **Sintoma:** 315 erros `Unknown module type: sky130_fd_io__top_ground_*`.
+- **Causa:** (1) faltavam os modelos dos pads de **terra** (`VSSD`, `VSSIO`,
+  `VSSA`); (2) o Icarus elabora como raiz todo módulo não instanciado — e o
+  `sky130_ef_io.v` tem dezenas de pads que não usamos.
+- **Resolvi com:** os dois modelos de terra trazidos; `iverilog -s tb_gate`.
+
+### 🐛 2ª tentativa: tudo em X — `USE_POWER_PINS` vazando
+
+- **Sintoma:** `uart0_txd_o = x` no ciclo 21; a sonda mostrou o anel
+  certo (VCCD = VDDIO = VCCHIB = 1, VSS* = 0) mas `DM = xxx` nos pads.
+- **Causa:** `-DUSE_POWER_PINS` na linha de comando vale para **todos** os
+  arquivos — e a biblioteca de células usa a **mesma macro** para ganhar
+  `VPWR/VGND`. As `conb_1` (e todas as células do núcleo) ficaram com os
+  pinos de alimentação soltos e as saídas em X. Os modelos das macros da
+  OpenRAM também têm `` `ifdef USE_POWER_PINS``.
+- **Resolvi com:** a macro entra por um arquivo,
+  `layout/chip/pinos_alimentacao_pads.v`, lido **depois** das células, do
+  núcleo e das macros e **antes** dos pads e do `chip_top` — o mesmo
+  mecanismo do `restore_nettype.v`.
+- **Vira slide?** Sim: "um `` `define`` vale para tudo o que vem depois" —
+  duas bibliotecas usando a mesma macro com sentidos diferentes.
+
+### 🐛 A mutação não aparecia
+
+- **Causa:** o aviso de X do `tb_gate.v` ficava no buffer da saída até o
+  próximo `$fflush()`, que só acontece quando a UART fala — e com o pad
+  morto ela nunca fala.
+- **Resolvi com:** `$fflush()` logo depois do aviso; `10_simula.sh` aceita
+  `CHIP_V=` (cópia com defeito) e `EXTRA="+LIMITE_MS=1"`.
+
+### Arquivos
+
+| Arquivo | O quê |
+|---|---|
+| `layout/chip/chip_top.v` | novo |
+| `layout/chip/pinos_alimentacao_pads.v` | novo: `` `define USE_POWER_PINS`` só para pads |
+| `layout/chip/10_simula.sh` | novo |
+| `tech/sky130_io/` | modelos dos pads (SkyWater/Efabless, Apache-2.0) + o modelo da fatia VCCHIB (nosso) + `LEIAME.md` |
+| `vm/backend/synthesis/scripts/tb_gate.v` | `` `ifdef CHIP_TOP``; `$fflush()` depois do aviso de X |
+
+### Para continuar: etapa 11 (padring, fluxo `Chip`)
+
+| A decidir/fazer | Por quê |
+|---|---|
+| Tamanho do die e lado de cada pad (`PAD_SOUTH/EAST/NORTH/WEST`) | núcleo 2,0 × 1,5 mm + ~211 µm de pad + cantos de 200 µm por lado → ~2,5 × 2,0 mm; pads perto dos pinos do núcleo |
+| `PAD_FAKE_SITES`, `PAD_SITE_NAME`, `PAD_CORNER`, `PAD_FILLERS` | o sky130 não traz (L16) |
+| `fatia_vcchib` é `CLASS PAD AREAIO`, não `SPACER` | precisa entrar numa lista de lado como se fosse pad |
+| Núcleo como macro: `asic_top.lef` (etapa 8, `Magic.WriteLEF`) + GDS | |
+| Alimentação do núcleo pelo anel (VCCD/VSSD → `vccd1`/`vssd1`) | |
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L48 | 6 pads de alimentação: um de cada (vccd, vssd, vddio, vssio, vdda, vssa) | 🟡 | Mínimo que alimenta o anel; VSSA = 0 é exigido pelo driver de saída do gpiov2 |
+| L49 | `ENABLE_H`/`HLD_H_N` = `TIE_HI_ESD` (sem power-on-reset de 3,3 V) | 🟡 | Caravel usa POR; aqui o pad liga com o VDDIO. Basta para estudo |
+| L50 | Fatia `connect_vcchib_vccd_and_vswitch_vddio` no anel, com modelo Verilog nosso | 🟡 | Sem ela VCCHIB fica sem fonte e o buffer de entrada dá X |
+| L51 | `USE_POWER_PINS` só para pads, por arquivo na ordem de leitura | 🟡 | A macro também liga os pinos de alimentação das células e das macros |
+
 ---
 
 ## Índice de decisões
@@ -3251,6 +3389,10 @@ padring (11) e o GDS final (12).
 | L45 | `FOREIGN` nos LEF das macros (`macros/lef_foreign.py`) | 🟡 funcionou (XOR 0) | 2026-10-10 |
 | L46 | Netlist do layout sem células só físicas (`tira_fisicas.py`) | 🟡 funcionou | 2026-10-10 |
 | L47 | Golden do LEC da etapa 9 = Genus achatado (+ RTL no 4c) | 🟡 funcionou (0 não mapeados) | 2026-10-10 |
+| L48 | 6 pads de alimentação (um de cada) | 🟡 | 2026-10-28 |
+| L49 | `ENABLE_H` = `TIE_HI_ESD`, sem POR | 🟡 | 2026-10-28 |
+| L50 | Fatia VCCHIB/VSWITCH no anel (modelo nosso) | 🟡 | 2026-10-28 |
+| L51 | `USE_POWER_PINS` só para pads (arquivo na ordem de leitura) | 🟡 | 2026-10-28 |
 
 ---
 
@@ -3278,7 +3420,8 @@ padring (11) e o GDS final (12).
 - [x] ~~`diag_xor.sh` (L44)~~ — macros vazias no GDS do KLayout → L45 (29ª sessão)
 - [x] ~~Etapa 8 de novo com L42 + L45~~ — XOR 0, DRC 130 isentos, LVS limpo (30ª sessão)
 - [x] ~~Etapa 9~~ — LEC 19.828 equivalentes, simulação PASSOU com as 3 somas (34ª sessão)
-- [ ] Etapa 10: `chip_top.v` com pads `sky130_ef_io` + núcleo
+- [x] ~~Etapa 10~~ — `chip_top.v` com pads simula PASSOU, 3 somas = RTL (35ª sessão)
+- [ ] Etapa 11: padring (fluxo `Chip`), config do anel (L16)
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou

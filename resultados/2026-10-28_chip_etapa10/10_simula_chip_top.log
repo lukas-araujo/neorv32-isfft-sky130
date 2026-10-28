@@ -1,0 +1,22 @@
+# layout/chip/10_simula.sh -- nucleo = netlist do layout, Icarus 12.0, 2026-10-28 (sessao do Claude)
+[IMEM] programa: /home/user/neorv32-isfft-sky130/sw/isfft_evm/neorv32_raw_exe.hex
+[IMEM] mem[0..2] = 0f14020f3 080001217 0ffc20213
+[TB] 3 somas esperadas em /home/user/neorv32-isfft-sky130/sw/isfft_evm/chk_rtl.txt
+[TB] reset liberado em 200000 ns
+[UART] 
+[UART] isfft_evm: matrizes da Kria pelo chip
+[UART] CHK 0 0xeb88508e ciclos 0x00000a3e
+[TB] matriz 0: soma = RTL (0xeb88508e)
+[UART] DUMP 0 0x80000000
+[UART] CHK 1 0xba7fc58e ciclos 0x00000a3e
+[TB] matriz 1: soma = RTL (0xba7fc58e)
+[UART] DUMP 1 0x80000000
+[UART] CHK 2 0xb29c0211 ciclos 0x00000a3e
+[TB] matriz 2: soma = RTL (0xb29c0211)
+[UART] DUMP 2 0x80000000
+[UART] MAT_IN 0x00000003 MAT_OUT 0x00000003 ERR 0x00000000
+[UART] RESULTADO: OK
+[UART] #FIM#
+[TB] fim em 3.764 ms (188195 ciclos)
+[TB] PASSOU
+(tempo real: 4074 s)

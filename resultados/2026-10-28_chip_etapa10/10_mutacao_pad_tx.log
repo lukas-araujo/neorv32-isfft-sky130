@@ -1,0 +1,6 @@
+# mutacao: pad_tx com DM=001 (so entrada) em vez de 110; CHIP_V=<copia> EXTRA=+LIMITE_MS=1; interrompida depois do ERRO
+[IMEM] programa: /home/user/neorv32-isfft-sky130/sw/isfft_evm/neorv32_raw_exe.hex
+[IMEM] mem[0..2] = 0f14020f3 080001217 0ffc20213
+[TB] 3 somas esperadas em /home/user/neorv32-isfft-sky130/sw/isfft_evm/chk_rtl.txt
+[TB] reset liberado em 200000 ns
+[TB] ERRO: uart0_txd_o = z no ciclo 21 -- X/Z vindo de estado nao inicializado
