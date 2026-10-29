@@ -1,0 +1,20 @@
+{
+  "meta": {
+    "version": 3,
+    "flow": [
+      "Yosys.JsonHeader",
+      "Yosys.Synthesis",
+      "Checker.YosysUnmappedCells",
+      "Checker.YosysSynthChecks",
+      "Checker.NetlistAssignStatements",
+      "OpenROAD.CheckSDCFiles",
+      "OpenROAD.CheckMacroInstances",
+      "OpenROAD.Floorplan",
+      "Odb.SetPowerConnections",
+      "OpenROAD.PadRing",
+      "Odb.ManualMacroPlacement",
+      "KLayout.StreamOut",
+      "KLayout.Render"
+    ]
+  }
+}

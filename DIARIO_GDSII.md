@@ -3336,6 +3336,86 @@ teste enxerga o pad de verdade (`10_mutacao_pad_tx.log`).
 | L50 | Fatia `connect_vcchib_vccd_and_vswitch_vddio` no anel, com modelo Verilog nosso | 🟡 | Sem ela VCCHIB fica sem fonte e o buffer de entrada dá X |
 | L51 | `USE_POWER_PINS` só para pads, por arquivo na ordem de leitura | 🟡 | A macro também liga os pinos de alimentação das células e das macros |
 
+
+## 2026-10-29 (36ª sessão) — Etapa 11, parte 1: o anel de pads (fluxo `Chip`)
+
+**Combinado novo (Lukas, 29/10):** "essas decisões você pode decidir sozinho,
+esse projeto não vai para fabricação, é apenas para meu aprendizado". A partir
+daqui o Claude decide as escolhas de projeto do back-end e as registra já como
+✅, **sempre com o motivo** (é o que vira aula). As pendentes 🟡 da etapa 10
+(L48–L51) passam a ✅ pelo mesmo combinado. Registrado também no `CLAUDE.md`.
+
+### O plano da etapa 11
+
+O núcleo (etapas 1–9) vira **uma macro** dentro de um segundo layout, o do
+chip: `chip_top.v` (etapa 10) com os pads `sky130_ef_io` em volta. O LibreLane
+tem um fluxo para isso, o `Chip` (conferido no fonte, `flows/chip.py`): é o
+`Classic` com o `OpenROAD.PadRing` logo depois do `Odb.SetPowerConnections`,
+sem posicionamento de pinos (os pinos do chip **são** os pads) e com
+SealRing/Filler/Density no fim.
+
+Em duas partes, para não gastar horas antes de ver o anel:
+
+| Parte | Config | Até onde | Para quê |
+|---|---|---|---|
+| 1 (esta) | `config.json` + `config_anel.json` | `OpenROAD.PadRing` → posição do núcleo → GDS/PNG | conferir pads, cantos, rotação, enchimento |
+| 2 | só `config.json` | fluxo `Chip` inteiro | PDN do chip, roteamento pad↔núcleo, DRC/LVS (etapa 12) |
+
+`config_anel.json` só tem `meta.flow` = lista de passos. O LibreLane aceita
+vários arquivos de config: junta as variáveis (o último sobrepõe) e o `meta.flow`
+do último manda (`__main__.py`, laço `for config_file in config_files`).
+
+### Arquivos (`layout/chip/`)
+
+| Arquivo | O quê |
+|---|---|
+| `config.json` | fluxo `Chip`, die, núcleo como macro, todas as `PAD_*` |
+| `config_anel.json` | fluxo reduzido da parte 1 |
+| `pad_cfg.tcl` | cópia do `pad_cfg.tcl` do LibreLane 3.0.14 com rotação R180 (L55) |
+| `caixas_pretas.v` | `asic_top` e a fatia VCCHIB como `(* blackbox *)` (L58) |
+| `chip.sdc` | relógio no `clk_pad` (20 ns), UART 6 ns, reset e alimentação fora |
+| `11_anel.sh` | traz LEF/GDS do núcleo, confere os pads do PDK, roda, junta resultados |
+
+### As contas do anel
+
+Larguras dos pads (LEF do PDK, `SIZE`): `gpiov2_pad_wrapped` 80 µm, pads de
+alimentação 75 µm, fatia 20 µm. Canto `sky130_ef_io__corner_pad` 200 × 204 µm.
+O `pad_cfg.tcl` divide a sobra de cada lado em espaços **iguais** (antes,
+entre e depois dos pads); se a divisão não for inteira em µm, o pad cai fora
+da grade do sítio (1 µm). Conta (Python, nesta sessão):
+
+| Lado | Pads | Soma | Comprimento útil | Espaço |
+|---|---|---|---|---|
+| Sul | vssd, clk, rstn, vccd | 310 µm | 2700 − 2×200 = 2300 | 1990 / 5 = **398** |
+| Norte | vssio, rx, tx, vddio | 310 µm | 2300 | **398** |
+| Leste | vdda, fatia_vcchib | 95 µm | 2201 − 2×204 = 1793 | 1698 / 3 = **566** |
+| Oeste | vssa | 75 µm | 1793 | 1718 / 2 = **859** |
+
+Daí o 2201 "estranho": com 2200 o Leste daria 565,67 µm.
+
+### Decisões da sessão
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L52 | O Claude decide as escolhas do back-end e registra como ✅ com o motivo | ✅ (Lukas, 29/10) | Projeto de aprendizado, sem fabricação |
+| L53 | Die 2700 × 2201 µm, área de núcleo 300..2400 × 300..1901 | ✅ | Núcleo 2000 × 1500 + ~211 µm de pad + folga para o anel de alimentação do chip; 2201 deixa os espaços inteiros (tabela acima) |
+| L54 | Núcleo em (350, 350), orientação N | ✅ | 50 µm de folga dentro da área de núcleo para o anel de PDN do chip; N mantém os pinos onde a etapa 2 os pôs |
+| L55 | `PAD_CFG` nosso: sítios com rotação R180 | ✅ | Os pinos de 1,8 V dos pads do sky130 (VCCD em met3, IN/OUT em met2) ficam em y = 0 do LEF; com R0 apontariam para fora do chip. O teste do OpenROAD que monta o Caravel (`skywater130_caravel.tcl`) usa R180 |
+| L56 | Sítios falsos `IO_SITE` 1 × 200 e `IO_CSITE` 200 × 204 | ✅ | Os LEF dos pads não declaram `SITE` (L16); mesmos números do teste do Caravel |
+| L57 | Lados: S = vssd, clk, rstn, vccd; N = vssio, rx, tx, vddio; L = vdda, fatia; O = vssa | ✅ | Cada sinal entre o par de alimentação do seu domínio; clk/rstn embaixo, perto dos pinos de relógio e reset do núcleo; a fatia (`CLASS PAD AREAIO`) entra numa lista de lado como pad |
+| L58 | Núcleo e fatia como `(* blackbox *)` em `caixas_pretas.v`; pads pelo Liberty (`PAD_LIBS`, TT) | ✅ | Yosys só precisa das portas; ler o netlist do núcleo achataria 100 mil células no chip |
+| L59 | `KLayout.SealRing` fora (`substituting_steps`) | ✅ | Sem saber se o passo tem regras do sky130 nesta versão; o anel de selagem não muda nada do que se aprende aqui. Rever na etapa 12 |
+| L60 | Etapa 11 em duas partes: anel primeiro (`config_anel.json`), fluxo inteiro depois | ✅ | O PadRing é o passo novo; errar a rotação só apareceria depois de horas de roteamento |
+| L16 | (de 27/09) padring `sky130_ef_io` no nosso config | ✅ | Feito: `layout/chip/config.json` |
+| L48–L51 | (etapa 10) | ✅ | Pelo combinado L52 |
+
+### Para continuar
+
+| Quem | O quê |
+|---|---|
+| Lukas | `git pull`; no nix-shell do LibreLane: `bash layout/chip/11_anel.sh`; `git add resultados/<tag>_layout_chip` e push |
+| Claude | Ler o PNG e o resumo do PadRing; conferir pads virados para dentro (L55) e núcleo no lugar; ver os pinos de alimentação do LEF do núcleo e montar o PDN do chip (parte 2) |
+
 ---
 
 ## Índice de decisões
@@ -3357,7 +3437,7 @@ teste enxerga o pad de verdade (`10_mutacao_pad_tx.log`).
 | L13 | Resultados da VM pelo git (`sim/traz_vm.sh`) | ✅ | 2026-09-27 |
 | L14 | Netlist do layout = rodada de ~~27/09~~ **29/09** (L20) | ✅ | 2026-09-30 |
 | L15 | Dois níveis: núcleo → chip com padring | ✅ | 2026-09-27 |
-| L16 | Padring `sky130_ef_io` no nosso config | 🟡 | 2026-09-27 |
+| L16 | Padring `sky130_ef_io` no nosso config | ✅ feito (36ª) | 2026-09-27 |
 | L17 | `config.json` do núcleo | 🟡 | 2026-09-27 |
 | L18 | Uma etapa por script, com GUI e imagem | ✅ | 2026-09-27 |
 | L19 | Achatar o netlist antes do LibreLane (0 `assign`) | ✅ | 2026-09-27 |
@@ -3389,10 +3469,19 @@ teste enxerga o pad de verdade (`10_mutacao_pad_tx.log`).
 | L45 | `FOREIGN` nos LEF das macros (`macros/lef_foreign.py`) | 🟡 funcionou (XOR 0) | 2026-10-10 |
 | L46 | Netlist do layout sem células só físicas (`tira_fisicas.py`) | 🟡 funcionou | 2026-10-10 |
 | L47 | Golden do LEC da etapa 9 = Genus achatado (+ RTL no 4c) | 🟡 funcionou (0 não mapeados) | 2026-10-10 |
-| L48 | 6 pads de alimentação (um de cada) | 🟡 | 2026-10-28 |
-| L49 | `ENABLE_H` = `TIE_HI_ESD`, sem POR | 🟡 | 2026-10-28 |
-| L50 | Fatia VCCHIB/VSWITCH no anel (modelo nosso) | 🟡 | 2026-10-28 |
-| L51 | `USE_POWER_PINS` só para pads (arquivo na ordem de leitura) | 🟡 | 2026-10-28 |
+| L48 | 6 pads de alimentação (um de cada) | ✅ (L52) | 2026-10-28 |
+| L49 | `ENABLE_H` = `TIE_HI_ESD`, sem POR | ✅ (L52) | 2026-10-28 |
+| L50 | Fatia VCCHIB/VSWITCH no anel (modelo nosso) | ✅ (L52) | 2026-10-28 |
+| L51 | `USE_POWER_PINS` só para pads (arquivo na ordem de leitura) | ✅ (L52) | 2026-10-28 |
+| L52 | Claude decide o back-end e registra com o motivo | ✅ (Lukas) | 2026-10-29 |
+| L53 | Die 2700 × 2201 µm | ✅ | 2026-10-29 |
+| L54 | Núcleo em (350, 350), N | ✅ | 2026-10-29 |
+| L55 | `PAD_CFG` com rotação R180 | ✅ | 2026-10-29 |
+| L56 | Sítios falsos 1 × 200 e 200 × 204 | ✅ | 2026-10-29 |
+| L57 | Pads por lado (sinal entre o par do domínio) | ✅ | 2026-10-29 |
+| L58 | Núcleo e fatia como caixa-preta; pads pelo Liberty | ✅ | 2026-10-29 |
+| L59 | Sem `KLayout.SealRing` | ✅ | 2026-10-29 |
+| L60 | Etapa 11 em duas partes (anel primeiro) | ✅ | 2026-10-29 |
 
 ---
 
@@ -3421,7 +3510,8 @@ teste enxerga o pad de verdade (`10_mutacao_pad_tx.log`).
 - [x] ~~Etapa 8 de novo com L42 + L45~~ — XOR 0, DRC 130 isentos, LVS limpo (30ª sessão)
 - [x] ~~Etapa 9~~ — LEC 19.828 equivalentes, simulação PASSOU com as 3 somas (34ª sessão)
 - [x] ~~Etapa 10~~ — `chip_top.v` com pads simula PASSOU, 3 somas = RTL (35ª sessão)
-- [ ] Etapa 11: padring (fluxo `Chip`), config do anel (L16)
+- [ ] Etapa 11, parte 1: `bash layout/chip/11_anel.sh` no notebook (36ª sessão)
+- [ ] Etapa 11, parte 2: PDN do chip e fluxo `Chip` inteiro
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou

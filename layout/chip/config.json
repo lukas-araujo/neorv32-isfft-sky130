@@ -1,0 +1,134 @@
+{
+  "meta": {
+    "version": 3,
+    "flow": "Chip",
+    "substituting_steps": {
+      "KLayout.SealRing": null
+    }
+  },
+  "DESIGN_NAME": "chip_top",
+  "VERILOG_FILES": [
+    "dir::chip_top.v",
+    "dir::caixas_pretas.v"
+  ],
+  "SYNTH_ELABORATE_ONLY": true,
+  "RUN_LINTER": false,
+  "CLOCK_PORT": "clk_pad",
+  "CLOCK_NET": "pad_clk/IN",
+  "CLOCK_PERIOD": 20,
+  "PNR_SDC_FILE": "dir::chip.sdc",
+  "SIGNOFF_SDC_FILE": "dir::chip.sdc",
+  "FP_SIZING": "absolute",
+  "DIE_AREA": [
+    0,
+    0,
+    2700,
+    2201
+  ],
+  "CORE_AREA": [
+    300,
+    300,
+    2400,
+    1901
+  ],
+  "MACROS": {
+    "asic_top": {
+      "instances": {
+        "u_core": {
+          "location": [
+            350,
+            350
+          ],
+          "orientation": "N"
+        }
+      },
+      "lef": [
+        "dir::entrada/asic_top.lef"
+      ],
+      "gds": [
+        "dir::entrada/asic_top.gds"
+      ]
+    }
+  },
+  "PAD_LEFS": [
+    "pdk_dir::libs.ref/sky130_fd_io/lef/sky130_ef_io.lef",
+    "pdk_dir::libs.ref/sky130_fd_io/lef/sky130_fd_io.lef"
+  ],
+  "PAD_GDS": [
+    "pdk_dir::libs.ref/sky130_fd_io/gds/sky130_ef_io.gds",
+    "pdk_dir::libs.ref/sky130_fd_io/gds/sky130_fd_io.gds"
+  ],
+  "PAD_LIBS": {
+    "*": [
+      "pdk_dir::libs.ref/sky130_fd_io/lib/sky130_ef_io__gpiov2_pad_wrapped_tt_tt_025C_1v80_3v30.lib",
+      "pdk_dir::libs.ref/sky130_fd_io/lib/sky130_ef_io__vccd_lvc_clamped_pad_tt_025C_1v80_3v30_3v30.lib",
+      "pdk_dir::libs.ref/sky130_fd_io/lib/sky130_ef_io__vssd_lvc_clamped_pad_tt_025C_1v80_3v30.lib",
+      "pdk_dir::libs.ref/sky130_fd_io/lib/sky130_ef_io__vddio_hvc_clamped_pad_tt_025C_1v80_3v30_3v30.lib",
+      "pdk_dir::libs.ref/sky130_fd_io/lib/sky130_ef_io__vssio_hvc_clamped_pad_tt_025C_1v80_3v30_3v30.lib",
+      "pdk_dir::libs.ref/sky130_fd_io/lib/sky130_ef_io__vdda_hvc_clamped_pad_tt_025C_1v80_3v30_3v30.lib",
+      "pdk_dir::libs.ref/sky130_fd_io/lib/sky130_ef_io__vssa_hvc_clamped_pad_tt_025C_1v80_3v30_3v30.lib"
+    ]
+  },
+  "PAD_CFG": "dir::pad_cfg.tcl",
+  "PAD_FAKE_SITES": {
+    "IO_SITE": [
+      1,
+      200
+    ],
+    "IO_CSITE": [
+      200,
+      204
+    ]
+  },
+  "PAD_SITE_NAME": "IO_SITE",
+  "PAD_CORNER_SITE_NAME": "IO_CSITE",
+  "PAD_CORNER": [
+    "sky130_ef_io__corner_pad"
+  ],
+  "PAD_FILLERS": [
+    "sky130_ef_io__com_bus_slice_20um",
+    "sky130_ef_io__com_bus_slice_10um",
+    "sky130_ef_io__com_bus_slice_5um",
+    "sky130_ef_io__com_bus_slice_1um"
+  ],
+  "PAD_EDGE_SPACING": 0,
+  "PAD_PLACE_IO_TERMINALS": [
+    "sky130_ef_io__gpiov2_pad_wrapped/PAD",
+    "sky130_ef_io__vccd_lvc_clamped_pad/VCCD_PAD",
+    "sky130_ef_io__vssd_lvc_clamped_pad/VSSD_PAD",
+    "sky130_ef_io__vddio_hvc_clamped_pad/VDDIO_PAD",
+    "sky130_ef_io__vssio_hvc_clamped_pad/VSSIO_PAD",
+    "sky130_ef_io__vdda_hvc_clamped_pad/VDDA_PAD",
+    "sky130_ef_io__vssa_hvc_clamped_pad/VSSA_PAD"
+  ],
+  "PAD_SOUTH": [
+    "pad_vssd",
+    "pad_clk",
+    "pad_rstn",
+    "pad_vccd"
+  ],
+  "PAD_EAST": [
+    "pad_vdda",
+    "fatia_vcchib"
+  ],
+  "PAD_NORTH": [
+    "pad_vssio",
+    "pad_rx",
+    "pad_tx",
+    "pad_vddio"
+  ],
+  "PAD_WEST": [
+    "pad_vssa"
+  ],
+  "VDD_NETS": [
+    "vccd1"
+  ],
+  "GND_NETS": [
+    "vssd1"
+  ],
+  "PDN_MACRO_CONNECTIONS": [
+    "u_core vccd1 vssd1 vccd1 vssd1",
+    "pad_.* vccd1 vssd1 VCCD VSSD",
+    "fatia_vcchib vccd1 vssd1 VCCD VSSD"
+  ]
+}

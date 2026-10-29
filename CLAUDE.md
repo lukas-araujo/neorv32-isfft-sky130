@@ -35,6 +35,10 @@ Lukas.
 - **Atualize o diário a cada etapa**, no formato dele (🐛 Sintoma /
   Causa / Resolvi com / Tempo / Vira slide?; tabela de decisões da sessão
   + índice no fim). Decisão nova = 🟡 até o Lukas confirmar.
+  **Exceção (Lukas, 29/10/2026, DIARIO_GDSII L52):** escolhas de projeto o
+  Claude decide sozinho e registra já como ✅, sempre com o motivo — o
+  projeto não vai para fabricação. Pergunte só o que depende do Lukas
+  (rodar no notebook/VM, prazos, o que ele quer aprender).
 - **Resultado de etapa = tabela Markdown no diário.** Não gerar imagens
   (PNG/SVG) de tabelas ou resumos — pedido do Lukas (29/09). As imagens do
   próprio layout (as que os scripts `layout/nucleo/NN_*.sh` salvam da GUI
