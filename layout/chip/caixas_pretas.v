@@ -17,6 +17,10 @@
 //=============================================================================
 (* blackbox *)
 module asic_top (
+`ifdef USE_POWER_PINS
+    inout  vccd1,       // pinos do LEF do nucleo (Magic.WriteLEF, met4/met5)
+    inout  vssd1,
+`endif
     input  clk_i,
     input  rstn_i,
     input  uart0_rxd_i,

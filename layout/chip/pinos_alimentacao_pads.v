@@ -9,3 +9,7 @@
 // macros e ANTES dos modelos dos pads e do chip_top (os ultimos da lista),
 // do mesmo jeito que o restore_nettype.v.
 `define USE_POWER_PINS
+// O nucleo e um netlist SEM pinos de alimentacao (o do layout, etapa 9):
+// o chip_top so liga vccd1/vssd1 do u_core quando isto NAO esta definido
+// (no LibreLane, etapa 11).
+`define NUCLEO_SEM_ALIMENTACAO

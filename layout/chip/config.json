@@ -69,6 +69,10 @@
       "pdk_dir::libs.ref/sky130_fd_io/lib/sky130_ef_io__vssa_hvc_clamped_pad_tt_025C_1v80_3v30_3v30.lib"
     ]
   },
+  "PAD_VERILOG_MODELS": [
+    "dir::../../tech/sky130_io/verilog/sky130_ef_io.v",
+    "dir::../../tech/sky130_io/verilog/sky130_ef_io__gpiov2_pad_wrapped.v"
+  ],
   "PAD_CFG": "dir::pad_cfg.tcl",
   "PAD_FAKE_SITES": {
     "IO_SITE": [
@@ -121,14 +125,12 @@
     "pad_vssa"
   ],
   "VDD_NETS": [
-    "vccd1"
+    "vccd"
   ],
   "GND_NETS": [
-    "vssd1"
+    "vssd"
   ],
   "PDN_MACRO_CONNECTIONS": [
-    "u_core vccd1 vssd1 vccd1 vssd1",
-    "pad_.* vccd1 vssd1 VCCD VSSD",
-    "fatia_vcchib vccd1 vssd1 VCCD VSSD"
+    "u_core vccd vssd vccd1 vssd1"
   ]
 }

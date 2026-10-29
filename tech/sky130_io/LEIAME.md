@@ -1,6 +1,8 @@
 # tech/sky130_io/ — modelos Verilog dos pads de I/O (sky130_fd_io / sky130_ef_io)
 
-Usados na simulação do chip com os pads (etapa 10, `layout/chip/10_simula.sh`).
+Usados na simulação do chip com os pads (etapa 10, `layout/chip/10_simula.sh`)
+e, os dois primeiros da tabela, como `PAD_VERILOG_MODELS` do LibreLane
+(etapa 11, `layout/chip/config.json`; DIARIO_GDSII L61).
 Licença Apache-2.0 (cabeçalhos mantidos). Cópia **sem modificação**, exceto o
 último arquivo da tabela, que é nosso.
 

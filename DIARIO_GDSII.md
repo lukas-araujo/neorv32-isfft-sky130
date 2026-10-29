@@ -3416,6 +3416,50 @@ Daí o 2201 "estranho": com 2200 o Leste daria 565,67 µm.
 | Lukas | `git pull`; no nix-shell do LibreLane: `bash layout/chip/11_anel.sh`; `git add resultados/<tag>_layout_chip` e push |
 | Claude | Ler o PNG e o resumo do PadRing; conferir pads virados para dentro (L55) e núcleo no lugar; ver os pinos de alimentação do LEF do núcleo e montar o PDN do chip (parte 2) |
 
+### 🐛 1ª rodada (`2026-10-28_2111`): parou no 1º passo, `Yosys.JsonHeader`
+
+- **Sintoma:** `ERROR: Module \sky130_ef_io__vssa_hvc_clamped_pad referenced in
+  module \chip_top in cell \pad_vssa is not part of the design.` (0 de 13 passos)
+- **Causa:** conferida no fonte (`steps/pyosys.py`, `VerilogStep`). O
+  `JsonHeader` é o passo que descobre **quem liga em qual rede de
+  alimentação** (o `Odb.SetPowerConnections` usa o JSON dele). Por isso ele
+  lê o projeto com `USE_POWER_PINS` e as caixas-pretas vêm dos **modelos
+  Verilog** (`CELL_VERILOG_MODELS`, `PAD_VERILOG_MODELS`), não do Liberty:
+  o Liberty não tem os 12 barramentos do anel como portas. Sem
+  `PAD_VERILOG_MODELS`, nenhum pad existia para ele. O passo seguinte
+  (`Yosys.Synthesis`, sem `USE_POWER_PINS`) é que usa o `PAD_LIBS`.
+- **Resolvi com** (L61, L62):
+  - `PAD_VERILOG_MODELS` = `sky130_ef_io.v` + `sky130_ef_io__gpiov2_pad_wrapped.v`
+    de `tech/sky130_io/verilog/` (iguais aos do open_pdks `8afc8346`, `diff`
+    sem diferença). A fatia continua só em `caixas_pretas.v` (o PDK não tem
+    modelo dela; duas definições dariam erro de redefinição).
+  - Com `USE_POWER_PINS` o `u_core` não tinha pino de alimentação nenhum: o
+    núcleo ficaria sem ligação ao anel no netlist (e o LVS da etapa 12
+    reclamaria). Agora `caixas_pretas.v` dá `vccd1`/`vssd1` ao `asic_top` e o
+    `chip_top.v` liga `.vccd1(vccd)`, `.vssd1(vssd)` — os barramentos VCCD/VSSD
+    do anel. `VDD_NETS`/`GND_NETS` do chip passam a `vccd`/`vssd`.
+  - A simulação da etapa 10 usa o netlist do núcleo **sem** pinos de
+    alimentação: o `pinos_alimentacao_pads.v` define `NUCLEO_SEM_ALIMENTACAO`
+    e o `chip_top.v` só liga `vccd1`/`vssd1` sem ela.
+- **Conferido aqui antes de mandar de volta** (sem PDK/OpenROAD na nuvem: o
+  download do PDK pelo `ciel` é bloqueado): emulei os dois passos do Yosys com
+  o `create_blackbox_model` do próprio LibreLane e o yowasp-yosys.
+
+| Passo emulado | Entrada | Resultado |
+|---|---|---|
+| `Yosys.JsonHeader` | células + pads (Verilog, `USE_POWER_PINS`) + `chip_top.v` + `caixas_pretas.v` | passa; `u_core.vccd1 → vccd`, `vssd1 → vssd`; pads e fatia com VCCD/VSSD/VCCHIB/VDDIO/VSWITCH nas redes do anel |
+| `Yosys.Synthesis` (elaboração) | 7 Liberty TT dos pads + Liberty das células + os dois `.v` | passa; 16 instâncias: núcleo, fatia, 4 gpiov2, 6 pads de alimentação, 4 `conb_1` |
+
+- **Tempo:** ~1 h (achar o porquê no fonte do LibreLane).
+- **Vira slide?** Sim: "por que o LibreLane lê o mesmo pad de dois jeitos"
+  — Verilog com pinos de alimentação para saber as ligações, Liberty para
+  a síntese e o tempo.
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L61 | `PAD_VERILOG_MODELS` = cópias em `tech/sky130_io/verilog/` | ✅ | Arquivos já versionados e conferidos iguais aos do PDK; a fatia fica em `caixas_pretas.v` |
+| L62 | Núcleo ligado aos barramentos VCCD/VSSD do anel no `chip_top.v` (`VDD_NETS` = `vccd`) | ✅ | Sem isso o netlist do chip não diz de onde o núcleo tira 1,8 V; a simulação continua sem (`NUCLEO_SEM_ALIMENTACAO`) |
+
 ---
 
 ## Índice de decisões
@@ -3482,6 +3526,8 @@ Daí o 2201 "estranho": com 2200 o Leste daria 565,67 µm.
 | L58 | Núcleo e fatia como caixa-preta; pads pelo Liberty | ✅ | 2026-10-29 |
 | L59 | Sem `KLayout.SealRing` | ✅ | 2026-10-29 |
 | L60 | Etapa 11 em duas partes (anel primeiro) | ✅ | 2026-10-29 |
+| L61 | `PAD_VERILOG_MODELS` = cópias em `tech/sky130_io/verilog/` | ✅ | 2026-10-29 |
+| L62 | Núcleo ligado a VCCD/VSSD do anel no `chip_top.v` | ✅ | 2026-10-29 |
 
 ---
 

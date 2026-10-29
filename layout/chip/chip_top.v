@@ -98,7 +98,17 @@ module chip_top (
     //=========================================================================
     // Nucleo (etapas 1-9): asic_top
     //=========================================================================
+    // Alimentacao do nucleo = os barramentos VCCD/VSSD do anel (36a sessao).
+    // So no layout (Yosys.JsonHeader do LibreLane, LVS): o netlist do nucleo
+    // usado na simulacao nao tem pinos de alimentacao, e o 10_simula.sh
+    // define NUCLEO_SEM_ALIMENTACAO (pinos_alimentacao_pads.v).
     asic_top u_core (
+`ifdef USE_POWER_PINS
+`ifndef NUCLEO_SEM_ALIMENTACAO
+        .vccd1       (vccd),
+        .vssd1       (vssd),
+`endif
+`endif
         .clk_i       (clk_core),
         .rstn_i      (rstn_core),
         .uart0_rxd_i (rx_core),
