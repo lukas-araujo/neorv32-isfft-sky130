@@ -3449,6 +3449,7 @@ Daí o 2201 "estranho": com 2200 o Leste daria 565,67 µm.
 |---|---|---|
 | `Yosys.JsonHeader` | células + pads (Verilog, `USE_POWER_PINS`) + `chip_top.v` + `caixas_pretas.v` | passa; `u_core.vccd1 → vccd`, `vssd1 → vssd`; pads e fatia com VCCD/VSSD/VCCHIB/VDDIO/VSWITCH nas redes do anel |
 | `Yosys.Synthesis` (elaboração) | 7 Liberty TT dos pads + Liberty das células + os dois `.v` | passa; 16 instâncias: núcleo, fatia, 4 gpiov2, 6 pads de alimentação, 4 `conb_1` |
+| Etapa 10 com o `chip_top.v` novo | Icarus, mesma lista do `10_simula.sh`, núcleo trocado por um fio rx→tx | compila (a guarda `NUCLEO_SEM_ALIMENTACAO` funciona); `tx_pad` sem X em 1 ms. A simulação inteira (~1 h) não foi refeita: só a ligação do `u_core` mudou, e ela some com a guarda |
 
 - **Tempo:** ~1 h (achar o porquê no fonte do LibreLane).
 - **Vira slide?** Sim: "por que o LibreLane lê o mesmo pad de dois jeitos"
