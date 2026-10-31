@@ -67,8 +67,11 @@ PY
 #-----------------------------------------------------------------------------
 # 2. Arquivos dos pads no PDK (sky130_fd_io: LEF/GDS da Efabless e da SkyWater)
 #-----------------------------------------------------------------------------
-io="$(find -L "$PDK_ROOT" -maxdepth 4 -type d -path '*sky130A/libs.ref/sky130_fd_io' 2>/dev/null | head -1 || true)"
-[ -n "$io" ] || { echo "ERRO: nao achei sky130A/libs.ref/sky130_fd_io em $PDK_ROOT"; exit 1; }
+# Ha mais de uma versao do PDK em $PDK_ROOT: tem de ser a 8afc8346, a que o
+# LibreLane usa (L10; mesmo cuidado do gera_maglef no comum.sh). O "head -1"
+# sem filtro pegou outra versao e a copia da L74 saiu de outro arquivo (L75).
+io="$(find -L "$PDK_ROOT" -maxdepth 8 -type d -path '*8afc8346*/sky130A/libs.ref/sky130_fd_io' 2>/dev/null | head -1 || true)"
+[ -n "$io" ] || { echo "ERRO: nao achei .../8afc8346.../sky130A/libs.ref/sky130_fd_io em $PDK_ROOT"; exit 1; }
 # O GDS combinado sky130_ef_io.gds NAO tem o gpiov2_pad_wrapped nem a fatia
 # VCCHIB (o LEF combinado tem): vem cada um no seu arquivo (37a sessao, L64)
 for f in lef/sky130_ef_io.lef lef/sky130_fd_io.lef gds/sky130_ef_io.gds gds/sky130_fd_io.gds \
@@ -80,10 +83,15 @@ echo ">>> pads: $io (LEF e GDS ok)"
 # O sky130_fd_io.gds do PDK tem um BOUNDARY aberto (overlay_vddio_lvc); o
 # Magic avisa "Boundary is not closed" e o LibreLane reprova (L74). Copia
 # consertada em entrada/ (fora do git), so refeita se o PDK mudar.
-if [ ! -f "$ENT/sky130_fd_io.gds" ] || [ "$io/gds/sky130_fd_io.gds" -nt "$ENT/sky130_fd_io.gds" ]; then
-  python3 "$CHIP/fecha_gds.py" fecha "$io/gds/sky130_fd_io.gds" "$ENT/sky130_fd_io.gds" \
+# Refaz se a origem mudou (o arquivo .origem guarda o caminho e o tamanho do original)
+orig="$io/gds/sky130_fd_io.gds"
+assinatura="$(readlink -f "$orig") $(stat -L -c %s "$orig")"
+if [ ! -f "$ENT/sky130_fd_io.gds" ] || [ "$(cat "$ENT/sky130_fd_io.gds.origem" 2>/dev/null)" != "$assinatura" ]; then
+  python3 "$CHIP/fecha_gds.py" fecha "$orig" "$ENT/sky130_fd_io.gds" \
     || { echo "ERRO: a copia do sky130_fd_io.gds ainda tem BOUNDARY aberto"; exit 1; }
+  echo "$assinatura" > "$ENT/sky130_fd_io.gds.origem"
 fi
+echo ">>> sky130_fd_io.gds consertado (L74), origem: $(cat "$ENT/sky130_fd_io.gds.origem")"
 for f in sky130_ef_io.gds sky130_ef_io__gpiov2_pad_wrapped.gds \
          sky130_ef_io__connect_vcchib_vccd_and_vswitch_vddio_slice_20um.gds; do
   python3 "$CHIP/fecha_gds.py" confere "$io/gds/$f" \

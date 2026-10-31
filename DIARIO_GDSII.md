@@ -3901,6 +3901,31 @@ reprovou de novo:
 |---|---|---|---|
 | L74 | Cópia do `sky130_fd_io.gds` com os `BOUNDARY` fechados (`fecha_gds.py`), usada no `PAD_GDS` | ✅ | Defeito do arquivo do PDK; conserto mínimo e conferível, sem desligar o filtro de erros do Magic |
 
+### 🐛 4ª rodada (`2026-10-31_2015`): a cópia saiu de **outra versão do PDK**
+
+- **Sintoma:** o `Boundary is not closed` sumiu, mas apareceram 8 linhas `Error while reading
+  cell "sky130_fd_io__res250_sub_small" (byte position 188864): NODE elements not supported`
+  (`11_magic_resumo.txt`). Na rodada `1645`, lendo o `sky130_fd_io.gds` do PDK, essa célula
+  passou sem aviso.
+- **Causa:** a `entrada/sky130_fd_io.gds` não é a mesma biblioteca: no `magic-streamout.log` ela
+  começa com as células `polygon03812`, `polygon03811`... e tem 1049 linhas de leitura contra
+  3750 do arquivo da `1645` (que começa com `hvDFL1sd_CDNS_...`). O `11_anel.sh` achava a pasta
+  dos pads com `find ... | head -1`, sem filtrar a versão; no notebook há mais de uma versão do
+  PDK, e veio uma que não é a `8afc8346` do LibreLane (L10). Até aqui isso só servia para
+  conferir se os arquivos existiam, e ninguém notou; com a L74 o arquivo passou a ser **usado**.
+  É a mesma armadilha que o `gera_maglef` do `comum.sh` já evitava com `-path '*8afc8346*'`.
+- **Resolvi com (L75):** o `find` filtra `*8afc8346*` (e erra se não achar, em vez de pegar outra
+  versão). A cópia guarda a origem (`entrada/sky130_fd_io.gds.origem`: caminho real e tamanho) e
+  é refeita quando a origem muda — o teste antigo por data (`-nt`) não refaria, porque a cópia
+  errada é mais nova que o original certo. Testado o `find` numa árvore falsa com duas versões.
+- **Tempo:** ~25 min.
+- **Vira slide?** Sim, junto com a L10: "qual PDK?" — duas versões instaladas, e um `head -1`
+  decide qual entra no chip.
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L75 | `11_anel.sh` acha os pads só na versão `8afc8346` do PDK; a cópia da L74 é refeita quando a origem muda | ✅ | Com duas versões instaladas, o `head -1` pegou a outra; o arquivo dos pads tem de ser o mesmo PDK do resto do fluxo |
+
 ---
 
 ## Índice de decisões
@@ -3981,6 +4006,7 @@ reprovou de novo:
 | L72 | Pontes do núcleo até o anel do chip, com vias M4M5 (PSM-0069) | ✅ | 2026-10-31 |
 | L73 | `PAD_GDS` com `sky130_fd_io.gds` primeiro (células vazias no Magic) | ✅ | 2026-10-31 |
 | L74 | `sky130_fd_io.gds` com os polígonos fechados (`fecha_gds.py`) | ✅ | 2026-10-31 |
+| L75 | Pads da versão `8afc8346` do PDK (não `head -1`); cópia refeita se a origem mudar | ✅ | 2026-10-31 |
 
 ---
 
@@ -4012,7 +4038,7 @@ reprovou de novo:
 - [x] ~~Etapa 11, parte 1~~ — anel de pads, 13/13 passos, GDS + PNG (37ª sessão)
 - [x] ~~Etapa 11, parte 2a~~ — PDN ligado pad → anel → núcleo (37ª sessão)
 - [ ] IR drop do chip com a fonte **no pad** (`VSRC_LOC_FILES` com a posição do `pad_vccd`/`pad_vssd`): sem terminal de topo, o `analyze_power_grid` usa "bump pattern" (`PSM-0073`: fontes virtuais a cada 140 µm no met5, como num flip-chip) e a queda sai otimista; o `PSM-0025` do `GeneratePDN` é a mesma falta de terminal (L68)
-- [ ] Etapa 11, parte 2b: `bash layout/chip/11_anel.sh chip` no notebook — `1029` parou no `IRDropReport` (L72 corrigiu); `1524` passou o PSM e parou no `Magic.StreamOut` (L73); `1645` parou no BOUNDARY aberto do PDK (L74); rodar de novo
+- [ ] Etapa 11, parte 2b: `bash layout/chip/11_anel.sh chip` no notebook — `1029` parou no `IRDropReport` (L72 corrigiu); `1524` passou o PSM e parou no `Magic.StreamOut` (L73); `1645` parou no BOUNDARY aberto do PDK (L74); `2015` usou o GDS de outra versão do PDK (L75); rodar de novo
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
