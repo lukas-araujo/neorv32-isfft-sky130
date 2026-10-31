@@ -136,5 +136,9 @@
     "u_core vccd vssd vccd1 vssd1"
   ],
   "PDN_CFG": "dir::pdn_chip.tcl",
-  "ERROR_ON_PDN_VIOLATIONS": false
+  "ERROR_ON_PDN_VIOLATIONS": false,
+  "RUN_CTS": false,
+  "RUN_MAGIC_DRC": false,
+  "RUN_KLAYOUT_DRC": false,
+  "RUN_LVS": false
 }

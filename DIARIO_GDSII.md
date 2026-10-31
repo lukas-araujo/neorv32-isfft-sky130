@@ -3748,6 +3748,35 @@ e salvar `11_pdn_geometria.txt`.
 |---|---|---|---|
 | L69 | Ligação pad → anel feita à mão (faixa met3 + pilhas de via), sem `-connect_to_pads` | ✅ | O pdngen só liga o met3 do pad a met2/met4; o anel embaixo é met5 |
 
+### Parte 2a, 2ª rodada (`2026-10-31_1024`): PDN ✅ — alimentação ligada de ponta a ponta
+
+Do log e de `resultados/2026-10-31_1024_layout_chip/11_pdn_geometria.txt`:
+
+| Conferência | Resultado |
+|---|---|
+| `ligacao_pads` (log do `GeneratePDN`) | `pad_vccd/VCCD`: 2 faixas met3, **44** pilhas (barra y 290,92–295,92); `pad_vssd/VSSD`: 2 faixas, **48** pilhas (barra 284,22–289,22) — igual ao previsto pelo teste com o OpenDB de mentira |
+| Formas especiais no DEF | vccd 4747 → **4837** (+90 = 2 faixas + 44 × 2 vias); vssd 4747 → **4845** (+98 = 2 + 48 × 2): as vias foram criadas |
+| Fios entre pad e anel (y 150–280) | vccd 2 (met3), vssd 2 (met3) — antes 0 |
+| Pontes até o núcleo | 10 + 10 |
+| Anel | 4 lados em cada rede |
+| Fluxo | 17/17, código 0 (o PSM virou aviso, L68) |
+
+Cadeia completa: bond pad → célula do pad → met3 (faixa) → via3/via4 → anel met5/met4 →
+faixas da grade (met4/met5) → pontes met5 → pinos `vccd1`/`vssd1` do núcleo. Quem
+confirma eletricamente é o LVS (etapa 12).
+
+### Parte 2b: o fluxo `Chip` inteiro — o que fica de fora e por quê
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L70 | `RUN_CTS = false` no chip | ✅ | Não há flip-flop no nível do chip: a árvore de relógio está dentro do núcleo; aqui o relógio é um fio do pad ao pino `clk_i` da macro (sem Liberty), e a CTS não teria destino |
+| L71 | `RUN_MAGIC_DRC`, `RUN_KLAYOUT_DRC`, `RUN_LVS = false` na parte 2b | ✅ | Ficam para a etapa 12, preparados: o núcleo como caixa-preta no DRC do Magic (como a L42) e os modelos SPICE dos pads para o LVS. Sem isso reprovariam por falta de preparação, depois de muito tempo rodando. O XOR (Magic × KLayout) continua: já pegou erro antes (L45) |
+
+`bash layout/chip/11_anel.sh chip` roda só o `config.json` (fluxo `Chip`: posicionamento das 4
+`conb_1`, roteamento global e detalhado dos sinais pad ↔ núcleo, RCX, STA, GDS pelo Magic e
+pelo KLayout, XOR, antena, enchimento, densidade) e guarda também folga de setup/hold,
+erros de roteamento e comprimento de fio.
+
 ---
 
 ## Índice de decisões
@@ -3823,6 +3852,8 @@ e salvar `11_pdn_geometria.txt`.
 | L67 | Parte 2a só até o PDN (`config_pdn.json`) | ✅ | 2026-10-31 |
 | L68 | `ERROR_ON_PDN_VIOLATIONS = false` no chip (PSM sem terminal) | ✅ | 2026-10-31 |
 | L69 | Ligação pad → anel à mão (met3 + vias) | ✅ | 2026-10-31 |
+| L70 | Sem CTS no chip | ✅ | 2026-10-31 |
+| L71 | DRC e LVS do chip ficam para a etapa 12 | ✅ | 2026-10-31 |
 
 ---
 
@@ -3852,8 +3883,8 @@ e salvar `11_pdn_geometria.txt`.
 - [x] ~~Etapa 9~~ — LEC 19.828 equivalentes, simulação PASSOU com as 3 somas (34ª sessão)
 - [x] ~~Etapa 10~~ — `chip_top.v` com pads simula PASSOU, 3 somas = RTL (35ª sessão)
 - [x] ~~Etapa 11, parte 1~~ — anel de pads, 13/13 passos, GDS + PNG (37ª sessão)
-- [ ] Etapa 11, parte 2a: `bash layout/chip/11_anel.sh pdn` no notebook (37ª sessão)
-- [ ] Etapa 11, parte 2b: fluxo `Chip` inteiro
+- [x] ~~Etapa 11, parte 2a~~ — PDN ligado pad → anel → núcleo (37ª sessão)
+- [ ] Etapa 11, parte 2b: `bash layout/chip/11_anel.sh chip` no notebook
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou

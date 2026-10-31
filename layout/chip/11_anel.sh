@@ -25,6 +25,9 @@
 #     bash layout/chip/11_anel.sh          parte 1: so o anel (config_anel.json)
 #     bash layout/chip/11_anel.sh pdn      parte 2a: anel + PDN do chip
 #                                          (config_pdn.json, pdn_chip.tcl, L65)
+#     bash layout/chip/11_anel.sh chip     parte 2b: fluxo Chip inteiro (so o
+#                                          config.json; sem CTS, DRC e LVS:
+#                                          L70, L71)
 #=============================================================================
 PARTE="${1:-anel}"
 source "$(dirname "$0")/../nucleo/comum.sh"     # estado_de, visao_de...
@@ -86,8 +89,9 @@ else echo ">>> o PDK nao traz config de pads para o LibreLane (tudo vem da nossa
 TAG="$(date +%Y-%m-%d_%H%M)"
 echo "$TAG" > "$CHIP/.rodada_atual"
 r=0
-( cd "$CHIP" && librelane --pdk-root "$PDK_ROOT" --run-tag "$TAG" \
-    config.json "config_${PARTE}.json" ) || r=$?
+CONFIGS=(config.json)
+[ "$PARTE" = chip ] || CONFIGS+=("config_${PARTE}.json")
+( cd "$CHIP" && librelane --pdk-root "$PDK_ROOT" --run-tag "$TAG" "${CONFIGS[@]}" ) || r=$?
 echo ">>> librelane terminou com codigo $r"
 
 #-----------------------------------------------------------------------------
@@ -106,7 +110,9 @@ m = json.load(open(sys.argv[1])).get("metrics", {})
 json.dump(m, open(sys.argv[2], "w"), indent=1, sort_keys=True)
 for k in ["design__die__area", "design__core__area",
           "design__instance__count", "design__instance__count__macros",
-          "design__io"]:
+          "design__io", "timing__setup__ws", "timing__hold__ws",
+          "timing__setup_vio__count", "timing__hold_vio__count",
+          "route__drc_errors", "route__wirelength", "antenna__violating__nets"]:
     if k in m: print(f"  {k:36s} {m[k]}")
 PY
 fi
