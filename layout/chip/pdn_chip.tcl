@@ -27,11 +27,13 @@
 #      pino do nucleo (mesma camada, mesma rede: liga por sobreposicao) ate o
 #      lado direito do anel do chip (met4), com vias M4M5 onde cruza met4 da
 #      propria rede (lado do anel e faixa de borda em x ~ 2379).
-#      L72: a 1a versao parava em borda + 15 um, contando com um toco da faixa
-#      met5 do chip entre o halo e o anel. Esse toco nao existe (o PSM do
-#      IRDropReport juntou pino + ponte numa forma que acaba em 2365,0 e
-#      acusou PSM-0069 / u_core/vccd1 solto). Sobrepor no mesmo metal so liga
-#      se houver o que sobrepor: agora a ponte vai ate um met4 que existe.
+#      L72: a 1a versao parava em borda + 15 um = 2365, contando com o toco
+#      da faixa met5 do chip entre o halo e o anel. O toco existe, mas o
+#      pdngen apara a ponta solta ate a ultima via: ele comeca na faixa de
+#      borda (x ~ 2379), 13 um depois da ponte -> PSM-0069, u_core/vccd1
+#      solto. Agora a ponte vai ate o anel; na 2a rodada o log deu "0 vias
+#      M4M5" porque as vias do pdngen (toco x faixa de borda x anel) ja
+#      estavam la, e o PSM achou tudo ligado.
 #=============================================================================
 
 source $::env(SCRIPTS_DIR)/openroad/common/set_global_connections.tcl

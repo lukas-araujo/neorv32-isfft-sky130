@@ -144,6 +144,15 @@ if [ -n "$pd" ]; then
     if [ -f "$f" ]; then echo "    $(basename "$f"): $(grep -c . "$f" || true) linhas"; fi
   done
 fi
+# Magic.StreamOut: o LibreLane trata "Error while reading cell" como fatal (L73)
+ms="$(ls -d "$RUN"/*-magic-streamout 2>/dev/null | tail -1 || true)"
+if [ -n "$ms" ] && [ -f "$ms/magic-streamout.log" ]; then
+  { echo "linhas fatais (Error while reading cell, sem Warning) em magic-streamout.log:"
+    grep "Error while reading cell" "$ms/magic-streamout.log" | grep -v "Warning:" \
+      | sed 's/(byte position [0-9]*)//' | sort | uniq -c | sort -rn | head -40
+    grep -E "^> gds read" "$ms/magic-streamout.log"; } > "$DEST/11_magic_resumo.txt" 2>&1 || true
+  echo ">>> Magic.StreamOut:"; sed 's/^/    /' "$DEST/11_magic_resumo.txt"
+fi
 echo
 echo "Resultados: ${DEST#$REPO/}"
 ls -1 "$DEST" "$DEST/imagens" | sed 's/^/    /'

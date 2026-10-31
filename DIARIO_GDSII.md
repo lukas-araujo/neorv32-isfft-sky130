@@ -3803,8 +3803,10 @@ Números de `resultados/2026-10-31_1029_layout_chip/11_chip_metricas.json` (esta
 - **Causa:** a forma met5 acusada vai de (379,12; 406,65) a (**2365,000**; 408,25): é o pino do
   núcleo juntado com a ponte, e acaba exatamente na ponta da ponte (`borda + 15 µm`). Eu contava
   com um **toco da faixa met5 do chip** entre o halo da macro (2355) e o anel (2405,8) para a
-  ponte sobrepor. Esse toco não existe — o pdngen não deixou faixa met5 ali. Sobrepor no mesmo
-  metal só liga se houver o que sobrepor. O `confere_pdn.py` contava as pontes, mas não
+  ponte sobrepor. O toco existe, mas **começa em x ≈ 2379** (faixa met4 de borda): o pdngen
+  apara a ponta solta de cada faixa até a última via. Ficaram 13 µm de vão entre a ponte e o
+  toco (confirmado na 2ª rodada, abaixo). Sobrepor no mesmo metal só liga se houver o que
+  sobrepor. O `confere_pdn.py` contava as pontes, mas não
   olhava onde elas terminavam: por isso a parte 2a pareceu fechada.
 - **Resolvi com (L72):** `pontes_nucleo` agora leva cada ponte até o **lado direito do anel da
   própria rede** (met4 vertical de 5 µm: vccd até x = 2410,82, vssd até 2417,52) e põe vias
@@ -3823,7 +3825,46 @@ Números de `resultados/2026-10-31_1029_layout_chip/11_chip_metricas.json` (esta
 
 | # | Decisão | Status | Motivo |
 |---|---|---|---|
-| L72 | Pontes met5 do núcleo vão até o lado direito do anel do chip (met4) com vias M4M5 feitas à mão; ponte sem via é erro | ✅ | O toco de faixa met5 do chip entre o halo e o anel, com que a 1ª versão contava, não existe (PSM-0069). Levar a ponte a um met4 que certamente existe (o anel) não depende de como o pdngen corta as faixas perto da macro |
+| L72 | Pontes met5 do núcleo vão até o lado direito do anel do chip (met4) com vias M4M5 feitas à mão; ponte sem via é erro | ✅ | O toco de faixa met5 do chip com que a 1ª versão contava começa só em x ≈ 2379 (o pdngen apara a ponta solta), 13 µm depois da ponte (PSM-0069). Levar a ponte até o anel não depende de como o pdngen apara as faixas perto da macro |
+
+### Parte 2b, 2ª rodada (`2026-10-31_1524`): PDN ✅, parou no `Magic.StreamOut`
+
+| Conferência | Resultado (fonte) |
+|---|---|
+| `pontes_nucleo` (log do `GeneratePDN`) | 10 + 10 pontes, até x = 2410,82 (vccd) e 2417,52 (vssd); **0 vias novas**: em todo cruzamento já havia via do pdngen (o toco met5 × faixa de borda × anel), então a função só reconheceu a ligação |
+| `confere_pdn.py` (`11_pdn_geometria.txt`) | vccd: 10 pontes, 10 com via à direita da macro; vssd: 10, 10 |
+| `IRDropReport` (`irdrop.rpt`) | `PSM-0040 All shapes on net vccd are connected` (e vssd). Queda pior: vccd **16 µV**, vssd **77,5 µV** (0,00 %), potência 1,73 mW — só as células do chip; o núcleo é macro sem consumo declarado, então isto testa a **ligação**, não a queda real |
+| Roteamento, antena, STA | iguais à 1ª rodada (0 DRC, 14696 µm, 0 antena, 0 violações) |
+| `Magic.StreamOut` | ❌ `Encountered one or more fatal errors while running Magic` — com o GDS gravado ("GDS Write Complete") |
+
+### 🐛 `Magic.StreamOut`: 19 células dos pads vazias, por causa da ordem dos GDS
+
+- **Sintoma:** 38 linhas `Error while reading cell "...": cell sky130_fd_io__overlay_vccd_hvc
+  was used but not defined` (19 células: `overlay_*`, `top_gpiov2`, `top_power_*_wpad*`,
+  `top_ground_*_wpad`, `corner_bus_overlay`), metade ao ler `sky130_ef_io.gds` e metade ao ler
+  `sky130_fd_io.gds`. O Magic não devolve código de erro; o LibreLane procura essa frase no log
+  (`MAGIC_CAPTURE_ERRORS`, regex `Error while reading cell(?!.*Warning:)`) e reprova. Os
+  milhares de "Unknown layer/datatype" das SRAM aparecem só no `asic_top.get_bbox.log`, que não
+  passa por esse filtro (são as camadas da OpenRAM já vistas na L44).
+- **Causa:** o `read_pad_gds` lê o `PAD_GDS` na ordem da lista, com `gds noduplicates true`.
+  O `sky130_ef_io.gds` vinha primeiro e usa células que estão no `sky130_fd_io.gds`: o Magic cria
+  células **vazias** no lugar delas. Quando o `sky130_fd_io.gds` chega, o `noduplicates` pula
+  essas 19 porque "já existem", e elas continuam vazias (por isso a mesma lista aparece de novo
+  no fim do 2º arquivo). Seria um GDS com pads ocos.
+- **Resolvi com (L73):** `PAD_GDS` com a biblioteca base primeiro (`sky130_fd_io.gds`, depois
+  `sky130_ef_io.gds`, depois os dois avulsos) — a mesma regra da ordem de ligação de
+  bibliotecas: quem define vem antes de quem usa. O `11_anel.sh` agora grava
+  `11_magic_resumo.txt` (linhas fatais e ordem dos `gds read`).
+  Sem Magic e sem PDK na sessão do Claude: a conferência é a próxima rodada (deve vir sem
+  nenhuma linha "was used but not defined").
+- **Por que não `MAGIC_CAPTURE_ERRORS = false`:** passaria, mas com as 19 células vazias no GDS
+  — o filtro do LibreLane pegou um defeito real.
+- **Tempo:** ~30 min.
+- **Vira slide?** Sim: "ordem de leitura importa" (mesma ideia da ordem de `-l` no ligador).
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L73 | `PAD_GDS`: `sky130_fd_io.gds` antes de `sky130_ef_io.gds` | ✅ | Com `gds noduplicates`, a célula usada antes de ser definida fica vazia para sempre; a biblioteca base tem de vir primeiro |
 
 ---
 
@@ -3903,6 +3944,7 @@ Números de `resultados/2026-10-31_1029_layout_chip/11_chip_metricas.json` (esta
 | L70 | Sem CTS no chip | ✅ | 2026-10-31 |
 | L71 | DRC e LVS do chip ficam para a etapa 12 | ✅ | 2026-10-31 |
 | L72 | Pontes do núcleo até o anel do chip, com vias M4M5 (PSM-0069) | ✅ | 2026-10-31 |
+| L73 | `PAD_GDS` com `sky130_fd_io.gds` primeiro (células vazias no Magic) | ✅ | 2026-10-31 |
 
 ---
 
@@ -3933,7 +3975,7 @@ Números de `resultados/2026-10-31_1029_layout_chip/11_chip_metricas.json` (esta
 - [x] ~~Etapa 10~~ — `chip_top.v` com pads simula PASSOU, 3 somas = RTL (35ª sessão)
 - [x] ~~Etapa 11, parte 1~~ — anel de pads, 13/13 passos, GDS + PNG (37ª sessão)
 - [x] ~~Etapa 11, parte 2a~~ — PDN ligado pad → anel → núcleo (37ª sessão)
-- [ ] Etapa 11, parte 2b: `bash layout/chip/11_anel.sh chip` no notebook — 1ª rodada (`1029`) parou no `IRDropReport` (PSM-0069), corrigido pela L72; rodar de novo
+- [ ] Etapa 11, parte 2b: `bash layout/chip/11_anel.sh chip` no notebook — `1029` parou no `IRDropReport` (L72 corrigiu); `1524` passou o PSM e parou no `Magic.StreamOut` (L73); rodar de novo
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
