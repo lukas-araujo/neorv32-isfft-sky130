@@ -63,7 +63,11 @@ PY
 #-----------------------------------------------------------------------------
 io="$(find -L "$PDK_ROOT" -maxdepth 4 -type d -path '*sky130A/libs.ref/sky130_fd_io' 2>/dev/null | head -1 || true)"
 [ -n "$io" ] || { echo "ERRO: nao achei sky130A/libs.ref/sky130_fd_io em $PDK_ROOT"; exit 1; }
-for f in lef/sky130_ef_io.lef lef/sky130_fd_io.lef gds/sky130_ef_io.gds gds/sky130_fd_io.gds; do
+# O GDS combinado sky130_ef_io.gds NAO tem o gpiov2_pad_wrapped nem a fatia
+# VCCHIB (o LEF combinado tem): vem cada um no seu arquivo (37a sessao, L64)
+for f in lef/sky130_ef_io.lef lef/sky130_fd_io.lef gds/sky130_ef_io.gds gds/sky130_fd_io.gds \
+         gds/sky130_ef_io__gpiov2_pad_wrapped.gds \
+         gds/sky130_ef_io__connect_vcchib_vccd_and_vswitch_vddio_slice_20um.gds; do
   [ -f "$io/$f" ] || { echo "ERRO: falta $io/$f"; exit 1; }
 done
 echo ">>> pads: $io (LEF e GDS ok)"

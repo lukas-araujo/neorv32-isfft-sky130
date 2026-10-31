@@ -56,7 +56,9 @@
   ],
   "PAD_GDS": [
     "pdk_dir::libs.ref/sky130_fd_io/gds/sky130_ef_io.gds",
-    "pdk_dir::libs.ref/sky130_fd_io/gds/sky130_fd_io.gds"
+    "pdk_dir::libs.ref/sky130_fd_io/gds/sky130_fd_io.gds",
+    "pdk_dir::libs.ref/sky130_fd_io/gds/sky130_ef_io__gpiov2_pad_wrapped.gds",
+    "pdk_dir::libs.ref/sky130_fd_io/gds/sky130_ef_io__connect_vcchib_vccd_and_vswitch_vddio_slice_20um.gds"
   ],
   "PAD_LIBS": {
     "*": [

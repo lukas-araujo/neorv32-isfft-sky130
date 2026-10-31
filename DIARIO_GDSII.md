@@ -3511,6 +3511,45 @@ cantos e o enchimento foram colocados.
 |---|---|---|---|
 | L63 | No `chip_top.v`, VSWITCH = `vddio` e VCCHIB = `vccd` em todos os pads (anel com 10 redes) | ✅ | A fatia funde esses barramentos no metal; o netlist tem de dizer o mesmo que o layout (PadRing agora, LVS na etapa 12) |
 
+## 2026-10-31 (37ª sessão) — Etapa 11: o anel fechou; falta o GDS de 2 células
+
+### 3ª rodada (`2026-10-31_0042`): `OpenROAD.PadRing` ✅
+
+Do log colado pelo Lukas (passos 1–11 de 13 passaram):
+
+| O quê | Resultado (log do PadRing / `odb-manualmacroplacement`) |
+|---|---|
+| Ligação dos barramentos por encosto | sem erro (L63 resolveu o `PAD-0002`) |
+| Instâncias depois do anel | 446: núcleo, 4 gpiov2, 6 pads de alimentação, fatia, 4 `conb_1`, **426 fatias de enchimento** (*pad spacer*, 1,46 mm²) e **4 cantos** (*endcap*, 163.200 µm²) |
+| Terminais (`PAD-0116`), todos em met5 | sul: `vssd_pad` y 30,8–98,1; `clk_pad`/`rstn_pad` y 33,0–95,4; norte: `rx_pad`/`tx_pad` y 2105,6–2168,0 (die vai até 2201); leste: `vdda_pad` x 2605,1–2665,9 (die até 2700); oeste: `vssa_pad` x 34,1–94,9 |
+| Núcleo | `u_core` em (350, 350), N |
+
+Os terminais confirmam a **rotação R180 (L55)**: em todos os lados o bond pad
+ficou a ~30–100 µm da borda do die, ou seja, virado para fora; o lado de
+1,8 V (IN/OUT, VCCD) olha para o núcleo.
+
+### 🐛 `KLayout.StreamOut`: duas células sem GDS
+
+- **Sintoma:** `[ERROR] LEF Cell 'sky130_ef_io__connect_vcchib_vccd_and_vswitch_vddio_slice_20um'
+  has no matching GDS cell.` e o mesmo para `sky130_ef_io__gpiov2_pad_wrapped`.
+- **Causa:** o **LEF** combinado `sky130_ef_io.lef` tem as duas células (o
+  OpenROAD posicionou tudo), mas o **GDS** combinado `sky130_ef_io.gds` não.
+  No open_pdks (`8afc8346`, `sky130/custom/sky130_fd_io/gds/`) cada uma vem num
+  arquivo próprio. Conferido com o gdstk: o do gpiov2 tem 1 célula, que
+  referencia `sky130_ef_io__gpiov2_pad`, e essa já está no combinado (o KLayout
+  não reclamou dela); o da fatia é autocontido.
+- **Resolvi com** (L64): `PAD_GDS` ganha
+  `sky130_ef_io__gpiov2_pad_wrapped.gds` e
+  `sky130_ef_io__connect_vcchib_vccd_and_vswitch_vddio_slice_20um.gds`, e o
+  `11_anel.sh` confere se os dois estão no PDK do notebook antes de rodar.
+- **Tempo:** ~15 min.
+- **Vira slide?** Sim, junto com o `FOREIGN` (L45): LEF e GDS são vistas
+  separadas da mesma célula, e uma pode ter o que a outra não tem.
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L64 | `PAD_GDS` com os GDS próprios do `gpiov2_pad_wrapped` e da fatia VCCHIB | ✅ | O GDS combinado do PDK não traz essas duas células |
+
 ---
 
 ## Índice de decisões
@@ -3580,6 +3619,7 @@ cantos e o enchimento foram colocados.
 | L61 | `PAD_VERILOG_MODELS` = cópias em `tech/sky130_io/verilog/` | ✅ | 2026-10-29 |
 | L62 | Núcleo ligado a VCCD/VSSD do anel no `chip_top.v` | ✅ | 2026-10-29 |
 | L63 | Anel com 10 redes: VSWITCH = VDDIO, VCCHIB = VCCD | ✅ | 2026-10-31 |
+| L64 | `PAD_GDS` + GDS do gpiov2_pad_wrapped e da fatia | ✅ | 2026-10-31 |
 
 ---
 
