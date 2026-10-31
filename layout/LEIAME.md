@@ -5,7 +5,7 @@ Dois níveis (L15 do `DIARIO_GDSII.md`):
 | Pasta | Nível | Fluxo | Situação |
 |---|---|---|---|
 | `nucleo/` | 1 — `asic_top` (netlist do Genus + 4 macros) | `Classic` | etapas 1–9 passaram (GDS, DRC/LVS, LEC e simulação) |
-| `chip/` | 2 — padring + núcleo como macro | `Chip` | etapa 10 ✅ (`chip_top.v` + simulação com os pads); etapa 11 parte 1 (`11_anel.sh`: anel de pads) pronta para rodar |
+| `chip/` | 2 — padring + núcleo como macro | `Chip` | etapa 10 ✅ (`chip_top.v` + simulação com os pads); etapa 11 parte 1 ✅ (`11_anel.sh`: anel de pads, 13/13); parte 2 (PDN e roteamento) a fazer |
 
 ## Como rodar o núcleo, uma etapa por vez
 

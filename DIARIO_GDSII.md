@@ -3550,6 +3550,53 @@ ficou a ~30–100 µm da borda do die, ou seja, virado para fora; o lado de
 |---|---|---|---|
 | L64 | `PAD_GDS` com os GDS próprios do `gpiov2_pad_wrapped` e da fatia VCCHIB | ✅ | O GDS combinado do PDK não traz essas duas células |
 
+### 🐛 Nota de git (não é do layout, mas custou uma rodada)
+
+- **Sintoma:** depois de desfazer um commit local com `git reset origin/main`, a
+  4ª rodada (`2026-10-31_0102`) falhou igual à 3ª: o comando do KLayout ainda
+  tinha só 2 GDS de pads.
+- **Causa:** `git reset` sem `--hard` move o ramo e o índice, mas **não mexe nos
+  arquivos do disco**; eles ficaram na versão de antes da L64 (o próprio git
+  avisou: `Unstaged changes after reset: M ... config.json`). O `git pull`
+  respondeu "Already up to date" porque o ramo já estava certo.
+- **Resolvi com:** `git checkout -- <os 3 arquivos>`. O comando certo teria sido
+  `git reset --hard origin/main` (quando não há nada local a guardar).
+- **Vira slide?** Não; vira dica no LEIAME.
+
+### 5ª rodada (`2026-10-31_0106`): parte 1 ✅ — 13/13 passos
+
+Fonte: log colado pelo Lukas e `resultados/2026-10-31_0106_layout_chip/`
+(`11_anel_metricas.json`, `imagens/11_anel.png`).
+
+| Métrica (`11_anel_metricas.json`) | Valor |
+|---|---|
+| Die | 0 0 2700 2201 µm (5,94 mm²) |
+| Área de núcleo (linhas) | 300,38 301,92 2399,82 1898,56 µm (3,35 mm²) |
+| Instâncias | 446 |
+| Área das células de pad (`padcells`) | 1,62 mm²: enchimento 1,46 mm², cantos 0,16 mm², pads de alimentação 0,089 mm², gpiov2 0,068 mm², fatia 0,004 mm² |
+| Núcleo (macro) | 3,00 mm² |
+| Células-padrão | 4 `conb_1` (15 µm²) |
+| `KLayout.StreamOut` | "All LEF cells have matching GDS cells" |
+
+O que se vê na imagem (`11_anel.png`, 1000 × 815 px):
+
+| Conferência | Resultado |
+|---|---|
+| Anel contínuo nos 4 lados, cantos nos 4 cantos | ✅ |
+| Norte e sul com 4 pads cada; oeste com 1; leste com o pad de VDDA (a fatia de 20 µm quase não aparece nessa escala) | ✅ |
+| Bond pads (quadrados laranja) na borda **de fora** em todos os lados (L55) | ✅ |
+| Núcleo em (350, 350): na imagem vai de x ≈ 148 a 845 px e y ≈ 144 a 660 px, o que bate com 350…2350 × 350…1850 µm na escala de 0,352 px/µm | ✅ |
+| Faixas de alimentação do núcleo visíveis (met5 horizontal em amarelo, met4 vertical em roxo): são os pinos `vccd1`/`vssd1` do LEF (50 retângulos cada) | ✅ |
+| Folga entre o anel e o núcleo: ~100–150 µm | onde vão o anel de PDN do chip e as ligações pad ↔ núcleo (parte 2) |
+
+### Para continuar: etapa 11, parte 2
+
+| A fazer | Como (a conferir no fonte do LibreLane 3.0.14 antes de escrever) |
+|---|---|
+| Ligar VCCD/VSSD dos pads ao núcleo | anel de PDN do chip em volta da macro (met4/met5) ligado aos pinos de 1,8 V dos pads, e as faixas do núcleo ligadas ao anel; PDN de células-padrão quase vazio (só 4 `conb_1`) |
+| Rotear 4 sinais + as amarrações dos pads | pinos IN/OUT dos gpiov2 (met2, borda de dentro) até os pinos do núcleo (met2/met3 na borda da macro); `conb_1` posicionadas perto de cada pad |
+| Fluxo | `config.json` sozinho (fluxo `Chip` inteiro), depois DRC/LVS (etapa 12) |
+
 ---
 
 ## Índice de decisões
@@ -3648,7 +3695,7 @@ ficou a ~30–100 µm da borda do die, ou seja, virado para fora; o lado de
 - [x] ~~Etapa 8 de novo com L42 + L45~~ — XOR 0, DRC 130 isentos, LVS limpo (30ª sessão)
 - [x] ~~Etapa 9~~ — LEC 19.828 equivalentes, simulação PASSOU com as 3 somas (34ª sessão)
 - [x] ~~Etapa 10~~ — `chip_top.v` com pads simula PASSOU, 3 somas = RTL (35ª sessão)
-- [ ] Etapa 11, parte 1: `bash layout/chip/11_anel.sh` no notebook (36ª sessão)
+- [x] ~~Etapa 11, parte 1~~ — anel de pads, 13/13 passos, GDS + PNG (37ª sessão)
 - [ ] Etapa 11, parte 2: PDN do chip e fluxo `Chip` inteiro
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
