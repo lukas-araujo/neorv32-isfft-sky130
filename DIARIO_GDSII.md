@@ -3707,6 +3707,47 @@ cabeçalho da rede como ponto (corrigido) e contava o próprio anel como ligaç�
 pad (janela fechada em y = 280, abaixo do anel). O `11_anel.sh pdn` passa a rodá-lo
 e salvar `11_pdn_geometria.txt`.
 
+### 🐛 O anel não estava ligado aos pads
+
+- **Sintoma** (`confere_pdn.py` no DEF da rodada `2026-10-31_0135`, colado pelo Lukas):
+
+| Item | vccd | vssd |
+|---|---|---|
+| Fios/vias entre o pad e o anel (y 150–280) | **0 / 0** (pad em x = 2027) | **0 / 0** (pad em x = 598) |
+| Pontes até o núcleo | 10 (y 407,45; 560,63; 713,81…) | 10 (y 410,75; 563,93; 717,11…) |
+| Anel | 4 lados, (289,4; 290,9)–(2410,8; 1909,6) | 4 lados, (282,7; 284,2)–(2417,5; 1916,3) |
+
+  Grade, anel e pontes certos; **o chip não recebia alimentação**: o `-connect_to_pads`
+  não fez nada, sem erro nem aviso no log.
+- **Causa** (fonte do pdngen, `src/pdn/src/straps.cpp` e `grid.cpp`): os pinos foram
+  achados (o `getPinsFacingCore` quer o pino encostado na borda da célula virada para
+  o núcleo, e o met3 do `vccd_lvc_clamped_pad` encosta, depois do R180). Mas a ligação
+  é uma faixa **na camada do pino (met3)** que só pode terminar em via para uma camada
+  **vizinha** (met2/met4). O lado de baixo do anel é **met5**: sem alvo, a faixa é
+  descartada (a mensagem "Rejecting pad cell pin" só sai com o depurador ligado).
+- **Resolvi com** (L69): `ligacao_pads` no `pdn_chip.tcl`, depois do `pdngen`. Para cada
+  pino de met3 virado para dentro: faixa de met3 do pino até a barra met5 da própria
+  rede e pilhas `M3M4_PR` + `M4M5_PR` (vias do tlef do sky130) a cada 2 µm onde a faixa
+  cruza a barra. Cada pilha tem só o seu quadrado de met4 (1,18 µm): perto do pad de
+  VCCD desce até o anel uma faixa met4 de **vssd** da grade (x 2098,44–2100,04), e uma
+  placa de met4 inteira curtaria as duas redes. Colunas a menos de 0,3 µm de met4 de
+  outra rede são puladas. O `-connect_to_pads` saiu do `add_pdn_ring`.
+- **Conferido aqui** (OpenDB de mentira com as caixas reais dos LEFs dos pads e o anel
+  e as faixas na posição do DEF):
+
+| Pad | Faixas met3 (µm) | Pilhas de via |
+|---|---|---|
+| `pad_vccd` | x 2027,3–2051,245 e 2077,5–2101,5; y 191,1 → 295,92 | 44 (4 colunas puladas perto da faixa de vssd); 0 encostando nela |
+| `pad_vssd` | x 598,3–622,245 e 648,5–672,5; y 158,4 → 289,22 | 48 |
+
+- **Tempo:** ~1 h (achar a causa no fonte do pdngen).
+- **Vira slide?** Sim: "uma ferramenta que desiste em silêncio", e por que conferir
+  pela geometria quando a verificação automática não se aplica.
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L69 | Ligação pad → anel feita à mão (faixa met3 + pilhas de via), sem `-connect_to_pads` | ✅ | O pdngen só liga o met3 do pad a met2/met4; o anel embaixo é met5 |
+
 ---
 
 ## Índice de decisões
@@ -3781,6 +3822,7 @@ e salvar `11_pdn_geometria.txt`.
 | L66 | Faixas met4 nas laterais da macro | ✅ | 2026-10-31 |
 | L67 | Parte 2a só até o PDN (`config_pdn.json`) | ✅ | 2026-10-31 |
 | L68 | `ERROR_ON_PDN_VIOLATIONS = false` no chip (PSM sem terminal) | ✅ | 2026-10-31 |
+| L69 | Ligação pad → anel à mão (met3 + vias) | ✅ | 2026-10-31 |
 
 ---
 
