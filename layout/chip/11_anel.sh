@@ -77,6 +77,18 @@ for f in lef/sky130_ef_io.lef lef/sky130_fd_io.lef gds/sky130_ef_io.gds gds/sky1
   [ -f "$io/$f" ] || { echo "ERRO: falta $io/$f"; exit 1; }
 done
 echo ">>> pads: $io (LEF e GDS ok)"
+# O sky130_fd_io.gds do PDK tem um BOUNDARY aberto (overlay_vddio_lvc); o
+# Magic avisa "Boundary is not closed" e o LibreLane reprova (L74). Copia
+# consertada em entrada/ (fora do git), so refeita se o PDK mudar.
+if [ ! -f "$ENT/sky130_fd_io.gds" ] || [ "$io/gds/sky130_fd_io.gds" -nt "$ENT/sky130_fd_io.gds" ]; then
+  python3 "$CHIP/fecha_gds.py" fecha "$io/gds/sky130_fd_io.gds" "$ENT/sky130_fd_io.gds" \
+    || { echo "ERRO: a copia do sky130_fd_io.gds ainda tem BOUNDARY aberto"; exit 1; }
+fi
+for f in sky130_ef_io.gds sky130_ef_io__gpiov2_pad_wrapped.gds \
+         sky130_ef_io__connect_vcchib_vccd_and_vswitch_vddio_slice_20um.gds; do
+  python3 "$CHIP/fecha_gds.py" confere "$io/gds/$f" \
+    || echo "AVISO: $f tambem tem BOUNDARY aberto (o Magic vai reprovar; usar fecha_gds.py nele, L74)"
+done
 # O PDK pode trazer uma config de pads pronta para o LibreLane (valores
 # padrao das PAD_*); a nossa config.json sobrepoe. So mostramos, para comparar.
 pc="$(dirname "$(dirname "$io")")/libs.tech/librelane/sky130_fd_io/config.tcl"

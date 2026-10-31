@@ -3866,6 +3866,41 @@ Números de `resultados/2026-10-31_1029_layout_chip/11_chip_metricas.json` (esta
 |---|---|---|---|
 | L73 | `PAD_GDS`: `sky130_fd_io.gds` antes de `sky130_ef_io.gds` | ✅ | Com `gds noduplicates`, a célula usada antes de ser definida fica vazia para sempre; a biblioteca base tem de vir primeiro |
 
+### Parte 2b, 3ª rodada (`2026-10-31_1645`): a L73 funcionou; sobrou 1 linha
+
+`resultados/2026-10-31_1645_layout_chip/11_magic_resumo.txt`: a ordem dos `gds read` agora é
+`fd_io` → `ef_io` → os dois avulsos, e as 38 linhas "was used but not defined" sumiram. PDN e
+IR drop iguais à 2ª rodada (`PSM-0040` nas duas redes). Sobrou **uma** linha fatal, e o passo
+reprovou de novo:
+
+### 🐛 `Boundary is not closed` no GDS do próprio PDK
+
+- **Sintoma:** `Error while reading cell "sky130_fd_io__overlay_vddio_lvc" (byte position
+  11540404): Boundary is not closed.` O Magic termina ("GDS Write Complete"), o LibreLane reprova.
+- **Causa:** no GDSII um polígono (`BOUNDARY`) tem de repetir o primeiro ponto no fim. Um
+  polígono dessa célula do `sky130_fd_io.gds` não repete: defeito do arquivo do PDK. Nem usamos
+  essa célula (ela não aparece nas linhas "Copying output for cell" do log), mas o Magic lê o
+  arquivo inteiro e reclama.
+- **Resolvi com (L74):** `layout/chip/fecha_gds.py` lê os registros do GDS direto (2 bytes de
+  tamanho, 1 de tipo, 1 de tipo de dado, dados big-endian; sem biblioteca), lista os `BOUNDARY`
+  abertos (célula, camada, primeiro e último ponto) e grava uma cópia em que só o `XY` desses
+  polígonos ganha o primeiro ponto repetido no fim — o resto sai byte a byte igual. O
+  `11_anel.sh` gera `layout/chip/entrada/sky130_fd_io.gds` (fora do git; refaz só se o PDK
+  mudar), confere os outros três GDS dos pads, e o `PAD_GDS` aponta para a cópia.
+  Testado com um GDS sintético (KLayout do pip): um polígono aberto de propósito é achado, e a
+  cópia consertada sai **idêntica** (`cmp`) ao arquivo original fechado.
+- **Por que não regravar com o KLayout:** ele também fecha o polígono, mas reescreve o arquivo
+  todo (ordem das células, propriedades); o conserto no registro mexe só no que está errado e
+  dá para conferir.
+- **Por que não `MAGIC_CAPTURE_ERRORS = false`:** desligaria o filtro que acabou de pegar as
+  células vazias da L73.
+- **Tempo:** ~30 min.
+- **Vira slide?** Sim: o formato GDSII por dentro (registros) e "o PDK também tem defeito".
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L74 | Cópia do `sky130_fd_io.gds` com os `BOUNDARY` fechados (`fecha_gds.py`), usada no `PAD_GDS` | ✅ | Defeito do arquivo do PDK; conserto mínimo e conferível, sem desligar o filtro de erros do Magic |
+
 ---
 
 ## Índice de decisões
@@ -3945,6 +3980,7 @@ Números de `resultados/2026-10-31_1029_layout_chip/11_chip_metricas.json` (esta
 | L71 | DRC e LVS do chip ficam para a etapa 12 | ✅ | 2026-10-31 |
 | L72 | Pontes do núcleo até o anel do chip, com vias M4M5 (PSM-0069) | ✅ | 2026-10-31 |
 | L73 | `PAD_GDS` com `sky130_fd_io.gds` primeiro (células vazias no Magic) | ✅ | 2026-10-31 |
+| L74 | `sky130_fd_io.gds` com os polígonos fechados (`fecha_gds.py`) | ✅ | 2026-10-31 |
 
 ---
 
@@ -3976,7 +4012,7 @@ Números de `resultados/2026-10-31_1029_layout_chip/11_chip_metricas.json` (esta
 - [x] ~~Etapa 11, parte 1~~ — anel de pads, 13/13 passos, GDS + PNG (37ª sessão)
 - [x] ~~Etapa 11, parte 2a~~ — PDN ligado pad → anel → núcleo (37ª sessão)
 - [ ] IR drop do chip com a fonte **no pad** (`VSRC_LOC_FILES` com a posição do `pad_vccd`/`pad_vssd`): sem terminal de topo, o `analyze_power_grid` usa "bump pattern" (`PSM-0073`: fontes virtuais a cada 140 µm no met5, como num flip-chip) e a queda sai otimista; o `PSM-0025` do `GeneratePDN` é a mesma falta de terminal (L68)
-- [ ] Etapa 11, parte 2b: `bash layout/chip/11_anel.sh chip` no notebook — `1029` parou no `IRDropReport` (L72 corrigiu); `1524` passou o PSM e parou no `Magic.StreamOut` (L73); rodar de novo
+- [ ] Etapa 11, parte 2b: `bash layout/chip/11_anel.sh chip` no notebook — `1029` parou no `IRDropReport` (L72 corrigiu); `1524` passou o PSM e parou no `Magic.StreamOut` (L73); `1645` parou no BOUNDARY aberto do PDK (L74); rodar de novo
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
