@@ -3692,6 +3692,21 @@ Do log colado pelo Lukas:
 |---|---|---|---|
 | L68 | `ERROR_ON_PDN_VIOLATIONS = false` no chip | ✅ | O PSM precisa de pino de topo na rede; no chip a alimentação entra pelo pad. Quem confere é o LVS |
 
+**A imagem `11_pdn.png`** (`resultados/2026-10-31_0135_layout_chip/imagens/`): aparecem
+as linhas de células com tap cells em volta da macro (a faixa azul densa entre o
+anel e o núcleo), as faixas met5 (amarelo) indo do anel até a macro dos dois
+lados e as faixas met4 em cima/embaixo e nas laterais. O que **não dá para ver**
+nessa escala (0,35 px/µm): se o `-connect_to_pads` ligou o anel aos pads VCCD/VSSD,
+e o log do `GeneratePDN` não diz nada sobre isso.
+
+**`layout/chip/confere_pdn.py`** (sem nix-shell, só lê o DEF do passo de PDN): conta,
+para `vccd`/`vssd`, (1) fios e vias entre cada pad de alimentação e o anel
+(y = 150–280 µm), (2) as pontes até o núcleo, (3) os lados do anel (5 µm). Testado
+com um DEF sintético no formato do OpenROAD: a 1ª versão lia o `( * VPWR )` do
+cabeçalho da rede como ponto (corrigido) e contava o próprio anel como ligação ao
+pad (janela fechada em y = 280, abaixo do anel). O `11_anel.sh pdn` passa a rodá-lo
+e salvar `11_pdn_geometria.txt`.
+
 ---
 
 ## Índice de decisões

@@ -129,6 +129,11 @@ if [ -n "$pd" ]; then
   grep -hE 'pontes_nucleo|PDN-[0-9]+|\[ERROR|ERROR' "$pd"/*.log 2>/dev/null | sort | uniq -c | sort -rn | head -40 \
     > "$DEST/11_pdn_resumo.txt" || true
   echo ">>> PDN (mensagens, contagem):"; sed 's/^/    /' "$DEST/11_pdn_resumo.txt"
+  # o check_power_grid nao serve no chip (L68): conferencia pela geometria do DEF
+  if [ -f "$pd/chip_top.def" ]; then
+    python3 "$CHIP/confere_pdn.py" "$pd/chip_top.def" > "$DEST/11_pdn_geometria.txt" 2>&1 || true
+    sed 's/^/    /' "$DEST/11_pdn_geometria.txt"
+  fi
   for f in "$DEST"/*grid-errors.rpt; do
     if [ -f "$f" ]; then echo "    $(basename "$f"): $(grep -c . "$f" || true) linhas"; fi
   done
