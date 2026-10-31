@@ -8,7 +8,8 @@ de PDN e conta, para vccd e vssd:
 
   1. fios e vias na faixa entre cada pad de alimentacao e o anel
      (o que o -connect_to_pads deveria ter criado);
-  2. as pontes met5 ate o nucleo (pdn_chip.tcl, L65);
+  2. as pontes met5 ate o nucleo (pdn_chip.tcl, L65) e se elas chegam ao
+     anel com via (L72);
   3. o anel (fios de 5 um de largura).
 
 Uso:
@@ -123,7 +124,13 @@ def main():
             p = [f for f in formas[rede] if f[0] == "fio" and f[1] == "met5"
                  and f[2] < borda < f[4] and f[2] > borda - 40 * dbu]
             ys = ", ".join(f"{um((f[3] + f[5]) / 2):.2f}" for f in sorted(p, key=lambda f: f[3])[:3])
-            print(f"   {rede}: {len(p)} pontes (centros y: {ys} ...)")
+            fins = sorted({um(f[4]) for f in p})
+            # vias M4M5 sobre cada ponte, a direita da macro (L72: a ponte tem de
+            # chegar ao met4 da rede -- lado do anel / faixa de borda -- com via)
+            com_via = sum(1 for f in p if any(v[0] == "via" and v[2] > borda and f[2] <= v[2] <= f[4]
+                                              and f[3] <= v[3] <= f[5] for v in formas[rede]))
+            print(f"   {rede}: {len(p)} pontes (centros y: {ys} ...), terminam em x = "
+                  f"{', '.join(f'{x:.2f}' for x in fins)} um; {com_via} com via a direita da macro")
 
     # 3. anel (largura 5 um)
     print("\n3. Anel do chip (fios met4/met5 com 5 um de largura)")

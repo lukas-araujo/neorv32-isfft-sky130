@@ -23,9 +23,15 @@
 #      uma faixa met5 do nucleo (macro em (350, 350), orientacao N);
 #   2. anel do chip em met4/met5, ligado ao met3 dos pads VCCD/VSSD por
 #      faixas e vias feitas a mao depois do pdngen (L69);
-#   3. depois do pdngen: uma PONTE de met5 por faixa, da ponta da faixa do
-#      chip ate 1 um para dentro do pino do nucleo. Mesma camada, mesma rede:
-#      liga por sobreposicao, sem via.
+#   3. depois do pdngen: uma PONTE de met5 por faixa, de 1 um para dentro do
+#      pino do nucleo (mesma camada, mesma rede: liga por sobreposicao) ate o
+#      lado direito do anel do chip (met4), com vias M4M5 onde cruza met4 da
+#      propria rede (lado do anel e faixa de borda em x ~ 2379).
+#      L72: a 1a versao parava em borda + 15 um, contando com um toco da faixa
+#      met5 do chip entre o halo e o anel. Esse toco nao existe (o PSM do
+#      IRDropReport juntou pino + ponte numa forma que acaba em 2365,0 e
+#      acusou PSM-0069 / u_core/vccd1 solto). Sobrepor no mesmo metal so liga
+#      se houver o que sobrepor: agora a ponte vai ate um met4 que existe.
 #=============================================================================
 
 source $::env(SCRIPTS_DIR)/openroad/common/set_global_connections.tcl
@@ -79,9 +85,42 @@ add_pdn_connect -grid nucleo -layers {met4 met5}
 #-----------------------------------------------------------------------------
 pdngen
 
+proc caixas_de {net camada} {
+    # retangulos (x0 y0 x1 y1) dos fios especiais de uma rede numa camada
+    set r {}
+    foreach sw [$net getSWires] {
+        foreach sb [$sw getWires] {
+            if { [$sb isVia] } { continue }
+            if { [[$sb getTechLayer] getName] != $camada } { continue }
+            lappend r [list [$sb xMin] [$sb yMin] [$sb xMax] [$sb yMax]]
+        }
+    }
+    return $r
+}
+
+proc vias_de {net} {
+    # caixas envolventes (x0 y0 x1 y1) das vias especiais de uma rede
+    set r {}
+    foreach sw [$net getSWires] {
+        foreach sb [$sw getWires] {
+            if { ![$sb isVia] } { continue }
+            lappend r [list [$sb xMin] [$sb yMin] [$sb xMax] [$sb yMax]]
+        }
+    }
+    return $r
+}
+
+proc cruza {a b} {
+    lassign $a ax0 ay0 ax1 ay1
+    lassign $b bx0 by0 bx1 by1
+    return [expr {$ax0 < $bx1 && $ax1 > $bx0 && $ay0 < $by1 && $ay1 > $by0}]
+}
+
 proc pontes_nucleo {inst_name} {
     set block [ord::get_db_block]
-    set dbu [[ord::get_db_tech] getDbUnitsPerMicron]
+    set tech [ord::get_db_tech]
+    set dbu [$tech getDbUnitsPerMicron]
+    set via45 [$tech findVia M4M5_PR]
     set inst [$block findInst $inst_name]
     if { $inst == "NULL" } { error "pontes_nucleo: instancia $inst_name nao existe" }
     if { [$inst getOrient] != "R0" } {
@@ -93,14 +132,27 @@ proc pontes_nucleo {inst_name} {
     set master [$inst getMaster]
     set W [$master getWidth]
     set H [$master getHeight]
+    set borda [expr {$ox + $W}]
     set margem [expr {int(40 * $dbu)}]   ;# fora do anel do nucleo (~30 um)
     set dentro [expr {int(1 * $dbu)}]    ;# quanto a ponte entra no pino
-    set fora [expr {int(15 * $dbu)}]     ;# quanto passa da borda (> halo 5)
+    set larg_anel [expr {int(5 * $dbu)}]
+    set meia4 [expr {int(0.59 * $dbu)}]  ;# metade do met4 da M4M5_PR
+    set passo [expr {int(2 * $dbu)}]
     set total 0
     foreach {pino rede} [list vccd1 $::env(VDD_NET) vssd1 $::env(GND_NET)] {
         set net [$block findNet $rede]
+        set met4 [caixas_de $net met4]
+        set ja [vias_de $net]
+        # lado DIREITO do anel desta rede: met4 vertical de 5 um a direita da macro
+        set lado {}
+        foreach c $met4 {
+            lassign $c x0 y0 x1 y1
+            if { $x1 - $x0 == $larg_anel && $x0 > $borda && $y1 - $y0 > $H } { set lado $c }
+        }
+        if { $lado == {} } { error "pontes_nucleo: nao achei o lado direito do anel de $rede" }
+        set fim_x [lindex $lado 2]
         set sw [odb::dbSWire_create $net "ROUTED"]
-        set n 0
+        set n 0; set nv 0; set soltas 0
         foreach mpin [[$master findMTerm $pino] getMPins] {
             foreach box [$mpin getGeometry] {
                 set layer [$box getTechLayer]
@@ -110,14 +162,38 @@ proc pontes_nucleo {inst_name} {
                 # (as faixas comecam no anel da esquerda, x = 29,12: nao filtrar xMin)
                 if { [$box xMax] < $W - $margem } { continue }
                 if { [$box yMin] < $margem || [$box yMax] > $H - $margem } { continue }
-                odb::dbSBox_create $sw $layer \
-                    [expr {$ox + [$box xMax] - $dentro}] [expr {$oy + [$box yMin]}] \
-                    [expr {$ox + $W + $fora}]            [expr {$oy + [$box yMax]}] \
-                    "STRIPE"
+                set p [list [expr {$ox + [$box xMax] - $dentro}] [expr {$oy + [$box yMin]}] \
+                            $fim_x [expr {$oy + [$box yMax]}]]
+                lassign $p px0 py0 px1 py1
+                odb::dbSBox_create $sw $layer $px0 $py0 $px1 $py1 "STRIPE"
                 incr n
+                # vias onde a ponte cruza met4 da MESMA rede fora da macro
+                # (lado do anel e faixas de borda), se o pdngen ainda nao pos via ali
+                set yc [expr {(($py0 + $py1) / 2 / 5) * 5}]
+                set ligada 0
+                foreach c $met4 {
+                    lassign $c x0 y0 x1 y1
+                    if { $x0 <= $borda || $y0 > $py0 || $y1 < $py1 } { continue }
+                    set xa [expr {max($x0, $px0)}]; set xb [expr {min($x1, $px1)}]
+                    if { $xb - $xa < 2 * $meia4 } { continue }
+                    set regiao [list $xa $py0 $xb $py1]
+                    set tem 0
+                    foreach v $ja { if { [cruza $v $regiao] } { set tem 1; break } }
+                    if { $tem } { set ligada 1; continue }
+                    set k [expr {($xb - $xa - 2 * $meia4) / $passo + 1}]
+                    set x [expr {$xa + ($xb - $xa - ($k - 1) * $passo) / 2}]
+                    for {set i 0} {$i < $k} {incr i} {
+                        set xv [expr {(($x + $i * $passo) / 5) * 5}]
+                        odb::dbSBox_create $sw $via45 $xv $yc "STRIPE"
+                        incr nv
+                    }
+                    set ligada 1
+                }
+                if { !$ligada } { incr soltas }
             }
         }
-        puts "\[INFO\] pontes_nucleo: $n pontes met5 de $rede ate $inst_name/$pino"
+        puts "\[INFO\] pontes_nucleo: $n pontes met5 de $rede ate $inst_name/$pino, ate x = [expr {$fim_x / double($dbu)}] (anel), $nv vias M4M5"
+        if { $soltas > 0 } { error "pontes_nucleo: $soltas pontes de $rede sem via em met4 da rede (PSM-0069, L72)" }
         incr total $n
     }
     if { $total == 0 } { error "pontes_nucleo: nenhuma ponte criada" }
@@ -132,19 +208,6 @@ pontes_nucleo u_core
 # (1,18 um); colunas com met4 de OUTRA rede por perto sao puladas (ex.: a
 # faixa met4 de vssd da grade que desce ate o anel em x ~ 2099).
 #-----------------------------------------------------------------------------
-proc caixas_de {net camada {tipo fio}} {
-    # retangulos (x0 y0 x1 y1) dos fios especiais de uma rede numa camada
-    set r {}
-    foreach sw [$net getSWires] {
-        foreach sb [$sw getWires] {
-            if { [$sb isVia] } { continue }
-            if { [[$sb getTechLayer] getName] != $camada } { continue }
-            lappend r [list [$sb xMin] [$sb yMin] [$sb xMax] [$sb yMax]]
-        }
-    }
-    return $r
-}
-
 proc ligacao_pads {pares} {
     set block [ord::get_db_block]
     set tech [ord::get_db_tech]

@@ -3777,6 +3777,54 @@ confirma eletricamente é o LVS (etapa 12).
 pelo KLayout, XOR, antena, enchimento, densidade) e guarda também folga de setup/hold,
 erros de roteamento e comprimento de fio.
 
+### Parte 2b, 1ª rodada (`2026-10-31_1029`): 49 passos bons, parou no `OpenROAD.IRDropReport`
+
+Números de `resultados/2026-10-31_1029_layout_chip/11_chip_metricas.json` (estado do passo 49,
+`STAPostPNR`) e dos logs em `logs_anel.tar.gz`:
+
+| Passo | Resultado |
+|---|---|
+| Posicionamento | 3780 células-padrão: 3710 tap, 4 endcap, **55** `conb_1`, 11 diodos; 437 células do anel (4 pads de sinal, 6 de alimentação, 426 enchimentos, 1 fatia) |
+| `RepairDesignPostGPL` | `RSZ-0042`: inseriu 42 + 13 `conb_1` (4 → 55): o resizer dá **um tie por pino** ligado a constante (pinos de configuração dos pads), em vez de um tie puxando fio longo. `RSZ-0020`: 2 redes "flutuando", `vccd` e `vssd` — no netlist são redes de sinal que só ligam pinos de alimentação; quem as liga é o PDN (aviso esperado) |
+| Roteamento global | 15207 µm estimados |
+| Antena | `rstn_core` reprovou no global; `RepairAntennas` resolveu (1 jumper, 11 diodos); depois do detalhado: **0** redes violando |
+| Roteamento detalhado | **0** erros de DRC (18 → 1 → 1 → 0 nas iterações); **14696 µm** de fio; maior rede 2767 µm |
+| Pinos desconectados | 17, nenhum crítico |
+| Enchimento | 75420 células de enchimento; utilização das células-padrão 47,7 % |
+| STA pós-roteamento (RCX) | setup e hold: 0 violações, folga 1e39 = **sem caminho restrito**. O núcleo é macro sem Liberty: o relógio chega no pino `clk_i` e para ali. O tempo dos sinais pad ↔ núcleo só aparece com um `.lib` do núcleo (etapa 12 ou depois) |
+| `IRDropReport` | ❌ `[PSM-0069] Check connectivity failed on vccd` |
+
+### 🐛 `PSM-0069`: o núcleo não estava ligado à grade do chip
+
+- **Sintoma:** `analyze_power_grid -net vccd` → 49 × `PSM-0038 Unconnected shape on net vccd`
+  (as faixas met4/met5 do **próprio núcleo**, em coordenadas do chip) e
+  `PSM-0039 Unconnected instance u_core/vccd1`; depois `PSM-0069`. Nenhum pad e nenhuma
+  célula-padrão na lista: o resto da rede estava inteiro.
+- **Causa:** a forma met5 acusada vai de (379,12; 406,65) a (**2365,000**; 408,25): é o pino do
+  núcleo juntado com a ponte, e acaba exatamente na ponta da ponte (`borda + 15 µm`). Eu contava
+  com um **toco da faixa met5 do chip** entre o halo da macro (2355) e o anel (2405,8) para a
+  ponte sobrepor. Esse toco não existe — o pdngen não deixou faixa met5 ali. Sobrepor no mesmo
+  metal só liga se houver o que sobrepor. O `confere_pdn.py` contava as pontes, mas não
+  olhava onde elas terminavam: por isso a parte 2a pareceu fechada.
+- **Resolvi com (L72):** `pontes_nucleo` agora leva cada ponte até o **lado direito do anel da
+  própria rede** (met4 vertical de 5 µm: vccd até x = 2410,82, vssd até 2417,52) e põe vias
+  `M4M5_PR` (a cada 2 µm, centradas) onde a ponte cruza met4 da mesma rede fora da macro: o lado
+  do anel (2 vias) e a faixa de borda em x ≈ 2379/2383 (1 via). Se o pdngen já tiver via ali,
+  não repete. Ponte sem nenhuma via → erro no `GeneratePDN` (não deixa passar calado de novo).
+  A ponte de vssd cruza o lado do anel de vccd em met5 sobre met4: camadas diferentes, sem via.
+  O `confere_pdn.py` passou a mostrar onde as pontes terminam e quantas têm via (no DEF de teste
+  antigo: "terminam em x = 2365,00; 0 com via" — teria pegado o erro na parte 2a).
+- **Conferido** com o OpenDB de mentira (`mock3.tcl`, pinos reais do LEF, anel e faixas do DEF):
+  20 pontes até o anel, 60 vias M4M5, todas com o met4 da via dentro de met4 da própria rede;
+  a `ligacao_pads` continua igual (44 e 48 pilhas).
+- **Tempo:** ~40 min de diagnóstico e correção.
+- **Vira slide?** Sim: "o checador que conta não basta, tem de olhar onde termina" — e o PSM
+  como verificação de conectividade da alimentação antes do LVS.
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L72 | Pontes met5 do núcleo vão até o lado direito do anel do chip (met4) com vias M4M5 feitas à mão; ponte sem via é erro | ✅ | O toco de faixa met5 do chip entre o halo e o anel, com que a 1ª versão contava, não existe (PSM-0069). Levar a ponte a um met4 que certamente existe (o anel) não depende de como o pdngen corta as faixas perto da macro |
+
 ---
 
 ## Índice de decisões
@@ -3854,6 +3902,7 @@ erros de roteamento e comprimento de fio.
 | L69 | Ligação pad → anel à mão (met3 + vias) | ✅ | 2026-10-31 |
 | L70 | Sem CTS no chip | ✅ | 2026-10-31 |
 | L71 | DRC e LVS do chip ficam para a etapa 12 | ✅ | 2026-10-31 |
+| L72 | Pontes do núcleo até o anel do chip, com vias M4M5 (PSM-0069) | ✅ | 2026-10-31 |
 
 ---
 
@@ -3884,7 +3933,7 @@ erros de roteamento e comprimento de fio.
 - [x] ~~Etapa 10~~ — `chip_top.v` com pads simula PASSOU, 3 somas = RTL (35ª sessão)
 - [x] ~~Etapa 11, parte 1~~ — anel de pads, 13/13 passos, GDS + PNG (37ª sessão)
 - [x] ~~Etapa 11, parte 2a~~ — PDN ligado pad → anel → núcleo (37ª sessão)
-- [ ] Etapa 11, parte 2b: `bash layout/chip/11_anel.sh chip` no notebook
+- [ ] Etapa 11, parte 2b: `bash layout/chip/11_anel.sh chip` no notebook — 1ª rodada (`1029`) parou no `IRDropReport` (PSM-0069), corrigido pela L72; rodar de novo
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
