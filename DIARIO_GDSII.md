@@ -3661,6 +3661,37 @@ entrada/saída ficar ruim, mudar os pads de lado é a correção.
 | L66 | Um par de faixas met4 em cada faixa estreita ao lado da macro | ✅ | Alimentar as linhas de células fora do alcance da grade alinhada |
 | L67 | Parte 2 em duas: PDN primeiro (`config_pdn.json`), fluxo inteiro depois | ✅ | Mesmo motivo da L60: ver o PDN antes de horas de roteamento |
 
+### Parte 2a, 1ª rodada (`2026-10-31_0135`): PDN gerado, 17/17 passos
+
+Do log colado pelo Lukas:
+
+| Passo | Resultado |
+|---|---|
+| `CutRows` | 587 linhas cortadas pela macro (halo 10 µm) em 1146 pedaços (223.940 sítios) |
+| `TapEndcapInsertion` | 1174 endcaps e 3710 tap cells (instâncias: 446 → 4156; metade dos endcaps contados como *fill*) |
+| `GeneratePDN` | `Inserting grid: chip`, `Inserting grid: nucleo - u_core`, **20 pontes** (`pontes_nucleo: 10 ... vccd`, `10 ... vssd`), a 2ª chamada do `pdngen` virou o aviso esperado |
+| `KLayout.StreamOut`/`Render` | GDS e `11_pdn.png` |
+| `Checker.PowerGridViolations` | 2 "violações" = os 2 `PSM-0025` abaixo (erro adiado) |
+
+### 🐛 `[PSM-0025] vccd does not contain any terminals` (e `vssd`)
+
+- **Causa:** o `check_power_grid` (OpenROAD PSM) parte dos **terminais** da rede,
+  os pinos de topo do bloco, e confere se tudo se liga a eles. No núcleo,
+  `vccd1`/`vssd1` eram pinos de topo. No chip a alimentação entra pelo **pad**: o
+  pino de topo é o `vccd_pad` (o bond pad), do outro lado da célula do pad, e a
+  rede interna `vccd` não tem terminal. A verificação não tem de onde partir; não é
+  sinal de rede solta (os relatórios `vccd/vssd-grid-errors.rpt` saíram vazios porque
+  a verificação nem começou).
+- **Resolvi com** (L68): `ERROR_ON_PDN_VIOLATIONS = false` no `config.json` do chip.
+  A conferência da alimentação fica com a imagem agora e com o **LVS** na etapa 12
+  (o próprio LibreLane diz: "you may ignore these if LVS passes").
+- **Vira slide?** Sim: o que um verificador precisa saber para funcionar (aqui, onde
+  a corrente entra).
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L68 | `ERROR_ON_PDN_VIOLATIONS = false` no chip | ✅ | O PSM precisa de pino de topo na rede; no chip a alimentação entra pelo pad. Quem confere é o LVS |
+
 ---
 
 ## Índice de decisões
@@ -3734,6 +3765,7 @@ entrada/saída ficar ruim, mudar os pads de lado é a correção.
 | L65 | PDN do chip com pontes met5 pela direita (`pdn_chip.tcl`) | ✅ | 2026-10-31 |
 | L66 | Faixas met4 nas laterais da macro | ✅ | 2026-10-31 |
 | L67 | Parte 2a só até o PDN (`config_pdn.json`) | ✅ | 2026-10-31 |
+| L68 | `ERROR_ON_PDN_VIOLATIONS = false` no chip (PSM sem terminal) | ✅ | 2026-10-31 |
 
 ---
 
