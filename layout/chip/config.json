@@ -134,5 +134,6 @@
   ],
   "PDN_MACRO_CONNECTIONS": [
     "u_core vccd vssd vccd1 vssd1"
-  ]
+  ],
+  "PDN_CFG": "dir::pdn_chip.tcl"
 }

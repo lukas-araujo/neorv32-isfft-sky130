@@ -22,8 +22,11 @@
 #
 #   Resultado: resultados/<AAAA-MM-DD_HHMM>_layout_chip/ (metricas, PNG,
 #   logs). Uso, dentro do nix-shell do LibreLane:
-#     bash layout/chip/11_anel.sh
+#     bash layout/chip/11_anel.sh          parte 1: so o anel (config_anel.json)
+#     bash layout/chip/11_anel.sh pdn      parte 2a: anel + PDN do chip
+#                                          (config_pdn.json, pdn_chip.tcl, L65)
 #=============================================================================
+PARTE="${1:-anel}"
 source "$(dirname "$0")/../nucleo/comum.sh"     # estado_de, visao_de...
 confere_ambiente
 CHIP="$REPO/layout/chip"
@@ -78,13 +81,13 @@ if [ -f "$pc" ]; then echo ">>> o PDK traz $pc:"; grep -E 'PAD_' "$pc" | sed 's/
 else echo ">>> o PDK nao traz config de pads para o LibreLane (tudo vem da nossa config.json)"; fi
 
 #-----------------------------------------------------------------------------
-# 3. LibreLane: config.json + config_anel.json (o segundo so troca o fluxo)
+# 3. LibreLane: config.json + config_<parte>.json (o segundo so troca o fluxo)
 #-----------------------------------------------------------------------------
 TAG="$(date +%Y-%m-%d_%H%M)"
 echo "$TAG" > "$CHIP/.rodada_atual"
 r=0
 ( cd "$CHIP" && librelane --pdk-root "$PDK_ROOT" --run-tag "$TAG" \
-    config.json config_anel.json ) || r=$?
+    config.json "config_${PARTE}.json" ) || r=$?
 echo ">>> librelane terminou com codigo $r"
 
 #-----------------------------------------------------------------------------
@@ -97,7 +100,7 @@ ultimo="$(ls -d "$RUN"/[0-9]*/ 2>/dev/null | while read -r d; do
            [ -f "$d/state_out.json" ] && echo "$d"; done | sort -V | tail -1 || true)"
 if [ -n "$ultimo" ]; then
   echo ">>> ultimo passo com estado: $(basename "$ultimo")"
-  python3 - "$ultimo/state_out.json" "$DEST/11_anel_metricas.json" <<'PY'
+  python3 - "$ultimo/state_out.json" "$DEST/11_${PARTE}_metricas.json" <<'PY'
 import json, sys
 m = json.load(open(sys.argv[1])).get("metrics", {})
 json.dump(m, open(sys.argv[2], "w"), indent=1, sort_keys=True)
@@ -107,7 +110,7 @@ for k in ["design__die__area", "design__core__area",
     if k in m: print(f"  {k:36s} {m[k]}")
 PY
 fi
-find "$RUN" -name '*.png' -path '*klayout-render*' -exec cp -f {} "$DEST/imagens/11_anel.png" \; 2>/dev/null || true
+find "$RUN" -name '*.png' -path '*klayout-render*' -exec cp -f {} "$DEST/imagens/11_${PARTE}.png" \; 2>/dev/null || true
 ( cd "$CHIP/runs" && find "$TAG" -type f \
     \( -name '*.log' -o -name '*.rpt' -o -name '*.txt' -o -name '*.json' \
        -o -name '*.tcl' -o -name '*.sdc' \) -size -20M -print0 \
@@ -119,10 +122,23 @@ if [ -n "$pr" ]; then
     > "$DEST/11_padring_resumo.txt" || true
   echo ">>> PadRing (mensagens, contagem):"; sed 's/^/    /' "$DEST/11_padring_resumo.txt"
 fi
+# PDN: erros da grade (check_power_grid) e as pontes do nucleo
+pd="$(ls -d "$RUN"/*-openroad-generatepdn 2>/dev/null | tail -1 || true)"
+if [ -n "$pd" ]; then
+  cp -f "$pd"/*grid-errors.rpt "$DEST/" 2>/dev/null || true
+  grep -hE 'pontes_nucleo|PDN-[0-9]+|\[ERROR|ERROR' "$pd"/*.log 2>/dev/null | sort | uniq -c | sort -rn | head -40 \
+    > "$DEST/11_pdn_resumo.txt" || true
+  echo ">>> PDN (mensagens, contagem):"; sed 's/^/    /' "$DEST/11_pdn_resumo.txt"
+  for f in "$DEST"/*grid-errors.rpt; do
+    if [ -f "$f" ]; then echo "    $(basename "$f"): $(grep -c . "$f" || true) linhas"; fi
+  done
+fi
 echo
 echo "Resultados: ${DEST#$REPO/}"
 ls -1 "$DEST" "$DEST/imagens" | sed 's/^/    /'
 echo
 echo "Para mandar pelo git:"
-echo "  git add resultados/${TAG}_layout_chip && git commit -m 'gdsii: etapa 11, anel de pads' && git push"
+echo "  git add resultados/${TAG}_layout_chip"
+echo "  git commit -m 'gdsii: etapa 11, ${PARTE}'"
+echo "  git pull --rebase origin main && git push"
 exit "$r"

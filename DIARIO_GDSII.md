@@ -3597,6 +3597,70 @@ O que se vê na imagem (`11_anel.png`, 1000 × 815 px):
 | Rotear 4 sinais + as amarrações dos pads | pinos IN/OUT dos gpiov2 (met2, borda de dentro) até os pinos do núcleo (met2/met3 na borda da macro); `conb_1` posicionadas perto de cada pad |
 | Fluxo | `config.json` sozinho (fluxo `Chip` inteiro), depois DRC/LVS (etapa 12) |
 
+### Parte 2a: o PDN do chip (`pdn_chip.tcl`)
+
+O LEF do núcleo veio pelo git (`resultados/2026-10-31_0106_layout_chip/asic_top.lef.gz`).
+O que ele diz sobre a alimentação (números do arquivo):
+
+| O quê | Onde (coordenadas da macro, µm) |
+|---|---|
+| Anel do núcleo | `vssd1` por fora (met4 x 29,12–30,72 e 1968,9–1970,5; met5 y 29,9–31,5 e 1467,22–1468,82), `vccd1` por dentro (x 32,42–34,02 / 1965,6–1967,2; y 33,2–34,8 / 1463,92–1465,52), 1,6 µm de largura |
+| Faixas met4 (verticais) | 13 por rede, passo 153,6, `vccd1` a partir de x = 55,54; várias partidas onde há SRAM |
+| Faixas met5 (horizontais) | 10 por rede, passo 153,18, `vccd1` a partir de y = 56,65; todas de x = 29,12 a 1970,5 |
+| Obstrução (OBS) perto da borda | met4: faixa corrida y 2,2–29,5 (embaixo) e y 1469,2–1470,7 (em cima); met5: x 21,7–27,5 na frente de cada faixa (à esquerda), mas **nada à direita de x = 1953,5** |
+
+Os pads (LEF do open_pdks): só `vccd_lvc_clamped_pad` e `vssd_lvc_clamped_pad` têm
+pino de alimentação virado para o núcleo, em met3 (dois retângulos de ~24 µm).
+
+**O problema:** o núcleo ocupa met4 **e** met5. O jeito comum de alimentar uma
+macro (faixa de met5 do chip passando por cima dos pinos de met4 dela, com via,
+como foi feito com as SRAMs no núcleo) não serve: não há camada livre por cima.
+A ligação tem de ser na borda, e a única borda sem obstrução na frente dos pinos
+é a **direita, em met5**.
+
+**A solução (L65):**
+1. grade do chip com o mesmo passo, largura e espaçamento das faixas do núcleo
+   (os padrões do LibreLane para o sky130, conferidos: o centro da 1ª faixa do
+   núcleo = canto da área de núcleo dele + 16,32 / 16,65) e deslocamento
+   calculado para a macro em (350, 350): `-offset 105.96` (met4) e
+   `105.53` (met5);
+2. anel do chip em met4/met5 (5 µm), ligado ao met3 dos pads VCCD/VSSD
+   (`-connect_to_pads -connect_to_pad_layers met3`);
+3. a macro com uma grade de instância vazia (halo de 5 µm), só para o `pdngen`
+   não passar faixas por cima dela;
+4. **depois do `pdngen`**, uma ponte de met5 por faixa, da ponta da faixa do chip
+   até 1 µm dentro do pino do núcleo (mesma camada, mesma rede: liga por
+   sobreposição, sem via). 10 por rede. O LibreLane não tem gancho depois do
+   `pdngen`, então o `pdn_chip.tcl` roda o `pdngen` ele mesmo e troca o
+   comando por um aviso para a segunda chamada (a do `pdn.tcl`).
+
+Mais um par de faixas met4 em cada faixa estreita à esquerda e à direita da
+macro (L66): sem elas, as linhas de células (tap cells, `conb_1`) de lá ficariam
+sem alimentação, porque as faixas alinhadas com o núcleo só começam em x = 406.
+
+**Conferido aqui (sem OpenROAD):**
+
+| Teste | Resultado |
+|---|---|
+| Pontes contra a OBS do LEF (Python) | por baixo: as 26 batem na OBS de met4 (y 2,2–29,5); pela direita: as 20 livres |
+| `pdn_chip.tcl` num OpenDB de mentira (tclsh, caixas reais do LEF) | 1ª tentativa: **0 pontes** (o filtro descartava faixas com `xMin` < 40 µm, e todas começam em 29,12); corrigido: 20 pontes, 1ª `vccd` em y 406,65–408,25 (centro 407,45 = 301,92 + 105,53, alinhada com a grade), x 2319,5–2365 |
+
+Para conferir no notebook: `bash layout/chip/11_anel.sh pdn` (fluxo reduzido
+`config_pdn.json`: anel → `CutRows` → `TapEndcapInsertion` → `GeneratePDN` → GDS/PNG
+→ `Checker.PowerGridViolations`).
+
+Observação para depois (não muda nada agora): os pinos de sinal do núcleo estão
+na borda **esquerda** (`clk_i` y 1447, `uart0_rxd_i` 681, `uart0_txd_o` 610) e em
+cima (`rstn_i` x 1629). Os pads de clk/rstn estão embaixo e os de rx/tx em cima
+(L57), então o roteamento vai dar a volta na macro. Funciona, mas se o tempo de
+entrada/saída ficar ruim, mudar os pads de lado é a correção.
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L65 | PDN do chip: grade alinhada com a do núcleo + anel ligado aos pads + 20 pontes met5 pela direita, feitas depois do `pdngen` | ✅ | Núcleo ocupa met4/met5; a única borda sem OBS na frente dos pinos é a direita |
+| L66 | Um par de faixas met4 em cada faixa estreita ao lado da macro | ✅ | Alimentar as linhas de células fora do alcance da grade alinhada |
+| L67 | Parte 2 em duas: PDN primeiro (`config_pdn.json`), fluxo inteiro depois | ✅ | Mesmo motivo da L60: ver o PDN antes de horas de roteamento |
+
 ---
 
 ## Índice de decisões
@@ -3667,6 +3731,9 @@ O que se vê na imagem (`11_anel.png`, 1000 × 815 px):
 | L62 | Núcleo ligado a VCCD/VSSD do anel no `chip_top.v` | ✅ | 2026-10-29 |
 | L63 | Anel com 10 redes: VSWITCH = VDDIO, VCCHIB = VCCD | ✅ | 2026-10-31 |
 | L64 | `PAD_GDS` + GDS do gpiov2_pad_wrapped e da fatia | ✅ | 2026-10-31 |
+| L65 | PDN do chip com pontes met5 pela direita (`pdn_chip.tcl`) | ✅ | 2026-10-31 |
+| L66 | Faixas met4 nas laterais da macro | ✅ | 2026-10-31 |
+| L67 | Parte 2a só até o PDN (`config_pdn.json`) | ✅ | 2026-10-31 |
 
 ---
 
@@ -3696,7 +3763,8 @@ O que se vê na imagem (`11_anel.png`, 1000 × 815 px):
 - [x] ~~Etapa 9~~ — LEC 19.828 equivalentes, simulação PASSOU com as 3 somas (34ª sessão)
 - [x] ~~Etapa 10~~ — `chip_top.v` com pads simula PASSOU, 3 somas = RTL (35ª sessão)
 - [x] ~~Etapa 11, parte 1~~ — anel de pads, 13/13 passos, GDS + PNG (37ª sessão)
-- [ ] Etapa 11, parte 2: PDN do chip e fluxo `Chip` inteiro
+- [ ] Etapa 11, parte 2a: `bash layout/chip/11_anel.sh pdn` no notebook (37ª sessão)
+- [ ] Etapa 11, parte 2b: fluxo `Chip` inteiro
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou

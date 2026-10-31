@@ -1,0 +1,24 @@
+{
+  "meta": {
+    "version": 3,
+    "flow": [
+      "Yosys.JsonHeader",
+      "Yosys.Synthesis",
+      "Checker.YosysUnmappedCells",
+      "Checker.YosysSynthChecks",
+      "Checker.NetlistAssignStatements",
+      "OpenROAD.CheckSDCFiles",
+      "OpenROAD.CheckMacroInstances",
+      "OpenROAD.Floorplan",
+      "Odb.SetPowerConnections",
+      "OpenROAD.PadRing",
+      "Odb.ManualMacroPlacement",
+      "OpenROAD.CutRows",
+      "OpenROAD.TapEndcapInsertion",
+      "OpenROAD.GeneratePDN",
+      "KLayout.StreamOut",
+      "KLayout.Render",
+      "Checker.PowerGridViolations"
+    ]
+  }
+}
