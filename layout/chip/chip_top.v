@@ -60,12 +60,17 @@
 //              de saida do gpiov2 no modelo)
 // + a fatia connect_vcchib_vccd_and_vswitch_vddio (L50): VCCHIB <- VCCD
 //   (buffer de entrada de 1,8 V dos pads) e VSWITCH <- VDDIO.
+//   No LEF dela a faixa de met4 que nas outras fatias e VDDIO se chama
+//   VSWITCH, e o met5 do VCCHIB cobre o do VCCD: como os barramentos
+//   correm por todo o anel, VSWITCH e VDDIO sao UMA rede so, VCCHIB e VCCD
+//   tambem. O netlist tem de dizer isso, senao o PadRing (connect_by_
+//   abutment) acha duas redes se tocando: PAD-0002 (DIARIO_GDSII L63).
 //=============================================================================
 
 // ANEL_ = as 12 ligacoes do anel seguidas de virgula (antes de outras
 // portas); ANEL = sem a virgula (instancia que so tem o anel).
 `ifdef USE_POWER_PINS
-`define ANEL .AMUXBUS_A(amuxbus_a), .AMUXBUS_B(amuxbus_b), .VSSA(vssa), .VDDA(vdda), .VSWITCH(vswitch), .VDDIO_Q(vddio_q), .VCCHIB(vcchib), .VDDIO(vddio), .VCCD(vccd), .VSSIO(vssio), .VSSD(vssd), .VSSIO_Q(vssio_q)
+`define ANEL .AMUXBUS_A(amuxbus_a), .AMUXBUS_B(amuxbus_b), .VSSA(vssa), .VDDA(vdda), .VSWITCH(vddio), .VDDIO_Q(vddio_q), .VCCHIB(vccd), .VDDIO(vddio), .VCCD(vccd), .VSSIO(vssio), .VSSD(vssd), .VSSIO_Q(vssio_q)
 `define ANEL_ `ANEL,
 `else
 `define ANEL
@@ -88,7 +93,9 @@ module chip_top (
 );
 
 `ifdef USE_POWER_PINS
-    wire amuxbus_a, amuxbus_b, vssa, vdda, vswitch, vddio_q, vcchib,
+    // 10 redes, nao 12: VSWITCH = VDDIO e VCCHIB = VCCD no anel inteiro
+    // (a fatia fatia_vcchib as junta no metal; ver o cabecalho, L63)
+    wire amuxbus_a, amuxbus_b, vssa, vdda, vddio_q,
          vddio, vccd, vssio, vssd, vssio_q;
 `endif
 

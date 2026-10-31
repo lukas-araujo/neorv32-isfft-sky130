@@ -3461,6 +3461,56 @@ Daí o 2201 "estranho": com 2200 o Leste daria 565,67 µm.
 | L61 | `PAD_VERILOG_MODELS` = cópias em `tech/sky130_io/verilog/` | ✅ | Arquivos já versionados e conferidos iguais aos do PDK; a fatia fica em `caixas_pretas.v` |
 | L62 | Núcleo ligado aos barramentos VCCD/VSSD do anel no `chip_top.v` (`VDD_NETS` = `vccd`) | ✅ | Sem isso o netlist do chip não diz de onde o núcleo tira 1,8 V; a simulação continua sem (`NUCLEO_SEM_ALIMENTACAO`) |
 
+### 🐛 2ª rodada (`2026-10-31_0034`): o anel saiu, mas o PadRing parou ao ligar os barramentos
+
+O que já deu certo (log do `OpenROAD.PadRing`, colado pelo Lukas):
+
+| Lado | Soma dos pads | Comprimento | Espaço entre pads | Previsto (36ª) |
+|---|---|---|---|---|
+| Sul | 310 µm | 2300 | 398 | 398 ✅ |
+| Leste | 95 µm | 1793 | 566 | 566 ✅ |
+| Norte | 310 µm | 2300 | 398 | 398 ✅ |
+| Oeste | 75 µm | 1793 | 859 | 859 ✅ |
+
+`JsonHeader`, síntese (16 instâncias), floorplan (núcleo 300,38 … 2399,82 ×
+301,92 … 1898,56 µm, por causa da grade das linhas) e `SetPowerConnections`
+(todos os pinos de alimentação dos pads e do núcleo ligados) passaram. Os
+cantos e o enchimento foram colocados.
+
+- **Sintoma:** `[PAD-0002] fatia_vcchib/VDDIO (vddio) and IO_FILL_IO_EAST_1_565/VDDIO
+  (vswitch) are touching, but are connected to different nets`, em
+  "Connecting ring signals" (`connect_by_abutment`).
+- **Causa:** LEF da fatia (open_pdks `8afc8346`) comparado com o de uma
+  `com_bus_slice_1um`: a faixa de **met4 em y = 17,75–22,4 µm**, que nas fatias
+  comuns é `VDDIO`, na fatia `connect_vcchib…` se chama **`VSWITCH`**; e o met5
+  do `VCCHIB` (y 0,1–11,4) cobre a faixa do `VCCD` (6,95–11,4). A fatia não
+  "liga uma rede na outra" por um fio: ela **funde os barramentos no metal**, e
+  como os barramentos correm pelo anel inteiro, VSWITCH e VDDIO são **uma rede
+  só no chip todo** (VCCHIB e VCCD também). O `chip_top.v` da etapa 10 tinha 12
+  redes, com `vswitch` e `vcchib` separadas, e o modelo da fatia fazia a ligação
+  com `tran`. Na simulação isso dá o mesmo resultado; no layout o PadRing achou
+  duas redes se tocando e parou. Ele propaga as redes pelo encosto, por isso o
+  enchimento vizinho herdou `vswitch` no lugar de `vddio`.
+- **Resolvi com** (L63): no `chip_top.v`, todos os pads e a fatia ligam
+  `.VSWITCH(vddio)` e `.VCCHIB(vccd)`; o anel passa a ter **10 redes**. O modelo
+  da fatia (`tran`) agora liga uma rede nela mesma: inofensivo, e continua
+  descrevendo o que a célula faz.
+- **Conferido aqui:**
+
+| Teste | Resultado |
+|---|---|
+| Elaboração com `USE_POWER_PINS` (Yosys) | `fatia_vcchib` e `pad_clk`: VCCHIB = VCCD = `vccd`, VSWITCH = VDDIO = `vddio`; `u_core`: `vccd1 → vccd` |
+| Etapa 10 com núcleo de mentira (rx → tx), Icarus | compila; `tx_pad` sem X em 1 ms (sem VCCHIB alimentado, a entrada do pad daria X) |
+| Faixas de met4/met5 na borda dos 6 pads de alimentação, do gpiov2 e do canto × `com_bus_slice` | todas com o mesmo nome (30 retângulos por pad); o mesmo script acusa a fatia (`met4 y17.75-22.4: VSWITCH, comum: VDDIO`), então ele funciona |
+
+- **Tempo:** ~40 min.
+- **Vira slide?** Sim: "uma célula que liga duas redes sem fio nenhum: os
+  barramentos do anel de pads, com nome trocado no LEF".
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L63 | No `chip_top.v`, VSWITCH = `vddio` e VCCHIB = `vccd` em todos os pads (anel com 10 redes) | ✅ | A fatia funde esses barramentos no metal; o netlist tem de dizer o mesmo que o layout (PadRing agora, LVS na etapa 12) |
+
 ---
 
 ## Índice de decisões
@@ -3529,6 +3579,7 @@ Daí o 2201 "estranho": com 2200 o Leste daria 565,67 µm.
 | L60 | Etapa 11 em duas partes (anel primeiro) | ✅ | 2026-10-29 |
 | L61 | `PAD_VERILOG_MODELS` = cópias em `tech/sky130_io/verilog/` | ✅ | 2026-10-29 |
 | L62 | Núcleo ligado a VCCD/VSSD do anel no `chip_top.v` | ✅ | 2026-10-29 |
+| L63 | Anel com 10 redes: VSWITCH = VDDIO, VCCHIB = VCCD | ✅ | 2026-10-31 |
 
 ---
 
