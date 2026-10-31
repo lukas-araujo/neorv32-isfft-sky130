@@ -1,0 +1,15 @@
+DEF: /home/lukas/Projects/neorv32-isfft-sky130/layout/chip/runs/2026-10-31_1029/18-openroad-generatepdn/chip_top.def
+formas especiais: vccd 4837, vssd 4845
+
+1. Ligacao pad -> anel (fios/vias em y = 150-280 um: entre o pad e o anel, ~283-295)
+   pad        celula                                 rede   fios  vias  camadas
+   pad_vccd   sky130_ef_io__vccd_lvc_clamped_pad     vccd      2     0  met3  (pad em x=2027.0 y=0.0 S)
+   pad_vssd   sky130_ef_io__vssd_lvc_clamped_pad     vssd      2     0  met3  (pad em x=598.0 y=0.0 S)
+
+2. Pontes met5 ate o nucleo (sobrepoem a borda direita da macro)
+   vccd: 10 pontes (centros y: 407.45, 560.63, 713.81 ...)
+   vssd: 10 pontes (centros y: 410.75, 563.93, 717.11 ...)
+
+3. Anel do chip (fios met4/met5 com 5 um de largura)
+   vccd: 4 lados, caixa (289.4, 290.9) - (2410.8, 1909.6)
+   vssd: 4 lados, caixa (282.7, 284.2) - (2417.5, 1916.3)

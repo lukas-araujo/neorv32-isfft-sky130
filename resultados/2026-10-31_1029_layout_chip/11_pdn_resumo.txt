@@ -1,0 +1,6 @@
+      1 [INFO] pontes_nucleo: 10 pontes met5 de vssd ate u_core/vssd1
+      1 [INFO] pontes_nucleo: 10 pontes met5 de vccd ate u_core/vccd1
+      1 [INFO PDN-0001] Inserting grid: nucleo - u_core
+      1 [INFO PDN-0001] Inserting grid: chip
+      1 [ERROR PSM-0025] vssd does not contain any terminals
+      1 [ERROR PSM-0025] vccd does not contain any terminals
