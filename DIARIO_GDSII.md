@@ -4053,6 +4053,63 @@ O que pode aparecer (para não assustar):
   netlist do Verilog não tiver essas instâncias, o Netgen vê células a mais no layout; é a
   primeira coisa a olhar no `12_lvs.txt`.
 
+### Etapa 12, 1ª rodada (`2026-11-01_1717_12`): ✅ LVS limpo; DRC só na faixa dos pads
+
+Fontes: `resultados/2026-11-01_1717_12_layout_chip/` (`12_lvs.txt`, `12_lvs_netgen.rpt.gz`,
+`12_drc.txt`, `12_metricas.json`).
+
+| Verificação | Resultado |
+|---|---|
+| **LVS** (Netgen, extração abstrata, L79) | ✅ **"Circuits match uniquely"**; `design__lvs_error__count` 0 (e 0 em dispositivos, redes, pinos e propriedades) |
+| Dois lados | 502 "dispositivos" e 143 redes em cada; todas as células do anel nos dois: 358 + 41 + 15 + 12 fatias `com_bus_slice`, 4 `gpiov2_pad_wrapped`, 4 cantos, 6 pads de alimentação, a fatia VCCHIB, 55 `conb_1`, o núcleo. As 71735 `decap_3` etc. viram 1 por "dispositivos paralelos" (não têm sinal) |
+| Pinos do chip | os 10 bond pads (`clk_pad` ... `vssio_pad`) casam um a um |
+| "5 simetrias" | células idênticas e trocáveis entre si (ex.: os 4 cantos); o Netgen resolve pelo nome e fecha "uniquely" |
+| **DRC** (Magic no GDS, L78) | 305299 caixas: **0** na região `chip` (tudo o que desenhamos nas etapas 11/12), **305262** na faixa dos pads, **37** no núcleo |
+| Tempo do DRC | 17 min 52 s |
+| Sobreposição ilegal | as mesmas 24 (L77) |
+
+O LVS limpo **fecha a cadeia elétrica**: bond pad → pad → met3 → pilhas de via → anel → grade →
+pontes → `vccd1`/`vssd1` do núcleo, os sinais pad ↔ núcleo e as 10 redes do anel passando de
+fatia em fatia. (Pela vista abstrata: pinos dos LEF; o miolo dos pads não entra.)
+
+### 🐛 37 caixas de `nwell.4` no núcleo: nwell na OBS do LEF
+
+- **Sintoma:** 37 caixas "All nwells must contain metal-connected N+ taps" dentro da macro, de
+  (389,83; 390,715) a (2309,79; 1808,11), recortadas na grade de ladrilhos do Magic (314,56 µm)
+  e com buracos onde estão as SRAM.
+- **Causa:** o LEF do núcleo (`Magic.WriteLEF`, etapa 8) tem na `OBS` um retângulo de **nwell**
+  `39.830 40.715 1959.790 1458.110` (= as mesmas coordenadas + 350). O `lef read` do Magic
+  transforma isso em nwell de verdade no maglef, sem nenhum tap → `nwell.4`. Alarme falso da
+  vista abstrata (o miolo real tem os taps e passou na etapa 8).
+- **Resolvi com (L82):** o `12_verifica.sh` gera o maglef de uma cópia do LEF sem o nwell da
+  OBS (`entrada/maglef/asic_top_sem_nwell.lef`). Testado no LEF da etapa 11: só as 2 linhas do
+  nwell saem (`diff`).
+- **Vira slide?** Junto com a L42: o abstrato também mente — às vezes para mais.
+
+### As 305262 caixas na faixa dos pads: método para separar (L81)
+
+Todas caem dentro das células de I/O (exemplos: `diff/tap.3` "LV to MV Diffusion spacing" com
+213330 caixas, `diff/tap.18,20`, `diff/tap.21`, `poly.7`, `licon.7`...): regras de transistores e
+difusões de média/alta tensão — o miolo das células da SkyWater, que nós não desenhamos. Mas
+"parece da foundry" não é prova. A pergunta certa: **algum erro vem do encosto** (pad × fatia,
+pad × o nosso metal, a sobra de met4 dos pads lvc da L77)?
+
+- **Método (`12_drc_celulas.sh`, L81):** o Magic lê o **mesmo** `chip_top.gds` da etapa 11, carrega
+  cada célula do anel **sozinha** e roda o mesmo DRC (`drc(full)`, euclidiano). O
+  `resume_verifica.py anel` soma, por regra, a **área** de erro de cada célula × instâncias no chip
+  e compara com a área de erro do chip na faixa dos pads. Área igual → erro interno da célula;
+  área a mais no chip → encosto, e ele lista as caixas.
+- **Por que área e não número de caixas:** o Magic recorta cada erro na grade de ladrilhos dele
+  (as caixas do `nwell.4` acima mostram isso); a mesma célula, em outro lugar, sai em outro
+  número de pedaços. A área não muda.
+- **Testado** com uma referência falsa montada do próprio relatório: as regras presentes dão 0,00 %
+  e a regra tirada de propósito aparece como "DIFERENTE" com as caixas.
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L81 | Erros de DRC na faixa dos pads separados por DRC de referência de cada célula sozinha, comparando área por regra | ✅ | Prova (em vez de supor) que os erros são internos das células da foundry; o que sobrar é encosto e tem coordenada |
+| L82 | Maglef do núcleo sem o nwell da OBS do LEF | ✅ | 37 `nwell.4` falsos: nwell sem tap só existe no abstrato |
+
 ---
 
 ## Índice de decisões
@@ -4139,6 +4196,8 @@ O que pode aparecer (para não assustar):
 | L78 | DRC do chip: núcleo caixa-preta, pads com GDS real | ✅ | 2026-11-01 |
 | L79 | LVS do chip: extração abstrata primeiro | ✅ | 2026-11-01 |
 | L80 | Sem selo: o PDK não define `KLAYOUT_SEALRING_SCRIPT` (fecha a L59) | ✅ | 2026-11-01 |
+| L81 | DRC de referência das células do anel (área por regra) | ✅ | 2026-11-01 |
+| L82 | Maglef do núcleo sem nwell (37 `nwell.4` falsos) | ✅ | 2026-11-01 |
 
 ---
 
@@ -4171,7 +4230,7 @@ O que pode aparecer (para não assustar):
 - [x] ~~Etapa 11, parte 2a~~ — PDN ligado pad → anel → núcleo (37ª sessão)
 - [ ] IR drop do chip com a fonte **no pad** (`VSRC_LOC_FILES` com a posição do `pad_vccd`/`pad_vssd`): sem terminal de topo, o `analyze_power_grid` usa "bump pattern" (`PSM-0073`: fontes virtuais a cada 140 µm no met5, como num flip-chip) e a queda sai otimista; o `PSM-0025` do `GeneratePDN` é a mesma falta de terminal (L68)
 - [x] Etapa 11, parte 2b: fluxo `Chip` completo na rodada `2026-11-01_1249` (L72–L77, 38ª sessão)
-- [ ] Etapa 12: `bash layout/chip/12_verifica.sh` no notebook (DRC com núcleo caixa-preta, LVS abstrato; L78–L80)
+- [ ] Etapa 12: LVS ✅ (`1717_12`); falta `12_verifica.sh` de novo (L82: núcleo 37 → 0) e `12_drc_celulas.sh` (L81: erros da faixa dos pads = internos das células?)
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou

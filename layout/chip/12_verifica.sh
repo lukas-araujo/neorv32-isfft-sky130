@@ -67,8 +67,29 @@ rc="$(find -L "$PDK_ROOT" -name sky130A.magicrc -path '*8afc8346*' 2>/dev/null |
 [ -f "$ENT/asic_top.lef" ] || { echo "ERRO: falta $ENT/asic_top.lef (rode o 11_anel.sh)"; exit 1; }
 ml="$ENT/maglef"
 mkdir -p "$ml"
-rm -f "$ml"/*.mag
-printf 'lef read %s\nload asic_top\nsave %s/asic_top.mag\nquit -noprompt\n' "$ENT/asic_top.lef" "$ml" > "$ml/gera.tcl"
+rm -f "$ml"/*.mag "$ml"/*.lef
+# O Magic.WriteLEF poe na OBS do nucleo um retangulo de NWELL (39,83..1959,79 x
+# 40,715..1458,11 um); no maglef ele vira nwell de verdade, sem tap -> 37 caixas
+# de nwell.4 (rodada 1717_12). O abstrato nao precisa de nwell: tira (L82).
+python3 - "$ENT/asic_top.lef" "$ml/asic_top_sem_nwell.lef" <<'PY'
+import sys
+saida, pula, tirados = [], False, 0
+for l in open(sys.argv[1]):
+    t = l.split()
+    if t[:1] == ["LAYER"]:
+        pula = len(t) > 1 and t[1] == "nwell"
+        if pula:
+            continue
+    elif t[:1] in (["END"], ["PIN"], ["OBS"]):
+        pula = False
+    if pula:
+        tirados += 1
+        continue
+    saida.append(l)
+open(sys.argv[2], "w").writelines(saida)
+print(f"    LEF do nucleo sem nwell: {tirados} retangulo(s) de nwell tirado(s)")
+PY
+printf 'lef read %s\nload asic_top\nsave %s/asic_top.mag\nquit -noprompt\n' "$ml/asic_top_sem_nwell.lef" "$ml" > "$ml/gera.tcl"
 ( cd "$ml" && magic -dnull -noconsole -rcfile "$rc" "$ml/gera.tcl" > "$ml/gera.log" 2>&1 ) || true
 [ -f "$ml/asic_top.mag" ] || { echo "ERRO: maglef do nucleo nao saiu (veja $ml/gera.log)"; exit 1; }
 echo ">>> maglef do nucleo: ${ml#$REPO/}/asic_top.mag ($(grep -c '^rect' "$ml/asic_top.mag") retangulos)"
