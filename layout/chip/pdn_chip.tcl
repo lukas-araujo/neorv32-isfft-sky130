@@ -207,8 +207,9 @@ pontes_nucleo u_core
 # nucleo: uma faixa de met3 do pino ate cobrir a barra (met5) da propria rede
 # no lado do anel mais proximo, e pilhas de via M3M4_PR + M4M5_PR a cada 2 um
 # onde a faixa cruza essa barra. Cada pilha tem so o seu quadrado de met4
-# (1,18 um); colunas com met4 de OUTRA rede por perto sao puladas (ex.: a
-# faixa met4 de vssd da grade que desce ate o anel em x ~ 2099).
+# (1,18 um); colunas com met4 por perto sao puladas: de OUTRA rede (ex.: a
+# faixa met4 de vssd em x ~ 2099) e da propria (faixa vccd em x ~ 2096, que
+# ja tem via4 do pdngen na barra; L76).
 #-----------------------------------------------------------------------------
 proc ligacao_pads {pares} {
     set block [ord::get_db_block]
@@ -243,7 +244,10 @@ proc ligacao_pads {pares} {
         }
         if { $barra == {} } { error "ligacao_pads: nao achei a barra met5 de $rede acima de $inst_name" }
         lassign $barra bx0 by0 bx1 by1
-        set outros4 [caixas_de $net_outra met4]
+        # colunas a pular: met4 da OUTRA rede (curto) e da PROPRIA rede (a faixa da
+        # grade ja desce ate a barra com a via4 do pdngen; via4 em cima de via4 da
+        # cortes encavalados, e o Magic recorta diferente do KLayout: XOR, L76)
+        set outros4 [concat [caixas_de $net_outra met4] [caixas_de $net met4]]
         set sw [odb::dbSWire_create $net "ROUTED"]
         set nfaixas 0; set nvias 0
         foreach mpin [[$master findMTerm $pino] getMPins] {

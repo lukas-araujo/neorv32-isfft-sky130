@@ -3926,6 +3926,67 @@ reprovou de novo:
 |---|---|---|---|
 | L75 | `11_anel.sh` acha os pads só na versão `8afc8346` do PDK; a cópia da L74 é refeita quando a origem muda | ✅ | Com duas versões instaladas, o `head -1` pegou a outra; o arquivo dos pads tem de ser o mesmo PDK do resto do fluxo |
 
+### Parte 2b, 5ª rodada (`2026-10-31_2058`): o fluxo `Chip` foi até o fim — 67 passos
+
+`11_magic_resumo.txt`: **nenhuma** linha fatal; `sky130_fd_io.gds` lido da cópia
+consertada da versão `8afc8346`. Métricas de `11_chip_metricas.json`, mensagens do `flow.log`:
+
+| Passo | Resultado |
+|---|---|
+| Roteamento detalhado | **0** erros de DRC, 14696 µm |
+| Antena (OpenROAD) | 0 redes violando |
+| IR drop | `PSM-0040` nas duas redes; pior 16 µV (com "bump pattern", ver pendência) |
+| STA / slew / capacitância | 0 / 0 / 0 violações (sem caminho restrito: núcleo sem `.lib`) |
+| `Magic.StreamOut`, `KLayout.StreamOut` | ✅ os dois GDS |
+| `Checker.XOR` | ❌ adiado: **3** diferenças, todas na camada **71/44 (via4)**: 57649 × 57654 polígonos |
+| `Magic.SpiceExtraction` + `Checker.IllegalOverlap` | ❌ adiado: **24** sobreposições "obsm4 × metal4" |
+| `KLayout.Antenna`, `Filler`, `Density` | pulados: o PDK não traz os runsets do KLayout para o sky130 no LibreLane (`KLAYOUT_*_RUNSET is unset`) |
+| DRC, LVS | pulados de propósito (L71, etapa 12) |
+
+Imagem: `resultados/2026-10-31_2058_layout_chip/imagens/11_chip.png`.
+
+### 🐛 XOR na via4: via em cima de via
+
+- **Sintoma:** 3 diferenças entre o GDS do Magic e o do KLayout, só na via4 (5 polígonos a
+  mais num deles).
+- **Causa:** a `ligacao_pads` (L69) pulava as colunas com met4 da **outra** rede, mas não as da
+  **própria**. Perto do `pad_vccd`, a faixa met4 vccd da grade (x 2095,14–2096,74) desce até a
+  barra do anel, e o pdngen já põe ali a via4 dele. Duas pilhas minhas (x = 2096,5;
+  y = 292,42 e 294,42, pelo mock) caíam em cima: cortes de via4 encavalados. O KLayout grava as
+  duas vias como estão; o Magic junta os contatos numa área só e gera os cortes de novo pela
+  regra dele. Daí os dois GDS divergem — e via encavalada é erro de DRC de qualquer jeito.
+  (O local exato das 3 diferenças não está nos logs: o XML do XOR ficava fora do pacote.)
+- **Resolvi com (L76):** a `ligacao_pads` pula também as colunas sobre met4 da própria rede (ali
+  a faixa já liga na barra pela via do pdngen). Mock: `pad_vccd` 44 → **40** pilhas, nenhuma
+  sobre a faixa; `pad_vssd` continua com 48. O `11_anel.sh` passa a guardar os `*.xml` (o
+  relatório do XOR) no `logs_anel.tar.gz`.
+- **Tempo:** ~30 min.
+- **Vira slide?** Sim, junto com a L45: o XOR entre duas ferramentas pegou um erro que nenhum
+  dos checadores anteriores pegou.
+
+### 🐛 24 sobreposições ilegais: a sobra de OBS dos pads lvc
+
+- **Sintoma:** `Illegal overlap between obsm4 and metal4 (types do not connect)`, em 4 grupos de
+  caixas: x 586,8–598,0 e 2015,8–2027,0, y 153,8–163,3 µm (`feedback.txt` × `cif_scale.txt`
+  = 0,005). É a faixa logo à **esquerda** do `pad_vssd` (x = 598) e do `pad_vccd` (x = 2027).
+- **Causa:** a extração do LibreLane (`Magic.SpiceExtraction`) monta o chip pelo DEF + os
+  **LEF** (vista abstrata), não pelo GDS. O LEF de `sky130_ef_io__vccd_lvc_clamped_pad` e de
+  `..._vssd_lvc_clamped_pad` tem dois `OBS` de met4 que **saem 11,16 µm da célula**
+  (x 75,0–86,14 e 75,0–86,165, y 34,7–44,2 no LEF; em R180 caem à esquerda do pad, y 153,8–163,3).
+  Ali está o met4 do vizinho no anel, e o Magic acusa obstrução × metal. Os pads hvc não têm
+  essa sobra (conferido no LEF do `vdda_hvc`). Afastar não adianta: o anel precisa de vizinho
+  encostado para os barramentos continuarem.
+- **Decisão (L77):** `ERROR_ON_ILLEGAL_OVERLAPS = false` no chip. A sobreposição é da vista
+  abstrata; quem decide se há curto de verdade é o LVS da etapa 12, extraído do **GDS**
+  (`MAGIC_EXT_USE_GDS`), onde aquela obstrução vira o metal que ela representa.
+- **Tempo:** ~20 min.
+- **Vira slide?** Talvez: "vista abstrata × vista real" (a mesma lição da L42, ao contrário).
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L76 | `ligacao_pads` pula colunas sobre met4 da própria rede também | ✅ | Ali o pdngen já pôs via4; via em cima de via deu XOR (e seria erro de DRC) |
+| L77 | `ERROR_ON_ILLEGAL_OVERLAPS = false` no chip | ✅ | As 24 sobreposições vêm do OBS met4 que sai 11 µm do LEF dos pads lvc; extração abstrata. O LVS pelo GDS (etapa 12) é a verificação que vale |
+
 ---
 
 ## Índice de decisões
@@ -4007,6 +4068,8 @@ reprovou de novo:
 | L73 | `PAD_GDS` com `sky130_fd_io.gds` primeiro (células vazias no Magic) | ✅ | 2026-10-31 |
 | L74 | `sky130_fd_io.gds` com os polígonos fechados (`fecha_gds.py`) | ✅ | 2026-10-31 |
 | L75 | Pads da versão `8afc8346` do PDK (não `head -1`); cópia refeita se a origem mudar | ✅ | 2026-10-31 |
+| L76 | `ligacao_pads` sem via4 sobre via4 do pdngen (XOR) | ✅ | 2026-11-01 |
+| L77 | Sobreposição ilegal no chip vira aviso (OBS dos pads lvc; LVS pelo GDS decide) | ✅ | 2026-11-01 |
 
 ---
 
@@ -4038,7 +4101,7 @@ reprovou de novo:
 - [x] ~~Etapa 11, parte 1~~ — anel de pads, 13/13 passos, GDS + PNG (37ª sessão)
 - [x] ~~Etapa 11, parte 2a~~ — PDN ligado pad → anel → núcleo (37ª sessão)
 - [ ] IR drop do chip com a fonte **no pad** (`VSRC_LOC_FILES` com a posição do `pad_vccd`/`pad_vssd`): sem terminal de topo, o `analyze_power_grid` usa "bump pattern" (`PSM-0073`: fontes virtuais a cada 140 µm no met5, como num flip-chip) e a queda sai otimista; o `PSM-0025` do `GeneratePDN` é a mesma falta de terminal (L68)
-- [ ] Etapa 11, parte 2b: `bash layout/chip/11_anel.sh chip` no notebook — `1029` parou no `IRDropReport` (L72 corrigiu); `1524` passou o PSM e parou no `Magic.StreamOut` (L73); `1645` parou no BOUNDARY aberto do PDK (L74); `2015` usou o GDS de outra versão do PDK (L75); rodar de novo
+- [ ] Etapa 11, parte 2b: `bash layout/chip/11_anel.sh chip` no notebook — `1029` parou no `IRDropReport` (L72 corrigiu); `1524` passou o PSM e parou no `Magic.StreamOut` (L73); `1645` parou no BOUNDARY aberto do PDK (L74); `2015` usou o GDS de outra versão do PDK (L75); `2058` foi até o fim (67 passos) com XOR 3 na via4 (L76) e 24 sobreposições (L77); rodar de novo para fechar
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou

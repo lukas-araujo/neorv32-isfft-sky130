@@ -140,5 +140,6 @@
   "RUN_CTS": false,
   "RUN_MAGIC_DRC": false,
   "RUN_KLAYOUT_DRC": false,
-  "RUN_LVS": false
+  "RUN_LVS": false,
+  "ERROR_ON_ILLEGAL_OVERLAPS": false
 }

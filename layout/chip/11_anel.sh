@@ -139,7 +139,7 @@ fi
 find "$RUN" -name '*.png' -path '*klayout-render*' -exec cp -f {} "$DEST/imagens/11_${PARTE}.png" \; 2>/dev/null || true
 ( cd "$CHIP/runs" && find "$TAG" -type f \
     \( -name '*.log' -o -name '*.rpt' -o -name '*.txt' -o -name '*.json' \
-       -o -name '*.tcl' -o -name '*.sdc' \) -size -20M -print0 \
+       -o -name '*.tcl' -o -name '*.sdc' -o -name '*.xml' \) -size -20M -print0 \
   | tar czf "$DEST/logs_anel.tar.gz" --null -T - )
 # o PadRing escreve o que fez no log: pads, cantos, enchimento
 pr="$(ls -d "$RUN"/*-openroad-padring 2>/dev/null | tail -1 || true)"
