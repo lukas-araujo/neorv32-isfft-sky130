@@ -114,8 +114,9 @@ de lógica extra para entrar na cadeia.
 | 6 | Falhas de transição (*at-speed*, LOC) | Modus | VM | cobertura de transição |
 | 7 | Compressão (o chip tem 4 pinos) | Genus · Modus | VM | mesma cobertura com menos pinos de teste |
 
-Etapas 5–7 são o "se der tempo / se o Lukas quiser": cada uma ensina uma
-coisa diferente (observabilidade, defeitos de atraso, custo de pino).
+Etapas 5–7 ficaram **fora** (T10, Lukas em 01/11: um teste básico basta —
+ver o fluxo funcionando no Modus). Ficam na tabela como registro do que
+viria depois (observabilidade, defeitos de atraso, custo de pino).
 
 ### Fora de escopo
 
@@ -286,6 +287,15 @@ etapa 5, junto com a *shadow logic* (T11).
 
 ---
 
+### Escopo confirmado (Lukas, 01/11, depois do commit `72caba5`)
+
+"A ideia da DFT é só testar como funciona e ver no Modus as coisas
+funcionando. Um teste básico já é suficiente." → **T10 ✅: etapas 1–3**
+(Genus com scan, LEC + Kria no netlist, ATPG *stuck-at* no Modus); a 4
+(simular os padrões) só se sair de graça; 5–7 fora.
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -299,8 +309,8 @@ etapa 5, junto com a *shadow logic* (T11).
 | T7 | Biblioteca do Modus pré-processada com `FUNCTIONAL` | ✅ | 2026-11-01 |
 | T8 | Conferência aberta antes da VM | ✅ | 2026-11-01 |
 | T9 | Pastas da frente: `vm/backend/dft_isfft/`, `sim/run_dft_*.sh`, `sim/dft/`, `sim/traz_dft.sh` | ✅ | 2026-11-01 |
-| T10 | Roteiro de 7 etapas | 🟡 | 2026-11-01 |
-| T11 | Proteção das macros no deslocamento → etapa 5 | ✅ | 2026-11-01 |
+| T10 | ~~Roteiro de 7 etapas~~ → escopo **básico**: etapas 1–3 (4 opcional); 5–7 fora | ✅ (Lukas) | 2026-11-01 |
+| T11 | Proteção das macros no deslocamento → etapa 5 (fora do escopo, T10; fica como achado) | ✅ | 2026-11-01 |
 
 ---
 
@@ -311,5 +321,5 @@ etapa 5, junto com a *shadow logic* (T11).
 - [ ] VM: bloco 3 (Modus) — conferir o nome do script que o `write_dft_atpg` escreve
 - [ ] Bloco 4 (simulação dos padrões): preparar depois de ver a saída do bloco 3
 - [ ] Comparar área/timing com a síntese sem DFT (o IP sozinho: rodar o mesmo script sem scan? ou ler o `u_isfft` do `_area_hier.rpt` do chip)
-- [ ] Confirmar T10 (até onde ir: etapas 5–7)
-- [ ] Etapa 5: *shadow logic* nas macros e proteção do `csb` no deslocamento (T6, T11)
+- [x] ~~Confirmar T10~~ — Lukas (01/11): "a ideia da DFT é só testar como funciona e ver no Modus as coisas funcionando; um teste básico já é suficiente" → etapas 1–3
+- [ ] (fora do escopo, T10) Etapas 5–7: *shadow logic*, proteção do `csb`, transição, compressão
