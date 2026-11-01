@@ -23,7 +23,7 @@ diários.
 | Front-end (fechado) | `DIARIO.md` | D (citado como FE-Dn) | — (só correções) |
 | Back-end / GDSII | `DIARIO_GDSII.md` | L | `macros/`, `openram/`, `tech/`, `vm/backend/synthesis/`, `layout/` |
 | UVM do IP da ISFFT | `DIARIO_UVM.md` | U | `vm/verification/uvm_isfft/`, `sim/run_uvm_*.sh`, `sim/traz_uvm.sh` |
-| DFT do IP da ISFFT | `DIARIO_DFT.md` (criar) | T | `vm/backend/dft_isfft/` |
+| DFT do IP da ISFFT | `DIARIO_DFT.md` | T | `vm/backend/dft_isfft/`, `sim/run_dft_*.sh`, `sim/dft/`, `sim/traz_dft.sh` |
 
 Fora das suas pastas: **só leitura**. Se precisar mudar algo de outra
 frente (ex.: RTL), registre o motivo no **seu** diário, rode as

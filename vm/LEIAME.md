@@ -39,6 +39,7 @@ Depois, **um bloco por vez** (comente o 1, descomente o próximo):
 | `backend/synthesis/scripts/` | `run_first.tcl`, script do Genus, `common/`, dofile do LEC, testbench, modelo da IMEM (`imem_sim_model.v`) |
 | `backend/synthesis/constraints/` | SDC (50 MHz) |
 | `verification/uvm_isfft/` | Verificação **UVM** do IP da ISFFT (`isfft_axi_v4`), com script próprio: `scripts/run_first_uvm.tcl`. Ver o `LEIAME.md` de lá e o `DIARIO_UVM.md` |
+| `backend/dft_isfft/` | **DFT** do IP da ISFFT: síntese com scan (Genus) e ATPG (Modus), com script próprio: `scripts/run_first_dft.tcl`. Ver o `LEIAME.md` de lá e o `DIARIO_DFT.md` |
 
 ## Pontos que já custaram tempo (não mude sem ler o DIARIO)
 

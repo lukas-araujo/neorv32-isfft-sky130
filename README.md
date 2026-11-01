@@ -10,7 +10,7 @@ geradas pela **OpenRAM**.
 | Síntese Genus, pós-síntese Xcelium, LEC Conformal | ✅ | `DIARIO.md` |
 | Ressíntese para o layout + LibreLane → GDSII | ▶ | `DIARIO_GDSII.md` |
 | UVM no IP da ISFFT (8/8 no Xcelium, cobertura funcional 94,4 %, 12/12 mutações) | ▶ | `DIARIO_UVM.md` |
-| Síntese com DFT no IP da ISFFT | ⏳ | `DIARIO_DFT.md` |
+| Síntese com DFT (scan) + ATPG no IP da ISFFT | ▶ | `DIARIO_DFT.md` |
 
 Números de referência (Genus, 50 MHz): 1,91 mm² (62% macros), slack
 +2,4 ns, LEC 169/169 módulos. EVM do chip = Kria (3,41 / 0,78 / 0,60 %).
@@ -39,7 +39,8 @@ e avisar nos outros.
 | `openram/` | Configs e scripts de geração | GDSII |
 | `tech/sky130/` | Cópia das células sky130 (lib, lef, verilog) usada pela VM | GDSII |
 | `vm/backend/synthesis/` | Scripts Genus / Xcelium / Conformal do **chip** | GDSII |
-| `vm/backend/dft_isfft/` | Síntese com DFT do IP da ISFFT | DFT |
+| `vm/backend/dft_isfft/` | Síntese com scan e ATPG (Modus) do IP da ISFFT | DFT |
+| `sim/run_dft_*.sh`, `sim/dft/`, `sim/traz_dft.sh` | Conferência aberta da DFT (Yosys + Icarus) e retorno dos resultados da VM | DFT |
 | `vm/verification/uvm_isfft/` | Ambiente UVM do IP da ISFFT | UVM |
 | `sim/run_uvm_*.sh`, `sim/traz_uvm.sh` | UVM no Verilator (conferência aberta, mutações) e retorno dos resultados da VM | UVM |
 | `layout/` | Configuração do LibreLane (notebook) | GDSII |
