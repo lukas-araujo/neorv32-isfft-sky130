@@ -3987,6 +3987,50 @@ Imagem: `resultados/2026-10-31_2058_layout_chip/imagens/11_chip.png`.
 | L76 | `ligacao_pads` pula colunas sobre met4 da própria rede também | ✅ | Ali o pdngen já pôs via4; via em cima de via deu XOR (e seria erro de DRC) |
 | L77 | `ERROR_ON_ILLEGAL_OVERLAPS = false` no chip | ✅ | As 24 sobreposições vêm do OBS met4 que sai 11 µm do LEF dos pads lvc; extração abstrata. O LVS pelo GDS (etapa 12) é a verificação que vale |
 
+## 2026-11-01 (38ª sessão) — ✅ Etapa 11 fechada: o fluxo `Chip` completo, `Flow complete.`
+
+Rodada `2026-11-01_1249` (`resultados/2026-11-01_1249_layout_chip/`): 67 passos,
+`flow.log` termina em "Flow complete." e não há nenhum erro adiado.
+
+| Conferência | Resultado (fonte) |
+|---|---|
+| `ligacao_pads` (log do `GeneratePDN`) | `pad_vccd`: **40** pilhas (era 44, L76), `pad_vssd`: 48 — igual ao mock |
+| `pontes_nucleo` | 10 + 10 pontes até o anel; 0 vias novas (as do pdngen já estavam lá, L72) |
+| Magic (`11_magic_resumo.txt`) | **0** linhas fatais; `sky130_fd_io.gds` da cópia consertada da versão `8afc8346` (L73–L75) |
+| XOR Magic × KLayout | **0** diferenças ("Check for XOR differences clear") |
+| Sobreposição ilegal | 24, agora só aviso (L77; o LVS pelo GDS decide) |
+| Roteamento detalhado | 0 erros de DRC, 14696 µm |
+| Antena | 0 redes violando |
+| IR drop | `PSM-0040` nas duas redes; pior 16 µV ("bump pattern") |
+| STA / slew / capacitância | 0 / 0 / 0 violações (sem caminho restrito: núcleo sem `.lib`) |
+| Tamanho | die 2700 × 2201 µm = 5,94 mm²; 3780 células-padrão (3710 tap), 437 células do anel, 1 macro (o núcleo) |
+
+Imagem: `resultados/2026-11-01_1249_layout_chip/imagens/11_chip.png`.
+
+### O caminho da parte 2b (para a aula)
+
+| Rodada | Parou em | O que era | Decisão |
+|---|---|---|---|
+| `1029` | `IRDropReport` (PSM-0069) | ponte do núcleo 13 µm antes do toco da faixa do chip | L72 |
+| `1524` | `Magic.StreamOut` | ordem dos GDS dos pads → 19 células vazias | L73 |
+| `1645` | `Magic.StreamOut` | BOUNDARY aberto no GDS do PDK | L74 |
+| `2015` | `Magic.StreamOut` | cópia feita de outra versão do PDK | L75 |
+| `2058` | fim, 2 adiados | via4 sobre via4 (XOR); OBS dos pads lvc (sobreposição) | L76, L77 |
+| `1249` | — | **Flow complete.** | — |
+
+Lição geral: cada checador pegou uma coisa diferente (PSM a conectividade, o filtro de erros do
+Magic as células vazias e o GDS defeituoso, o XOR a via encavalada). Nenhum deles sozinho bastaria.
+
+### Para continuar: etapa 12 (DRC e LVS do chip)
+
+1. **DRC (Magic) do GDS do chip**, com o núcleo como caixa-preta (maglef, como a L42): o DRC do
+   núcleo já foi feito na etapa 8; aqui interessa o anel, as pontes, a ligação pad → anel e o
+   roteamento pad ↔ núcleo. Atenção à via4 da `ligacao_pads` e às pontes (feitas à mão).
+2. **LVS (Netgen)** extraído do **GDS** (`MAGIC_EXT_USE_GDS`), com os modelos SPICE dos pads e o
+   núcleo como caixa-preta (`LVS_IGNORE_CELLS` ou subcircuito vazio): confirma eletricamente a
+   cadeia pad → anel → pontes → núcleo e decide as 24 sobreposições da L77.
+3. Selo (seal ring, L59): decidir se entra.
+
 ---
 
 ## Índice de decisões
@@ -4101,7 +4145,8 @@ Imagem: `resultados/2026-10-31_2058_layout_chip/imagens/11_chip.png`.
 - [x] ~~Etapa 11, parte 1~~ — anel de pads, 13/13 passos, GDS + PNG (37ª sessão)
 - [x] ~~Etapa 11, parte 2a~~ — PDN ligado pad → anel → núcleo (37ª sessão)
 - [ ] IR drop do chip com a fonte **no pad** (`VSRC_LOC_FILES` com a posição do `pad_vccd`/`pad_vssd`): sem terminal de topo, o `analyze_power_grid` usa "bump pattern" (`PSM-0073`: fontes virtuais a cada 140 µm no met5, como num flip-chip) e a queda sai otimista; o `PSM-0025` do `GeneratePDN` é a mesma falta de terminal (L68)
-- [ ] Etapa 11, parte 2b: `bash layout/chip/11_anel.sh chip` no notebook — `1029` parou no `IRDropReport` (L72 corrigiu); `1524` passou o PSM e parou no `Magic.StreamOut` (L73); `1645` parou no BOUNDARY aberto do PDK (L74); `2015` usou o GDS de outra versão do PDK (L75); `2058` foi até o fim (67 passos) com XOR 3 na via4 (L76) e 24 sobreposições (L77); rodar de novo para fechar
+- [x] Etapa 11, parte 2b: fluxo `Chip` completo na rodada `2026-11-01_1249` (L72–L77, 38ª sessão)
+- [ ] Etapa 12: DRC (Magic, núcleo caixa-preta) e LVS (Netgen, pelo GDS) do chip
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
