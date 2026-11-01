@@ -1,0 +1,17 @@
+      1 [WARNING STA-1173] /home/lukas/Projects/pdks/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_io/lib/sky130_ef_io__vssio_hvc_clamped_pad_tt_025C_1v80_3v30_3v30.lib line 42, default_fanout_load is 0.0.
+      1 [WARNING STA-1173] /home/lukas/Projects/pdks/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_io/lib/sky130_ef_io__vssd_lvc_clamped_pad_tt_025C_1v80_3v30.lib line 43, default_fanout_load is 0.0.
+      1 [WARNING STA-1173] /home/lukas/Projects/pdks/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_io/lib/sky130_ef_io__vssa_hvc_clamped_pad_tt_025C_1v80_3v30_3v30.lib line 42, default_fanout_load is 0.0.
+      1 [WARNING STA-1173] /home/lukas/Projects/pdks/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_io/lib/sky130_ef_io__vddio_hvc_clamped_pad_tt_025C_1v80_3v30_3v30.lib line 42, default_fanout_load is 0.0.
+      1 [WARNING STA-1173] /home/lukas/Projects/pdks/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_io/lib/sky130_ef_io__vdda_hvc_clamped_pad_tt_025C_1v80_3v30_3v30.lib line 42, default_fanout_load is 0.0.
+      1 [WARNING STA-1173] /home/lukas/Projects/pdks/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_io/lib/sky130_ef_io__vccd_lvc_clamped_pad_tt_025C_1v80_3v30_3v30.lib line 42, default_fanout_load is 0.0.
+      1 [WARNING STA-1173] /home/lukas/Projects/pdks/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_io/lib/sky130_ef_io__gpiov2_pad_wrapped_tt_tt_025C_1v80_3v30.lib line 33, default_fanout_load is 0.0.
+      1 [INFO PAD-0116] Creating terminal for vssio_pad on met5 at (605.110um, 2106.120um) - (665.950um, 2166.945um)
+      1 [INFO PAD-0116] Creating terminal for vssd_pad on met5 at (608.330um, 30.835um) - (662.730um, 98.100um)
+      1 [INFO PAD-0116] Creating terminal for vssa_pad on met5 at (34.055um, 1070.110um) - (94.880um, 1130.950um)
+      1 [INFO PAD-0116] Creating terminal for vddio_pad on met5 at (2034.110um, 2106.120um) - (2094.950um, 2166.945um)
+      1 [INFO PAD-0116] Creating terminal for vdda_pad on met5 at (2605.120um, 777.110um) - (2665.945um, 837.950um)
+      1 [INFO PAD-0116] Creating terminal for vccd_pad on met5 at (2037.330um, 30.835um) - (2091.730um, 98.100um)
+      1 [INFO PAD-0116] Creating terminal for tx_pad on met5 at (1555.200um, 2105.560um) - (1617.800um, 2168.010um)
+      1 [INFO PAD-0116] Creating terminal for rx_pad on met5 at (1077.200um, 2105.560um) - (1139.800um, 2168.010um)
+      1 [INFO PAD-0116] Creating terminal for rstn_pad on met5 at (1555.200um, 32.990um) - (1617.800um, 95.440um)
+      1 [INFO PAD-0116] Creating terminal for clk_pad on met5 at (1077.200um, 32.990um) - (1139.800um, 95.440um)
