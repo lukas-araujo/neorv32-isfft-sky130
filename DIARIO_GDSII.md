@@ -4031,6 +4031,28 @@ Magic as células vazias e o GDS defeituoso, o XOR a via encavalada). Nenhum del
    cadeia pad → anel → pontes → núcleo e decide as 24 sobreposições da L77.
 3. Selo (seal ring, L59): decidir se entra.
 
+### Etapa 12 preparada: `layout/chip/12_verifica.sh`
+
+| Arquivo | O quê |
+|---|---|
+| `12_verifica.sh` | Continua da rodada da etapa 11 (`.rodada_atual`, ou o 1º argumento) numa rodada **nova** (`runs/<data>_12`), com `--with-initial-state` no passo anterior ao `Magic.DRC`; gera o maglef do núcleo; roda de `Magic.DRC` até `Misc.ReportManufacturability`; guarda `12_drc.txt`, `12_lvs.txt`, os relatórios completos e as duas netlists (`.gz`) em `resultados/<data>_12_layout_chip/` |
+| `config_verifica.json` | Liga `RUN_MAGIC_DRC` e `RUN_LVS`; `MAGIC_DRC_MAGLEFS` = núcleo; `ERROR_ON_MAGIC_DRC` e `ERROR_ON_LVS_ERROR` = false na 1ª rodada (para ler a lista inteira, não parar no 1º checker) |
+| `resume_verifica.py` | DRC: caixas por regra e por **região** — `chip` (o que desenhamos nas etapas 11/12: PDN, pontes, ligação pad → anel, roteamento pad ↔ núcleo), `anel` (faixa dos pads, 205 µm da borda) e `nucleo` (só o abstrato). LVS: resultado final, dispositivos/redes dos dois lados, linhas de diferença sem repetição. Testado nos relatórios do núcleo (etapa 8): 130 caixas e "Circuits match uniquely" |
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L78 | DRC do chip: GDS do Magic, **núcleo caixa-preta** (maglef do `asic_top.lef`), **pads e fatias com o GDS real** | ✅ | O miolo do núcleo já passou na etapa 8 (130 isentos, L43); os pads são a parte nova e encostam no nosso metal (pontes, faixas met3, a sobra de met4 da L77) — o DRC tem de ver o metal deles de verdade |
+| L79 | LVS do chip, 1ª rodada: extração **abstrata** (DEF + LEF, `MAGIC_EXT_USE_GDS = false`); pads, fatias e núcleo como caixas-pretas casadas pelos pinos | ✅ | Confere a nossa ligação (pad ↔ núcleo, anel de 10 redes pelos pinos das fatias, alimentação até `vccd1`/`vssd1`) sem precisar do SPICE de transistor dos pads. A extração pelo GDS com os pads inteiros (`PAD_SPICE_MODELS`) fica para depois, se o resultado pedir — é a que responderia de vez a L77 |
+| L80 | Sem selo (seal ring) | ✅ | O `KLayout.SealRing` do LibreLane 3.0.14 só tem gerador para o IHP; para o sky130 depende de `KLAYOUT_SEALRING_SCRIPT`, que o PDK não define (como os runsets de antena/densidade do KLayout, vistos pulados na rodada `2058`). Fecha a L59 |
+
+O que pode aparecer (para não assustar):
+- **DRC nos pads**: o GDS das células de I/O do sky130 foi desenhado com regras próprias; erros
+  dentro de `anel` precisam ser separados entre "da célula da foundry" e "do encosto com o nosso
+  metal" (as caixas trazem coordenada).
+- **LVS e as fatias do anel**: as `com_bus_slice` têm pinos no LEF (`AMUXBUS_A`, `VDDIO`...). Se o
+  netlist do Verilog não tiver essas instâncias, o Netgen vê células a mais no layout; é a
+  primeira coisa a olhar no `12_lvs.txt`.
+
 ---
 
 ## Índice de decisões
@@ -4114,6 +4136,9 @@ Magic as células vazias e o GDS defeituoso, o XOR a via encavalada). Nenhum del
 | L75 | Pads da versão `8afc8346` do PDK (não `head -1`); cópia refeita se a origem mudar | ✅ | 2026-10-31 |
 | L76 | `ligacao_pads` sem via4 sobre via4 do pdngen (XOR) | ✅ | 2026-11-01 |
 | L77 | Sobreposição ilegal no chip vira aviso (OBS dos pads lvc; LVS pelo GDS decide) | ✅ | 2026-11-01 |
+| L78 | DRC do chip: núcleo caixa-preta, pads com GDS real | ✅ | 2026-11-01 |
+| L79 | LVS do chip: extração abstrata primeiro | ✅ | 2026-11-01 |
+| L80 | Sem selo: o PDK não define `KLAYOUT_SEALRING_SCRIPT` (fecha a L59) | ✅ | 2026-11-01 |
 
 ---
 
@@ -4146,7 +4171,7 @@ Magic as células vazias e o GDS defeituoso, o XOR a via encavalada). Nenhum del
 - [x] ~~Etapa 11, parte 2a~~ — PDN ligado pad → anel → núcleo (37ª sessão)
 - [ ] IR drop do chip com a fonte **no pad** (`VSRC_LOC_FILES` com a posição do `pad_vccd`/`pad_vssd`): sem terminal de topo, o `analyze_power_grid` usa "bump pattern" (`PSM-0073`: fontes virtuais a cada 140 µm no met5, como num flip-chip) e a queda sai otimista; o `PSM-0025` do `GeneratePDN` é a mesma falta de terminal (L68)
 - [x] Etapa 11, parte 2b: fluxo `Chip` completo na rodada `2026-11-01_1249` (L72–L77, 38ª sessão)
-- [ ] Etapa 12: DRC (Magic, núcleo caixa-preta) e LVS (Netgen, pelo GDS) do chip
+- [ ] Etapa 12: `bash layout/chip/12_verifica.sh` no notebook (DRC com núcleo caixa-preta, LVS abstrato; L78–L80)
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou

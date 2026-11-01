@@ -1,0 +1,18 @@
+{
+  "meta": {
+    "version": 3,
+    "flow": "Chip",
+    "substituting_steps": {
+      "KLayout.SealRing": null
+    }
+  },
+  "RUN_MAGIC_DRC": true,
+  "MAGIC_DRC_USE_GDS": true,
+  "MAGIC_DRC_MAGLEFS": [
+    "dir::entrada/maglef/asic_top.mag"
+  ],
+  "ERROR_ON_MAGIC_DRC": false,
+  "RUN_LVS": true,
+  "ERROR_ON_LVS_ERROR": false,
+  "MAGIC_EXT_USE_GDS": false
+}
