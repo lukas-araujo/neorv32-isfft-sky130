@@ -4324,6 +4324,51 @@ respeitando o espaçamento com o desenho.
   sem uma das células: as 13 acham definição e a célula tirada aparece como faltando.
 - **Tempo:** ~30 min. **Vira slide?** O `dir::` relativo ao último arquivo, talvez.
 
+### `12_densidade.sh`, 1ª rodada (`2026-11-02_1614_12dens`): o preenchimento resolve quase tudo
+
+Números da saída do script no notebook (os arquivos vão em `resultados/2026-11-02_1614_12dens_layout_chip/`).
+Janela = 700 × 700 µm, passo 70 µm: 690 janelas no chip de 2700 × 2201 µm.
+
+| Camada | Limites | Global antes | Global depois | Janelas reprovadas antes | depois | Janela mín. depois |
+|---|---|---|---|---|---|---|
+| FOM (difusão) | 0,33–0,57 | 0,160 | 0,424 | 636 | **26** | 0,295 |
+| poly | — | 0,131 | 0,183 | — | — | 0,130 |
+| li | 0,35–0,60 | 0,241 | 0,542 | 393 | **0** | 0,449 |
+| met1 | 0,35–0,60 | 0,157 | 0,476 | 690 | **0** | 0,369 |
+| met2 | 0,35–0,60 | 0,101 | 0,450 | 690 | **209** | 0,252 |
+| met3 | 0,35–0,60 | 0,083 | 0,449 | 690 | **139** | 0,314 |
+| met4 | 0,35–0,60 | 0,292 | 0,519 | 654 | **39** | 0,335 |
+| met5 | 0,45–0,76 | 0,299 | 0,545 | 687 | **224** | 0,326 |
+
+- **Antes:** nenhuma camada passava, nem na média do chip (met3 com 8,3 %). Esperado: entre o anel e
+  o núcleo e em volta das SRAM há muito vazio, e a etapa 11 só pôs células de preenchimento nas
+  linhas, sem metal.
+- **Depois:** todas as médias globais dentro dos limites; li e met1 sem nenhuma janela reprovada;
+  sobram janelas em met2/met3/met5 (e poucas em FOM/met4), com mínimo acima de 0,25. Falta saber
+  **onde** (os índices das janelas estão no `12_densidade_depois.txt`): perto do anel de pads, onde
+  as células da foundry têm áreas vazias que o fill não pode ocupar, ou sobre as SRAM.
+- **Fill:** 29 min (`-dist`), 125 MB (`.gds.gz`), 17 células; GDS final com fill: 932 MB.
+
+DRC do GDS preenchido (mesmo método do `12_verifica.sh`, núcleo caixa-preta):
+
+| | sem fill (`1839_12`) | com fill |
+|---|---|---|
+| região `chip` | 0 | **0** |
+| faixa dos pads | 305262 | 316073 (+10811) |
+| `licon.7` P-tap overlap | 4544 | 23056 |
+| `LU.3` P-diff a mais de 15 µm de N-tap | 210 | 9010 |
+| `diff/tap.3` MV diffusion × MV tap | 6308 | 8076 |
+| `diff/tap.23` MV × LV P-diffusion | 270 / 42 | 1422 / 1194 |
+
+O fill **não** criou erro no nosso desenho (região `chip` continua 0, e lá ele preencheu de verdade).
+Os erros novos estão todos na faixa dos pads e são de **difusão/tap/latch-up**: o fill de FOM
+(difusão "fantasma", obrigatória pela densidade de FOM) caiu perto dos transistores de média tensão
+dos pads, e o `LU.3` conta esses quadrados como P-diff sem tap N por perto. Exemplo: `licon.7` em
+(606,5; 151,0), dentro do `pad_vssd` (x 598–673). Próximo passo: com as caixas
+(`12_drc_preenchido.rpt.gz`), confirmar e então **tirar o fill da faixa dos pads** (as células de
+I/O são entregues completas pela foundry; o Caravel também não preenche dentro delas), conferindo se a
+densidade continua passando sem ele.
+
 ---
 
 ## Índice de decisões

@@ -74,9 +74,10 @@ manda_git () {   # pasta
 # Python do LibreLane (tem o modulo do KLayout: klayout.db / pya)
 py_klayout () {
   local p
-  p="$(head -1 "$(command -v librelane)" | sed 's/^#![[:space:]]*//')"
-  case "$p" in */env\ *) p="${p##* }";; esac
-  for c in "$p" python3; do
+  # o librelane pode ser script (#!python) ou executavel binario (wrapper do Nix)
+  p="$(head -c 300 "$(command -v librelane)" | tr -d '\000' | head -1)"
+  case "$p" in '#!'*) p="${p#\#!}"; p="${p# }"; case "$p" in */env\ *) p="${p##* }";; esac;; *) p="";; esac
+  for c in ${p:+"$p"} python3; do
     if "$c" -c "import klayout.db" 2>/dev/null; then echo "$c"; return; fi
   done
   echo ""
