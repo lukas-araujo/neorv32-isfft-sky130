@@ -10,8 +10,7 @@
 #   2a) Equivalencia RTL x netlist com scan -- Conformal
 #   2b) Regressao da Kria no netlist com scan (scan_en = 0) -- Xcelium
 #   3) ATPG (falhas stuck-at) -- Modus
-#   4) Simulacao dos padroes do ATPG -- Xcelium   (preparado na sessao 2,
-#      depois de ver o que o bloco 3 escreve)
+#   4) Simulacao dos padroes do ATPG -- Xcelium (script escrito pelo Genus)
 #
 # ⚠️ Lido com 'source': nao ponha 'exit' aqui (fecharia o terminal).
 
@@ -132,3 +131,17 @@ ls -la ${MODUS_DIR}
 #modus -file runmodus.atpg.tcl 2>&1 | tee ${RPT_DIR}/${DESIGNS}_modus.log
 #echo "--- cobertura (procure 'Test Coverage' / 'Fault Coverage') ---"
 #grep -iE "coverage|faults|patterns|tests" ${RPT_DIR}/${DESIGNS}_modus.log | tail -30
+
+#=============================================================================
+# 4) SIMULACAO DOS PADROES DO ATPG -- XCELIUM  (depois do bloco 3)
+#
+# O write_dft_atpg do Genus escreveu tambem o run_fullscan_sim (2a sessao do
+# DIARIO_DFT): simula no netlist os vetores que o Modus gravou
+# (write_vectors), com deslocamento e captura de verdade. E a prova de que
+# os padroes que iriam para o testador batem com o circuito.
+# Esperado: nenhuma "miscompare" no fim do log.
+#=============================================================================
+
+#cd ${MODUS_DIR}
+#./run_fullscan_sim 2>&1 | tee ${RPT_DIR}/${DESIGNS}_sim_padroes.log
+#grep -iE "miscompare|mismatch|error|passed|failed" ${RPT_DIR}/${DESIGNS}_sim_padroes.log | tail -20

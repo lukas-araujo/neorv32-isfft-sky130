@@ -296,6 +296,47 @@ funcionando. Um teste básico já é suficiente." → **T10 ✅: etapas 1–3**
 
 ---
 
+## 2026-11-02 — 2ª sessão: ✅ bloco 1 (Genus com scan) passou de primeira
+
+Rodado pelo Lukas na VM; fonte: trecho final do `genus.log` colado no chat
+(os relatórios completos chegam pelo `sim/traz_dft.sh`).
+
+| Item | Resultado | Linha do log |
+|---|---|---|
+| `connect_scan_chains` | "Configuring 16 chains for 12552 scan f/f"; cadeias 0–7 com 785, 8–15 com 784; domínio `aclk`, borda de subida | `connect_scan_chains` |
+| Portas criadas | 32 (`DFT-130`: `scan_in_0..15`, `scan_out_0..15`) + `scan_en` | Message Summary |
+| `check_dft_rules` (pós) | **0 violações**; 12.552 registradores passam; **100 %** com scan; 0 fora por escolha | `check_dft_rules` |
+| `syn_opt` | área final **974.796** (`area_down`); TNS 0; transição máx. 5.263 → 0 | tabelas do `syn_opt` |
+| `add_tieoffs` | `conb_1` nos `1'b0`/`1'b1` | `UTUI-207` |
+| `write_do_lec` | dofile composto (RTL → `fv_map` → revisado) **com as restrições de DFT** | `CFM-2`, `CFM-655` |
+| `write_dft_atpg` | `modus_work/runmodus.atpg.tcl` **e** `run_fullscan_sim` (simulação dos padrões) | fim do log |
+| `ungroup` + netlist achatado | sem erro (o bloco 2b tem netlist) | — |
+
+**Flip-flops: Yosys 12.559 × Genus 12.552.** O Genus otimizou 7 a mais; a
+previsão das cadeias (~785) bateu.
+
+| Aviso | O que é | Efeito |
+|---|---|---|
+| `DFT-325` | as células de clock gating (`sdlclkp`) estão evitadas, e "a DFT às vezes precisa delas" | nenhum: o IP não tem clock gating, e o Genus não precisou de nenhuma |
+| `CFM-655` | o dofile do LEC prende as portas de teste (`scan_en = 0`) | é o que se quer: com `scan_en = 0` o netlist tem de ser o RTL |
+| `TUI-32` | um atributo vai ficar obsoleto na próxima versão | nenhum agora; descobrir qual quando o `genus.log` inteiro chegar |
+
+A área de 974.796 µm² inclui as 2 macros (449.871 µm² no `.lib`). A
+comparação justa com o IP sem scan fica para quando chegar o
+`_area_hier.rpt` (o `u_isfft` da síntese do chip tem 448.030 µm² de
+lógica, `doc/tabelas_sintese.md`).
+
+**Etapa 4 de graça:** o `run_fullscan_sim` já existe; entrou como bloco 4
+do `run_first_dft.tcl` (rodar depois do 3).
+
+**Vira slide?** Sim: "12.552 flip-flops, 100 % com scan, 16 cadeias de 785".
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| T12 | Bloco 4 = `run_fullscan_sim` escrito pelo Genus | ✅ | Sai de graça e fecha o ciclo: os padrões do Modus simulados no netlist |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -311,15 +352,17 @@ funcionando. Um teste básico já é suficiente." → **T10 ✅: etapas 1–3**
 | T9 | Pastas da frente: `vm/backend/dft_isfft/`, `sim/run_dft_*.sh`, `sim/dft/`, `sim/traz_dft.sh` | ✅ | 2026-11-01 |
 | T10 | ~~Roteiro de 7 etapas~~ → escopo **básico**: etapas 1–3 (4 opcional); 5–7 fora | ✅ (Lukas) | 2026-11-01 |
 | T11 | Proteção das macros no deslocamento → etapa 5 (fora do escopo, T10; fica como achado) | ✅ | 2026-11-01 |
+| T12 | Bloco 4 = `run_fullscan_sim` do Genus | ✅ | 2026-11-02 |
 
 ---
 
 ## Pendências abertas
 
-- [ ] VM: `bash sim/monta_vm.sh` → copiar → bloco 1 (Genus) do `run_first_dft.tcl` → `traz_dft.sh … scan`
+- [x] ~~VM: bloco 1 (Genus)~~ — passou (2ª sessão)
 - [ ] VM: blocos 2a (LEC) e 2b (Kria no netlist com scan)
-- [ ] VM: bloco 3 (Modus) — conferir o nome do script que o `write_dft_atpg` escreve
-- [ ] Bloco 4 (simulação dos padrões): preparar depois de ver a saída do bloco 3
+- [ ] VM: bloco 3 (Modus) — script `runmodus.atpg.tcl` (confirmado pelo log do Genus)
+- [ ] VM: bloco 4 (`run_fullscan_sim`)
+- [ ] `traz_dft.sh … scan` com tudo
 - [ ] Comparar área/timing com a síntese sem DFT (o IP sozinho: rodar o mesmo script sem scan? ou ler o `u_isfft` do `_area_hier.rpt` do chip)
 - [x] ~~Confirmar T10~~ — Lukas (01/11): "a ideia da DFT é só testar como funciona e ver no Modus as coisas funcionando; um teste básico já é suficiente" → etapas 1–3
 - [ ] (fora do escopo, T10) Etapas 5–7: *shadow logic*, proteção do `csb`, transição, compressão
