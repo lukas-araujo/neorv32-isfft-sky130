@@ -4110,6 +4110,55 @@ pad × o nosso metal, a sobra de met4 dos pads lvc da L77)?
 | L81 | Erros de DRC na faixa dos pads separados por DRC de referência de cada célula sozinha, comparando área por regra | ✅ | Prova (em vez de supor) que os erros são internos das células da foundry; o que sobrar é encosto e tem coordenada |
 | L82 | Maglef do núcleo sem o nwell da OBS do LEF | ✅ | 37 `nwell.4` falsos: nwell sem tap só existe no abstrato |
 
+### Etapa 12, 2ª rodada (`2026-11-01_1839_12`) + DRC das células sozinhas
+
+`resultados/2026-11-01_1839_12_layout_chip/` (`12_drc.txt`, `12_lvs.txt`, `12_drc_anel.txt`):
+
+| Verificação | Resultado |
+|---|---|
+| LVS | ✅ de novo "Circuits match uniquely", 502/143 |
+| DRC núcleo | **0** (eram 37: a L82 funcionou) |
+| DRC região `chip` | **0** |
+| DRC faixa dos pads | 305262 caixas (as mesmas) |
+| Comparação por área (L81) | 27 regras "diferentes"; total chip 30518 µm² × células 25365 µm² |
+
+### 🐛 A comparação por área total não serve (L83)
+
+- **Sintoma:** regras com área a mais no chip (`Can't overlap those layers` +40 %,
+  `diff/tap.18,20` presente só no chip, `diff/tap.16`, `licon.5b`...) e outras com área a **menos**
+  (`met5.4` some no chip, `LU.3` −69 %).
+- **Causa (três coisas misturadas):**
+  1. **caixas repetidas**: o relatório traz a mesma caixa duas vezes (ex.:
+     `1083.525 29.975 1083.590 30.025`), e o Magic corta erros na borda dos ladrilhos (as caixas
+     param em x ou y = 1100,96 = 3,5 × 314,56). Somar área conta repetido;
+  2. **erros que somem no contexto** (normal): a fatia de 1 µm sozinha tem met5 menor que a área
+     mínima; no chip o met5 dela emenda no do vizinho e o erro some;
+  3. **erros de interação entre subcélulas**, que só existem com as células encostadas:
+     `Can't overlap those layers` e `This layer can't abut or partially overlap between subcells`
+     são do próprio Magic (o `sky130.tech` do open_pdks só tem `exact_overlap`/`no_overlap` para
+     contatos; a mensagem vem do verificador de interação). Exemplo: no `pad_vssa` (lado oeste),
+     faixas de 55 nm em y = 1120,565–1120,62, de 20 em 20 µm em x — cara de borda entre o pad e a
+     fatia vizinha.
+- **Resolvi com (L83):** `compara_drc_anel.py`, comparação **geométrica**: cada caixa de erro de
+  cada célula sozinha é levada para o lugar de **cada instância** (posição e orientação do DEF,
+  tamanho do LEF); por regra, com **regiões** (união, sem repetição; módulo de geometria do
+  KLayout): `só chip = chip − levado` e `só célula = levado − chip`. O que sobra em "só chip" sai
+  com a instância onde cai e a **distância até a borda dela** (encosto = perto da borda). Regras
+  separadas por camada: **metal/via** (o que o nosso desenho poderia ter causado) × **dispositivo**
+  (difusão, poço, poly, implantes: só existem dentro das células da foundry — no anel não pusemos
+  nenhuma dessas camadas). O `12_drc_celulas.sh` passa a gravar cada caixa da referência.
+- **Testado** com um caso sintético (3 instâncias em N, S e W, caixa repetida, um erro de metal fora
+  das células e um de difusão dentro): a caixa repetida conta uma vez, as orientações levam a caixa
+  ao lugar certo, e só os dois erros plantados aparecem em "só chip", com a localização certa.
+  O Tcl novo do Magic foi conferido com um `drc` de mentira no `tclsh`.
+- **O que já dá para dizer pelos números da área (sem a geométrica):** nenhuma regra de
+  **metal/via** cresceu no chip (`met2.3a` e `mcon.2` iguais; `via4.2` −22 %, `met5.4` e `met1.6`
+  somem). Todas as que cresceram são de camada de dispositivo ou de interação.
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L83 | Comparação geométrica (por instância, regiões, por camada) no lugar da soma de área | ✅ | Área total mistura repetição, erro que some no contexto e erro de interação; a geométrica diz onde cada sobra cai |
+
 ---
 
 ## Índice de decisões
@@ -4198,6 +4247,7 @@ pad × o nosso metal, a sobra de met4 dos pads lvc da L77)?
 | L80 | Sem selo: o PDK não define `KLAYOUT_SEALRING_SCRIPT` (fecha a L59) | ✅ | 2026-11-01 |
 | L81 | DRC de referência das células do anel (área por regra) | ✅ | 2026-11-01 |
 | L82 | Maglef do núcleo sem nwell (37 `nwell.4` falsos) | ✅ | 2026-11-01 |
+| L83 | DRC do anel: comparação geométrica por instância (`compara_drc_anel.py`) | ✅ | 2026-11-02 |
 
 ---
 
@@ -4230,7 +4280,7 @@ pad × o nosso metal, a sobra de met4 dos pads lvc da L77)?
 - [x] ~~Etapa 11, parte 2a~~ — PDN ligado pad → anel → núcleo (37ª sessão)
 - [ ] IR drop do chip com a fonte **no pad** (`VSRC_LOC_FILES` com a posição do `pad_vccd`/`pad_vssd`): sem terminal de topo, o `analyze_power_grid` usa "bump pattern" (`PSM-0073`: fontes virtuais a cada 140 µm no met5, como num flip-chip) e a queda sai otimista; o `PSM-0025` do `GeneratePDN` é a mesma falta de terminal (L68)
 - [x] Etapa 11, parte 2b: fluxo `Chip` completo na rodada `2026-11-01_1249` (L72–L77, 38ª sessão)
-- [ ] Etapa 12: LVS ✅ (`1717_12`); falta `12_verifica.sh` de novo (L82: núcleo 37 → 0) e `12_drc_celulas.sh` (L81: erros da faixa dos pads = internos das células?)
+- [ ] Etapa 12: LVS ✅, DRC núcleo 0 e `chip` 0 (`1839_12`); falta `12_drc_celulas.sh` de novo com a comparação geométrica (L83)
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou

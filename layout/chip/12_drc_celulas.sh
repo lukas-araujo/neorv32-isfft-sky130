@@ -74,6 +74,11 @@ foreach {why coords} [drc listall why] {
         incr k
     }
     puts \$fout "$c\t\$why\t\$k\t\$a"
+    foreach co \$coords {
+        puts \$fout [format "BOX\t%s\t%s\t%.3f\t%.3f\t%.3f\t%.3f" $c \$why \
+            [expr {\$oscale * [lindex \$co 0]}] [expr {\$oscale * [lindex \$co 1]}] \
+            [expr {\$oscale * [lindex \$co 2]}] [expr {\$oscale * [lindex \$co 3]}]]
+    }
     incr n \$k
 }
 puts stdout "\[INFO\] $c: \$n caixas"
@@ -88,13 +93,23 @@ echo ">>> Magic: DRC de cada celula (pode levar alguns minutos)"
 ( cd "$W" && magic -dnull -noconsole -rcfile "$rc" "$tcl" > "$W/drc_celulas.log" 2>&1 ) || true
 grep "\[INFO\]" "$W/drc_celulas.log" | sed 's/^/    /'
 [ -s "$W/ref.tsv" ] || { echo "ERRO: ref.tsv vazio (veja $W/drc_celulas.log)"; exit 1; }
-cp -f "$W/ref.tsv" "$DEST/12_drc_ref_celulas.tsv"
+gzip -c "$W/ref.tsv" > "$DEST/12_drc_ref_celulas.tsv.gz"
 gzip -c "$W/drc_celulas.log" > "$DEST/12_drc_celulas.log.gz"
 
-python3 "$CHIP/resume_verifica.py" anel "$drc" "$W/ref.tsv" "$spice" > "$DEST/12_drc_anel.txt" 2>&1 || true
+python3 "$CHIP/resume_verifica.py" anel "$drc" "$W/ref.tsv" "$spice" > "$DEST/12_drc_anel_area.txt" 2>&1 || true
+# comparacao geometrica (L83): erros das celulas levados para cada instancia pelo DEF
+deff="$(python3 -c "import json,sys; print(json.load(open(sys.argv[1])).get('def') or '')" \
+        "$(dirname "$(dirname "$drc")")/state_in.json")"
+lefs="$(python3 -c "import json,sys; print(':'.join(json.load(open(sys.argv[1]))['PAD_LEFS']))" "$RUN12/resolved.json")"
+export CDA_RPT="$drc" CDA_REF="$W/ref.tsv" CDA_DEF="$deff" CDA_LEFS="$lefs"
+if python3 -c "import klayout.db" 2>/dev/null; then
+  python3 "$CHIP/compara_drc_anel.py" > "$DEST/12_drc_anel.txt" 2>&1 || true
+else
+  klayout -b -r "$CHIP/compara_drc_anel.py" > "$DEST/12_drc_anel.txt" 2>&1 || true
+fi
 sed 's/^/    /' "$DEST/12_drc_anel.txt" | head -70
 echo
-echo "Resultados em ${DEST#$REPO/}: 12_drc_anel.txt, 12_drc_ref_celulas.tsv"
+echo "Resultados em ${DEST#$REPO/}: 12_drc_anel.txt (geometrico, L83), 12_drc_anel_area.txt (L81), 12_drc_ref_celulas.tsv"
 echo "  git add resultados/${TAG12}_layout_chip"
 echo "  git commit -m 'gdsii: etapa 12, DRC das celulas do anel'"
 echo "  git pull --rebase origin main && git push"
