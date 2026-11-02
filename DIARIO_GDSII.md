@@ -4299,6 +4299,31 @@ respeitando o espaçamento com o desenho.
 | L87 | STA do chip com um modelo de tempo do núcleo (`write_timing_model`, TT, chave `"*"` como as SRAM) | ✅ | Sem `.lib` do núcleo o STA do chip não tem caminho (folga 1e39); o modelo leva para o chip a árvore de relógio e os fios extraídos do núcleo |
 | L88 | LVS pelo GDS com os pads inteiros, núcleo abstraído, `MAGIC_CAPTURE_ERRORS = false` só nessa rodada (camadas da OpenRAM, L44; o script lista as linhas) | ✅ | É o LVS que enxerga o metal real dentro do anel: fecha a L77 (curto apareceria como redes fundidas) |
 
+### 🐛 1ª tentativa do `12_sta.sh` e do `12_lvs_gds.sh` (notebook, 02/11 16:12)
+
+- **`12_sta.sh` — sintoma:** `nucleo.sdc, 43 can't read "::env(SYNTH_DRIVING_CELL)"`.
+  **Causa:** passei ao OpenROAD só 7 das variáveis que o SDC lê; ele usa 13 (`SYNTH_DRIVING_CELL`,
+  `SYNTH_CLK_DRIVING_CELL`, `OUTPUT_CAP_LOAD`, `TIME_DERATING_CONSTRAINT`,
+  `CLOCK_TRANSITION_CONSTRAINT`...). **Resolvi:** o script lê do próprio `nucleo.sdc` todas as
+  `::env(X)` e pega o valor no `resolved.json` da rodada do núcleo (e imprime a lista).
+- **`12_lvs_gds.sh` — sintoma 1:** `Path provided for variable 'MACROS.asic_top.gds[0]' is
+  invalid: .../layout/chip/entrada/entrada/asic_top.gds` (e todos os `dir::` do `config.json`).
+  **Causa:** com dois arquivos de configuração, o LibreLane resolveu o `dir::` do `config.json`
+  pela pasta do **último** arquivo (eu gravei o extra em `entrada/`). O `config_verifica.json`
+  funcionou porque está na mesma pasta do `config.json`. **Resolvi:** os extras gerados vão para
+  `layout/chip/.config_lvs_gds.json` e `.config_sta.json` (fora do git pelo `.gitignore`).
+  O `12_sta.sh` ia tropeçar no mesmo.
+- **Sintoma 2:** "SEM SPICE" para todas as 13 células do anel: o `spice/` do PDK só tem
+  `sky130_fd_io.spice`. **Causa:** as células `sky130_ef_io` (os pads "embrulhados", fatias, canto)
+  não vêm da SkyWater; são do open_pdks, que as descreve num **CDL** próprio
+  (`libs.ref/sky130_fd_io/cdl/sky130_ef_io.cdl`, conferido no fonte do open_pdks: `.SUBCKT` em
+  sintaxe SPICE pura, que o Netgen lê). Ele instancia as células `sky130_fd_io__top_*` da
+  SkyWater, que estão no `sky130_fd_io.spice`. **Resolvi:** o script usa os dois e confere o
+  **fecho** (tudo o que as células do anel instanciam, recursivamente, tem de ter definição; o que
+  faltar sai listado). Testado com o CDL real do open_pdks e um `sky130_fd_io.spice` de mentira
+  sem uma das células: as 13 acham definição e a célula tirada aparece como faltando.
+- **Tempo:** ~30 min. **Vira slide?** O `dir::` relativo ao último arquivo, talvez.
+
 ---
 
 ## Índice de decisões

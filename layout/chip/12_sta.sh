@@ -38,10 +38,12 @@ stn="$(ls -d "$RUNN"/[0-9]*-openroad-stapostpnr* 2>/dev/null | sort -V | while r
         [ -f "$d/state_out.json" ] && echo "$d/state_out.json"; done | tail -1 || true)"
 [ -n "$stn" ] || { echo "ERRO: sem OpenROAD.STAPostPNR com estado em $RUNN"; exit 1; }
 echo ">>> nucleo: $TAGN, estado ${stn#$NUC/}"
-python3 - "$stn" "$RUNN/resolved.json" "$W/modelo/env.tcl" <<'PY'
-import json, sys
+python3 - "$stn" "$RUNN/resolved.json" "$W/modelo/env.tcl" "$NUC/nucleo.sdc" <<'PY'
+import json, re, sys
 st = json.load(open(sys.argv[1]))
 r = json.load(open(sys.argv[2]))
+# todas as variaveis ::env(X) que o nucleo.sdc le, com o valor da rodada do nucleo
+vars_sdc = sorted(set(re.findall(r"::env\((\w+)\)", open(sys.argv[4]).read())))
 odb = st["odb"]
 spef = st.get("spef") or {}
 nom = [v for k, v in spef.items() if k.startswith("nom")]
@@ -58,14 +60,14 @@ def tcl(x):
     return "{" + str(x) + "}"
 with open(sys.argv[3], "w") as f:
     f.write(f"set ODB {tcl(odb)}\nset SPEF {tcl(nom[0])}\nset LIBS [list {' '.join(tcl(l) for l in libs)}]\n")
-    for k in ("CLOCK_PORT", "CLOCK_PERIOD", "IO_DELAY_CONSTRAINT", "MAX_FANOUT_CONSTRAINT",
-              "MAX_TRANSITION_CONSTRAINT", "MAX_CAPACITANCE_CONSTRAINT", "CLOCK_UNCERTAINTY_CONSTRAINT"):
+    for k in vars_sdc:
         v = r.get(k)
         if v is not None:
             if isinstance(v, list):
                 v = " ".join(map(str, v))
             f.write(f"set ::env({k}) {tcl(v)}\n")
 print(f"    odb  {odb}\n    spef {nom[0]}\n    {len(libs)} libs TT")
+print("    variaveis do nucleo.sdc: " + ", ".join(f"{k}={r.get(k)!r}" for k in vars_sdc))
 PY
 MODELO="$ENT/asic_top_tt.lib"
 cat > "$W/modelo/modelo.tcl" <<TCL
@@ -109,7 +111,7 @@ cp -f "$W/modelo/modelo.log" "$W/modelo/nucleo_max.rpt" "$W/modelo/nucleo_min.rp
 gzip -c "$MODELO" > "$DEST/asic_top_tt.lib.gz"
 
 #--- B. STA do chip --------------------------------------------------------------
-python3 - "$CHIP/config.json" "$CHIP" "$MODELO" "$ENT/config_sta.json" <<'PY'
+python3 - "$CHIP/config.json" "$CHIP" "$MODELO" "$CHIP/.config_sta.json" <<'PY'
 import json, os, sys
 c = json.load(open(sys.argv[1]))
 base, modelo, saida = sys.argv[2], sys.argv[3], sys.argv[4]
@@ -128,7 +130,7 @@ ini="$(estado_11 openroad-rcx)"
 [ -n "$ini" ] || { echo "ERRO: sem estado do OpenROAD.RCX em $RUN11"; exit 1; }
 echo ">>> B. STA do chip (OpenROAD.STAPostPNR), a partir de ${ini#$CHIP/}"
 r=0
-roda_librelane "$TAG" OpenROAD.STAPostPNR OpenROAD.STAPostPNR "$ini" "$ENT/config_sta.json" || r=$?
+roda_librelane "$TAG" OpenROAD.STAPostPNR OpenROAD.STAPostPNR "$ini" "$CHIP/.config_sta.json" || r=$?
 
 d="$(ls -d "$W"/[0-9]*-openroad-stapostpnr 2>/dev/null | sort -V | tail -1 || true)"
 if [ -n "$d" ] && [ -f "$d/state_out.json" ]; then

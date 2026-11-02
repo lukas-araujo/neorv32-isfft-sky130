@@ -30,35 +30,68 @@ W="$CHIP/runs/$TAG"
 mkdir -p "$DEST"
 
 #--- 1. SPICE dos pads: em que arquivo esta cada celula do anel -----------------
-ls "$IO"/spice/*.spice >/dev/null 2>&1 || { echo "ERRO: sem $IO/spice/*.spice"; exit 1; }
-python3 - "$IO/spice" "$CHIP/config.json" "$ENT/config_lvs_gds.json" "$DEST/12_lvs_gds_spice.txt" <<'PY'
+ls "$IO"/spice/*.spice "$IO"/cdl/*.cdl >/dev/null 2>&1 || { echo "ERRO: sem SPICE/CDL em $IO"; exit 1; }
+python3 - "$IO" "$CHIP/config.json" "$CHIP/.config_lvs_gds.json" "$DEST/12_lvs_gds_spice.txt" <<'PY'
 import glob, json, os, re, sys
-pasta, cfg, saida, rel = sys.argv[1:5]
+io, cfg, saida, rel = sys.argv[1:5]
 c = json.load(open(cfg))
-# celulas do anel: pads (pelo chip_top.v: modulos sky130_ef_io__*), cantos, fatias
 v = open(os.path.join(os.path.dirname(cfg), "chip_top.v")).read()
-precisa = set(re.findall(r"^\s*(sky130_e[f]_io__\w+)\s", v, re.M))
+precisa = set(re.findall(r"^\s*(sky130_ef_io__\w+)\s", v, re.M))
 precisa |= set(c.get("PAD_CORNER") or []) | set(c.get("PAD_FILLERS") or [])
-define = {}
-for f in sorted(glob.glob(os.path.join(pasta, "*.spice"))):
-    for m in re.finditer(r"^\s*\.subckt\s+(\S+)", open(f, errors="replace").read(), re.M | re.I):
-        define.setdefault(m.group(1), []).append(f)
-# preferencia: os arquivos combinados; depois o arquivo proprio da celula
-escolha, linhas = [], []
-for comb in ("sky130_ef_io.spice", "sky130_fd_io.spice"):
-    p = os.path.join(pasta, comb)
-    if os.path.exists(p):
+
+def subckts(f):
+    """{nome: [celulas instanciadas]} de um arquivo SPICE/CDL"""
+    txt = open(f, errors="replace").read().replace("\n+", " ")
+    r, atual = {}, None
+    for l in txt.splitlines():
+        t = l.split()
+        if not t:
+            continue
+        if t[0].lower() == ".subckt":
+            atual = t[1]
+            r[atual] = []
+        elif t[0].lower() == ".ends":
+            atual = None
+        elif atual and t[0][0] in "Xx":
+            nomes = [x for x in t[1:] if "=" not in x]
+            if nomes:
+                r[atual].append(nomes[-1].lstrip("/"))
+    return r
+
+arquivos = sorted(glob.glob(os.path.join(io, "spice", "*.spice")) + glob.glob(os.path.join(io, "cdl", "*.cdl")))
+tab = {f: subckts(f) for f in arquivos}
+# O PDK traz as celulas sky130_ef_io (pads "embrulhados", fatias, canto) so no CDL
+# custom do open_pdks; as sky130_fd_io de dentro delas, no SPICE da SkyWater.
+escolha = []
+for nome in ("cdl/sky130_ef_io.cdl", "spice/sky130_fd_io.spice"):
+    p = os.path.join(io, nome)
+    if p in tab:
         escolha.append(p)
+def define(cel, fs):
+    return [f for f in fs if cel in tab[f]]
+# fecho: tudo o que as celulas do anel instanciam tem de estar definido
+falta, vistos, fila = set(), set(), sorted(precisa)
+while fila:
+    cel = fila.pop()
+    if cel in vistos:
+        continue
+    vistos.add(cel)
+    fs = define(cel, escolha)
+    if not fs:
+        outros = define(cel, arquivos)
+        if outros:
+            escolha.append(outros[0])
+            fs = [outros[0]]
+        elif not cel.startswith("sky130_fd_pr__"):
+            falta.add(cel)
+            continue
+        else:
+            continue
+    fila += [x for x in tab[fs[0]][cel] if not x.startswith("sky130_fd_pr__")]
+linhas = []
 for cel in sorted(precisa):
-    fs = define.get(cel, [])
-    if any(f in escolha for f in fs):
-        onde = [os.path.basename(f) for f in fs if f in escolha][0]
-    elif fs:
-        escolha.append(fs[0])
-        onde = os.path.basename(fs[0]) + " (arquivo proprio)"
-    else:
-        onde = "SEM SPICE -> caixa-preta do lado do esquematico"
-    linhas.append(f"  {cel:62s} {onde}")
+    fs = define(cel, escolha)
+    linhas.append(f"  {cel:62s} {os.path.relpath(fs[0], io) if fs else 'SEM DEFINICAO'}")
 json.dump({"meta": c["meta"],
            "MAGIC_EXT_USE_GDS": True,
            "MAGIC_EXT_ABSTRACT_CELLS": ["^asic_top$"],
@@ -67,8 +100,10 @@ json.dump({"meta": c["meta"],
            "ERROR_ON_LVS_ERROR": False,
            "ERROR_ON_ILLEGAL_OVERLAPS": False,
            "PAD_SPICE_MODELS": escolha}, open(saida, "w"), indent=2)
-txt = "SPICE dos pads (PAD_SPICE_MODELS):\n" + "\n".join("  " + f for f in escolha) + \
-      "\n\nCelulas do anel -> onde esta o .subckt:\n" + "\n".join(linhas) + "\n"
+txt = ("SPICE/CDL dos pads (PAD_SPICE_MODELS):\n" + "\n".join("  " + os.path.relpath(f, io) for f in escolha)
+       + "\n\nCelulas do anel -> onde esta o .subckt:\n" + "\n".join(linhas)
+       + f"\n\nSubcelulas (fecho) sem definicao em nenhum arquivo: {', '.join(sorted(falta)) or 'nenhuma'}\n"
+       + f"Subcircuitos conferidos no fecho: {len(vistos)}\n")
 open(rel, "w").write(txt)
 print(txt)
 PY
@@ -81,7 +116,7 @@ done
 [ -n "$ini" ] || { echo "ERRO: nenhum passo antes da extracao com estado em $RUN11"; exit 1; }
 echo ">>> extracao pelo GDS + LVS, a partir de ${ini#$CHIP/} (demora: pads com transistores)"
 r=0
-roda_librelane "$TAG" Magic.SpiceExtraction Checker.LVS "$ini" "$ENT/config_lvs_gds.json" || r=$?
+roda_librelane "$TAG" Magic.SpiceExtraction Checker.LVS "$ini" "$CHIP/.config_lvs_gds.json" || r=$?
 
 #--- 3. resultados ------------------------------------------------------------------
 d="$(ls -d "$W"/[0-9]*-magic-spiceextraction 2>/dev/null | sort -V | tail -1 || true)"
