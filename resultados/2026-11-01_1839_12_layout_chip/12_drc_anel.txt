@@ -1,288 +1,243 @@
-Instancias do anel (netlist extraida):
-     12 sky130_ef_io__com_bus_slice_10um
-     41 sky130_ef_io__com_bus_slice_1um
-    358 sky130_ef_io__com_bus_slice_20um
-     15 sky130_ef_io__com_bus_slice_5um
-      1 sky130_ef_io__connect_vcchib_vccd_and_vswitch_vddio_slice_20um
-      4 sky130_ef_io__corner_pad
-      4 sky130_ef_io__gpiov2_pad_wrapped
-      1 sky130_ef_io__vccd_lvc_clamped_pad
-      1 sky130_ef_io__vdda_hvc_clamped_pad
-      1 sky130_ef_io__vddio_hvc_clamped_pad
-      1 sky130_ef_io__vssa_hvc_clamped_pad
-      1 sky130_ef_io__vssd_lvc_clamped_pad
-      1 sky130_ef_io__vssio_hvc_clamped_pad
+DRC do chip: /home/lukas/Projects/neorv32-isfft-sky130/layout/chip/runs/2026-11-01_1839_12/01-magic-drc/reports/drc.magic.rpt
+instancias do anel no DEF: 441; celulas com DRC sozinhas: 9
 
- area chip (um2)   soma celulas  dif. %  regra  [celulas onde aparece sozinha]
-      13489.3720      9625.2821   40.15  Can't overlap those layers  [gpiov2_pad_wrapped,vccd_lvc_clamped_pad,vdda_hvc_clamped_pad]  <-- DIFERENTE
-       7927.1253      7932.7492   -0.07  LV to MV Diffusion spacing < 54 (diff/tap.3)  [gpiov2_pad_wrapped,vdda_hvc_clamped_pad,vddio_hvc_clamped_pa]
-       2352.7366         0.0000     inf  Spacing of N-Diffusion or P-tap to MV nwell < 0.43um (diff/tap.18,20)  []  <-- DIFERENTE
-       2296.5130      2296.5129    0.00  This layer can't abut or partially overlap between subcells  [gpiov2_pad_wrapped]
-       1997.0182      2015.1445   -0.90  All HV nwell can contain only HV diffusion (diff/tap.21)  [gpiov2_pad_wrapped,vdda_hvc_clamped_pad,vddio_hvc_clamped_pa]  <-- DIFERENTE
-        659.3479       666.2466   -1.04  Spacing of HV nwell to HV nwell < 2.0um (nwell.8)  [gpiov2_pad_wrapped]  <-- DIFERENTE
-        568.9640       568.9640    0.00  Deep N-well spacing to N-well < 900 (nwell.7)  [gpiov2_pad_wrapped]
-        137.5716       450.2868  -69.45  P-diff distance to N-tap must be < 15.0um (LU.3)  [gpiov2_pad_wrapped,vccd_lvc_clamped_pad,vssd_lvc_clamped_pad]  <-- DIFERENTE
-          0.0000       399.7500 -100.00  Metal5 minimum area < 160000 (met5.4)  [com_bus_slice_1um]  <-- DIFERENTE
-         43.2904       341.4664  -87.32  P-tap overlap of P-tap contact < 24 in one direction (licon.7)  [gpiov2_pad_wrapped,vccd_lvc_clamped_pad,vssd_lvc_clamped_pad]  <-- DIFERENTE
-        288.9600       288.9600    0.00  N-Diffusion overhang of nFET < 50 (poly.7)  [gpiov2_pad_wrapped]
-         63.3312       271.8140  -76.70  MV Diffusion to MV tap spacing < 54 (diff/tap.3)  [gpiov2_pad_wrapped]  <-- DIFERENTE
-        165.3344       165.3344    0.00  All nwells must contain metal-connected N+ taps (nwell.4)  [vccd_lvc_clamped_pad,vssd_lvc_clamped_pad]
-        127.0940         0.0000     inf  MV Butting tap length < 140 (diff/tap.16)  []  <-- DIFERENTE
-         96.3200        96.3200    0.00  P-Diffusion overhang of pmos < 50 (poly.7)  [gpiov2_pad_wrapped]
-         74.0568        73.2711    1.07  Spacing of HV nwell to LV nwell < 2.0um (nwell.8)  [gpiov2_pad_wrapped]  <-- DIFERENTE
-         51.2984         0.0000     inf  MV Diffusion width < 58 (diff/tap.14)  []  <-- DIFERENTE
-         48.5680         3.0056 1515.92  MV Diffusion in N-well to P-tap spacing < 152 (diff/tap.20 + diff/tap.17,19)  [gpiov2_pad_wrapped]  <-- DIFERENTE
-         31.3933        31.4950   -0.32  MV N-diffusion to LV N-diffusion < 72 (diff/tap.23 + diff/tap.22)  [gpiov2_pad_wrapped]  <-- DIFERENTE
-         31.1308        31.2400   -0.35  LV N-diffusion to MV N-diffusion < 72 (diff/tap.23 + diff/tap.22)  [gpiov2_pad_wrapped]  <-- DIFERENTE
-          1.4980        26.5664  -94.36  MV P-diffusion to LV P-diffusion < 72 (diff/tap.23 + diff/tap.22)  [gpiov2_pad_wrapped]  <-- DIFERENTE
-          0.0228        25.0336  -99.91  LV P-diffusion to MV P-diffusion < 72 (diff/tap.23 + diff/tap.22)  [gpiov2_pad_wrapped]  <-- DIFERENTE
-         12.7494        12.7848   -0.28  P-tap contact width     < 34 (licon.1)  [gpiov2_pad_wrapped]  <-- DIFERENTE
-         12.7656        12.7656    0.00  N-well overlap of P-Diffusion < 36 (diff/tap.8)  [vccd_lvc_clamped_pad,vssd_lvc_clamped_pad]
-          8.7000         0.0000     inf  Min. space between N-tap contact and butting P diffusion < 12 (licon.5b)  []  <-- DIFERENTE
-          7.6000         7.6000    0.00  Diffusion spacing < 54 (diff/tap.3)  [gpiov2_pad_wrapped]
-          5.2413         5.2626   -0.40  Diffusion width < 30 (diff/tap.1)  [gpiov2_pad_wrapped]  <-- DIFERENTE
-          4.0320         4.0320    0.00  Transistor width < 84 (diff/tap.2)  [gpiov2_pad_wrapped]
-          3.8544         3.8544    0.00  N-tap overlap of N-tap contact < 24 in one direction (licon.7)  [gpiov2_pad_wrapped]
-          2.5944         2.3136   12.14  MV Tap width < 30 (diff/tap.1)  [gpiov2_pad_wrapped]  <-- DIFERENTE
-          2.5600         2.5600    0.00  Only 90 degree angles permitted on poly (x.2)  [gpiov2_pad_wrapped]
-          1.9456         0.3050  537.90  HVNTM spacing < 140 (hvntm.2)  [gpiov2_pad_wrapped]  <-- DIFERENTE
-          1.8166         1.7952    1.19  Diffusion contact spacing < 34 (licon.2)  [gpiov2_pad_wrapped]  <-- DIFERENTE
-          0.9558         0.0000     inf  Width of HVNTM < 140 (hvntm.1)  []  <-- DIFERENTE
-          0.7230         0.7230    0.00  Spacing of metal2 features attached to and within 0.28um of large metal2 < 56 (met2.3a)  [vssa_hvc_clamped_pad,vssio_hvc_clamped_pad]
-          0.4320         0.4320    0.00  mcon.spacing < 38 (mcon.2)  [gpiov2_pad_wrapped]
-          0.3570         0.3570    0.00  N-tap contact width     < 34 (licon.1)  [gpiov2_pad_wrapped]
-          0.3342         0.0000     inf  MV P-Diffusion to MV N-tap spacing < 25 across butted junction (nsd.5a)  []  <-- DIFERENTE
-          0.2750         0.2750    0.00  N-well overlap of Deep N-well < 0.4um outside, 1.03um inside (nwell.5a, 7)  [gpiov2_pad_wrapped]
-          0.0884         0.0884    0.00  P-tap minimum area < 0.07011um^2 (psd.10b)  [gpiov2_pad_wrapped]
-          0.0388         0.0500  -22.40  via4 spacing < 84 (via4.2 - 2 * via4.4)  [corner_pad]  <-- DIFERENTE
-          0.0432         0.0432    0.00  Poly resistor spacing to poly < 96 (poly.9)  [gpiov2_pad_wrapped]
-          0.0420         0.0420    0.00  MV Diffusion spacing < 60 (diff/tap.15a)  [gpiov2_pad_wrapped]
-          0.0000         0.0310 -100.00  Metal1 minimum area < 3320 (met1.6)  [gpiov2_pad_wrapped]  <-- DIFERENTE
-          0.0192         0.0000     inf  MV P-Diffusion to MV N-tap spacing < 25 across butted junction (nsd.5b)  []  <-- DIFERENTE
-          0.0008         0.0008    0.00  No bends in transistors (poly.11)  [gpiov2_pad_wrapped]
-      30518.1154     25364.7581  TOTAL
+classe          chip um2 celulas um2   so chip so celula  regra
+metal/via         0.0194      0.0250    0.0069    0.0125  via4 spacing < 84 (via4.2 - 2 * via4.4)
+metal/via         0.0000      0.0310    0.0000    0.0310  Metal1 minimum area < 3320 (met1.6)
+metal/via         0.0000    399.7500    0.0000  399.7500  Metal5 minimum area < 160000 (met5.4)
+metal/via         0.7230      0.7230    0.0000    0.0000  Spacing of metal2 features attached to and within 0.28um of large metal2 < 56 (met2.3a)
+metal/via         0.3180      0.3180    0.0000    0.0000  mcon.spacing < 38 (mcon.2)
+outra          8425.6825   8378.1227   47.5598    0.0000  Can't overlap those layers
+outra           209.3689    209.3689    0.0000    0.0000  This layer can't abut or partially overlap between subcells
+dispositivo    7926.6879   7932.1298 5487.6355 5493.0774  LV to MV Diffusion spacing < 54 (diff/tap.3)
+dispositivo    2352.7366      0.0000 2352.7366    0.0000  Spacing of N-Diffusion or P-tap to MV nwell < 0.43um (diff/tap.18,20)
+dispositivo     127.0940      0.0000  127.0940    0.0000  MV Butting tap length < 140 (diff/tap.16)
+dispositivo      51.2984      0.0000   51.2984    0.0000  MV Diffusion width < 58 (diff/tap.14)
+dispositivo      34.6788      3.0056   33.1760    1.5028  MV Diffusion in N-well to P-tap spacing < 152 (diff/tap.20 + diff/tap.17,19)
+dispositivo      31.3933     31.4950   30.1438   30.2455  MV N-diffusion to LV N-diffusion < 72 (diff/tap.23 + diff/tap.22)
+dispositivo      31.1308     31.2400   29.9308   30.0400  LV N-diffusion to MV N-diffusion < 72 (diff/tap.23 + diff/tap.22)
+dispositivo       8.7000      0.0000    8.7000    0.0000  Min. space between N-tap contact and butting P diffusion < 12 (licon.5b)
+dispositivo       7.6000      7.6000    7.6000    7.6000  Diffusion spacing < 54 (diff/tap.3)
+dispositivo      12.7494     12.7768    7.4592    7.4866  P-tap contact width     < 34 (licon.1)
+dispositivo       5.2413      5.2626    2.6100    2.6313  Diffusion width < 30 (diff/tap.1)
+dispositivo       2.5944      2.3136    1.4376    1.1568  MV Tap width < 30 (diff/tap.1)
+dispositivo       1.4980     26.5664    1.1240   26.1924  MV P-diffusion to LV P-diffusion < 72 (diff/tap.23 + diff/tap.22)
+dispositivo       1.3581      1.3792    1.0880    1.1091  Diffusion contact spacing < 34 (licon.2)
+dispositivo       0.9728      0.3050    0.9728    0.3050  HVNTM spacing < 140 (hvntm.2)
+dispositivo       0.9557      0.0000    0.9557    0.0000  Width of HVNTM < 140 (hvntm.1)
+dispositivo       0.3342      0.0000    0.3342    0.0000  MV P-Diffusion to MV N-tap spacing < 25 across butted junction (nsd.5a)
+dispositivo       0.3570      0.3570    0.1785    0.1785  N-tap contact width     < 34 (licon.1)
+dispositivo      31.7224    135.0563    0.1136  103.4475  MV Diffusion to MV tap spacing < 54 (diff/tap.3)
+dispositivo       0.0420      0.0420    0.0420    0.0420  MV Diffusion spacing < 60 (diff/tap.15a)
+dispositivo     650.3232    657.2218    0.0345    6.9331  Spacing of HV nwell to HV nwell < 2.0um (nwell.8)
+dispositivo       0.0192      0.0000    0.0192    0.0000  MV P-Diffusion to MV N-tap spacing < 25 across butted junction (nsd.5b)
+dispositivo       0.0228     25.0336    0.0168   25.0276  LV P-diffusion to MV P-diffusion < 72 (diff/tap.23 + diff/tap.22)
+dispositivo    1997.0182   2015.1446    0.0000   18.1264  All HV nwell can contain only HV diffusion (diff/tap.21)
+dispositivo     165.3344    165.3344    0.0000    0.0000  All nwells must contain metal-connected N+ taps (nwell.4)
+dispositivo     246.9888    246.9888    0.0000    0.0000  Deep N-well spacing to N-well < 900 (nwell.7)
+dispositivo     188.1600    188.1600    0.0000    0.0000  N-Diffusion overhang of nFET < 50 (poly.7)
+dispositivo       3.0092      3.0092    0.0000    0.0000  N-tap overlap of N-tap contact < 24 in one direction (licon.7)
+dispositivo       0.2750      0.2750    0.0000    0.0000  N-well overlap of Deep N-well < 0.4um outside, 1.03um inside (nwell.5a, 7)
+dispositivo      12.5064     12.5064    0.0000    0.0000  N-well overlap of P-Diffusion < 36 (diff/tap.8)
+dispositivo       0.0008      0.0008    0.0000    0.0000  No bends in transistors (poly.11)
+dispositivo       2.5600      2.5600    0.0000    0.0000  Only 90 degree angles permitted on poly (x.2)
+dispositivo      62.7200     62.7200    0.0000    0.0000  P-Diffusion overhang of pmos < 50 (poly.7)
+dispositivo     137.5716    450.2868    0.0000  312.7152  P-diff distance to N-tap must be < 15.0um (LU.3)
+dispositivo       0.0884      0.0884    0.0000    0.0000  P-tap minimum area < 0.07011um^2 (psd.10b)
+dispositivo      39.1834    304.3754    0.0000  265.1920  P-tap overlap of P-tap contact < 24 in one direction (licon.7)
+dispositivo       0.0416      0.0416    0.0000    0.0000  Poly resistor spacing to poly < 96 (poly.9)
+dispositivo      33.3484     33.3484    0.0000    0.0000  Spacing of HV nwell to LV nwell < 2.0um (nwell.8)
+dispositivo       2.6880      2.6880    0.0000    0.0000  Transistor width < 84 (diff/tap.2)
 
-Veredito: 27 regra(s) com area diferente -- olhar as caixas abaixo:
-  Can't overlap those layers
-     5.185 1120.565 14.655 1120.620
-     17.985 1120.565 37.655 1120.620
-     40.985 1120.565 60.655 1120.620
-     5.185 1115.965 14.655 1116.555
-     17.985 1115.965 37.655 1116.555
-     40.985 1115.965 60.655 1116.555
-     125.535 1119.260 125.615 1119.590
-     132.985 1120.565 152.655 1120.620
-  Spacing of N-Diffusion or P-tap to MV nwell < 0.43um (diff/tap.18,20)
-     163.200 1100.460 170.200 1100.740
-     163.200 1099.680 170.200 1099.960
-     163.200 1098.900 170.200 1099.180
-     163.200 1098.120 170.200 1098.400
-     163.200 1097.340 170.200 1097.620
-     163.200 1096.560 170.200 1096.840
-     163.200 1095.780 170.200 1096.060
-     163.200 1095.000 170.200 1095.280
-  All HV nwell can contain only HV diffusion (diff/tap.21)
-     163.200 1100.460 170.200 1100.740
-     163.200 1099.680 170.200 1099.960
-     163.200 1098.900 170.200 1099.180
-     163.200 1098.120 170.200 1098.400
-     163.200 1097.340 170.200 1097.620
-     163.200 1096.560 170.200 1096.840
-     163.200 1095.780 170.200 1096.060
-     163.200 1095.000 170.200 1095.280
-  Spacing of HV nwell to HV nwell < 2.0um (nwell.8)
-     1097.945 136.040 1098.380 137.660
-     1078.040 86.260 1078.480 91.520
-     1083.000 86.260 1083.440 91.520
-     1087.960 86.260 1088.400 91.520
-     1092.920 86.260 1093.360 91.520
-     1097.880 86.260 1098.320 91.520
-     1078.040 78.260 1078.480 83.520
-     1083.000 78.260 1083.440 83.520
-  P-diff distance to N-tap must be < 15.0um (LU.3)
-     636.355 179.650 636.425 196.590
-     1078.480 86.390 1078.610 91.390
-     1079.910 86.390 1080.040 91.390
-     1083.440 86.390 1083.570 91.390
-     1084.870 86.390 1085.000 91.390
-     1088.400 86.390 1088.530 91.390
-     1089.830 86.390 1089.960 91.390
-     1093.360 86.390 1093.490 91.390
-  Metal5 minimum area < 160000 (met5.4)
-  P-tap overlap of P-tap contact < 24 in one direction (licon.7)
-     1082.015 153.505 1082.135 153.655
-     1082.015 153.485 1082.135 153.505
-     1082.015 153.150 1082.135 153.300
-     1082.015 153.130 1082.135 153.150
-     1082.015 152.795 1082.135 152.945
-     1082.015 152.775 1082.135 152.795
-     1082.015 152.440 1082.135 152.590
-     1082.015 152.420 1082.135 152.440
-  MV Diffusion to MV tap spacing < 54 (diff/tap.3)
-     1083.525 29.975 1083.590 30.025
-     1083.525 29.905 1083.590 29.975
-     1083.525 29.855 1083.590 29.905
-     1083.525 29.835 1083.590 29.855
-     1083.525 29.975 1083.590 30.025
-     1083.525 29.905 1083.590 29.975
-     1083.525 29.855 1083.590 29.905
-     1083.525 29.835 1083.590 29.855
-  MV Butting tap length < 140 (diff/tap.16)
-     1083.695 29.325 1100.960 29.855
-     1083.695 2171.145 1100.960 2171.675
-     1100.960 29.325 1119.275 29.855
-     1119.445 29.325 1143.815 29.855
-     1100.960 2171.145 1119.275 2171.675
-     1119.445 2171.145 1143.815 2171.675
-     1561.695 29.325 1597.275 29.855
-     1597.445 29.325 1621.815 29.855
-  Spacing of HV nwell to LV nwell < 2.0um (nwell.8)
-     1098.810 134.040 1100.380 134.190
-     1098.810 133.460 1099.510 134.190
-     1086.315 5.845 1091.675 6.025
-     1072.185 4.500 1072.670 6.055
-     1086.315 5.410 1086.920 6.025
-     1085.580 4.500 1086.920 5.410
-     1072.185 4.095 1072.670 6.055
-     1072.185 4.095 1072.670 6.055
-  MV Diffusion width < 58 (diff/tap.14)
-     1083.590 30.125 1100.960 30.315
-     1083.590 30.105 1100.960 30.125
-     1083.590 2171.145 1083.695 2171.185
-     1083.695 2171.145 1100.960 2171.185
-     1083.590 2171.095 1100.960 2171.145
-     1083.590 2171.025 1100.960 2171.095
-     1083.590 2170.975 1100.960 2171.025
-     1100.960 30.125 1124.900 30.315
-  MV Diffusion in N-well to P-tap spacing < 152 (diff/tap.20 + diff/tap.17,19)
-     1078.610 86.620 1078.910 86.780
-     1078.610 86.450 1078.665 86.620
-     1078.665 86.450 1078.835 86.620
-     1078.835 86.450 1078.910 86.620
-     1078.610 86.390 1078.910 86.450
-     1079.610 86.620 1079.815 86.780
-     1079.610 86.450 1079.685 86.620
-     1079.685 86.450 1079.815 86.620
-  MV N-diffusion to LV N-diffusion < 72 (diff/tap.23 + diff/tap.22)
-     1076.235 49.600 1076.390 49.950
-     1076.235 49.430 1076.290 49.600
-     1076.290 49.430 1076.390 49.600
-     1076.235 49.260 1076.390 49.430
-     1076.235 49.090 1076.290 49.260
-     1076.290 49.090 1076.390 49.260
-     1076.235 48.920 1076.390 49.090
-     1076.235 48.750 1076.290 48.920
-  LV N-diffusion to MV N-diffusion < 72 (diff/tap.23 + diff/tap.22)
-     1076.235 49.600 1076.390 49.950
-     1076.235 49.430 1076.290 49.600
-     1076.290 49.430 1076.390 49.600
-     1076.235 49.260 1076.390 49.430
-     1076.235 49.090 1076.290 49.260
-     1076.290 49.090 1076.390 49.260
-     1076.235 48.920 1076.390 49.090
-     1076.235 48.750 1076.290 48.920
-  MV P-diffusion to LV P-diffusion < 72 (diff/tap.23 + diff/tap.22)
-     1072.695 179.510 1073.055 179.530
-     1073.055 179.510 1073.335 179.530
-     1072.695 176.330 1073.055 176.350
-     1073.055 176.330 1073.335 176.350
-     1082.835 176.330 1082.850 176.350
-     1073.630 168.880 1073.990 168.900
-     1073.990 168.880 1074.270 168.900
-     1073.495 165.620 1073.855 165.640
-  LV P-diffusion to MV P-diffusion < 72 (diff/tap.23 + diff/tap.22)
-     1082.835 176.330 1082.850 176.350
-     1075.615 165.620 1075.630 165.640
-     1075.615 2035.720 1075.630 2035.740
-     1082.835 2025.010 1082.850 2025.030
-     1101.335 140.005 1101.350 140.025
-     1103.955 140.005 1103.970 140.025
-     1117.670 2.225 1117.685 2.245
-     1103.990 198.170 1104.005 198.190
-  P-tap contact width     < 34 (licon.1)
-     1090.360 149.400 1090.450 149.570
-     1090.450 149.400 1090.530 149.570
-     1093.495 149.400 1093.510 149.570
-     1093.510 149.400 1093.665 149.570
-     1072.630 125.655 1072.775 125.735
-     1072.630 125.625 1072.775 125.655
-     1072.775 125.655 1072.800 125.735
-     1072.775 125.625 1072.800 125.655
-  Min. space between N-tap contact and butting P diffusion < 12 (licon.5b)
-     1083.530 30.125 1100.960 30.165
-     1083.590 2170.895 1100.960 2170.935
-     1100.960 30.125 1124.900 30.165
-     1125.075 30.125 1125.245 30.165
-     1125.420 30.125 1125.590 30.165
-     1125.765 30.125 1125.935 30.165
-     1126.110 30.125 1126.280 30.165
-     1126.455 30.125 1126.625 30.165
-  Diffusion width < 30 (diff/tap.1)
-     1072.240 106.925 1072.630 107.015
-     1072.630 106.925 1072.800 107.015
-     1072.800 106.925 1072.970 107.015
-     1072.970 106.925 1073.140 107.015
-     1073.140 106.925 1073.310 107.015
-     1073.310 106.925 1073.480 107.015
-     1073.480 106.925 1073.650 107.015
-     1073.650 106.925 1073.820 107.015
-  MV Tap width < 30 (diff/tap.1)
-     1072.260 125.565 1072.630 125.605
-     1072.630 125.565 1072.800 125.605
-     1072.800 125.565 1072.970 125.605
-     1072.970 125.565 1073.140 125.605
-     1073.140 125.565 1073.310 125.605
-     1073.310 125.565 1073.480 125.605
-     1073.480 125.565 1073.650 125.605
-     1073.650 125.565 1073.820 125.605
-  HVNTM spacing < 140 (hvntm.2)
-     1133.650 186.600 1133.810 186.660
-     1133.650 185.900 1133.810 186.600
-     1133.650 186.600 1133.810 186.660
-     1133.650 185.900 1133.810 186.600
-     1134.350 185.900 1134.510 186.600
-     1134.350 186.600 1134.510 186.660
-     1134.350 185.900 1134.510 186.600
-     1134.350 186.600 1134.510 186.660
-  Diffusion contact spacing < 34 (licon.2)
-     1070.915 126.190 1071.085 126.290
-     1070.915 125.565 1071.085 125.610
-     1070.915 125.510 1071.085 125.565
-     1070.915 107.050 1071.085 107.150
-     1071.085 107.050 1071.255 107.150
-     1070.915 106.370 1071.085 106.470
-     1071.085 106.370 1071.255 106.470
-     1070.915 126.190 1071.085 126.290
-  Width of HVNTM < 140 (hvntm.1)
-     1099.520 172.270 1100.175 172.330
-     1098.820 2029.365 1099.475 2029.430
-     1141.890 9.650 1142.055 10.350
-     1142.590 9.400 1142.755 9.650
-     1142.590 4.940 1142.755 5.100
-     1142.590 5.100 1142.755 5.190
-     1141.890 2196.060 1142.055 2196.760
-     1142.590 2195.810 1142.755 2195.900
-  MV P-Diffusion to MV N-tap spacing < 25 across butted junction (nsd.5a)
-     1083.465 30.125 1083.590 30.230
-     1083.465 30.105 1083.590 30.125
-     1083.465 30.025 1083.525 30.105
-     1083.465 29.975 1083.590 30.025
-     1083.465 29.905 1083.590 29.975
-     1083.465 29.900 1083.590 29.905
-     1083.465 2171.095 1083.590 2171.100
-     1083.465 2171.025 1083.590 2171.095
-  via4 spacing < 84 (via4.2 - 2 * via4.4)
-     181.310 156.935 181.320 157.280
-     181.310 156.935 181.320 157.280
-     180.890 2044.065 180.900 2044.485
-     181.310 2043.860 181.320 2044.065
-     180.890 2044.065 180.900 2044.485
-     181.310 2043.860 181.320 2044.065
-     2518.680 157.140 2518.690 157.280
-     2519.100 156.935 2519.110 157.140
-  Metal1 minimum area < 3320 (met1.6)
-  MV P-Diffusion to MV N-tap spacing < 25 across butted junction (nsd.5b)
-     1083.590 30.025 1083.650 30.105
-     1083.590 2170.895 1083.650 2170.975
-     1561.590 30.025 1561.650 30.105
-     1561.590 2170.895 1561.650 2170.975
+Onde cai o que so existe no chip (por regra; ate 6 trechos):
+
+[metal/via] via4 spacing < 84 (via4.2 - 2 * via4.4): 0.0069 um2 em 3 trecho(s)
+     181.310   156.935   181.320   157.280  em IO_CORNER_SOUTH_WEST_INST (corner_pad), a 18.69 um da borda
+     181.310  2043.860   181.320  2044.065  em IO_CORNER_NORTH_WEST_INST (corner_pad), a 18.69 um da borda
+    2518.680   157.140  2518.690   157.280  em IO_CORNER_SOUTH_EAST_INST (corner_pad), a 18.68 um da borda
+
+[dispositivo] LV to MV Diffusion spacing < 54 (diff/tap.3): 5487.6355 um2 em 5818 trecho(s)
+    2037.210  2048.180  2037.480  2068.180  em pad_vddio (vddio_hvc_clamped_pad), a 10.35 um da borda
+    2040.510  2048.180  2040.780  2068.180  em pad_vddio (vddio_hvc_clamped_pad), a 13.64 um da borda
+    2041.810  2048.180  2042.080  2068.180  em pad_vddio (vddio_hvc_clamped_pad), a 14.95 um da borda
+    2045.110  2048.180  2045.380  2068.180  em pad_vddio (vddio_hvc_clamped_pad), a 18.25 um da borda
+    2046.410  2048.180  2046.680  2068.180  em pad_vddio (vddio_hvc_clamped_pad), a 19.55 um da borda
+    2049.710  2048.180  2049.980  2068.180  em pad_vddio (vddio_hvc_clamped_pad), a 22.85 um da borda
+
+[dispositivo] Spacing of N-Diffusion or P-tap to MV nwell < 0.43um (diff/tap.18,20): 2352.7366 um2 em 18484 trecho(s)
+    1548.915  2073.420  1581.475  2075.435  em pad_tx (gpiov2_pad_wrapped), a 16.20 um da borda
+    1548.915  2094.075  1581.475  2096.090  em pad_tx (gpiov2_pad_wrapped), a 16.20 um da borda
+    1070.915  2073.420  1103.475  2075.435  em pad_rx (gpiov2_pad_wrapped), a 16.20 um da borda
+    1070.915  2094.075  1103.475  2096.090  em pad_rx (gpiov2_pad_wrapped), a 16.20 um da borda
+    1070.915   104.910  1103.475   106.925  em pad_clk (gpiov2_pad_wrapped), a 16.20 um da borda
+    1070.915   125.565  1103.475   127.580  em pad_clk (gpiov2_pad_wrapped), a 16.20 um da borda
+
+[dispositivo] MV Butting tap length < 140 (diff/tap.16): 127.0940 um2 em 8 trecho(s)
+    1083.695    29.325  1119.275    29.855  em pad_clk (gpiov2_pad_wrapped), a 29.59 um da borda
+    1561.695    29.325  1597.275    29.855  em pad_rstn (gpiov2_pad_wrapped), a 29.59 um da borda
+    1083.695  2171.145  1119.275  2171.675  em pad_rx (gpiov2_pad_wrapped), a 29.59 um da borda
+    1561.695  2171.145  1597.275  2171.675  em pad_tx (gpiov2_pad_wrapped), a 29.59 um da borda
+    1119.445    29.325  1143.815    29.855  em pad_clk (gpiov2_pad_wrapped), a 19.37 um da borda
+    1597.445    29.325  1621.815    29.855  em pad_rstn (gpiov2_pad_wrapped), a 19.37 um da borda
+
+[dispositivo] MV Diffusion width < 58 (diff/tap.14): 51.2984 um2 em 16 trecho(s)
+    1083.590    30.105  1144.490    30.315  em pad_clk (gpiov2_pad_wrapped), a 30.21 um da borda
+    1561.590    30.105  1622.490    30.315  em pad_rstn (gpiov2_pad_wrapped), a 30.21 um da borda
+    1083.590  2170.975  1144.490  2171.185  em pad_rx (gpiov2_pad_wrapped), a 29.92 um da borda
+    1561.590  2170.975  1622.490  2171.185  em pad_tx (gpiov2_pad_wrapped), a 29.92 um da borda
+    1139.215    14.370  1139.385    14.530  em pad_clk (gpiov2_pad_wrapped), a 11.70 um da borda
+    1145.385    14.370  1145.555    14.530  em pad_clk (gpiov2_pad_wrapped), a 5.53 um da borda
+
+[outra] Can't overlap those layers: 47.5598 um2 em 48 trecho(s)
+    1083.590    25.845  1119.145    25.955  em pad_clk (gpiov2_pad_wrapped), a 25.90 um da borda
+    1561.590    25.845  1597.145    25.955  em pad_rstn (gpiov2_pad_wrapped), a 25.90 um da borda
+    1083.590  2175.045  1119.145  2175.155  em pad_rx (gpiov2_pad_wrapped), a 25.90 um da borda
+    1561.590  2175.045  1597.145  2175.155  em pad_tx (gpiov2_pad_wrapped), a 25.90 um da borda
+    1074.345    25.685  1083.375    30.105  em pad_clk (gpiov2_pad_wrapped), a 7.86 um da borda
+    1552.345    25.685  1561.375    30.105  em pad_rstn (gpiov2_pad_wrapped), a 7.86 um da borda
+
+[dispositivo] MV Diffusion in N-well to P-tap spacing < 152 (diff/tap.20 + diff/tap.17,19): 33.1760 um2 em 156 trecho(s)
+    1556.705  2114.980  1557.815  2115.370  em pad_tx (gpiov2_pad_wrapped), a 8.26 um da borda
+    1561.665  2114.980  1562.775  2115.370  em pad_tx (gpiov2_pad_wrapped), a 13.22 um da borda
+    1566.625  2114.980  1567.735  2115.370  em pad_tx (gpiov2_pad_wrapped), a 18.18 um da borda
+    1571.585  2114.980  1572.695  2115.370  em pad_tx (gpiov2_pad_wrapped), a 23.14 um da borda
+    1576.545  2114.980  1577.655  2115.370  em pad_tx (gpiov2_pad_wrapped), a 28.10 um da borda
+    1581.505  2114.980  1582.615  2115.370  em pad_tx (gpiov2_pad_wrapped), a 33.06 um da borda
+
+[dispositivo] MV N-diffusion to LV N-diffusion < 72 (diff/tap.23 + diff/tap.22): 30.1438 um2 em 60 trecho(s)
+    1076.235    36.945  1076.390    41.945  em pad_clk (gpiov2_pad_wrapped), a 5.31 um da borda
+    1077.080    36.945  1077.235    41.945  em pad_clk (gpiov2_pad_wrapped), a 6.16 um da borda
+    1079.890    36.945  1080.045    41.945  em pad_clk (gpiov2_pad_wrapped), a 8.97 um da borda
+    1141.200    36.945  1141.355    41.945  em pad_clk (gpiov2_pad_wrapped), a 9.72 um da borda
+    1554.235    36.945  1554.390    41.945  em pad_rstn (gpiov2_pad_wrapped), a 5.31 um da borda
+    1555.080    36.945  1555.235    41.945  em pad_rstn (gpiov2_pad_wrapped), a 6.16 um da borda
+
+[dispositivo] LV N-diffusion to MV N-diffusion < 72 (diff/tap.23 + diff/tap.22): 29.9308 um2 em 46 trecho(s)
+    1076.235    36.945  1076.390    41.945  em pad_clk (gpiov2_pad_wrapped), a 5.31 um da borda
+    1077.080    36.945  1077.235    41.945  em pad_clk (gpiov2_pad_wrapped), a 6.16 um da borda
+    1079.890    36.945  1080.045    41.945  em pad_clk (gpiov2_pad_wrapped), a 8.97 um da borda
+    1141.200    36.945  1141.355    41.945  em pad_clk (gpiov2_pad_wrapped), a 9.72 um da borda
+    1554.235    36.945  1554.390    41.945  em pad_rstn (gpiov2_pad_wrapped), a 5.31 um da borda
+    1555.080    36.945  1555.235    41.945  em pad_rstn (gpiov2_pad_wrapped), a 6.16 um da borda
+
+[dispositivo] Min. space between N-tap contact and butting P diffusion < 12 (licon.5b): 8.7000 um2 em 232 trecho(s)
+    1561.590  2170.895  1602.960  2170.935  em pad_tx (gpiov2_pad_wrapped), a 30.09 um da borda
+    1083.590  2170.895  1124.960  2170.935  em pad_rx (gpiov2_pad_wrapped), a 30.09 um da borda
+    1083.530    30.125  1124.900    30.165  em pad_clk (gpiov2_pad_wrapped), a 30.14 um da borda
+    1561.530    30.125  1602.900    30.165  em pad_rstn (gpiov2_pad_wrapped), a 30.14 um da borda
+    1603.015  2170.895  1603.305  2170.935  em pad_tx (gpiov2_pad_wrapped), a 25.84 um da borda
+    1603.360  2170.895  1603.650  2170.935  em pad_tx (gpiov2_pad_wrapped), a 25.49 um da borda
+
+[dispositivo] Diffusion spacing < 54 (diff/tap.3): 7.6000 um2 em 8 trecho(s)
+    1076.595    36.945  1076.785    41.945  em pad_clk (gpiov2_pad_wrapped), a 5.69 um da borda
+    1554.595    36.945  1554.785    41.945  em pad_rstn (gpiov2_pad_wrapped), a 5.69 um da borda
+    1076.595    44.950  1076.785    49.950  em pad_clk (gpiov2_pad_wrapped), a 5.69 um da borda
+    1554.595    44.950  1554.785    49.950  em pad_rstn (gpiov2_pad_wrapped), a 5.69 um da borda
+    1076.595  2151.050  1076.785  2156.050  em pad_rx (gpiov2_pad_wrapped), a 5.69 um da borda
+    1554.595  2151.050  1554.785  2156.050  em pad_tx (gpiov2_pad_wrapped), a 5.69 um da borda
+
+[dispositivo] P-tap contact width     < 34 (licon.1): 7.4592 um2 em 412 trecho(s)
+    1594.115  2006.230  1594.285  2006.400  em pad_tx (gpiov2_pad_wrapped), a 16.28 um da borda
+    1568.360  2051.430  1568.530  2051.600  em pad_tx (gpiov2_pad_wrapped), a 19.45 um da borda
+    1571.495  2051.430  1571.665  2051.600  em pad_tx (gpiov2_pad_wrapped), a 22.58 um da borda
+    1583.405  2051.430  1583.575  2051.600  em pad_tx (gpiov2_pad_wrapped), a 34.49 um da borda
+    1093.495  2051.430  1093.665  2051.600  em pad_rx (gpiov2_pad_wrapped), a 22.58 um da borda
+    1105.405  2051.430  1105.575  2051.600  em pad_rx (gpiov2_pad_wrapped), a 34.49 um da borda
+
+[dispositivo] Diffusion width < 30 (diff/tap.1): 2.6100 um2 em 2 trecho(s)
+    1072.240   106.925  1086.740   107.015  em pad_clk (gpiov2_pad_wrapped), a 8.49 um da borda
+    1550.240   106.925  1564.740   107.015  em pad_rstn (gpiov2_pad_wrapped), a 8.49 um da borda
+
+[dispositivo] MV Tap width < 30 (diff/tap.1): 1.4376 um2 em 6 trecho(s)
+    1072.260   125.565  1086.720   125.605  em pad_clk (gpiov2_pad_wrapped), a 8.49 um da borda
+    1550.260   125.565  1564.720   125.605  em pad_rstn (gpiov2_pad_wrapped), a 8.49 um da borda
+    1150.310   163.420  1150.350   165.175  em pad_clk (gpiov2_pad_wrapped), a 0.67 um da borda
+    1628.310   163.420  1628.350   165.175  em pad_rstn (gpiov2_pad_wrapped), a 0.67 um da borda
+    1150.310  2035.825  1150.350  2037.580  em pad_rx (gpiov2_pad_wrapped), a 0.67 um da borda
+    1628.310  2035.825  1628.350  2037.580  em pad_tx (gpiov2_pad_wrapped), a 0.67 um da borda
+
+[dispositivo] MV P-diffusion to LV P-diffusion < 72 (diff/tap.23 + diff/tap.22): 1.1240 um2 em 142 trecho(s)
+    1134.265   198.170  1134.905   198.190  em pad_clk (gpiov2_pad_wrapped), a 12.78 um da borda
+    1135.145   198.170  1135.785   198.190  em pad_clk (gpiov2_pad_wrapped), a 12.78 um da borda
+    1136.025   198.170  1136.665   198.190  em pad_clk (gpiov2_pad_wrapped), a 12.78 um da borda
+    1136.905   198.170  1137.545   198.190  em pad_clk (gpiov2_pad_wrapped), a 12.78 um da borda
+    1137.785   198.170  1138.425   198.190  em pad_clk (gpiov2_pad_wrapped), a 12.78 um da borda
+    1141.045   198.170  1141.685   198.190  em pad_clk (gpiov2_pad_wrapped), a 9.63 um da borda
+
+[dispositivo] Diffusion contact spacing < 34 (licon.2): 1.0880 um2 em 112 trecho(s)
+    1070.915   106.370  1071.255   106.470  em pad_clk (gpiov2_pad_wrapped), a 0.09 um da borda
+    1548.915   106.370  1549.255   106.470  em pad_rstn (gpiov2_pad_wrapped), a 0.09 um da borda
+    1070.915   107.050  1071.255   107.150  em pad_clk (gpiov2_pad_wrapped), a 0.09 um da borda
+    1548.915   107.050  1549.255   107.150  em pad_rstn (gpiov2_pad_wrapped), a 0.09 um da borda
+    1070.915   125.510  1071.085   125.610  em IO_FILL_IO_SOUTH_1_397 (com_bus_slice_1um), a 0.00 um da borda
+    1548.915   125.510  1549.085   125.610  em IO_FILL_IO_SOUTH_2_397 (com_bus_slice_1um), a 0.00 um da borda
+
+[dispositivo] HVNTM spacing < 140 (hvntm.2): 0.9728 um2 em 8 trecho(s)
+    1133.650   185.900  1133.810   186.660  em pad_clk (gpiov2_pad_wrapped), a 17.27 um da borda
+    1134.350   185.900  1134.510   186.660  em pad_clk (gpiov2_pad_wrapped), a 16.57 um da borda
+    1611.650   185.900  1611.810   186.660  em pad_rstn (gpiov2_pad_wrapped), a 17.27 um da borda
+    1612.350   185.900  1612.510   186.660  em pad_rstn (gpiov2_pad_wrapped), a 16.57 um da borda
+    1133.650  2014.340  1133.810  2015.100  em pad_rx (gpiov2_pad_wrapped), a 17.27 um da borda
+    1134.350  2014.340  1134.510  2015.100  em pad_rx (gpiov2_pad_wrapped), a 16.57 um da borda
+
+[dispositivo] Width of HVNTM < 140 (hvntm.1): 0.9557 um2 em 16 trecho(s)
+    1141.890     9.650  1142.055    10.350  em pad_clk (gpiov2_pad_wrapped), a 9.03 um da borda
+    1619.890     9.650  1620.055    10.350  em pad_rstn (gpiov2_pad_wrapped), a 9.03 um da borda
+    1141.890  2196.060  1142.055  2196.760  em pad_rx (gpiov2_pad_wrapped), a 4.59 um da borda
+    1619.890  2196.060  1620.055  2196.760  em pad_tx (gpiov2_pad_wrapped), a 4.59 um da borda
+    1098.820  2029.365  1099.475  2029.430  em pad_rx (gpiov2_pad_wrapped), a 28.15 um da borda
+    1576.820  2029.365  1577.475  2029.430  em pad_tx (gpiov2_pad_wrapped), a 28.15 um da borda
+
+[dispositivo] MV P-Diffusion to MV N-tap spacing < 25 across butted junction (nsd.5a): 0.3342 um2 em 20 trecho(s)
+    1083.465    29.900  1083.590    30.230  em pad_clk (gpiov2_pad_wrapped), a 12.53 um da borda
+    1561.465    29.900  1561.590    30.230  em pad_rstn (gpiov2_pad_wrapped), a 12.53 um da borda
+    1083.465  2170.770  1083.590  2171.100  em pad_rx (gpiov2_pad_wrapped), a 12.53 um da borda
+    1561.465  2170.770  1561.590  2171.100  em pad_tx (gpiov2_pad_wrapped), a 12.53 um da borda
+    1139.385    14.115  1139.510    14.240  em pad_clk (gpiov2_pad_wrapped), a 11.55 um da borda
+    1145.260    14.115  1145.385    14.240  em pad_clk (gpiov2_pad_wrapped), a 5.68 um da borda
+
+[dispositivo] N-tap contact width     < 34 (licon.1): 0.1785 um2 em 8 trecho(s)
+    1114.760   106.925  1114.930   107.095  em pad_clk (gpiov2_pad_wrapped), a 36.15 um da borda
+    1592.760   106.925  1592.930   107.095  em pad_rstn (gpiov2_pad_wrapped), a 36.15 um da borda
+    1114.760   125.565  1114.930   125.735  em pad_clk (gpiov2_pad_wrapped), a 36.15 um da borda
+    1592.760   125.565  1592.930   125.735  em pad_rstn (gpiov2_pad_wrapped), a 36.15 um da borda
+    1070.915   125.565  1071.085   125.680  em IO_FILL_IO_SOUTH_1_397 (com_bus_slice_1um), a 0.00 um da borda
+    1548.915   125.565  1549.085   125.680  em IO_FILL_IO_SOUTH_2_397 (com_bus_slice_1um), a 0.00 um da borda
+
+[dispositivo] MV Diffusion to MV tap spacing < 54 (diff/tap.3): 0.1136 um2 em 8 trecho(s)
+    1083.590    30.025  1083.795    30.105  em pad_clk (gpiov2_pad_wrapped), a 12.69 um da borda
+    1561.590    30.025  1561.795    30.105  em pad_rstn (gpiov2_pad_wrapped), a 12.69 um da borda
+    1083.590  2170.895  1083.795  2170.975  em pad_rx (gpiov2_pad_wrapped), a 12.69 um da borda
+    1561.590  2170.895  1561.795  2170.975  em pad_tx (gpiov2_pad_wrapped), a 12.69 um da borda
+    1083.375    30.025  1083.525    30.105  em pad_clk (gpiov2_pad_wrapped), a 12.45 um da borda
+    1561.375    30.025  1561.525    30.105  em pad_rstn (gpiov2_pad_wrapped), a 12.45 um da borda
+
+[dispositivo] MV Diffusion spacing < 60 (diff/tap.15a): 0.0420 um2 em 4 trecho(s)
+    1125.190   178.670  1125.225   178.970  em pad_clk (gpiov2_pad_wrapped), a 25.79 um da borda
+    1603.190   178.670  1603.225   178.970  em pad_rstn (gpiov2_pad_wrapped), a 25.79 um da borda
+    1139.065  2026.480  1139.100  2026.780  em pad_rx (gpiov2_pad_wrapped), a 11.92 um da borda
+    1617.065  2026.480  1617.100  2026.780  em pad_tx (gpiov2_pad_wrapped), a 11.92 um da borda
+
+[dispositivo] Spacing of HV nwell to HV nwell < 2.0um (nwell.8): 0.0345 um2 em 4 trecho(s)
+    1099.945   137.835  1099.950   139.660  em pad_clk (gpiov2_pad_wrapped), a 28.95 um da borda
+    1577.945   137.835  1577.950   139.660  em pad_rstn (gpiov2_pad_wrapped), a 28.95 um da borda
+    1097.945   136.040  1097.950   137.660  em pad_clk (gpiov2_pad_wrapped), a 26.95 um da borda
+    1575.945   136.040  1575.950   137.660  em pad_rstn (gpiov2_pad_wrapped), a 26.95 um da borda
+
+[dispositivo] MV P-Diffusion to MV N-tap spacing < 25 across butted junction (nsd.5b): 0.0192 um2 em 4 trecho(s)
+    1083.590    30.025  1083.650    30.105  em pad_clk (gpiov2_pad_wrapped), a 12.62 um da borda
+    1561.590    30.025  1561.650    30.105  em pad_rstn (gpiov2_pad_wrapped), a 12.62 um da borda
+    1083.590  2170.895  1083.650  2170.975  em pad_rx (gpiov2_pad_wrapped), a 12.62 um da borda
+    1561.590  2170.895  1561.650  2170.975  em pad_tx (gpiov2_pad_wrapped), a 12.62 um da borda
+
+[dispositivo] LV P-diffusion to MV P-diffusion < 72 (diff/tap.23 + diff/tap.22): 0.0168 um2 em 22 trecho(s)
+    1125.475   178.670  1125.490   179.030  em pad_clk (gpiov2_pad_wrapped), a 25.52 um da borda
+    1603.475   178.670  1603.490   179.030  em pad_rstn (gpiov2_pad_wrapped), a 25.52 um da borda
+    1117.670     2.225  1117.685     2.245  em pad_clk (gpiov2_pad_wrapped), a 2.24 um da borda
+    1595.670     2.225  1595.685     2.245  em pad_rstn (gpiov2_pad_wrapped), a 2.24 um da borda
+    1101.335   140.005  1101.350   140.025  em pad_clk (gpiov2_pad_wrapped), a 30.34 um da borda
+    1103.955   140.005  1103.970   140.025  em pad_clk (gpiov2_pad_wrapped), a 32.96 um da borda
+
+Veredito:
+  metal/via: 1 regra(s) com erro so no chip -- olhar os trechos acima.
+  dispositivo/outra: 24 regra(s) com erro so no chip (camadas que so existem dentro das celulas da foundry: ver os trechos e a distancia ate a borda).
