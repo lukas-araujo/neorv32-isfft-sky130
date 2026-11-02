@@ -403,22 +403,34 @@ que não existem; o mesmo da etapa 9 do GDSII). Nenhum erro.
 equivalência formal; a simulação (2b) roda o mesmo teste que validou a Kria,
 o RTL e o netlist sem scan.
 
-### 🐛 Bloco 3 — Modus sem licença (`TDA-011`)
+### 🐛 Bloco 3 — Modus sem licença (`TDA-011`): licença 25.1, Modus 26.1
 
 **Sintoma:** `modus -file runmodus.atpg.tcl` abre ("Starting Modus DFT
 Software Solution Tcl UI") e para na hora:
 `ERROR (TDA-011): Failed to obtain a license to run Modus Tcl User Interface.
 Attempted to check out ... Modus_common_ui (1) ... CDS_LIC_FILE=5280@192.168.2.250`.
-**Causa:** a investigar. Ou o servidor da VM não tem o recurso
-`Modus_common_ui` (o software está instalado — `MODUS261` no PATH —, mas
-instalar não é licenciar), ou todas as cópias estavam em uso.
-**Resolvi com:** (em andamento) `lmstat -a` no servidor para listar os
-recursos de teste e o uso. Se não houver licença: plano B com ATPG aberto
-na nuvem (o netlist com scan, com os flip-flops cortados, vira um circuito
-combinacional; Atalanta), para ver o conceito — falhas, padrões, cobertura —
-mesmo sem o Modus.
-**Vira slide?** Sim, se for falta de licença: "ferramenta instalada ≠
-ferramenta licenciada".
+**Investigação (Lukas, na VM):**
+
+| Comando | Resultado |
+|---|---|
+| `lmstat -a` (servidor) | `Modus_common_ui`, `modus_atpg`, `modus_atpg_mcpu`, `Modus_DFT_Opt`: **95 emitidas, 0 em uso** (não é fila) |
+| `lmstat -i Modus_common_ui` | **v25.1**, 95, `cdslmd`, expira 31-mai-2027 |
+| `lmdiag -n Modus_common_ui` | servidor `licserver.ibti.org.br`; flutuante 1-jun-2026 a 31-mai-2027; "This license can be checked out" (testado na v25.1) |
+| `ls -d /tools/cadence/*MODUS*` | só `MODUS261` |
+
+**Causa:** licença FlexNet é um **teto de versão**: a v25.1 vale para o Modus
+≤ 25.1. O Modus da VM é o **26.1** (atualização de out/2026, DIARIO_UVM 6ª
+sessão) e pede a v26.1. O Conformal 26.1 e o Xcelium 26.03 pegam licença:
+as deles foram atualizadas; a do Modus, não. O `lmdiag` diz que pode retirar
+porque testa na versão da própria licença.
+**Resolvi com:** não se resolve daqui. Depende do administrador da VM:
+instalar o Modus 25.1 (a licença 25.1 está válida, 95 livres) ou atualizar a
+licença para 26.1. Com o 25.1 instalado, basta trocar `MODUS261` no PATH do
+bloco 3. Alternativa oferecida ao Lukas: ATPG aberto na nuvem para ver o
+conceito (circuito com os flip-flops cortados = combinacional).
+**Tempo gasto:** ~15 min.
+**Vira slide?** Sim: "ferramenta instalada ≠ ferramenta licenciada — e a
+licença tem versão".
 
 **Etapa 4 de graça:** o `run_fullscan_sim` já existe; entrou como bloco 4
 do `run_first_dft.tcl` (rodar depois do 3).
@@ -455,7 +467,7 @@ do `run_first_dft.tcl` (rodar depois do 3).
 - [x] ~~VM: bloco 1 (Genus)~~ — passou (2ª sessão)
 - [x] ~~VM: bloco 2a (LEC)~~ — PASS (2ª sessão)
 - [x] ~~VM: bloco 2b (Kria no netlist com scan)~~ — PASSOU, 10 s (2ª sessão)
-- [ ] VM: bloco 3 (Modus) — **parou por licença** (`TDA-011`, `Modus_common_ui`); conferir `lmstat`
+- [ ] VM: bloco 3 (Modus) — **bloqueado**: licença v25.1 × Modus 26.1 (`TDA-011`). Lukas pede ao administrador o Modus 25.1 ou licença 26.1
 - [ ] VM: bloco 4 (`run_fullscan_sim`)
 - [ ] `traz_dft.sh … scan` com tudo
 - [ ] Comparar área/timing com a síntese sem DFT (o IP sozinho: rodar o mesmo script sem scan? ou ler o `u_isfft` do `_area_hier.rpt` do chip)
