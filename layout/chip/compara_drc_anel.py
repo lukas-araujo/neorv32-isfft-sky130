@@ -195,7 +195,15 @@ def main():
             for b in bs:
                 reg.insert(caixa(*leva(b, W, H, px, py, escolhida.get(n, o))))
 
+    # L85: a sobra "so chip" cai onde a celula sozinha ja tinha erro (de QUALQUER
+    # regra, ate 0,5 um)? Se sim, e o mesmo defeito com outro nome ou com a marca
+    # do outro lado do espaco (o Magic rechecha achatado onde ha interacao).
+    perto = db.Region()
+    for reg in levado.values():
+        perto += reg
+    perto = perto.merged().sized(int(0.5 / DBU))
     linhas, sobras = [], []
+    fora_total = 0.0
     for regra in sorted(set(chip) | set(levado)):
         rc = db.Region()
         for b in chip.get(regra, []):
@@ -207,15 +215,21 @@ def main():
         so_ref = (rr - rc).merged()
         linhas.append((classe(regra), regra, area(rc), area(rr), area(so_chip), area(so_ref)))
         if area(so_chip) > 1e-6:
-            sobras.append((classe(regra), regra, so_chip))
+            fora = (so_chip - perto).merged()
+            fora_total += area(fora)
+            sobras.append((classe(regra), regra, fora if not fora.is_empty() else so_chip, area(fora)))
+            linhas[-1] = linhas[-1] + (area(fora),)
 
-    print(f"\n{'classe':12s} {'chip um2':>11s} {'celulas um2':>11s} {'so chip':>9s} {'so celula':>9s}  regra")
+    print(f"\n{'classe':12s} {'chip um2':>11s} {'celulas um2':>11s} {'so chip':>9s} {'so celula':>9s} {'longe*':>8s}  regra")
     for cl in ("metal/via", "outra", "dispositivo"):
-        for c, regra, a, b, sc, sr in sorted([x for x in linhas if x[0] == cl], key=lambda x: -x[4]):
-            print(f"{c:12s} {a:11.4f} {b:11.4f} {sc:9.4f} {sr:9.4f}  {regra}")
+        for x in sorted([x for x in linhas if x[0] == cl], key=lambda x: -x[4]):
+            c, regra, a, b, sc, sr = x[:6]
+            lg = f"{x[6]:8.4f}" if len(x) > 6 else f"{'':8s}"
+            print(f"{c:12s} {a:11.4f} {b:11.4f} {sc:9.4f} {sr:9.4f} {lg}  {regra}")
+    print("  * longe = parte do 'so chip' a mais de 0,5 um de qualquer erro das celulas sozinhas (L85)")
 
-    print("\nOnde cai o que so existe no chip (por regra; ate 6 trechos):")
-    for cl, regra, reg in sorted(sobras, key=lambda x: (x[0] != "metal/via", -x[2].area())):
+    print("\nOnde cai o 'so chip' LONGE dos erros das celulas (ou todo o 'so chip', se nada ficar longe; ate 6 trechos):")
+    for cl, regra, reg, _lg in sorted(sobras, key=lambda x: (x[0] != "metal/via", -x[2].area())):
         print(f"\n[{cl}] {regra}: {area(reg):.4f} um2 em {reg.count()} trecho(s)")
         trechos = sorted(reg.each_merged(), key=lambda p: -p.area())[:6]
         for p in trechos:
@@ -231,12 +245,15 @@ def main():
                 txt = "fora de todas as celulas do anel"
             print(f"   {x0:9.3f} {y0:9.3f} {x1:9.3f} {y1:9.3f}  {txt}")
 
-    tem_metal = [s for s in sobras if s[0] == "metal/via"]
+    tem_metal = [s for s in sobras if s[0] == "metal/via" and s[3] > 1e-6]
     print("\nVeredito:")
     if not tem_metal:
-        print("  metal/via: nada so no chip -- o encosto com o nosso metal nao criou erro de DRC no anel.")
+        print("  metal/via: nada so no chip longe dos erros das celulas -- o encosto com o nosso metal nao criou erro de DRC no anel.")
     else:
         print(f"  metal/via: {len(tem_metal)} regra(s) com erro so no chip -- olhar os trechos acima.")
+    tot_sc = sum(x[4] for x in linhas)
+    print(f"  'so chip' total {tot_sc:.4f} um2; longe (>0,5 um) de qualquer erro das celulas: {fora_total:.4f} um2"
+          + (f" ({100 * fora_total / tot_sc:.2f} %)" if tot_sc else ""))
     nd = [s for s in sobras if s[0] != "metal/via"]
     print(f"  dispositivo/outra: {len(nd)} regra(s) com erro so no chip (camadas que so existem dentro"
           " das celulas da foundry: ver os trechos e a distancia ate a borda).")

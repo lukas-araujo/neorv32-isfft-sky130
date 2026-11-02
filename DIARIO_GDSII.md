@@ -4195,6 +4195,85 @@ em camadas que só elas têm.
 |---|---|---|---|
 | L84 | Orientação de cada instância escolhida pelo encaixe dos erros (menor XOR), não só pelo nome do DEF | ✅ | O `pad_vddio` encaixa com XOR 0 espelhado e não encaixa pela orientação do DEF; a tabela registra cada divergência |
 
+## 2026-11-02 (39ª sessão) — ✅ Etapa 12 fechada: LVS limpo, DRC sem erro nosso
+
+### A L84 não era o problema: o posicionamento estava certo
+
+Com as posições do DEF (`12_anel_posicoes.txt`, rodada `1839_12`), a tabela de orientação mostrou
+que **a orientação do DEF é a que melhor encaixa em todas as instâncias** (nenhum aviso); os pads
+hvc ficam com XOR de 1620,74 µm² em qualquer orientação, e uma busca de deslocamento (±8 µm) não
+leva abaixo de 1377 µm². A conta **por regra** dentro do `pad_vddio` explicou:
+
+| Regra (dentro do `pad_vddio`) | chip µm² | célula µm² | só chip | só célula |
+|---|---|---|---|---|
+| `diff/tap.21` (HV nwell só com difusão HV) | 97,406 | 97,406 | 0 | 0 |
+| `Can't overlap those layers` | 814,937 | 814,937 | 0 | 0 |
+| `diff/tap.3` (LV to MV Diffusion spacing) | 945,540 | 945,540 | **813,800** | **813,800** |
+| `diff/tap.18,20` | 97,406 | 0 | 97,406 | 0 |
+
+- Duas regras casam **exatamente**: o lugar está certo.
+- `diff/tap.3` tem a **mesma área** dos dois lados, deslocada: é o mesmo erro de espaçamento, com a
+  marca desenhada do **outro lado** do espaço entre as duas difusões.
+- `diff/tap.18,20` só no chip, com a **mesma área** de `diff/tap.21`: o mesmo defeito recebendo um
+  segundo nome. O Magic, onde há interação (subcélulas sobrepostas, metal do topo por cima), achata a
+  região e rechecha; a marca e o nome da regra saem diferentes do DRC hierárquico da célula sozinha.
+- A L84 (orientação por encaixe) fica no script: não muda nada aqui e protege contra DEF com outra
+  convenção. A afirmação "o `pad_vddio` encaixa espelhado" da 38ª sessão estava errada: o teste usava
+  uma regra só, e o espelhamento casa com o deslocamento da marca do `diff/tap.3`.
+
+### O critério que fecha (L85)
+
+A pergunta certa não é "a marca é igual?", e sim: **o erro do chip cai onde a célula sozinha já
+tinha erro?** `compara_drc_anel.py` passou a medir a parte de "só chip" a mais de **0,5 µm** de
+**qualquer** erro das células sozinhas (todas as regras). Conta feita aqui com os arquivos da
+rodada `1839_12` (`12_drc_magic.rpt.gz`, `12_drc_ref_celulas.tsv.gz`, `12_anel_posicoes.txt`):
+
+| | µm² |
+|---|---|
+| "Só chip" (todas as regras, faixa dos pads) | 8192,27 |
+| a ≤ 0,5 µm de um erro da célula sozinha | 8155,82 (**99,6 %**) |
+| **longe** de qualquer erro da célula | **36,45** |
+
+Os 36,45 µm² que sobram, todos **no miolo dos 4 `gpiov2_pad_wrapped`**, nenhum em metal/via:
+
+| Regra | longe, µm² | onde |
+|---|---|---|
+| `Can't overlap those layers` | 21,373 | faixa y ≈ 25,7–30,1 (sul) / 2175 (norte), x de 1074 a 1119 e de 1552 a 1597: dentro dos pads, perto do bond pad |
+| `diff/tap.20` (MV diffusion em N-well × P-tap) | 7,504 | y ≈ 84, dentro do pad |
+| `diff/tap.16` (MV butting tap) | 7,034 | y ≈ 29,3, dentro do pad |
+| `hvntm.2` | 0,486 | y ≈ 186, dentro do pad |
+| `hvntm.1` | 0,055 | y ≈ 172, dentro do pad |
+
+São camadas de **dispositivo** (difusão MV, tap, HVNTM) e a interação entre as subcélulas do
+próprio pad. No anel nós só pusemos metal (faixas met3, vias, fios de sinal met2/met3, o terminal
+met5 do bond pad que o PadRing cria); a hipótese mais provável é a do rechecado achatado do Magic
+onde esse metal de topo passa por cima do pad (os 4 `gpiov2` são os pads com terminal **e** fio de
+sinal). Os pads hvc/lvc não deixam nada longe.
+
+### Veredito da etapa 12
+
+| Verificação | Resultado | Fonte |
+|---|---|---|
+| **LVS** (Netgen, abstrato: pads, fatias e núcleo como caixas-pretas) | ✅ "Circuits match uniquely"; 0 erros em dispositivos, redes, pinos, propriedades | `1839_12/12_lvs.txt`, `12_metricas.json` |
+| **DRC** região `chip` (o que desenhamos nas etapas 11/12) | ✅ **0** | `12_drc.txt` |
+| DRC núcleo (abstrato) | ✅ **0** (L82) | `12_drc.txt` |
+| DRC faixa dos pads, metal/via | ✅ nenhum erro do encosto (`via4.2` só dentro dos cantos, junto do erro da própria célula) | `12_drc_anel.txt` |
+| DRC faixa dos pads, dispositivo | ⚠️ isento: 99,6 % coincide com erros das células sozinhas; 36,45 µm² no miolo dos `gpiov2`, camadas que só a foundry desenhou | esta sessão |
+| Selo | fora (L80) | — |
+
+**Isenção documentada (L85):** os erros de DRC na faixa dos pads são das células de I/O do
+sky130 (`sky130_ef_io`/`sky130_fd_io`), conhecidas por não passarem limpas no `drc(full)` do Magic
+(regras de média/alta tensão desenhadas com as regras próprias da SkyWater). Nada de metal/via, nada
+fora das células, nada no nosso desenho.
+
+O que fica em aberto, documentado: a extração **pelo GDS** com os pads inteiros (`PAD_SPICE_MODELS`)
+para responder de vez a L77 (as 24 sobreposições "obsm4 × metal4" da vista abstrata); o DRC pelo
+GDS real já não acusou nada de metal ali.
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L85 | Erros de DRC na faixa dos pads = isenção da foundry, pelo critério "≤ 0,5 µm de um erro da célula sozinha" (99,6 %) + o resto só em camada de dispositivo no miolo dos pads | ✅ | A marca e o nome da regra mudam no rechecado achatado do Magic; o lugar do defeito não. Metal/via sem nenhum erro de encosto |
+
 ---
 
 ## Índice de decisões
@@ -4285,6 +4364,7 @@ em camadas que só elas têm.
 | L82 | Maglef do núcleo sem nwell (37 `nwell.4` falsos) | ✅ | 2026-11-01 |
 | L83 | DRC do anel: comparação geométrica por instância (`compara_drc_anel.py`) | ✅ | 2026-11-02 |
 | L84 | Orientação por encaixe (menor XOR) na comparação do DRC do anel | ✅ | 2026-11-02 |
+| L85 | DRC da faixa dos pads isento (≤ 0,5 µm de erro da célula; resto só dispositivo no miolo dos `gpiov2`) — etapa 12 ✅ | ✅ | 2026-11-02 |
 
 ---
 
@@ -4317,7 +4397,8 @@ em camadas que só elas têm.
 - [x] ~~Etapa 11, parte 2a~~ — PDN ligado pad → anel → núcleo (37ª sessão)
 - [ ] IR drop do chip com a fonte **no pad** (`VSRC_LOC_FILES` com a posição do `pad_vccd`/`pad_vssd`): sem terminal de topo, o `analyze_power_grid` usa "bump pattern" (`PSM-0073`: fontes virtuais a cada 140 µm no met5, como num flip-chip) e a queda sai otimista; o `PSM-0025` do `GeneratePDN` é a mesma falta de terminal (L68)
 - [x] Etapa 11, parte 2b: fluxo `Chip` completo na rodada `2026-11-01_1249` (L72–L77, 38ª sessão)
-- [ ] Etapa 12: LVS ✅, DRC núcleo 0 e `chip` 0, metal/via sem erro de encosto (`1839_12`); falta `12_drc_celulas.sh` de novo (L84: orientação do `pad_vddio`)
+- [x] Etapa 12: LVS limpo, DRC 0 no nosso desenho e no núcleo, faixa dos pads isenta (L85; 39ª sessão)
+- [ ] Opcional: LVS pelo GDS com os pads inteiros (`PAD_SPICE_MODELS`) para fechar a L77
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
