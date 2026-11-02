@@ -312,6 +312,37 @@ Rodado pelo Lukas na VM; fonte: trecho final do `genus.log` colado no chat
 | `write_dft_atpg` | `modus_work/runmodus.atpg.tcl` **e** `run_fullscan_sim` (simulação dos padrões) | fim do log |
 | `ungroup` + netlist achatado | sem erro (o bloco 2b tem netlist) | — |
 
+### Conferência do `run_first_dft.tcl` (depois do `exit`)
+
+| Item | Resultado |
+|---|---|
+| Módulos não resolvidos / vazios | 0 / 0 |
+| Regras de DFT (pré): relógio / set-reset assíncrono / total | 0 / 0 / **0**; 1 domínio de relógio de teste; 100 % com scan |
+| Cadeias (`_scan_chains.rpt`) | 16: `cadeia_0..7` com 785, `cadeia_8..15` com 784 |
+| Fora das cadeias | 0 (reprovados, preservados, segmentos, *lockup*) |
+| Células de scan no netlist | **12.551 `sdfxtp_1` + 1 `sdfxtp_2`; 0 `sedfxtp`** |
+| Flip-flops comuns | 0 |
+| Instâncias / sequenciais | 35.962 / 12.554 (12.552 flip-flops + 2 macros) |
+| Área (`_qor.rpt`) | 974.848,7 µm² |
+| Slack de setup | **+4.479 ps** |
+| `modus_work/` | `runmodus.atpg.tcl`, `run_fullscan_sim`, `run_fullscan_sim_sdf`, `isfft_axi_v4.FULLSCAN.pinassign`, `isfft_axi_v4.test_netlist.v` (5 MB) |
+
+**O Genus não usou o `sedfxtp`.** Os 9.8xx flip-flops com enable viraram
+`sdfxtp` + mux na frente (`D = DE ? D : Q`), não a célula de scan com
+enable embutido. Funciona igual: em deslocamento o mux de scan, dentro da
+célula, ignora o `D`. Se custou área, o `_gates.rpt` vai dizer (contar
+`mux2` aqui × síntese do chip).
+
+### 🐛 "portas de teste: 0" na conferência
+
+**Sintoma:** a linha de conferência contou 0 portas de teste, com o log
+dizendo 32 (`DFT-130`) e as cadeias ligadas de `scan_in_N` a `scan_out_N`.
+**Causa:** o `grep` procurava `input scan_...`; o Genus declara as portas em
+lista (`input aclk, ..., scan_in_0, ...`).
+**Resolvi com:** contar os nomes `scan_(in|out)_N` distintos no cabeçalho do
+módulo (esperado 32).
+**Tempo gasto:** 2 min. **Vira slide?** Não.
+
 **Flip-flops: Yosys 12.559 × Genus 12.552.** O Genus otimizou 7 a mais; a
 previsão das cadeias (~785) bateu.
 

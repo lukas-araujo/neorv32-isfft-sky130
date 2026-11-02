@@ -62,10 +62,11 @@ echo "--- flip-flops que NAO viraram scan (esperado: 0) ---"
 grep -iE "not|fail|non.scan|total" ${RPT_DIR}/${DESIGNS}_scan_registers.rpt | head -10
 echo "--- celulas de scan no netlist ---"
 grep -oE "sky130_fd_sc_hd__s(e)?df\w+" ${DEV_DIR}/${DESIGNS}.v | sort | uniq -c
+# (o Genus pode trocar edfxtp por sdfxtp + mux em vez de sedfxtp: 2a sessao)
 echo "--- flip-flops comuns no netlist (esperado: 0) ---"
 grep -cE "sky130_fd_sc_hd__(e)?df(x|r|s|b)\w+ " ${DEV_DIR}/${DESIGNS}.v
-echo "--- portas de teste ---"
-grep -oE "input +scan_\w+|output +scan_out_\w+" ${DEV_DIR}/${DESIGNS}.v | wc -l
+echo "--- portas de teste (esperado: 32 = 16 scan_in + 16 scan_out) ---"
+grep -m1 -A40 "^module isfft_axi_v4" ${DEV_DIR}/${DESIGNS}.v | grep -oE "scan_(in|out)_[0-9]+" | sort -u | wc -l
 echo "--- area e slack ---"
 grep -iE "^ *(Total|Cell) Area|Leaf Instance|Sequential" ${RPT_DIR}/${DESIGNS}_qor.rpt | head -6
 grep -m3 -i "slack" ${RPT_DIR}/${DESIGNS}_timing.rpt
