@@ -384,6 +384,25 @@ corrida hierárquica (um módulo), não do IP inteiro.
 nenhuma função.
 **Vira slide?** Sim, junto do LEC do chip: "inserir scan não muda o circuito".
 
+### ✅ Bloco 2b — regressão da Kria no netlist do Genus com scan (`scan_en = 0`)
+
+Fonte: saída do `xrun` colada no chat (Xcelium **26.03-s005**), netlist
+achatado `deliverables/isfft_dft_flat.v`.
+
+| Item | Resultado |
+|---|---|
+| Referência (wrapper da etapa 1) | 1.280 palavras |
+| Pacote truncado | injetado (20 palavras com `tlast`) |
+| Veredito | **`PASSOU: 40 matrizes identicas a referencia, tlast e registradores OK`** |
+| Tempo simulado / real | 118,35 µs / **10 s** (Icarus na nuvem, scan de mentira: 341 s) |
+
+Avisos: só `DLCPTH` (o `cds.lib` da instalação nova aponta para pastas VHDL
+que não existem; o mesmo da etapa 9 do GDSII). Nenhum erro.
+
+**A conferência fecha por dois caminhos independentes:** o LEC (2a) prova a
+equivalência formal; a simulação (2b) roda o mesmo teste que validou a Kria,
+o RTL e o netlist sem scan.
+
 **Etapa 4 de graça:** o `run_fullscan_sim` já existe; entrou como bloco 4
 do `run_first_dft.tcl` (rodar depois do 3).
 
@@ -418,7 +437,7 @@ do `run_first_dft.tcl` (rodar depois do 3).
 
 - [x] ~~VM: bloco 1 (Genus)~~ — passou (2ª sessão)
 - [x] ~~VM: bloco 2a (LEC)~~ — PASS (2ª sessão)
-- [ ] VM: bloco 2b (Kria no netlist com scan)
+- [x] ~~VM: bloco 2b (Kria no netlist com scan)~~ — PASSOU, 10 s (2ª sessão)
 - [ ] VM: bloco 3 (Modus) — script `runmodus.atpg.tcl` (confirmado pelo log do Genus)
 - [ ] VM: bloco 4 (`run_fullscan_sim`)
 - [ ] `traz_dft.sh … scan` com tudo
