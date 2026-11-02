@@ -403,6 +403,23 @@ que não existem; o mesmo da etapa 9 do GDSII). Nenhum erro.
 equivalência formal; a simulação (2b) roda o mesmo teste que validou a Kria,
 o RTL e o netlist sem scan.
 
+### 🐛 Bloco 3 — Modus sem licença (`TDA-011`)
+
+**Sintoma:** `modus -file runmodus.atpg.tcl` abre ("Starting Modus DFT
+Software Solution Tcl UI") e para na hora:
+`ERROR (TDA-011): Failed to obtain a license to run Modus Tcl User Interface.
+Attempted to check out ... Modus_common_ui (1) ... CDS_LIC_FILE=5280@192.168.2.250`.
+**Causa:** a investigar. Ou o servidor da VM não tem o recurso
+`Modus_common_ui` (o software está instalado — `MODUS261` no PATH —, mas
+instalar não é licenciar), ou todas as cópias estavam em uso.
+**Resolvi com:** (em andamento) `lmstat -a` no servidor para listar os
+recursos de teste e o uso. Se não houver licença: plano B com ATPG aberto
+na nuvem (o netlist com scan, com os flip-flops cortados, vira um circuito
+combinacional; Atalanta), para ver o conceito — falhas, padrões, cobertura —
+mesmo sem o Modus.
+**Vira slide?** Sim, se for falta de licença: "ferramenta instalada ≠
+ferramenta licenciada".
+
 **Etapa 4 de graça:** o `run_fullscan_sim` já existe; entrou como bloco 4
 do `run_first_dft.tcl` (rodar depois do 3).
 
@@ -438,7 +455,7 @@ do `run_first_dft.tcl` (rodar depois do 3).
 - [x] ~~VM: bloco 1 (Genus)~~ — passou (2ª sessão)
 - [x] ~~VM: bloco 2a (LEC)~~ — PASS (2ª sessão)
 - [x] ~~VM: bloco 2b (Kria no netlist com scan)~~ — PASSOU, 10 s (2ª sessão)
-- [ ] VM: bloco 3 (Modus) — script `runmodus.atpg.tcl` (confirmado pelo log do Genus)
+- [ ] VM: bloco 3 (Modus) — **parou por licença** (`TDA-011`, `Modus_common_ui`); conferir `lmstat`
 - [ ] VM: bloco 4 (`run_fullscan_sim`)
 - [ ] `traz_dft.sh … scan` com tudo
 - [ ] Comparar área/timing com a síntese sem DFT (o IP sozinho: rodar o mesmo script sem scan? ou ler o `u_isfft` do `_area_hier.rpt` do chip)
