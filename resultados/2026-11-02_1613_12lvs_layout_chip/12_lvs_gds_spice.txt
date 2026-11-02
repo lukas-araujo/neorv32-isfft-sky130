@@ -1,0 +1,17 @@
+SPICE dos pads (PAD_SPICE_MODELS):
+  /home/lukas/Projects/pdks/librelane/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_io/spice/sky130_fd_io.spice
+
+Celulas do anel -> onde esta o .subckt:
+  sky130_ef_io__com_bus_slice_10um                               SEM SPICE -> caixa-preta do lado do esquematico
+  sky130_ef_io__com_bus_slice_1um                                SEM SPICE -> caixa-preta do lado do esquematico
+  sky130_ef_io__com_bus_slice_20um                               SEM SPICE -> caixa-preta do lado do esquematico
+  sky130_ef_io__com_bus_slice_5um                                SEM SPICE -> caixa-preta do lado do esquematico
+  sky130_ef_io__connect_vcchib_vccd_and_vswitch_vddio_slice_20um SEM SPICE -> caixa-preta do lado do esquematico
+  sky130_ef_io__corner_pad                                       SEM SPICE -> caixa-preta do lado do esquematico
+  sky130_ef_io__gpiov2_pad_wrapped                               SEM SPICE -> caixa-preta do lado do esquematico
+  sky130_ef_io__vccd_lvc_clamped_pad                             SEM SPICE -> caixa-preta do lado do esquematico
+  sky130_ef_io__vdda_hvc_clamped_pad                             SEM SPICE -> caixa-preta do lado do esquematico
+  sky130_ef_io__vddio_hvc_clamped_pad                            SEM SPICE -> caixa-preta do lado do esquematico
+  sky130_ef_io__vssa_hvc_clamped_pad                             SEM SPICE -> caixa-preta do lado do esquematico
+  sky130_ef_io__vssd_lvc_clamped_pad                             SEM SPICE -> caixa-preta do lado do esquematico
+  sky130_ef_io__vssio_hvc_clamped_pad                            SEM SPICE -> caixa-preta do lado do esquematico

@@ -1,0 +1,22 @@
+
+/home/lukas/Projects/neorv32-isfft-sky130/resultados/2026-11-02_1614_12dens_layout_chip/12_densidade_antes.txt
+  camada     limites  global janela min janela max janelas c/ erro
+  FOM      0.33-0.57   0.160      0.069      0.377     690     636
+  POLY             -   0.131      0.059      0.265     690       0
+  LI       0.35-0.60   0.241      0.114      0.526     690     393
+  MET1     0.35-0.60   0.157      0.057      0.343     690     690
+  MET2     0.35-0.60   0.101      0.038      0.263     690     690
+  MET3     0.35-0.60   0.083      0.009      0.241     690     690
+  MET4     0.35-0.60   0.292      0.009      0.482     690     654
+  MET5     0.45-0.76   0.299      0.022      0.476     690     687
+
+/home/lukas/Projects/neorv32-isfft-sky130/resultados/2026-11-02_1614_12dens_layout_chip/12_densidade_depois.txt
+  camada     limites  global janela min janela max janelas c/ erro
+  FOM      0.33-0.57   0.424      0.295      0.469     690      26
+  POLY             -   0.183      0.130      0.290     690       0
+  LI       0.35-0.60   0.542      0.449      0.569     690       0
+  MET1     0.35-0.60   0.476      0.369      0.524     690       0
+  MET2     0.35-0.60   0.450      0.252      0.532     690     209
+  MET3     0.35-0.60   0.449      0.314      0.511     690     139
+  MET4     0.35-0.60   0.519      0.335      0.596     690      39
+  MET5     0.45-0.76   0.545      0.326      0.616     690     224
