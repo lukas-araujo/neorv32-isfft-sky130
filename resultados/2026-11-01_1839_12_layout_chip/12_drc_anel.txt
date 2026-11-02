@@ -1,6 +1,63 @@
 DRC do chip: /home/lukas/Projects/neorv32-isfft-sky130/layout/chip/runs/2026-11-01_1839_12/01-magic-drc/reports/drc.magic.rpt
 instancias do anel no DEF: 441; celulas com DRC sozinhas: 9
 
+instancia                    celula                                     x         y DEF usada   XOR DEF XOR usada  (um2, dentro do contorno)
+IO_CORNER_NORTH_EAST_INST    corner_pad                          2500.000  1997.000   N     N     0.000     0.000
+IO_CORNER_NORTH_WEST_INST    corner_pad                             0.000  1997.000  FN    FN     0.004     0.004
+IO_CORNER_SOUTH_EAST_INST    corner_pad                          2500.000     0.000  FS    FS     0.006     0.006
+IO_CORNER_SOUTH_WEST_INST    corner_pad                             0.000     0.000   S     S     0.010     0.010
+IO_FILL_IO_EAST_0_565        com_bus_slice_1um                   2502.035   769.000   E     E     9.750     9.750
+IO_FILL_IO_EAST_1_565        com_bus_slice_1um                   2502.035  1410.000   E     E     9.750     9.750
+IO_FILL_IO_EAST_2_565        com_bus_slice_1um                   2502.035  1996.000   E     E     9.750     9.750
+IO_FILL_IO_NORTH_0_395       com_bus_slice_1um                    595.000  2003.035  FN    FN     9.750     9.750
+IO_FILL_IO_NORTH_0_396       com_bus_slice_1um                    596.000  2003.035  FN    FN     9.750     9.750
+IO_FILL_IO_NORTH_0_397       com_bus_slice_1um                    597.000  2003.035  FN    FN     9.750     9.750
+IO_FILL_IO_NORTH_1_395       com_bus_slice_1um                   1068.000  2003.035  FN    FN     9.750     9.750
+IO_FILL_IO_NORTH_1_396       com_bus_slice_1um                   1069.000  2003.035  FN    FN     9.750     9.750
+IO_FILL_IO_NORTH_1_397       com_bus_slice_1um                   1070.000  2003.035  FN    FN    10.035    10.035
+IO_FILL_IO_NORTH_2_395       com_bus_slice_1um                   1546.000  2003.035  FN    FN     9.750     9.750
+IO_FILL_IO_NORTH_2_396       com_bus_slice_1um                   1547.000  2003.035  FN    FN     9.750     9.750
+IO_FILL_IO_NORTH_2_397       com_bus_slice_1um                   1548.000  2003.035  FN    FN    10.035    10.035
+IO_FILL_IO_NORTH_3_395       com_bus_slice_1um                   2024.000  2003.035  FN    FN     9.750     9.750
+IO_FILL_IO_NORTH_3_396       com_bus_slice_1um                   2025.000  2003.035  FN    FN     9.750     9.750
+IO_FILL_IO_NORTH_3_397       com_bus_slice_1um                   2026.000  2003.035  FN    FN     9.750     9.750
+IO_FILL_IO_NORTH_4_395       com_bus_slice_1um                   2497.000  2003.035  FN    FN     9.750     9.750
+IO_FILL_IO_NORTH_4_396       com_bus_slice_1um                   2498.000  2003.035  FN    FN     9.750     9.750
+IO_FILL_IO_NORTH_4_397       com_bus_slice_1um                   2499.000  2003.035  FN    FN     9.750     9.750
+IO_FILL_IO_SOUTH_0_395       com_bus_slice_1um                    595.000     0.000   S     S     9.750     9.750
+IO_FILL_IO_SOUTH_0_396       com_bus_slice_1um                    596.000     0.000   S     S     9.750     9.750
+IO_FILL_IO_SOUTH_0_397       com_bus_slice_1um                    597.000     0.000   S     S     9.750     9.750
+IO_FILL_IO_SOUTH_1_395       com_bus_slice_1um                   1068.000     0.000   S     S     9.750     9.750
+IO_FILL_IO_SOUTH_1_396       com_bus_slice_1um                   1069.000     0.000   S     S     9.750     9.750
+IO_FILL_IO_SOUTH_1_397       com_bus_slice_1um                   1070.000     0.000   S     S    10.058    10.058
+IO_FILL_IO_SOUTH_2_395       com_bus_slice_1um                   1546.000     0.000   S     S     9.750     9.750
+IO_FILL_IO_SOUTH_2_396       com_bus_slice_1um                   1547.000     0.000   S     S     9.750     9.750
+IO_FILL_IO_SOUTH_2_397       com_bus_slice_1um                   1548.000     0.000   S     S    10.058    10.058
+IO_FILL_IO_SOUTH_3_395       com_bus_slice_1um                   2024.000     0.000   S     S     9.750     9.750
+IO_FILL_IO_SOUTH_3_396       com_bus_slice_1um                   2025.000     0.000   S     S     9.750     9.750
+IO_FILL_IO_SOUTH_3_397       com_bus_slice_1um                   2026.000     0.000   S     S     9.750     9.750
+IO_FILL_IO_SOUTH_4_395       com_bus_slice_1um                   2497.000     0.000   S     S     9.750     9.750
+IO_FILL_IO_SOUTH_4_396       com_bus_slice_1um                   2498.000     0.000   S     S     9.750     9.750
+IO_FILL_IO_SOUTH_4_397       com_bus_slice_1um                   2499.000     0.000   S     S     9.750     9.750
+IO_FILL_IO_WEST_0_855        com_bus_slice_1um                      0.000  1059.000  FE    FE     9.750     9.750
+IO_FILL_IO_WEST_0_856        com_bus_slice_1um                      0.000  1060.000  FE    FE     9.750     9.750
+IO_FILL_IO_WEST_0_857        com_bus_slice_1um                      0.000  1061.000  FE    FE     9.750     9.750
+IO_FILL_IO_WEST_0_858        com_bus_slice_1um                      0.000  1062.000  FE    FE     9.750     9.750
+IO_FILL_IO_WEST_1_855        com_bus_slice_1um                      0.000  1993.000  FE    FE     9.750     9.750
+IO_FILL_IO_WEST_1_856        com_bus_slice_1um                      0.000  1994.000  FE    FE     9.750     9.750
+IO_FILL_IO_WEST_1_857        com_bus_slice_1um                      0.000  1995.000  FE    FE     9.750     9.750
+IO_FILL_IO_WEST_1_858        com_bus_slice_1um                      0.000  1996.000  FE    FE     9.750     9.750
+pad_clk                      gpiov2_pad_wrapped                  1071.000     0.000   S     S  1101.458  1101.458
+pad_rstn                     gpiov2_pad_wrapped                  1549.000     0.000   S     S  1101.458  1101.458
+pad_rx                       gpiov2_pad_wrapped                  1071.000  1990.035  FN    FN   956.516   956.516
+pad_tx                       gpiov2_pad_wrapped                  1549.000  1990.035  FN    FN   956.516   956.516
+pad_vccd                     vccd_lvc_clamped_pad                2027.000     0.000   S     S     2.280     2.280
+pad_vdda                     vdda_hvc_clamped_pad                2502.035   770.000   E     E  1620.740  1620.740
+pad_vddio                    vddio_hvc_clamped_pad               2027.000  2003.035  FN    FN  1620.740  1620.740
+pad_vssa                     vssa_hvc_clamped_pad                   0.000  1063.000  FE    FE  1620.740  1620.740
+pad_vssd                     vssd_lvc_clamped_pad                 598.000     0.000   S     S     2.280     2.280
+pad_vssio                    vssio_hvc_clamped_pad                598.000  2003.035  FN    FN  1620.740  1620.740
+
 classe          chip um2 celulas um2   so chip so celula  regra
 metal/via         0.0194      0.0250    0.0069    0.0125  via4 spacing < 84 (via4.2 - 2 * via4.4)
 metal/via         0.0000      0.0310    0.0000    0.0310  Metal1 minimum area < 3320 (met1.6)
