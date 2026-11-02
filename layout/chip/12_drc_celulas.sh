@@ -102,6 +102,10 @@ deff="$(python3 -c "import json,sys; print(json.load(open(sys.argv[1])).get('def
         "$(dirname "$(dirname "$drc")")/state_in.json")"
 lefs="$(python3 -c "import json,sys; print(':'.join(json.load(open(sys.argv[1]))['PAD_LEFS']))" "$RUN12/resolved.json")"
 export CDA_RPT="$drc" CDA_REF="$W/ref.tsv" CDA_DEF="$deff" CDA_LEFS="$lefs"
+# posicoes das celulas do anel no DEF (para conferir orientacoes fora daqui, L84)
+awk '/^COMPONENTS/{f=1} /^END COMPONENTS/{f=0} f' "$deff" | tr '\n' ' ' | sed 's/ ;/ ;\n/g' \
+  | grep -E 'sky130_ef_io__|sky130_fd_io__' > "$DEST/12_anel_posicoes.txt" || true
+echo ">>> $(wc -l < "$DEST/12_anel_posicoes.txt") celulas do anel no DEF (12_anel_posicoes.txt)"
 if python3 -c "import klayout.db" 2>/dev/null; then
   python3 "$CHIP/compara_drc_anel.py" > "$DEST/12_drc_anel.txt" 2>&1 || true
 else

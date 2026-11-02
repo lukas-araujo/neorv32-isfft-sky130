@@ -147,6 +147,43 @@ def main():
     print(f"DRC do chip: {rpt}")
     print(f"instancias do anel no DEF: {len(contornos)}; celulas com DRC sozinhas: {len(refs)}")
 
+    def area(reg):
+        return reg.area() * DBU * DBU
+
+    # Orientacao de cada instancia: em vez de confiar so no nome do DEF, testa as
+    # orientacoes com o mesmo contorno (W x H ou H x W) e fica com a que encaixa
+    # os erros da celula nos do chip (menor XOR dentro do contorno). Na 1a versao,
+    # os pads de alimentacao do lado norte nao encaixavam pela orientacao do DEF
+    # e encaixavam com XOR 0 espelhados (L84).
+    todos_chip = db.Region()
+    for bs in chip.values():
+        for b in bs:
+            todos_chip.insert(caixa(*b))
+    todos_chip.merge()
+    escolhida = {}
+    print(f"\n{'instancia':28s} {'celula':34s} {'x':>9s} {'y':>9s} {'DEF':>3s} {'usada':>5s} {'XOR DEF':>9s} {'XOR usada':>9s}  (um2, dentro do contorno)")
+    for n, c, px, py, o in inst:
+        if c not in tam or c not in refs:
+            continue
+        W, H = tam[c]
+        cand = [x for x in ("N", "S", "FN", "FS") ] if o in ("N", "S", "FN", "FS") else ["E", "W", "FE", "FW"]
+        k = contorno(W, H, px, py, o)
+        janela = db.Region(caixa(*k))
+        alvo = todos_chip & janela
+        xor = {}
+        for x in cand:
+            r = db.Region()
+            for bs in refs[c].values():
+                for b in bs:
+                    r.insert(caixa(*leva(b, W, H, px, py, x)))
+            xor[x] = area((r.merged() & janela) ^ alvo)
+        melhor = min(xor, key=xor.get)
+        if xor[o] <= xor[melhor] + 1e-6:
+            melhor = o
+        escolhida[n] = melhor
+        print(f"{n:28s} {c.replace('sky130_ef_io__', ''):34s} {px:9.3f} {py:9.3f} {o:>3s} {melhor:>5s} {xor[o]:9.3f} {xor[melhor]:9.3f}"
+              + ("   <-- orientacao diferente da do DEF" if melhor != o else ""))
+
     # erros das celulas levados para o chip
     levado = {}
     for n, c, px, py, o in inst:
@@ -156,10 +193,7 @@ def main():
         for regra, bs in refs[c].items():
             reg = levado.setdefault(regra, db.Region())
             for b in bs:
-                reg.insert(caixa(*leva(b, W, H, px, py, o)))
-
-    def area(reg):
-        return reg.area() * DBU * DBU
+                reg.insert(caixa(*leva(b, W, H, px, py, escolhida.get(n, o))))
 
     linhas, sobras = [], []
     for regra in sorted(set(chip) | set(levado)):

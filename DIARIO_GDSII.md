@@ -4159,6 +4159,42 @@ pad × o nosso metal, a sobra de met4 dos pads lvc da L77)?
 |---|---|---|---|
 | L83 | Comparação geométrica (por instância, regiões, por camada) no lugar da soma de área | ✅ | Área total mistura repetição, erro que some no contexto e erro de interação; a geométrica diz onde cada sobra cai |
 
+### Comparação geométrica, 1ª rodada (`12_drc_anel.txt` em `1839_12`)
+
+441 instâncias do anel no DEF; DRC sozinho de 9 células (as fatias de 5/10/20 µm não têm erro).
+
+| Classe | O que sobrou "só no chip" | Onde cai |
+|---|---|---|
+| **metal/via** | só `via4.2`: 0,0069 µm² (e 0,0125 µm² "só célula") | dentro dos **cantos**, a 18,7 µm da borda: o mesmo erro da célula, recortado em fatias de 10 nm de outro jeito |
+| `Can't overlap those layers` | 47,56 µm² (de 8425,7) | dentro dos 4 `gpiov2`, a 7,9–25,9 µm da borda |
+| dispositivo | várias regras (`diff/tap.18,20` 2352,7 µm², `diff/tap.16` 127,1...) | dentro dos `gpiov2`, quase tudo a mais de 5 µm da borda; dois casos a 0,00 µm, na fatia de 1 µm encostada no `pad_clk`/`pad_rstn` (`licon.1`/`licon.2`: contato de difusão do pad que passa da borda do LEF — o GDS do `gpiov2_pad_wrapped` vai até x = 80,085 num LEF de 80,000) |
+| dispositivo, `pad_vddio` | `diff/tap.3` 5487,6 µm² "só chip" **e** 5493,1 µm² "só célula" | ver o 🐛 abaixo |
+
+Já dá para afirmar: **nenhum erro de metal/via nasceu do encosto** e nenhum erro "só chip" cai fora
+das células do anel (no metal das etapas 11/12). O que sobra está dentro das células da foundry,
+em camadas que só elas têm.
+
+### 🐛 `pad_vddio`: as caixas da célula foram para o lugar errado (L84)
+
+- **Sintoma:** no `pad_vddio`, "só chip" ≈ "só célula" (5487,6 × 5493,1 µm²) — o mesmo tanto de
+  erro sobrando dos dois lados é sinal de caixa no lugar errado, não de erro novo.
+- **Causa:** o transporte usou a orientação **escrita no DEF**; para esse pad ela não reproduz o
+  desenho. Testando as 8 orientações contra os erros do chip, a célula **espelhada (FN)** encaixa
+  com XOR **0,000 µm²** (deslocamento x = 2027,27, y = 2003,035), e as outras dão 740–1842 µm².
+  Os `gpiov2` encaixaram com a orientação do DEF (`poly.7`, por exemplo, sem nenhuma sobra). O DEF
+  não veio no pacote, então não deu para ver qual nome de orientação está nele.
+- **Resolvi com (L84):** o `compara_drc_anel.py` testa, para cada instância com erros de
+  referência, as 4 orientações do mesmo contorno, nas coordenadas do DEF, e usa a de menor XOR. A
+  tabela mostra posição, orientação do DEF, a usada e os dois XOR (com aviso quando diferem). O
+  `12_drc_celulas.sh` grava as posições do DEF (`12_anel_posicoes.txt`). Testado: com o DEF
+  dizendo `N` para uma instância desenhada em `S`, ele escolhe `S` e avisa.
+- **Vira slide?** Sim: convenção de orientação (N/S/FN/FS, R180/MX/MY) é uma das armadilhas
+  clássicas entre ferramentas.
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L84 | Orientação de cada instância escolhida pelo encaixe dos erros (menor XOR), não só pelo nome do DEF | ✅ | O `pad_vddio` encaixa com XOR 0 espelhado e não encaixa pela orientação do DEF; a tabela registra cada divergência |
+
 ---
 
 ## Índice de decisões
@@ -4248,6 +4284,7 @@ pad × o nosso metal, a sobra de met4 dos pads lvc da L77)?
 | L81 | DRC de referência das células do anel (área por regra) | ✅ | 2026-11-01 |
 | L82 | Maglef do núcleo sem nwell (37 `nwell.4` falsos) | ✅ | 2026-11-01 |
 | L83 | DRC do anel: comparação geométrica por instância (`compara_drc_anel.py`) | ✅ | 2026-11-02 |
+| L84 | Orientação por encaixe (menor XOR) na comparação do DRC do anel | ✅ | 2026-11-02 |
 
 ---
 
@@ -4280,7 +4317,7 @@ pad × o nosso metal, a sobra de met4 dos pads lvc da L77)?
 - [x] ~~Etapa 11, parte 2a~~ — PDN ligado pad → anel → núcleo (37ª sessão)
 - [ ] IR drop do chip com a fonte **no pad** (`VSRC_LOC_FILES` com a posição do `pad_vccd`/`pad_vssd`): sem terminal de topo, o `analyze_power_grid` usa "bump pattern" (`PSM-0073`: fontes virtuais a cada 140 µm no met5, como num flip-chip) e a queda sai otimista; o `PSM-0025` do `GeneratePDN` é a mesma falta de terminal (L68)
 - [x] Etapa 11, parte 2b: fluxo `Chip` completo na rodada `2026-11-01_1249` (L72–L77, 38ª sessão)
-- [ ] Etapa 12: LVS ✅, DRC núcleo 0 e `chip` 0 (`1839_12`); falta `12_drc_celulas.sh` de novo com a comparação geométrica (L83)
+- [ ] Etapa 12: LVS ✅, DRC núcleo 0 e `chip` 0, metal/via sem erro de encosto (`1839_12`); falta `12_drc_celulas.sh` de novo (L84: orientação do `pad_vddio`)
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
