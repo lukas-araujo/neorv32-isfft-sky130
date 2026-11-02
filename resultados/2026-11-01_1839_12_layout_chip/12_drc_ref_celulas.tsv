@@ -1,0 +1,60 @@
+sky130_ef_io__com_bus_slice_1um	Metal5 minimum area < 160000 (met5.4)	3	9.74999956414104
+sky130_ef_io__corner_pad	via4 spacing < 84 (via4.2 - 2 * via4.4)	2	0.012499999441206461
+sky130_ef_io__gpiov2_pad_wrapped	N-tap contact width     < 34 (licon.1)	11	0.08924999601021415
+sky130_ef_io__gpiov2_pad_wrapped	P-tap minimum area < 0.07011um^2 (psd.10b)	2	0.022099999012053024
+sky130_ef_io__gpiov2_pad_wrapped	P-Diffusion overhang of pmos < 50 (poly.7)	976	24.079998923540078
+sky130_ef_io__gpiov2_pad_wrapped	This layer can't abut or partially overlap between subcells	544	574.1282243344667
+sky130_ef_io__gpiov2_pad_wrapped	MV Tap width < 30 (diff/tap.1)	84	0.5783999741435045
+sky130_ef_io__gpiov2_pad_wrapped	MV Diffusion in N-well to P-tap spacing < 152 (diff/tap.20 + diff/tap.17,19)	39	0.751399966409803
+sky130_ef_io__gpiov2_pad_wrapped	MV Diffusion to MV tap spacing < 54 (diff/tap.3)	2020	67.95349696224147
+sky130_ef_io__gpiov2_pad_wrapped	Diffusion width < 30 (diff/tap.1)	84	1.315649941185865
+sky130_ef_io__gpiov2_pad_wrapped	N-Diffusion overhang of nFET < 50 (poly.7)	2928	72.23999677062088
+sky130_ef_io__gpiov2_pad_wrapped	Can't overlap those layers	1809	1113.50207522258
+sky130_ef_io__gpiov2_pad_wrapped	HVNTM spacing < 140 (hvntm.2)	2	0.07624999659135942
+sky130_ef_io__gpiov2_pad_wrapped	LV P-diffusion to MV P-diffusion < 72 (diff/tap.23 + diff/tap.22)	299	6.258399720227721
+sky130_ef_io__gpiov2_pad_wrapped	All HV nwell can contain only HV diffusion (diff/tap.21)	4723	406.38013183341553
+sky130_ef_io__gpiov2_pad_wrapped	MV P-diffusion to LV P-diffusion < 72 (diff/tap.23 + diff/tap.22)	358	6.641599703097334
+sky130_ef_io__gpiov2_pad_wrapped	LV to MV Diffusion spacing < 54 (diff/tap.3)	32930	1037.6473536138024
+sky130_ef_io__gpiov2_pad_wrapped	Diffusion spacing < 54 (diff/tap.3)	86	1.899999915063384
+sky130_ef_io__gpiov2_pad_wrapped	Poly resistor spacing to poly < 96 (poly.9)	10	0.010799999517202383
+sky130_ef_io__gpiov2_pad_wrapped	Only 90 degree angles permitted on poly (x.2)	16	0.6399999713897706
+sky130_ef_io__gpiov2_pad_wrapped	mcon.spacing < 38 (mcon.2)	14	0.10799999517202381
+sky130_ef_io__gpiov2_pad_wrapped	LV N-diffusion to MV N-diffusion < 72 (diff/tap.23 + diff/tap.22)	384	7.80999965086579
+sky130_ef_io__gpiov2_pad_wrapped	MV N-diffusion to LV N-diffusion < 72 (diff/tap.23 + diff/tap.22)	389	7.873749648015944
+sky130_ef_io__gpiov2_pad_wrapped	P-diff distance to N-tap must be < 15.0um (LU.3)	2236	90.76079594267551
+sky130_ef_io__gpiov2_pad_wrapped	Diffusion contact spacing < 34 (licon.2)	93	0.4487999799370769
+sky130_ef_io__gpiov2_pad_wrapped	N-tap overlap of N-tap contact < 24 in one direction (licon.7)	101	0.9635999569237237
+sky130_ef_io__gpiov2_pad_wrapped	Transistor width < 84 (diff/tap.2)	40	1.007999954938889
+sky130_ef_io__gpiov2_pad_wrapped	MV Diffusion spacing < 60 (diff/tap.15a)	1	0.010499999530613428
+sky130_ef_io__gpiov2_pad_wrapped	No bends in transistors (poly.11)	8	0.00019999999105930338
+sky130_ef_io__gpiov2_pad_wrapped	Spacing of HV nwell to LV nwell < 2.0um (nwell.8)	29	18.317774181131654
+sky130_ef_io__gpiov2_pad_wrapped	N-well overlap of Deep N-well < 0.4um outside, 1.03um inside (nwell.5a, 7)	1	0.06874999692663554
+sky130_ef_io__gpiov2_pad_wrapped	Deep N-well spacing to N-well < 900 (nwell.7)	11	142.24099364133187
+sky130_ef_io__gpiov2_pad_wrapped	Spacing of HV nwell to HV nwell < 2.0um (nwell.8)	80	166.56164255411417
+sky130_ef_io__gpiov2_pad_wrapped	P-tap contact width     < 34 (licon.1)	669	3.196199857118721
+sky130_ef_io__gpiov2_pad_wrapped	Metal1 minimum area < 3320 (met1.6)	3	0.007749999653548006
+sky130_ef_io__gpiov2_pad_wrapped	P-tap overlap of P-tap contact < 24 in one direction (licon.7)	5348	68.79219692474759
+sky130_ef_io__vccd_lvc_clamped_pad	N-well overlap of P-Diffusion < 36 (diff/tap.8)	210	6.382799714666624
+sky130_ef_io__vccd_lvc_clamped_pad	Can't overlap those layers	29	488.61337815727916
+sky130_ef_io__vccd_lvc_clamped_pad	All nwells must contain metal-connected N+ taps (nwell.4)	24	82.66719630448821
+sky130_ef_io__vccd_lvc_clamped_pad	P-diff distance to N-tap must be < 15.0um (LU.3)	33	43.621798049953604
+sky130_ef_io__vccd_lvc_clamped_pad	P-tap overlap of P-tap contact < 24 in one direction (licon.7)	832	33.14879851813301
+sky130_ef_io__vdda_hvc_clamped_pad	Can't overlap those layers	143	1048.5117531278709
+sky130_ef_io__vdda_hvc_clamped_pad	All HV nwell can contain only HV diffusion (diff/tap.21)	91	97.40599564561258
+sky130_ef_io__vdda_hvc_clamped_pad	LV to MV Diffusion spacing < 54 (diff/tap.3)	30622	945.5399577312785
+sky130_ef_io__vddio_hvc_clamped_pad	Can't overlap those layers	143	1048.5117531278709
+sky130_ef_io__vddio_hvc_clamped_pad	All HV nwell can contain only HV diffusion (diff/tap.21)	91	97.40599564561258
+sky130_ef_io__vddio_hvc_clamped_pad	LV to MV Diffusion spacing < 54 (diff/tap.3)	30622	945.5399577312785
+sky130_ef_io__vssa_hvc_clamped_pad	Can't overlap those layers	143	1048.5117531278709
+sky130_ef_io__vssa_hvc_clamped_pad	All HV nwell can contain only HV diffusion (diff/tap.21)	91	97.40599564561258
+sky130_ef_io__vssa_hvc_clamped_pad	LV to MV Diffusion spacing < 54 (diff/tap.3)	30622	945.5399577312785
+sky130_ef_io__vssa_hvc_clamped_pad	Spacing of metal2 features attached to and within 0.28um of large metal2 < 56 (met2.3a)	8	0.3614999838396909
+sky130_ef_io__vssd_lvc_clamped_pad	N-well overlap of P-Diffusion < 36 (diff/tap.8)	210	6.382799714666624
+sky130_ef_io__vssd_lvc_clamped_pad	Can't overlap those layers	29	488.61337815727916
+sky130_ef_io__vssd_lvc_clamped_pad	All nwells must contain metal-connected N+ taps (nwell.4)	24	82.66719630448821
+sky130_ef_io__vssd_lvc_clamped_pad	P-diff distance to N-tap must be < 15.0um (LU.3)	33	43.621798049953604
+sky130_ef_io__vssd_lvc_clamped_pad	P-tap overlap of P-tap contact < 24 in one direction (licon.7)	832	33.14879851813301
+sky130_ef_io__vssio_hvc_clamped_pad	Can't overlap those layers	143	1048.5117531278709
+sky130_ef_io__vssio_hvc_clamped_pad	All HV nwell can contain only HV diffusion (diff/tap.21)	91	97.40599564561258
+sky130_ef_io__vssio_hvc_clamped_pad	LV to MV Diffusion spacing < 54 (diff/tap.3)	30622	945.5399577312785
+sky130_ef_io__vssio_hvc_clamped_pad	Spacing of metal2 features attached to and within 0.28um of large metal2 < 56 (met2.3a)	8	0.3614999838396909
