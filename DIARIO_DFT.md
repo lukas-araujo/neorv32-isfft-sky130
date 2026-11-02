@@ -357,6 +357,33 @@ comparação justa com o IP sem scan fica para quando chegar o
 `_area_hier.rpt` (o `u_isfft` da síntese do chip tem 448.030 µm² de
 lógica, `doc/tabelas_sintese.md`).
 
+### ✅ Bloco 2a — LEC: RTL sem scan ≡ netlist com scan
+
+Fonte: fim do `reports/isfft_dft_lec_run.log` colado no chat (Conformal
+**26.10-s200**). Dofile composto do Genus, com as restrições de DFT
+(`CFM-655`).
+
+| Etapa | Resultado |
+|---|---|
+| `fv_map` → netlist com scan (plana) | **Equivalent** |
+| RTL → `fv_map` (hierárquica, `run_hier_compare`) | **Equivalent**, 129 pares de módulos |
+| Não-equivalentes / abortados / desconhecidos | **0 / 0 / 0** |
+| `analyze_results` | LEC **PASS**, Flatten **PASS**, Hierarchical **PASS** |
+| Fase sequencial | 12.552 flip-flops, 0 inconsistências (`sequential_phase`) |
+| Constante / fusão sequencial | 516 / 163 pontos, 0 inconsistências (otimizações do Genus aceitas) |
+| Tempo | 582 s (comparação 334 s, datapath 206 s); 591 MB |
+
+Avisos "críticos" do log: `RTL5.3` (8), `RTL13` (5), `RTL7.10a` (2) — leitura
+do RTL do Spiral (`case` redimensionado, laço `for` que nunca entra,
+comparação de larguras diferentes); os mesmos do LEC do chip, sem efeito.
+O "No of compare points = 595" do fim do log é da última comparação da
+corrida hierárquica (um módulo), não do IP inteiro.
+
+**Leitura:** com `scan_en = 0` o mux de scan vira fio; o LEC prova que os
+32 portas novas e a troca de 9.8xx `edfxtp` por `sdfxtp` + mux não mudaram
+nenhuma função.
+**Vira slide?** Sim, junto do LEC do chip: "inserir scan não muda o circuito".
+
 **Etapa 4 de graça:** o `run_fullscan_sim` já existe; entrou como bloco 4
 do `run_first_dft.tcl` (rodar depois do 3).
 
@@ -390,7 +417,8 @@ do `run_first_dft.tcl` (rodar depois do 3).
 ## Pendências abertas
 
 - [x] ~~VM: bloco 1 (Genus)~~ — passou (2ª sessão)
-- [ ] VM: blocos 2a (LEC) e 2b (Kria no netlist com scan)
+- [x] ~~VM: bloco 2a (LEC)~~ — PASS (2ª sessão)
+- [ ] VM: bloco 2b (Kria no netlist com scan)
 - [ ] VM: bloco 3 (Modus) — script `runmodus.atpg.tcl` (confirmado pelo log do Genus)
 - [ ] VM: bloco 4 (`run_fullscan_sim`)
 - [ ] `traz_dft.sh … scan` com tudo
