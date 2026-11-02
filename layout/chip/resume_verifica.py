@@ -18,6 +18,10 @@ Etapa 12 (DIARIO_GDSII, 38a sessao). Le so texto; nao precisa do nix-shell.
       compara, por regra, a AREA de erro na faixa dos pads com a soma do DRC
       de cada celula sozinha (ref.tsv do 12_drc_celulas.sh) x instancias (L81).
 
+  python3 resume_verifica.py densidade <saida do check_density.py> [outra ...]
+      densidade global e por janela (700 x 700 um, passo 70) de cada camada,
+      com os limites do sky130 e quantas janelas reprovam.
+
   python3 resume_verifica.py lvs <lvs.netgen.rpt>
       resultado final, numero de dispositivos/redes dos dois lados e as
       linhas de diferenca (as marcadas com "**Mismatch**" e as de pinos).
@@ -173,7 +177,54 @@ def anel(rpt, ref_tsv, spice):
                 print("     %.3f %.3f %.3f %.3f" % cx)
 
 
+def le_densidade(caminho):
+    """saida do check_density.py -> {camada: (global, min, max, janelas, janelas com erro)}"""
+    txt = open(caminho, errors="replace").read()
+    partes = txt.split("Whole-chip (global) density results:")
+    passo, glob_ = partes[0], (partes[1] if len(partes) > 1 else "")
+    r = {}
+    camada = None
+    for l in passo.splitlines():
+        m = re.match(r"^(\w+) Density:\s*$", l.strip())
+        if m:
+            camada = m.group(1)
+            r.setdefault(camada, [None, [], 0])
+            continue
+        m = re.match(r"^Tile \((\d+), (\d+)\):\s+([\d.]+)", l.strip())
+        if m and camada:
+            r[camada][1].append(float(m.group(3)))
+        elif l.startswith("***Error") and camada:
+            r[camada][2] += 1
+    for m in re.finditer(r"^(\w+) Density: ([\d.]+)", glob_, re.M):
+        r.setdefault(m.group(1), [None, [], 0])[0] = float(m.group(2))
+    return r
+
+
+LIMITES = {"FOM": (0.33, 0.57), "POLY": (None, None), "LI": (0.35, 0.60), "MET1": (0.35, 0.60),
+           "MET2": (0.35, 0.60), "MET3": (0.35, 0.60), "MET4": (0.35, 0.60), "MET5": (0.45, 0.76)}
+
+
+def densidade(arquivos):
+    dados = [(a, le_densidade(a)) for a in arquivos]
+    for a, d in dados:
+        print(f"\n{a}")
+        print(f"  {'camada':6s} {'limites':>11s} {'global':>7s} {'janela min':>10s} {'janela max':>10s} {'janelas':>7s} {'c/ erro':>7s}")
+        for cam in ("FOM", "POLY", "LI", "MET1", "MET2", "MET3", "MET4", "MET5"):
+            if cam not in d:
+                continue
+            g, ts, e = d[cam]
+            lo, hi = LIMITES.get(cam, (None, None))
+            lim = f"{lo:.2f}-{hi:.2f}" if lo is not None else "-"
+            gs = f"{g:.3f}" if g is not None else "?"
+            mn = f"{min(ts):.3f}" if ts else "-"
+            mx = f"{max(ts):.3f}" if ts else "-"
+            print(f"  {cam:6s} {lim:>11s} {gs:>7s} {mn:>10s} {mx:>10s} {len(ts):7d} {e:7d}")
+
+
 def main():
+    if len(sys.argv) >= 3 and sys.argv[1] == "densidade":
+        densidade(sys.argv[2:])
+        return
     if len(sys.argv) == 3 and sys.argv[1] == "celulas":
         celulas(sys.argv[2])
         return

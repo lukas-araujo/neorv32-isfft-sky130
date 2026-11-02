@@ -4274,6 +4274,31 @@ GDS real já não acusou nada de metal ali.
 |---|---|---|---|
 | L85 | Erros de DRC na faixa dos pads = isenção da foundry, pelo critério "≤ 0,5 µm de um erro da célula sozinha" (99,6 %) + o resto só em camada de dispositivo no miolo dos pads | ✅ | A marca e o nome da regra mudam no rechecado achatado do Magic; o lugar do defeito não. Metal/via sem nenhum erro de encosto |
 
+### Etapa 12, extras (pedido do Lukas): densidade, STA do chip e LVS pelo GDS
+
+Três scripts novos em `layout/chip/`, cada um com a sua rodada (`runs/<data>_12dens|_12sta|_12lvs`)
+e a sua pasta em `resultados/`. O que é comum (rodada da etapa 11, PDK `8afc8346`, Python com o
+módulo do KLayout, DRC do Magic com o núcleo caixa-preta) foi para `comum_chip.sh`.
+
+| Script | O que faz | Testado aqui |
+|---|---|---|
+| `12_densidade.sh` | `check_density.py` (open_pdks, `libs.tech/magic/`) no GDS da etapa 11 → `generate_fill.py -dist` → KLayout junta chip + `chip_top_fill_pattern` → `check_density.py` de novo → DRC do Magic no GDS preenchido → imagem do GDS final | a junção chip + fill (GDS sintéticos, fill `.gds.gz`); o leitor da saída do `check_density.py` (`resume_verifica.py densidade`) |
+| `12_sta.sh` | A: OpenROAD lê o `.odb` + SPEF `nom` do núcleo (rodada da etapa 7/8), libs TT e `nucleo.sdc`, confere o STA TT e roda `write_timing_model` → `entrada/asic_top_tt.lib`. B: `config_sta.json` (MACROS com o `.lib`, caminhos absolutos) e só o `OpenROAD.STAPostPNR` do chip, a partir do RCX da etapa 11 | o gerador do `config_sta.json` com o `config.json` real; o resumo dos pinos/arcos do `.lib` (num `.lib` de mentira) |
+| `12_lvs_gds.sh` | acha em que arquivo SPICE do PDK está cada célula do anel (como a L64: o combinado pode não ter todas) → `MAGIC_EXT_USE_GDS`, núcleo abstraído (`MAGIC_EXT_ABSTRACT_CELLS`), `PAD_SPICE_MODELS` → `Magic.SpiceExtraction` + `Netgen.LVS` | a escolha dos SPICE (diretório de mentira: combinado, arquivo próprio e célula sem SPICE) |
+
+Densidade, na teoria: o sky130 pede, por janela de 700 × 700 µm (passo de 70 µm), li/met1–met4
+entre 35 % e 60 %, met5 entre 45 % e 76 %, difusão (FOM) entre 33 % e 57 % (limites do
+`check_density.py`). Sem isso o polimento químico-mecânico (CMP) deixa a superfície ondulada:
+onde há pouco metal o polimento "afunda" e a camada de cima sai fora de foco na litografia. O
+preenchimento ("wafflefill" do Magic) põe quadradinhos soltos, sem ligação elétrica, nos vazios,
+respeitando o espaçamento com o desenho.
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L86 | Densidade e preenchimento com os scripts do open_pdks para o Magic (`check_density.py`, `generate_fill.py`), fill juntado por instância; DRC de novo no GDS preenchido | ✅ | Os passos do KLayout pularam (sem runset no PDK); são os scripts que o Caravel usa; o fill não pode criar erro, então o DRC repete |
+| L87 | STA do chip com um modelo de tempo do núcleo (`write_timing_model`, TT, chave `"*"` como as SRAM) | ✅ | Sem `.lib` do núcleo o STA do chip não tem caminho (folga 1e39); o modelo leva para o chip a árvore de relógio e os fios extraídos do núcleo |
+| L88 | LVS pelo GDS com os pads inteiros, núcleo abstraído, `MAGIC_CAPTURE_ERRORS = false` só nessa rodada (camadas da OpenRAM, L44; o script lista as linhas) | ✅ | É o LVS que enxerga o metal real dentro do anel: fecha a L77 (curto apareceria como redes fundidas) |
+
 ---
 
 ## Índice de decisões
@@ -4365,6 +4390,9 @@ GDS real já não acusou nada de metal ali.
 | L83 | DRC do anel: comparação geométrica por instância (`compara_drc_anel.py`) | ✅ | 2026-11-02 |
 | L84 | Orientação por encaixe (menor XOR) na comparação do DRC do anel | ✅ | 2026-11-02 |
 | L85 | DRC da faixa dos pads isento (≤ 0,5 µm de erro da célula; resto só dispositivo no miolo dos `gpiov2`) — etapa 12 ✅ | ✅ | 2026-11-02 |
+| L86 | Densidade + preenchimento (scripts do open_pdks), DRC de novo no preenchido | ✅ | 2026-11-02 |
+| L87 | STA do chip com modelo de tempo do núcleo (`write_timing_model`) | ✅ | 2026-11-02 |
+| L88 | LVS pelo GDS com pads inteiros, núcleo abstraído | ✅ | 2026-11-02 |
 
 ---
 
@@ -4398,7 +4426,7 @@ GDS real já não acusou nada de metal ali.
 - [ ] IR drop do chip com a fonte **no pad** (`VSRC_LOC_FILES` com a posição do `pad_vccd`/`pad_vssd`): sem terminal de topo, o `analyze_power_grid` usa "bump pattern" (`PSM-0073`: fontes virtuais a cada 140 µm no met5, como num flip-chip) e a queda sai otimista; o `PSM-0025` do `GeneratePDN` é a mesma falta de terminal (L68)
 - [x] Etapa 11, parte 2b: fluxo `Chip` completo na rodada `2026-11-01_1249` (L72–L77, 38ª sessão)
 - [x] Etapa 12: LVS limpo, DRC 0 no nosso desenho e no núcleo, faixa dos pads isenta (L85; 39ª sessão)
-- [ ] Opcional: LVS pelo GDS com os pads inteiros (`PAD_SPICE_MODELS`) para fechar a L77
+- [ ] Etapa 12, extras: `12_sta.sh`, `12_lvs_gds.sh` (fecha a L77), `12_densidade.sh` no notebook (L86–L88)
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
