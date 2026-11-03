@@ -1,0 +1,193 @@
+
+===========================================================================
+report_checks -unconstrained
+===========================================================================
+======================= nom_tt_025C_1v80 Corner ===================================
+
+Startpoint: u_core (rising edge-triggered flip-flop clocked by clk_i)
+Endpoint: tx_pad (output port clocked by clk_i)
+Path Group: clk_i
+Path Type: max
+
+Fanout         Cap        Slew       Delay        Time   Description
+---------------------------------------------------------------------------------------------
+                                  0.000000    0.000000   clock clk_i (rise edge)
+                                  0.000000    0.000000   clock source latency
+     1    1.117215    0.000000    0.000000    0.000000 ^ clk_pad (inout)
+                                                         clk_pad (net)
+                      0.000000    0.000000    0.000000 ^ pad_clk/PAD (sky130_ef_io__gpiov2_pad_wrapped)
+     1    0.510184    0.568150    1.408940    1.408940 ^ pad_clk/IN (sky130_ef_io__gpiov2_pad_wrapped)
+                                                         clk_core (net)
+                      0.654664    0.167315    1.576256 ^ u_core/clk_i (asic_top)
+     1    0.352444    3.495783    6.117624    7.693880 ^ u_core/uart0_txd_o (asic_top)
+                                                         tx_core (net)
+                      3.540117    0.319048    8.012927 ^ pad_tx/OUT (sky130_ef_io__gpiov2_pad_wrapped)
+     1    1.117215    1.211184    3.500515   11.513442 ^ pad_tx/PAD (sky130_ef_io__gpiov2_pad_wrapped)
+                                                         tx_pad (net)
+                      1.211184    0.000000   11.513442 ^ tx_pad (inout)
+                                             11.513442   data arrival time
+
+                                 20.000000   20.000000   clock clk_i (rise edge)
+                                  0.000000   20.000000   clock network delay (propagated)
+                                 -0.250000   19.750002   clock uncertainty
+                                  0.000000   19.750002   clock reconvergence pessimism
+                                 -6.000000   13.750002   output external delay
+                                             13.750002   data required time
+---------------------------------------------------------------------------------------------
+                                             13.750002   data required time
+                                            -11.513442   data arrival time
+---------------------------------------------------------------------------------------------
+                                              2.236559   slack (MET)
+
+
+
+
+===========================================================================
+report_checks --slack_max -0.01
+============================================================================
+======================= nom_tt_025C_1v80 Corner ===================================
+
+No paths found.
+
+
+===========================================================================
+ report_check_types -max_slew -max_cap -max_fanout -violators
+============================================================================
+======================= nom_tt_025C_1v80 Corner ===================================
+
+max slew
+
+Pin                                        Limit        Slew       Slack
+------------------------------------------------------------------------
+pad_tx/OUT                              1.500000    3.540117   -2.040117 (VIOLATED)
+
+
+
+===========================================================================
+report_parasitic_annotation -report_unannotated
+============================================================================
+Found 106 unannotated drivers.
+ clk_pad
+ rstn_pad
+ rx_pad
+ tx_pad
+ pad_clk/AMUXBUS_A
+ pad_clk/AMUXBUS_B
+ pad_clk/IN_H
+ pad_clk/PAD
+ pad_clk/PAD_A_ESD_0_H
+ pad_clk/PAD_A_ESD_1_H
+ pad_clk/PAD_A_NOESD_H
+ pad_clk_1/HI
+ pad_clk_10/HI
+ pad_clk_11/HI
+ pad_clk_2/HI
+ pad_clk_3/HI
+ pad_clk_4/HI
+ pad_clk_43/LO
+ pad_clk_44/LO
+ pad_clk_45/LO
+ pad_clk_5/HI
+ pad_clk_6/HI
+ pad_clk_7/HI
+ pad_clk_8/HI
+ pad_clk_9/HI
+ pad_rstn/AMUXBUS_A
+ pad_rstn/AMUXBUS_B
+ pad_rstn/IN_H
+ pad_rstn/PAD
+ pad_rstn/PAD_A_ESD_0_H
+ pad_rstn/PAD_A_ESD_1_H
+ pad_rstn/PAD_A_NOESD_H
+ pad_rstn_12/HI
+ pad_rstn_13/HI
+ pad_rstn_14/HI
+ pad_rstn_15/HI
+ pad_rstn_16/HI
+ pad_rstn_17/HI
+ pad_rstn_18/HI
+ pad_rstn_19/HI
+ pad_rstn_20/HI
+ pad_rstn_21/HI
+ pad_rstn_22/HI
+ pad_rstn_46/LO
+ pad_rstn_47/LO
+ pad_rstn_48/LO
+ pad_rx/AMUXBUS_A
+ pad_rx/AMUXBUS_B
+ pad_rx/IN_H
+ pad_rx/PAD
+ pad_rx/PAD_A_ESD_0_H
+ pad_rx/PAD_A_ESD_1_H
+ pad_rx/PAD_A_NOESD_H
+ pad_rx_23/HI
+ pad_rx_24/HI
+ pad_rx_25/HI
+ pad_rx_26/HI
+ pad_rx_27/HI
+ pad_rx_28/HI
+ pad_rx_29/HI
+ pad_rx_30/HI
+ pad_rx_31/HI
+ pad_rx_32/HI
+ pad_rx_33/HI
+ pad_rx_49/LO
+ pad_rx_50/LO
+ pad_rx_51/LO
+ pad_tx/AMUXBUS_A
+ pad_tx/AMUXBUS_B
+ pad_tx/IN
+ pad_tx/IN_H
+ pad_tx/PAD
+ pad_tx/PAD_A_ESD_0_H
+ pad_tx/PAD_A_ESD_1_H
+ pad_tx/PAD_A_NOESD_H
+ pad_tx_34/HI
+ pad_tx_35/HI
+ pad_tx_36/HI
+ pad_tx_37/HI
+ pad_tx_38/HI
+ pad_tx_39/HI
+ pad_tx_40/HI
+ pad_tx_41/HI
+ pad_tx_42/HI
+ pad_tx_52/LO
+ pad_tx_53/LO
+ pad_tx_54/LO
+ pad_tx_55/LO
+ pad_vccd/AMUXBUS_A
+ pad_vccd/AMUXBUS_B
+ pad_vccd/VCCD_PAD
+ pad_vdda/AMUXBUS_A
+ pad_vdda/AMUXBUS_B
+ pad_vdda/VDDA_PAD
+ pad_vddio/AMUXBUS_A
+ pad_vddio/AMUXBUS_B
+ pad_vddio/VDDIO_PAD
+ pad_vssa/AMUXBUS_A
+ pad_vssa/AMUXBUS_B
+ pad_vssa/VSSA_PAD
+ pad_vssd/AMUXBUS_A
+ pad_vssd/AMUXBUS_B
+ pad_vssd/VSSD_PAD
+ pad_vssio/AMUXBUS_A
+ pad_vssio/AMUXBUS_B
+ pad_vssio/VSSIO_PAD
+Found 0 partially unannotated drivers.
+
+===========================================================================
+max slew violation count 1
+max fanout violation count 0
+max cap violation count 0
+============================================================================
+
+===========================================================================
+check_setup -verbose -unconstrained_endpoints -multiple_clock -no_clock -no_input_delay -loops -generated_clocks
+===========================================================================
+Warning: There are 2 input ports missing set_input_delay.
+  rstn_pad
+  tx_pad
+Warning: There are 3 unconstrained endpoints.
+  clk_pad
+  rstn_pad
+  rx_pad

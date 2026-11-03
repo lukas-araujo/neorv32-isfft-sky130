@@ -1,0 +1,6 @@
+== STA TT do nucleo (conferencia: tem de bater com a etapa 7)
+wns max 0.00
+tns max 0.00
+worst slack max 0.56
+worst slack min 0.13
+== modelo escrito: /home/lukas/Projects/neorv32-isfft-sky130/layout/chip/entrada/asic_top_tt.lib

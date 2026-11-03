@@ -1,0 +1,21 @@
+SPICE/CDL dos pads (PAD_SPICE_MODELS):
+  cdl/sky130_ef_io.cdl
+  spice/sky130_fd_io.spice
+
+Celulas do anel -> onde esta o .subckt:
+  sky130_ef_io__com_bus_slice_10um                               cdl/sky130_ef_io.cdl
+  sky130_ef_io__com_bus_slice_1um                                cdl/sky130_ef_io.cdl
+  sky130_ef_io__com_bus_slice_20um                               cdl/sky130_ef_io.cdl
+  sky130_ef_io__com_bus_slice_5um                                cdl/sky130_ef_io.cdl
+  sky130_ef_io__connect_vcchib_vccd_and_vswitch_vddio_slice_20um cdl/sky130_ef_io.cdl
+  sky130_ef_io__corner_pad                                       cdl/sky130_ef_io.cdl
+  sky130_ef_io__gpiov2_pad_wrapped                               cdl/sky130_ef_io.cdl
+  sky130_ef_io__vccd_lvc_clamped_pad                             cdl/sky130_ef_io.cdl
+  sky130_ef_io__vdda_hvc_clamped_pad                             cdl/sky130_ef_io.cdl
+  sky130_ef_io__vddio_hvc_clamped_pad                            cdl/sky130_ef_io.cdl
+  sky130_ef_io__vssa_hvc_clamped_pad                             cdl/sky130_ef_io.cdl
+  sky130_ef_io__vssd_lvc_clamped_pad                             cdl/sky130_ef_io.cdl
+  sky130_ef_io__vssio_hvc_clamped_pad                            cdl/sky130_ef_io.cdl
+
+Subcelulas (fecho) sem definicao em nenhum arquivo: nenhuma
+Subcircuitos conferidos no fecho: 114

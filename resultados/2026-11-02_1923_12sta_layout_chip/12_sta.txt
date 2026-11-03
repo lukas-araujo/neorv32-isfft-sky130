@@ -1,0 +1,15 @@
+STA do chip com o modelo do nucleo (folga em ns; 1e39 = sem caminho)
+  corner                  setup ws setup tns  vio   hold ws  hold tns  vio
+  max_ff_n40C_1v95           2.101     0.000    0     3.698     0.000    0
+  max_ss_100C_1v60           2.101     0.000    0     3.698     0.000    0
+  max_tt_025C_1v80           2.101     0.000    0     3.698     0.000    0
+  min_ff_n40C_1v95           2.471     0.000    0     3.675     0.000    0
+  min_ss_100C_1v60           2.471     0.000    0     3.675     0.000    0
+  min_tt_025C_1v80           2.471     0.000    0     3.675     0.000    0
+  nom_ff_n40C_1v95           2.237     0.000    0     3.686     0.000    0
+  nom_ss_100C_1v60           2.237     0.000    0     3.686     0.000    0
+  nom_tt_025C_1v80           2.237     0.000    0     3.686     0.000    0
+  timing__setup__ws            2.101358257988971
+  timing__hold__ws             3.6750767913532276
+  timing__setup_vio__count     0
+  timing__hold_vio__count      0

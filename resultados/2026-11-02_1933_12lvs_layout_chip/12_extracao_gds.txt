@@ -1,0 +1,29 @@
+== Magic.SpiceExtraction pelo GDS (01-magic-spiceextraction), tempo: 02:36:19.014
+asic_top matched with the expression '^asic_top$'
+
+== Linhas que o MAGIC_CAPTURE_ERRORS trataria como fatais (desligado aqui)
+     44 Error while reading cell "..." : Unknown layer/datatype in boundary, layer=33 type=43
+     28 Error while reading cell "..." : Unknown layer/datatype in boundary, layer=22 type=21
+     26 Error while reading cell "..." : Unknown layer/datatype in boundary, layer=92 type=44
+     16 Error while reading cell "..." : Unknown layer/datatype in boundary, layer=22 type=22
+     16 Error while reading cell "..." : Unknown layer/datatype in boundary, layer=115 type=43
+      8 Error while reading cell "..." : Unknown layer/datatype in boundary, layer=33 type=42
+      8 Error while reading cell "..." : Unknown layer/datatype in boundary, layer=115 type=42
+      6 Error while reading cell "..." : Unknown layer/datatype in boundary, layer=235 type=0
+
+== Netlist extraida: dispositivos por modelo (todas as subcelulas)
+   2271 sky130_fd_pr__nfet_01v8
+   1145 sky130_fd_pr__pfet_01v8
+   1003 sky130_fd_pr__pfet_01v8_hvt
+    274 sky130_fd_pr__nfet_g5v0d10v5
+    163 sky130_fd_pr__pfet_g5v0d10v5
+     88 sky130_fd_pr__special_nfet_latch
+     58 sky130_fd_pr__special_nfet_01v8
+     48 sky130_fd_pr__special_pfet_latch
+     26 sky130_fd_pr__pfet_01v8__example_55959141808416_9
+     26 sky130_fd_pr__nfet_05v0_nvt
+     24 sky130_fd_pr__res_generic_po
+     20 sky130_fd_pr__via_l1m1__example_559591418084_9
+     20 sky130_fd_pr__special_nfet_pass
+     20 sky130_fd_pr__nfet_01v8_lvt
+     15 sky130_fd_pr__nfet_01v8__example_55959141808674_0

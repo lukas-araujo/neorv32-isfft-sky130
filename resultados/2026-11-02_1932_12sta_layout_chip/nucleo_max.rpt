@@ -1,0 +1,168 @@
+Startpoint: u_cpu.neorv32_top_inst.soc_generators_neorv32_sys_reset_inst.n1061_q_reg
+            (rising edge-triggered flip-flop clocked by clk_i)
+Endpoint: u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_regfile_inst.n10620_q_reg[28]
+          (recovery check against rising-edge clock clk_i)
+Path Group: asynchronous
+Path Type: max
+
+     Cap     Slew    Delay     Time   Description
+---------------------------------------------------------------------------
+                     0.000    0.000   clock clk_i (rise edge)
+                     3.015    3.015   clock network delay (propagated)
+            0.075    0.000    3.015 ^ u_cpu.neorv32_top_inst.soc_generators_neorv32_sys_reset_inst.n1061_q_reg/CLK (sky130_fd_sc_hd__dfrtp_1)
+   0.009    0.093    0.386    3.402 ^ u_cpu.neorv32_top_inst.soc_generators_neorv32_sys_reset_inst.n1061_q_reg/Q (sky130_fd_sc_hd__dfrtp_1)
+            0.093    0.000    3.402 ^ fanout11830/A (sky130_fd_sc_hd__clkdlybuf4s25_1)
+   0.127    1.252    1.159    4.561 ^ fanout11830/X (sky130_fd_sc_hd__clkdlybuf4s25_1)
+            1.252    0.003    4.564 ^ fanout11751/A (sky130_fd_sc_hd__buf_2)
+   0.174    0.825    0.863    5.427 ^ fanout11751/X (sky130_fd_sc_hd__buf_2)
+            0.825    0.003    5.430 ^ fanout11647/A (sky130_fd_sc_hd__clkdlybuf4s25_1)
+   0.082    0.812    0.959    6.389 ^ fanout11647/X (sky130_fd_sc_hd__clkdlybuf4s25_1)
+            0.812    0.003    6.392 ^ fanout11646/A (sky130_fd_sc_hd__clkdlybuf4s25_1)
+   0.045    0.450    0.693    7.085 ^ fanout11646/X (sky130_fd_sc_hd__clkdlybuf4s25_1)
+            0.450    0.002    7.087 ^ fanout11632/A (sky130_fd_sc_hd__clkdlybuf4s25_1)
+   0.037    0.371    0.593    7.680 ^ fanout11632/X (sky130_fd_sc_hd__clkdlybuf4s25_1)
+            0.371    0.002    7.681 ^ fanout11631/A (sky130_fd_sc_hd__clkdlybuf4s25_1)
+   0.041    0.409    0.610    8.291 ^ fanout11631/X (sky130_fd_sc_hd__clkdlybuf4s25_1)
+            0.409    0.001    8.292 ^ fanout11629/A (sky130_fd_sc_hd__clkdlybuf4s25_1)
+   0.008    0.091    0.379    8.671 ^ fanout11629/X (sky130_fd_sc_hd__clkdlybuf4s25_1)
+            0.091    0.000    8.671 ^ load_slew11630/A (sky130_fd_sc_hd__clkbuf_4)
+   0.043    0.138    0.231    8.902 ^ load_slew11630/X (sky130_fd_sc_hd__clkbuf_4)
+            0.138    0.001    8.903 ^ fanout11627/A (sky130_fd_sc_hd__clkdlybuf4s25_1)
+   0.013    0.143    0.364    9.266 ^ fanout11627/X (sky130_fd_sc_hd__clkdlybuf4s25_1)
+            0.143    0.000    9.267 ^ load_slew11628/A (sky130_fd_sc_hd__clkbuf_4)
+   0.041    0.130    0.245    9.511 ^ load_slew11628/X (sky130_fd_sc_hd__clkbuf_4)
+            0.130    0.003    9.514 ^ u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_regfile_inst.n10620_q_reg[28]/RESET_B (sky130_fd_sc_hd__dfrtp_1)
+                              9.514   data arrival time
+
+                    20.000   20.000   clock clk_i (rise edge)
+                     2.780   22.780   clock network delay (propagated)
+                    -0.250   22.530   clock uncertainty
+                     0.222   22.752   clock reconvergence pessimism
+                             22.752 ^ u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_regfile_inst.n10620_q_reg[28]/CLK (sky130_fd_sc_hd__dfrtp_1)
+                     0.214   22.966   library recovery time
+                             22.966   data required time
+---------------------------------------------------------------------------
+                             22.966   data required time
+                             -9.514   data arrival time
+---------------------------------------------------------------------------
+                             13.452   slack (MET)
+
+
+Startpoint: u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_control_inst.n7868_q_reg[16]
+            (rising edge-triggered flip-flop clocked by clk_i)
+Endpoint: u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.n12685_q_reg[63]
+          (rising edge-triggered flip-flop clocked by clk_i)
+Path Group: clk_i
+Path Type: max
+
+     Cap     Slew    Delay     Time   Description
+---------------------------------------------------------------------------
+                     0.000    0.000   clock clk_i (rise edge)
+                     3.115    3.115   clock network delay (propagated)
+            0.086    0.000    3.115 ^ u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_control_inst.n7868_q_reg[16]/CLK (sky130_fd_sc_hd__dfrtp_1)
+   0.004    0.055    0.356    3.471 ^ u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_control_inst.n7868_q_reg[16]/Q (sky130_fd_sc_hd__dfrtp_1)
+            0.055    0.000    3.471 ^ fanout12579/A (sky130_fd_sc_hd__clkdlybuf4s25_1)
+   0.050    0.497    0.595    4.066 ^ fanout12579/X (sky130_fd_sc_hd__clkdlybuf4s25_1)
+            0.497    0.002    4.068 ^ wire12580/A (sky130_fd_sc_hd__clkbuf_4)
+   0.084    0.253    0.431    4.499 ^ wire12580/X (sky130_fd_sc_hd__clkbuf_4)
+            0.253    0.009    4.508 ^ fanout12575/A (sky130_fd_sc_hd__clkdlybuf4s25_1)
+   0.059    0.589    0.721    5.229 ^ fanout12575/X (sky130_fd_sc_hd__clkdlybuf4s25_1)
+            0.589    0.002    5.230 ^ fanout12574/A (sky130_fd_sc_hd__clkbuf_2)
+   0.052    0.283    0.406    5.636 ^ fanout12574/X (sky130_fd_sc_hd__clkbuf_2)
+            0.283    0.004    5.640 ^ u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.g7200__5477/S (sky130_fd_sc_hd__mux2_2)
+   0.008    0.062    0.414    6.054 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.g7200__5477/X (sky130_fd_sc_hd__mux2_2)
+            0.062    0.000    6.054 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.g7189__5115/A2 (sky130_fd_sc_hd__o21ba_2)
+   0.070    0.180    0.357    6.411 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.g7189__5115/X (sky130_fd_sc_hd__o21ba_2)
+            0.180    0.002    6.413 v fanout6817/A (sky130_fd_sc_hd__clkdlybuf4s25_1)
+   0.043    0.318    0.539    6.952 v fanout6817/X (sky130_fd_sc_hd__clkdlybuf4s25_1)
+            0.318    0.001    6.953 v fanout6815/A (sky130_fd_sc_hd__clkdlybuf4s25_1)
+   0.025    0.188    0.484    7.437 v fanout6815/X (sky130_fd_sc_hd__clkdlybuf4s25_1)
+            0.188    0.000    7.437 v load_slew6816/A (sky130_fd_sc_hd__buf_4)
+   0.038    0.064    0.248    7.685 v load_slew6816/X (sky130_fd_sc_hd__buf_4)
+            0.065    0.003    7.688 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1021/B (sky130_fd_sc_hd__fa_1)
+   0.006    0.088    0.436    8.124 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1021/COUT (sky130_fd_sc_hd__fa_1)
+            0.088    0.000    8.124 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1020/CIN (sky130_fd_sc_hd__fa_1)
+   0.006    0.086    0.415    8.538 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1020/COUT (sky130_fd_sc_hd__fa_1)
+            0.086    0.000    8.539 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1019/CIN (sky130_fd_sc_hd__fa_1)
+   0.006    0.084    0.411    8.950 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1019/COUT (sky130_fd_sc_hd__fa_1)
+            0.084    0.000    8.950 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1018/CIN (sky130_fd_sc_hd__fa_1)
+   0.009    0.102    0.439    9.389 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1018/COUT (sky130_fd_sc_hd__fa_1)
+            0.102    0.000    9.389 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1017/CIN (sky130_fd_sc_hd__fa_1)
+   0.009    0.103    0.447    9.836 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1017/COUT (sky130_fd_sc_hd__fa_1)
+            0.103    0.000    9.837 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1016/CIN (sky130_fd_sc_hd__fa_1)
+   0.012    0.113    0.460   10.297 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1016/COUT (sky130_fd_sc_hd__fa_1)
+            0.113    0.001   10.298 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1015/CIN (sky130_fd_sc_hd__fa_1)
+   0.007    0.089    0.429   10.727 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1015/COUT (sky130_fd_sc_hd__fa_1)
+            0.089    0.000   10.727 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1014/CIN (sky130_fd_sc_hd__fa_1)
+   0.015    0.129    0.475   11.202 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1014/COUT (sky130_fd_sc_hd__fa_1)
+            0.129    0.001   11.203 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1013/CIN (sky130_fd_sc_hd__fa_1)
+   0.017    0.139    0.501   11.704 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1013/COUT (sky130_fd_sc_hd__fa_1)
+            0.139    0.001   11.705 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1012/CIN (sky130_fd_sc_hd__fa_1)
+   0.006    0.086    0.435   12.141 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1012/COUT (sky130_fd_sc_hd__fa_1)
+            0.086    0.000   12.141 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1011/CIN (sky130_fd_sc_hd__fa_1)
+   0.007    0.093    0.423   12.564 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1011/COUT (sky130_fd_sc_hd__fa_1)
+            0.093    0.000   12.565 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1010/CIN (sky130_fd_sc_hd__fa_1)
+   0.007    0.089    0.421   12.986 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1010/COUT (sky130_fd_sc_hd__fa_1)
+            0.089    0.000   12.986 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1009/CIN (sky130_fd_sc_hd__fa_1)
+   0.006    0.088    0.418   13.404 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1009/COUT (sky130_fd_sc_hd__fa_1)
+            0.088    0.000   13.404 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1008/CIN (sky130_fd_sc_hd__fa_1)
+   0.008    0.099    0.435   13.839 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1008/COUT (sky130_fd_sc_hd__fa_1)
+            0.099    0.000   13.840 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1007/CIN (sky130_fd_sc_hd__fa_1)
+   0.010    0.105    0.449   14.288 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1007/COUT (sky130_fd_sc_hd__fa_1)
+            0.105    0.000   14.289 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1006__6161/CIN (sky130_fd_sc_hd__fa_1)
+   0.005    0.082    0.415   14.703 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1006__6161/COUT (sky130_fd_sc_hd__fa_1)
+            0.082    0.000   14.704 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1005__4733/CIN (sky130_fd_sc_hd__fa_1)
+   0.008    0.096    0.426   15.130 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1005__4733/COUT (sky130_fd_sc_hd__fa_1)
+            0.096    0.000   15.130 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1004__7482/CIN (sky130_fd_sc_hd__fa_1)
+   0.008    0.099    0.438   15.568 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1004__7482/COUT (sky130_fd_sc_hd__fa_1)
+            0.099    0.000   15.568 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1003__5115/CIN (sky130_fd_sc_hd__fa_1)
+   0.007    0.093    0.428   15.996 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1003__5115/COUT (sky130_fd_sc_hd__fa_1)
+            0.093    0.000   15.997 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1002__1881/CIN (sky130_fd_sc_hd__fa_1)
+   0.006    0.086    0.416   16.413 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1002__1881/COUT (sky130_fd_sc_hd__fa_1)
+            0.086    0.000   16.413 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1001__6131/CIN (sky130_fd_sc_hd__fa_1)
+   0.009    0.101    0.437   16.850 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1001__6131/COUT (sky130_fd_sc_hd__fa_1)
+            0.101    0.000   16.851 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1000__7098/CIN (sky130_fd_sc_hd__fa_1)
+   0.005    0.082    0.413   17.264 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g1000__7098/COUT (sky130_fd_sc_hd__fa_1)
+            0.082    0.000   17.264 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g999__8246/CIN (sky130_fd_sc_hd__fa_1)
+   0.010    0.105    0.442   17.706 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g999__8246/COUT (sky130_fd_sc_hd__fa_1)
+            0.105    0.000   17.707 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g998__5122/CIN (sky130_fd_sc_hd__fa_1)
+   0.011    0.108    0.455   18.162 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g998__5122/COUT (sky130_fd_sc_hd__fa_1)
+            0.108    0.000   18.162 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g997__1705/CIN (sky130_fd_sc_hd__fa_1)
+   0.015    0.128    0.480   18.643 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g997__1705/COUT (sky130_fd_sc_hd__fa_1)
+            0.128    0.001   18.644 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g996__2802/CIN (sky130_fd_sc_hd__fa_1)
+   0.007    0.092    0.439   19.083 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g996__2802/COUT (sky130_fd_sc_hd__fa_1)
+            0.092    0.000   19.083 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g995__1617/CIN (sky130_fd_sc_hd__fa_1)
+   0.005    0.082    0.410   19.493 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g995__1617/COUT (sky130_fd_sc_hd__fa_1)
+            0.082    0.000   19.493 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g994__3680/CIN (sky130_fd_sc_hd__fa_1)
+   0.006    0.085    0.412   19.905 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g994__3680/COUT (sky130_fd_sc_hd__fa_1)
+            0.085    0.000   19.905 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g993__6783/CIN (sky130_fd_sc_hd__fa_1)
+   0.005    0.082    0.409   20.314 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g993__6783/COUT (sky130_fd_sc_hd__fa_1)
+            0.082    0.000   20.314 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g992__5526/CIN (sky130_fd_sc_hd__fa_1)
+   0.005    0.082    0.407   20.721 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g992__5526/COUT (sky130_fd_sc_hd__fa_1)
+            0.082    0.000   20.721 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g991__8428/CIN (sky130_fd_sc_hd__fa_1)
+   0.005    0.082    0.407   21.128 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g991__8428/COUT (sky130_fd_sc_hd__fa_1)
+            0.082    0.000   21.129 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g990__4319/CIN (sky130_fd_sc_hd__fa_1)
+   0.005    0.082    0.406   21.535 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g990__4319/COUT (sky130_fd_sc_hd__fa_1)
+            0.082    0.000   21.535 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g989__6260/A2_N (sky130_fd_sc_hd__o2bb2ai_1)
+   0.003    0.053    0.138   21.673 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.SUB_TC_OP_1_Y_ADD_TC_OP_g989__6260/Y (sky130_fd_sc_hd__o2bb2ai_1)
+            0.053    0.000   21.673 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.g12432__6161/B1 (sky130_fd_sc_hd__a222oi_1)
+   0.003    0.276    0.289   21.962 ^ u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.g12432__6161/Y (sky130_fd_sc_hd__a222oi_1)
+            0.276    0.000   21.962 ^ u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.g12353/A (sky130_fd_sc_hd__inv_1)
+   0.002    0.055    0.068   22.030 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.g12353/Y (sky130_fd_sc_hd__inv_1)
+            0.055    0.000   22.030 v u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.n12685_q_reg[63]/D (sky130_fd_sc_hd__dfxtp_1)
+                             22.030   data arrival time
+
+                    20.000   20.000   clock clk_i (rise edge)
+                     2.786   22.786   clock network delay (propagated)
+                    -0.250   22.536   clock uncertainty
+                     0.164   22.700   clock reconvergence pessimism
+                             22.700 ^ u_cpu.neorv32_top_inst.core_complex_gen_n1_neorv32_cpu_inst.neorv32_cpu_alu_inst.neorv32_cpu_alu_muldiv_enabled_neorv32_cpu_alu_muldiv_inst.n12685_q_reg[63]/CLK (sky130_fd_sc_hd__dfxtp_1)
+                    -0.107   22.593   library setup time
+                             22.593   data required time
+---------------------------------------------------------------------------
+                             22.593   data required time
+                            -22.030   data arrival time
+---------------------------------------------------------------------------
+                              0.562   slack (MET)
+
+
