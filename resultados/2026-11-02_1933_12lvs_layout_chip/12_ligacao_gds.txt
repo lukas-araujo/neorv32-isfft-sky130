@@ -1,0 +1,133 @@
+layout:  resultados/2026-11-02_1933_12lvs_layout_chip/12_extraida_gds.spice.gz
+verilog: resultados/2026-11-01_1839_12_layout_chip/12_chip_top.pnl.v.gz
+
+celula                                                        layout verilog
+asic_top                                                           1       1
+sky130_ef_io__com_bus_slice_10um                                   0      12   <-- diferente
+sky130_ef_io__com_bus_slice_1um                                    0      41   <-- diferente
+sky130_ef_io__com_bus_slice_20um                                   0     358   <-- diferente
+sky130_ef_io__com_bus_slice_5um                                    0      15   <-- diferente
+sky130_ef_io__connect_vcchib_vccd_and_vswitch_vddio_slice_20um       0       1   <-- diferente
+sky130_ef_io__corner_pad                                           0       4   <-- diferente
+sky130_ef_io__gpiov2_pad_wrapped                                   4       4
+sky130_ef_io__vccd_lvc_clamped_pad                                 1       1
+sky130_ef_io__vdda_hvc_clamped_pad                                 1       1
+sky130_ef_io__vddio_hvc_clamped_pad                                1       1
+sky130_ef_io__vssa_hvc_clamped_pad                                 1       1
+sky130_ef_io__vssd_lvc_clamped_pad                                 1       1
+sky130_ef_io__vssio_hvc_clamped_pad                                1       1
+sky130_fd_sc_hd__conb_1                                           55      55
+sky130_fd_sc_hd__diode_2                                          11      11
+
+redes de topo (sem decap/fill/tap): layout 166, verilog 204
+assinaturas iguais: 159; so no layout: 7; so no verilog: 45
+
+  so no layout: 55x conb_1.VGND, 55x conb_1.VNB, 11x diode_2.VGND, 11x diode_2.VNB, 4x gpiov2_pad_wrapped.VSSD, 4x gpiov2_pad_wrapped.VSWITCH, ... (+52)
+
+  so no layout: 55x conb_1.VPB, 55x conb_1.VPWR, 11x diode_2.VPB, 11x diode_2.VPWR, 4x gpiov2_pad_wrapped.VCCD, 4x gpiov2_pad_wrapped.VCCHIB, ... (+13)
+
+  so no layout: 4x gpiov2_pad_wrapped.VSSIO_Q, 1x vccd_lvc_clamped_pad.VSSIO_Q, 1x vdda_hvc_clamped_pad.VSSIO_Q, 1x vddio_hvc_clamped_pad.VSSIO_Q, 1x vssa_hvc_clamped_pad.VSSIO_Q, 1x vssd_lvc_clamped_pad.VSSIO_Q, ... (+1)
+
+  so no layout: 4x gpiov2_pad_wrapped.VDDIO_Q, 1x vccd_lvc_clamped_pad.VDDIO_Q, 1x vdda_hvc_clamped_pad.VDDIO_Q, 1x vddio_hvc_clamped_pad.VDDIO_Q, 1x vssa_hvc_clamped_pad.VDDIO_Q, 1x vssd_lvc_clamped_pad.VDDIO_Q, ... (+1)
+
+  so no layout: 4x gpiov2_pad_wrapped.AMUXBUS_A, 1x vccd_lvc_clamped_pad.AMUXBUS_A, 1x vdda_hvc_clamped_pad.AMUXBUS_A, 1x vddio_hvc_clamped_pad.AMUXBUS_A, 1x vssa_hvc_clamped_pad.AMUXBUS_A, 1x vssd_lvc_clamped_pad.AMUXBUS_A, ... (+1)
+
+  so no layout: 4x gpiov2_pad_wrapped.VDDA, 1x vccd_lvc_clamped_pad.VDDA, 1x vdda_hvc_clamped_pad.VDDA, 1x vddio_hvc_clamped_pad.VDDA, 1x vssa_hvc_clamped_pad.VDDA, 1x vssd_lvc_clamped_pad.VDDA, ... (+1)
+
+  so no layout: 4x gpiov2_pad_wrapped.AMUXBUS_B, 1x vccd_lvc_clamped_pad.AMUXBUS_B, 1x vdda_hvc_clamped_pad.AMUXBUS_B, 1x vddio_hvc_clamped_pad.AMUXBUS_B, 1x vssa_hvc_clamped_pad.AMUXBUS_B, 1x vssd_lvc_clamped_pad.AMUXBUS_B, ... (+1)
+
+  so no verilog: 358x com_bus_slice_20um.VSSD, 55x conb_1.VGND, 55x conb_1.VNB, 41x com_bus_slice_1um.VSSD, 15x com_bus_slice_5um.VSSD, 12x com_bus_slice_10um.VSSD, ... (+12)
+
+  so no verilog: 358x com_bus_slice_20um.VCCD, 358x com_bus_slice_20um.VCCHIB, 55x conb_1.VPB, 55x conb_1.VPWR, 41x com_bus_slice_1um.VCCD, 41x com_bus_slice_1um.VCCHIB, ... (+25)
+
+  so no verilog: 358x com_bus_slice_20um.AMUXBUS_A, 41x com_bus_slice_1um.AMUXBUS_A, 15x com_bus_slice_5um.AMUXBUS_A, 12x com_bus_slice_10um.AMUXBUS_A, 4x corner_pad.AMUXBUS_A, 4x gpiov2_pad_wrapped.AMUXBUS_A, ... (+7)
+
+  so no verilog: 358x com_bus_slice_20um.AMUXBUS_B, 41x com_bus_slice_1um.AMUXBUS_B, 15x com_bus_slice_5um.AMUXBUS_B, 12x com_bus_slice_10um.AMUXBUS_B, 4x corner_pad.AMUXBUS_B, 4x gpiov2_pad_wrapped.AMUXBUS_B, ... (+7)
+
+  so no verilog: 358x com_bus_slice_20um.VSSA, 41x com_bus_slice_1um.VSSA, 15x com_bus_slice_5um.VSSA, 12x com_bus_slice_10um.VSSA, 4x corner_pad.VSSA, 4x gpiov2_pad_wrapped.VSSA, ... (+7)
+
+  so no verilog: 358x com_bus_slice_20um.VDDA, 41x com_bus_slice_1um.VDDA, 15x com_bus_slice_5um.VDDA, 12x com_bus_slice_10um.VDDA, 4x corner_pad.VDDA, 4x gpiov2_pad_wrapped.VDDA, ... (+7)
+
+  so no verilog: 358x com_bus_slice_20um.VDDIO, 358x com_bus_slice_20um.VSWITCH, 41x com_bus_slice_1um.VDDIO, 41x com_bus_slice_1um.VSWITCH, 15x com_bus_slice_5um.VDDIO, 15x com_bus_slice_5um.VSWITCH, ... (+20)
+
+  so no verilog: 358x com_bus_slice_20um.VDDIO_Q, 41x com_bus_slice_1um.VDDIO_Q, 15x com_bus_slice_5um.VDDIO_Q, 12x com_bus_slice_10um.VDDIO_Q, 4x corner_pad.VDDIO_Q, 4x gpiov2_pad_wrapped.VDDIO_Q, ... (+7)
+
+  so no verilog: 358x com_bus_slice_20um.VSSIO, 41x com_bus_slice_1um.VSSIO, 15x com_bus_slice_5um.VSSIO, 12x com_bus_slice_10um.VSSIO, 4x corner_pad.VSSIO, 4x gpiov2_pad_wrapped.VSSIO, ... (+7)
+
+  so no verilog: 358x com_bus_slice_20um.VSSIO_Q, 41x com_bus_slice_1um.VSSIO_Q, 15x com_bus_slice_5um.VSSIO_Q, 12x com_bus_slice_10um.VSSIO_Q, 4x corner_pad.VSSIO_Q, 4x gpiov2_pad_wrapped.VSSIO_Q, ... (+7)
+
+  so no verilog: 1x gpiov2_pad_wrapped.gpio/VSSIO_uq4
+
+  so no verilog: 1x gpiov2_pad_wrapped.gpio/VSSIO_uq4
+
+  so no verilog: 1x gpiov2_pad_wrapped.gpio/VSSIO_uq4
+
+  so no verilog: 1x gpiov2_pad_wrapped.gpio/VSSIO_uq4
+
+  so no verilog: 1x gpiov2_pad_wrapped.gpio/VSSA_uq9
+
+  so no verilog: 1x gpiov2_pad_wrapped.gpio/VSSA_uq9
+
+  so no verilog: 1x gpiov2_pad_wrapped.gpio/VSSA_uq9
+
+  so no verilog: 1x gpiov2_pad_wrapped.gpio/VSSA_uq9
+
+  so no verilog: 1x vccd_lvc_clamped_pad.VCCD_PAD
+
+  so no verilog: 1x vccd_lvc_clamped_pad.VSSA_uq6
+
+  so no verilog: 1x vccd_lvc_clamped_pad.VDDIO_uq6
+
+  so no verilog: 1x vccd_lvc_clamped_pad.VSSA_uq8
+
+  so no verilog: 1x vccd_lvc_clamped_pad.VSSA_uq9
+
+  so no verilog: 1x vdda_hvc_clamped_pad.VDDA_PAD
+
+  so no verilog: 1x vdda_hvc_clamped_pad.VSSIO_uq4
+
+  so no verilog: 1x vdda_hvc_clamped_pad.VSSA_uq6
+
+  so no verilog: 1x vdda_hvc_clamped_pad.VSSA_uq9
+
+  so no verilog: 1x vdda_hvc_clamped_pad.VSSA_uq8
+
+  so no verilog: 1x vdda_hvc_clamped_pad.VDDIO_uq6
+
+  so no verilog: 1x vddio_hvc_clamped_pad.VDDIO_PAD
+
+  so no verilog: 1x vddio_hvc_clamped_pad.VSSA_uq9
+
+  so no verilog: 1x vddio_hvc_clamped_pad.VSSA_uq6
+
+  so no verilog: 1x vddio_hvc_clamped_pad.VSSA_uq8
+
+  so no verilog: 1x vssa_hvc_clamped_pad.VSSA_PAD
+
+  so no verilog: 1x vssa_hvc_clamped_pad.VSSIO_uq4
+
+  so no verilog: 1x vssa_hvc_clamped_pad.VDDIO_uq6
+
+  so no verilog: 1x vssd_lvc_clamped_pad.VSSD_PAD
+
+  so no verilog: 1x vssd_lvc_clamped_pad.VDDIO_uq6
+
+  so no verilog: 1x vssd_lvc_clamped_pad.VSSA_uq9
+
+  so no verilog: 1x vssd_lvc_clamped_pad.VSSA_uq6
+
+  so no verilog: 1x vssd_lvc_clamped_pad.VSSA_uq8
+
+  so no verilog: 1x vssio_hvc_clamped_pad.VSSIO_PAD
+
+  so no verilog: 1x vssio_hvc_clamped_pad.VSSA_uq6
+
+  so no verilog: 1x vssio_hvc_clamped_pad.VSSA_uq8
+
+  so no verilog: 1x vssio_hvc_clamped_pad.VSSA_uq9
+
+Anel (pinos de barramento de todas as celulas sky130_ef_io):
+  layout   7 redes: AMUXBUS_A; AMUXBUS_B; VSSA=VSWITCH=VDDIO=VSSIO=VSSD; VDDA; VDDIO_Q; VCCHIB=VCCD; VSSIO_Q
+  verilog  10 redes: AMUXBUS_A; AMUXBUS_B; VSSA; VDDA; VSWITCH=VDDIO; VDDIO_Q; VCCHIB=VCCD; VSSIO; VSSD; VSSIO_Q
+
+Veredito: ha diferencas (ver acima)
