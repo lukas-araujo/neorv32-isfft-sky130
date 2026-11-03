@@ -4498,6 +4498,43 @@ todos os `… | head -N` de exibição dos scripts da etapa 12 (10 linhas). Do q
 da OpenRAM (33/42, 33/43, 22/21, 22/22, 92/44, 115/42, 115/43, 235/0, L44); fecho dos SPICE completo
 (114 subcircuitos, nenhum faltando).
 
+### Ligação de topo pelo GDS: os barramentos viraram uma rede só (`12_ligacao_gds.txt`)
+
+`compara_ligacao.py` na netlist extraída do GDS (rodada `1933_12lvs`) × `chip_top.pnl.v`:
+
+| | Layout (GDS) | Verilog |
+|---|---|---|
+| Redes do anel | **7**: `VSSA=VSWITCH=VDDIO=VSSIO=VSSD` juntas | 10 (`VSWITCH=VDDIO`, `VCCHIB=VCCD`, L63) |
+| Portas do `chip_top` | 7 (`clk`, `rstn`, `rx`, `tx`, `vccd`, `vdda`, `vssd`): sumiram `vddio_pad`, `vssio_pad`, `vssa_pad` | 10 |
+| Fatias e cantos como instância | 0 (o Magic achata célula sem dispositivo; o metal delas vira metal do topo) | 431 |
+
+Investigação (feita aqui com a netlist e os LEF):
+
+1. **A sobra de met4 dos pads lvc (L77) não é a causa.** Ela fica em y = 34,7–38,15 e 39,55–44,2
+   do LEF, exatamente a altura dos barramentos `VSSA` e `VSSD` do vizinho (LEF da
+   `com_bus_slice_1um`): é o próprio barramento do pad continuando, e encosta em metal da **mesma** rede.
+2. **A fusão já vem de dentro de uma célula da foundry.** O `sky130_ef_io__gpiov2_pad_wrapped`
+   extraído tem 42 portas e **nenhuma `VDDIO`** (e `VSSA`/`VSSIO` só como `gpio/VSSA_uq9` e
+   `gpio/VSSIO_uq4`). O Magic, quando duas portas são o mesmo nó dentro da célula, guarda um nome só:
+   dentro do gpiov2 extraído, `VDDIO` já é o mesmo nó que outra porta. Como todos os pads dividem os
+   barramentos do anel, basta **um** tipo de célula fundir por dentro para o anel inteiro virar uma
+   rede no topo. O `vddio_hvc_clamped_pad`, por exemplo, sai com todos os 12 barramentos separados.
+3. Na prática essa fusão não existe no silício (o Caravel usa esses pads com VDDIO = 3,3 V e os terras
+   separados). É a extração do Magic sobre o GDS da foundry: o mesmo tipo de diferença que fez o LVS
+   de transistor reprovar (resistores de metal e diodos que o SPICE da SkyWater descreve e o Magic não
+   reconhece no desenho), mais o substrato `VSUBS` comum.
+
+**Prova que falta (L91):** `12_extrai_celulas.sh` extrai cada célula do anel **sozinha**, a partir
+dos GDS do PDK (fora do chip), e lista os barramentos ausentes/fundidos em cada uma. Se o gpiov2
+sozinho já vier sem `VDDIO`, a fusão é da célula da foundry e não do nosso chip, e a L77 fecha pelo
+que já se tinha: ligação por pinos limpa (LVS abstrato), DRC sem nenhum erro de metal no encosto (L85)
+e a sobra de met4 encostando na mesma rede. Testado o resumo com os cabeçalhos reais vindos do chip
+(gpiov2: `VDDIO` ausente; vddio_hvc: nenhum ausente).
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L91 | A fusão dos barramentos na extração pelo GDS é investigada célula a célula (extração das células do anel sozinhas) | ✅ | Se a fusão já existe na célula da foundry sozinha, ela não diz nada sobre a ligação entre células; a L77 se decide pelo que não depende do modelo interno dos pads |
+
 | # | Decisão | Status | Motivo |
 |---|---|---|---|
 | L90 | Fill só fora da faixa dos pads (205 µm); densidade do miolo do núcleo documentada como limite do fill de chip | ✅ | Os erros novos de DRC vieram do fill dentro das células de I/O, e a faixa não reprova por densidade; o miolo do núcleo só se resolve com fill no próprio bloco |
@@ -4602,6 +4639,7 @@ da OpenRAM (33/42, 33/43, 22/21, 22/22, 92/44, 115/42, 115/43, 235/0, L44); fech
 | L88 | LVS pelo GDS com pads inteiros, núcleo abstraído | ✅ | 2026-11-02 |
 | L89 | L77 decidida pela ligação de topo do GDS (`compara_ligacao.py`) | ✅ | 2026-11-03 |
 | L90 | Fill fora da faixa dos pads; densidade do miolo do núcleo é limite do fill de chip | ✅ | 2026-11-03 |
+| L91 | Extração das células do anel sozinhas para localizar a fusão dos barramentos | ✅ | 2026-11-03 |
 
 ---
 
