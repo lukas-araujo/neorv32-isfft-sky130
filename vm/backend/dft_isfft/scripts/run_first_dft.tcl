@@ -11,6 +11,10 @@
 #   2b) Regressao da Kria no netlist com scan (scan_en = 0) -- Xcelium
 #   3) ATPG (falhas stuck-at) -- Modus
 #   4) Simulacao dos padroes do ATPG -- Xcelium (script escrito pelo Genus)
+#   5) MODO DE TESTE "na mao" -- Xcelium (sem Modus: carga, captura, descarga,
+#      falha injetada; ideia do Prof. Gilmar). Precisa do tb/mapa_cadeias.vh,
+#      gerado no notebook/nuvem a partir do netlist do Genus (traz_dft.sh +
+#      sim/run_dft_modo_teste.sh)
 #
 # ⚠️ Lido com 'source': nao ponha 'exit' aqui (fecharia o terminal).
 
@@ -146,3 +150,34 @@ ls -la ${MODUS_DIR}
 #cd ${MODUS_DIR}
 #./run_fullscan_sim 2>&1 | tee ${RPT_DIR}/${DESIGNS}_sim_padroes.log
 #grep -iE "miscompare|mismatch|error|passed|failed" ${RPT_DIR}/${DESIGNS}_sim_padroes.log | tail -20
+
+#=============================================================================
+# 5) MODO DE TESTE NA MAO -- XCELIUM  (DIARIO_DFT, 3a sessao, T13)
+#
+# O que um padrao de ATPG faz, escrito num testbench, no netlist com scan:
+#   A. integridade das cadeias (carrega 12.5xx bits aleatorios, descarrega)
+#   B. observar: o IP trabalha no modo normal; o estado sai pelas cadeias
+#   C. controlar: estado escrito pelas cadeias, lido no AXI-Lite
+#   D. padrao de captura: carga, 1 pulso com scan_en = 0, descarga
+#      (mat_in_cnt 0xFF -> 0x100)
+#   E. falha stuck-at-0 em mat_in_cnt[8].D: o teste de cadeia nao a ve;
+#      o padrao de captura a ve
+# tb/mapa_cadeias.vh diz em que cadeia/posicao esta cada bit -- gerado do
+# netlist achatado do Genus (sim/run_dft_modo_teste.sh no notebook).
+# Mesmo netlist e mesmos defines do bloco 2b.
+# Esperado: "[MT] RESULTADO: TUDO OK"
+#=============================================================================
+
+#cd ${SIM_DIR}
+#xrun -64bit -access +rwc -timescale 1ns/1ps \
+#  -define FUNCTIONAL -define 'UNIT_DELAY=#1' \
+#  -incdir ${DFT_DIR}/tb \
+#  ${TECH_DIR}/verilog/primitives.v \
+#  ${TECH_DIR}/verilog/sky130_fd_sc_hd.v \
+#  ${BACKEND_DIR}/synthesis/scripts/restore_nettype.v \
+#  ${DEV_DIR}/${DESIGNS}_flat.v \
+#  ${TECH_DIR}/verilog/sram_1rw1r_64x64_wpr2.v \
+#  ${TECH_DIR}/verilog/sram_1rw1r_64x256.v \
+#  ${DFT_DIR}/tb/tb_isfft_modo_teste.v \
+#  -top tb_isfft_modo_teste 2>&1 | tee ${SIM_DIR}/xrun_modo_teste.log
+#grep "^\[MT\]" ${SIM_DIR}/xrun_modo_teste.log
