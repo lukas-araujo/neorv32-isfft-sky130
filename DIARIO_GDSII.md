@@ -4432,6 +4432,30 @@ transistor com transistor, **não casa com o SPICE/CDL do PDK**:
 - `Checker.IllegalOverlap`: 798 (eram 24 pela vista abstrata); a extração pelo GDS vê as sobreposições
   internas das células da foundry.
 
+### LVS só da ligação de topo, sem nomes (`compara_ligacao.py`, L89)
+
+O GDS não guarda nome de instância, então a comparação não usa nomes: cada rede do `chip_top` vira
+uma **assinatura**, o multiconjunto de (célula, pino) que encostam nela; compara-se o multiconjunto
+de assinaturas do layout (netlist extraída) com o do Verilog (`chip_top.pnl.v`). Curto = uma rede
+do layout que é a soma de duas assinaturas do Verilog; aberto = o contrário. Decap/fill/tap ficam de
+fora (milhares, só alimentação). Dois cuidados no leitor de Verilog: barramento concatenado
+(`.DM({net4, net5, net6})` → `DM[2]`, `DM[1]`, `DM[0]`) e pino sem ligação (o `HI` das `conb_1`),
+que vira rede de um pino só, como sai na extração. Também mostra em quantas redes cai cada barramento
+do anel.
+
+| Teste | Resultado |
+|---|---|
+| Extração **abstrata** (`1839_12`, que o Netgen já casou) × `pnl.v` | ✅ 159 de 159 assinaturas iguais; mesmas contagens de célula; anel com 10 redes nos dois lados (`VSWITCH=VDDIO`, `VCCHIB=VCCD`, L63) |
+| Mutação 1: `pad_tx/OUT` em curto com `pad_rx/IN` | ❌ acusou "CURTO? uma rede do layout junta 2 redes do verilog" com as duas listadas |
+| Mutação 2: `VSSIO` em curto com `VDDIO` (o caso da L77) | ❌ acusou; anel caiu para 9 redes, `VSWITCH=VDDIO=VSSIO` |
+
+Falta rodar na netlist extraída **do GDS** (`12_extraida_gds.spice.gz` da rodada `1933_12lvs`); o
+`12_lvs_gds.sh` passa a fazer isso sozinho no fim (`12_ligacao_gds.txt`).
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L89 | A L77 se decide pela ligação de topo extraída do GDS (assinaturas, sem nomes), não pelo LVS de transistor dos pads | ✅ | O LVS de transistor reprova pela modelagem da foundry (resistor do bond pad, diodos, dedos de ESD), igual nos 6 pads; curto entre células aparece como redes fundidas no topo, e o comparador pega (mutações) |
+
 ---
 
 ## Índice de decisões
@@ -4526,6 +4550,7 @@ transistor com transistor, **não casa com o SPICE/CDL do PDK**:
 | L86 | Densidade + preenchimento (scripts do open_pdks), DRC de novo no preenchido | ✅ | 2026-11-02 |
 | L87 | STA do chip com modelo de tempo do núcleo (`write_timing_model`) | ✅ | 2026-11-02 |
 | L88 | LVS pelo GDS com pads inteiros, núcleo abstraído | ✅ | 2026-11-02 |
+| L89 | L77 decidida pela ligação de topo do GDS (`compara_ligacao.py`) | ✅ | 2026-11-03 |
 
 ---
 

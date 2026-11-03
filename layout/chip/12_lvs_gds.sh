@@ -145,6 +145,13 @@ if [ -n "$d" ] && [ -f "$d/reports/lvs.netgen.rpt" ]; then
 else
   echo ">>> Netgen.LVS nao gerou relatorio"
 fi
+# L89: o LVS de transistor reprova dentro dos pads (modelagem da foundry); a
+# pergunta da L77 e de LIGACAO entre celulas: compara so o topo, sem nomes
+pnl="$(vista "$ini" pnl)"
+if [ -f "$DEST/12_extraida_gds.spice.gz" ] && [ -f "$pnl" ]; then
+  python3 "$CHIP/compara_ligacao.py" "$DEST/12_extraida_gds.spice.gz" "$pnl" > "$DEST/12_ligacao_gds.txt" 2>&1 || true
+  echo ">>> ligacao de topo (metal do GDS x Verilog):"; sed -n '/redes de topo/,$p' "$DEST/12_ligacao_gds.txt" | sed 's/^/    /' | head -30
+fi
 st="$(ls -d "$W"/[0-9]*/ 2>/dev/null | while read -r x; do [ -f "$x/state_out.json" ] && echo "$x"; done | sort -V | tail -1 || true)"
 [ -n "$st" ] && python3 -c "
 import json,sys; m=json.load(open(sys.argv[1]))['metrics']
