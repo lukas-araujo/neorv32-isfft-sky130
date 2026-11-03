@@ -4369,6 +4369,69 @@ dos pads, e o `LU.3` conta esses quadrados como P-diff sem tap N por perto. Exem
 I/O são entregues completas pela foundry; o Caravel também não preenche dentro delas), conferindo se a
 densidade continua passando sem ele.
 
+### `12_sta.sh` (`2026-11-02_1923_12sta`): ✅ o chip tem tempo de verdade
+
+Saída do script no notebook (arquivos em `resultados/2026-11-02_1923_12sta_layout_chip/`).
+
+**A. Modelo do núcleo** (`write_timing_model`, núcleo da rodada `2026-09-30_0934`: `.odb` do passo
+136, SPEF `nom` do passo 137, 5 libs TT, as 13 variáveis do `nucleo.sdc`):
+
+| Conferência do STA TT do núcleo | Valor |
+|---|---|
+| WNS / TNS de setup | 0,00 / 0,00 |
+| Pior folga de setup | **+0,56 ns** |
+| Pior folga de hold | **+0,13 ns** |
+
+O modelo (`asic_top_tt.lib`, 3,4 kB) tem: `clk_i` como relógio (com `max/min_clock_tree_path`: o
+atraso da árvore de relógio do núcleo), `uart0_rxd_i` com `setup_rising`/`hold_rising`,
+`uart0_txd_o` com `rising_edge` (clk → saída), e `rstn_i` **sem arco** (é falso caminho no
+`nucleo.sdc`).
+
+**B. STA do chip** (`OpenROAD.STAPostPNR`, SPEF do chip da etapa 11):
+
+| Corner (RC) | Setup: pior folga | Hold: pior folga | Violações setup/hold |
+|---|---|---|---|
+| `nom_*` | +2,237 ns | +3,686 ns | 0 / 0 |
+| `min_*` | +2,471 ns | +3,675 ns | 0 / 0 |
+| `max_*` | **+2,101 ns** | +3,698 ns | 0 / 0 |
+| max cap / max slew | 0 / **1** | | |
+
+- **Antes:** folga 1e39 (sem caminho). **Agora:** os caminhos pad ↔ núcleo existem e passam com
+  folga em todos os corners: pior setup **+2,10 ns** num período de 20 ns com 6 ns de atraso de
+  entrada/saída (`chip.sdc`).
+- **Por que tt/ss/ff dão o mesmo número dentro de cada RC:** o `.lib` dos pads é só TT (`PAD_LIBS`
+  `"*"`) e o modelo do núcleo também (como as SRAM, L87). Só muda a extração (min/nom/max) do
+  fio do chip. O número vale para TT; ss/ff ficariam para um modelo por corner (as SRAM só têm TT,
+  então o núcleo também não teria).
+- **1 violação de max slew:** falta ver qual rede (relatório no `resultados/`); candidato natural é
+  um fio longo pad ↔ núcleo (até 2767 µm, etapa 11).
+
+### `12_lvs_gds.sh`, 1ª rodada (`2026-11-02_1933_12lvs`): 2 h 37 min, "Top level cell failed pin matching"
+
+Saída do Netgen no notebook (layout = circuito 1, esquemático = circuito 2). Cada pad, comparado
+transistor com transistor, **não casa com o SPICE/CDL do PDK**:
+
+| Célula | Layout (extraído do GDS) | Esquemático (`sky130_ef_io.cdl` + `sky130_fd_io.spice`) |
+|---|---|---|
+| pads hvc (`vddio`/`vssio`/`vdda`/`vssa`) | 5 `nfet_g5v0d10v5`, 2 `res_generic_m3`, 7 redes | 3 `nfet_g5v0d10v5`, 2 `res_generic_m3`, **1 `res_generic_m5`**, 6 redes |
+| pads lvc (`vccd`/`vssd`) | 6 nfet, 2 pfet, 2 res po, 2 res m3, 20 redes | o mesmo + **2 `diode_pd2nw_05v5`** + **1 `res_generic_m5`**, 11 redes |
+| `chip_top` inteiro | 1740 nfet_g5v0d10v5, 1352 pfet_g5v0d10v5, 0 diodos, 0 res m5 | 1680, 1292, 4 diodos, 6 res m5 |
+
+- O `res_generic_m5` do esquemático é o resistor do **bond pad** (metal 5) e os
+  `diode_pd2nw_05v5` são diodos de proteção que o SPICE da SkyWater descreve e a extração do Magic
+  não reconhece no GDS; os transistores a mais no layout são dedos de ESD que o esquemático junta.
+  Diferença de **modelagem da célula da foundry**, igual nos 6 pads de alimentação: não depende do
+  nosso chip.
+- Por isso o Netgen achata as células que não casaram e reprova no topo. **Esse resultado ainda não
+  responde a L77.** A pergunta da L77 é de ligação entre células (curto entre redes do anel), não de
+  transistor dentro de pad.
+- **Próximo passo:** com a netlist extraída do GDS (`12_extraida_gds.spice.gz`), comparar **só a
+  ligação de topo**: para cada pino de cada pad/fatia/núcleo, em que rede ele cai no layout (metal
+  real do GDS) × no `chip_top` do Verilog. Curto = dois pinos de redes diferentes na mesma rede do
+  layout. É um LVS no nível dos pinos, com o metal de verdade.
+- `Checker.IllegalOverlap`: 798 (eram 24 pela vista abstrata); a extração pelo GDS vê as sobreposições
+  internas das células da foundry.
+
 ---
 
 ## Índice de decisões
