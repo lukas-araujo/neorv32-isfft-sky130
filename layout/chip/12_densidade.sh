@@ -28,6 +28,9 @@
 #   nucleo inteiro dentro). Usa varios nucleos (-dist).
 #
 #   Uso (nix-shell do LibreLane):  bash layout/chip/12_densidade.sh
+#     FILL=<...fill_pattern.gds.gz>  reaproveita um fill ja gerado (pula o passo 2)
+#     ANTES=0                        pula a medida antes do fill
+#     FAIXA=205                      largura (um) da faixa dos pads sem fill (L90)
 #=============================================================================
 source "$(dirname "$0")/comum_chip.sh"
 confere_chip
@@ -53,39 +56,71 @@ export PDK=sky130A
 echo ">>> GDS: $gds ($(du -h "$gds" | cut -f1))"
 
 #--- 1. densidade antes --------------------------------------------------------
-echo ">>> 1. check_density (antes do preenchimento)"
-( cd "$W/antes" && PDK_ROOT="$PDKV" python3 "$MAGD/check_density.py" chip_top.gds ) \
-  > "$DEST/12_densidade_antes.txt" 2>&1 || true
-python3 "$CHIP/resume_verifica.py" densidade "$DEST/12_densidade_antes.txt" | sed 's/^/    /'
+if [ "${ANTES:-1}" = 1 ]; then
+  echo ">>> 1. check_density (antes do preenchimento)"
+  ( cd "$W/antes" && PDK_ROOT="$PDKV" python3 "$MAGD/check_density.py" chip_top.gds ) \
+    > "$DEST/12_densidade_antes.txt" 2>&1 || true
+  python3 "$CHIP/resume_verifica.py" densidade "$DEST/12_densidade_antes.txt" | sed 's/^/    /'
+else
+  echo ">>> 1. (ANTES=0: sem a medida antes do fill)"
+fi
 
 #--- 2. preenchimento ----------------------------------------------------------
-echo ">>> 2. generate_fill (demora)"
-t0=$(date +%s)
-( cd "$W/fill" && PDK_ROOT="$PDKV" python3 "$MAGD/generate_fill.py" chip_top.gds -dist ) \
-  > "$W/fill/generate_fill.log" 2>&1 || true
-fill="$W/fill/chip_top_fill_pattern.gds.gz"
-echo "    $(( ($(date +%s) - t0) / 60 )) min"
-[ -f "$fill" ] || { echo "ERRO: o generate_fill nao gerou $fill (veja $W/fill/generate_fill.log)"; tail -20 "$W/fill/generate_fill.log"; exit 1; }
+# FILL=<chip_top_fill_pattern.gds.gz de uma rodada anterior> reaproveita (29 min)
+if [ -n "${FILL:-}" ]; then
+  fill="$(readlink -f "$FILL")"
+  [ -f "$fill" ] || { echo "ERRO: FILL=$FILL nao existe"; exit 1; }
+  echo ">>> 2. preenchimento reaproveitado: $fill"
+else
+  echo ">>> 2. generate_fill (demora)"
+  t0=$(date +%s)
+  ( cd "$W/fill" && PDK_ROOT="$PDKV" python3 "$MAGD/generate_fill.py" chip_top.gds -dist ) \
+    > "$W/fill/generate_fill.log" 2>&1 || true
+  fill="$W/fill/chip_top_fill_pattern.gds.gz"
+  echo "    $(( ($(date +%s) - t0) / 60 )) min"
+  [ -f "$fill" ] || { echo "ERRO: o generate_fill nao gerou $fill (veja $W/fill/generate_fill.log)"; tail -20 "$W/fill/generate_fill.log"; exit 1; }
+fi
 echo "    fill: $(du -h "$fill" | cut -f1)"
 
-#--- 3. junta chip + fill ------------------------------------------------------
-echo ">>> 3. KLayout: chip_top + chip_top_fill_pattern"
-"$PY" - "$gds" "$fill" "$W/depois/chip_top.gds" <<'PY'
+#--- 3. junta chip + fill (sem fill na faixa dos pads, L90) ---------------------
+# O fill de difusao/poly/metal dentro das celulas de I/O criou 10811 erros de
+# DRC de difusao/tap/latch-up (1a rodada). As celulas de I/O vem completas da
+# foundry: so fica o fill INTEIRAMENTE a mais de FAIXA um da borda do die.
+FAIXA="${FAIXA:-205}"
+echo ">>> 3. KLayout: chip_top + fill (sem fill a menos de $FAIXA um da borda)"
+"$PY" - "$gds" "$fill" "$W/depois/chip_top.gds" "$FAIXA" <<'PY'
 import sys
 import klayout.db as db
-chip, fill, saida = sys.argv[1:4]
+chip, fill, saida, faixa = sys.argv[1], sys.argv[2], sys.argv[3], float(sys.argv[4])
 ly = db.Layout()
 ly.read(chip)
-antes = {c.name for c in ly.each_cell()}
 ly.read(fill)
-novas = [c.name for c in ly.each_cell() if c.name not in antes]
 top = ly.cell("chip_top")
 fp = ly.cell("chip_top_fill_pattern")
 if top is None or fp is None:
     sys.exit(f"ERRO: chip_top={top} chip_top_fill_pattern={fp}")
-top.insert(db.CellInstArray(fp.cell_index(), db.Trans()))
+bb = top.dbbox()            # contorno do chip (um)
+dbu = ly.dbu
+janela = db.Region(db.Box(int((bb.left + faixa) / dbu), int((bb.bottom + faixa) / dbu),
+                          int((bb.right - faixa) / dbu), int((bb.top - faixa) / dbu)))
+novo = ly.create_cell("chip_top_fill")
+tot = fica = 0
+for li in ly.layer_indexes():
+    r = db.Region(fp.begin_shapes_rec(li))
+    n = r.count()
+    if n == 0:
+        continue
+    dentro = r.inside(janela)          # so os quadrados inteiros dentro da janela
+    novo.shapes(li).insert(dentro)
+    tot += n
+    fica += dentro.count()
+    info = ly.get_info(li)
+    print(f"    camada {info.layer}/{info.datatype}: {n} formas de fill, ficam {dentro.count()}")
+top.insert(db.CellInstArray(novo.cell_index(), db.Trans()))
+# a celula do fill original (com a faixa) sai do GDS
+fp.prune_cell()
 ly.write(saida)
-print(f"    {len(novas)} celulas novas (fill); chip_top agora instancia chip_top_fill_pattern em (0, 0)")
+print(f"    fill: {tot} formas, ficam {fica} ({100.0 * fica / max(tot, 1):.1f} %); chip_top instancia chip_top_fill em (0, 0)")
 PY
 
 #--- 4. densidade depois -------------------------------------------------------
@@ -103,7 +138,7 @@ if [ "${DRC:-1}" = 1 ]; then
   if drc_magic "$W/depois/chip_top.gds" "$W/drc/drc.magic.rpt"; then
     python3 "$CHIP/resume_verifica.py" drc "$W/drc/drc.magic.rpt" > "$DEST/12_drc_preenchido.txt" 2>&1
     gzip -c "$W/drc/drc.magic.rpt" > "$DEST/12_drc_preenchido.rpt.gz"
-    sed 's/^/    /' "$DEST/12_drc_preenchido.txt" | head -25
+    sed 's/^/    /' "$DEST/12_drc_preenchido.txt" | head -25 || true
   else
     echo "    DRC nao gerou relatorio (veja $W/drc/drc.log)"
   fi

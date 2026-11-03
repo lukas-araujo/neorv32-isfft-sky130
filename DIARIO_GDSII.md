@@ -4452,6 +4452,56 @@ do anel.
 Falta rodar na netlist extraída **do GDS** (`12_extraida_gds.spice.gz` da rodada `1933_12lvs`); o
 `12_lvs_gds.sh` passa a fazer isso sozinho no fim (`12_ligacao_gds.txt`).
 
+### Os três resultados olhados de perto (rodadas `1614_12dens`, `1923_12sta`, `1933_12lvs`)
+
+**Densidade — onde estão as janelas que reprovam** (`12_densidade_depois.txt`, índices de janela
+→ posição; mapa feito aqui): **todas no miolo do chip, em cima do núcleo**; nenhuma na faixa dos pads.
+
+| Camada | Janelas | Onde |
+|---|---|---|
+| met2 | 209 | o miolo inteiro (janelas x = 5..26, y = 4..16) |
+| met5 | 224 | idem |
+| met3 | 139 | idem, um pouco menor |
+| met4 | 39 | o centro |
+| FOM | 26 | canto superior esquerdo (sobre a SRAM de 8 kB) |
+
+Dentro do núcleo o roteamento é denso e deixa vãos menores que um quadrado de fill + espaçamento:
+o fill feito no **nível do chip** não entra ali. É responsabilidade do **bloco** (o núcleo teria de
+sair da etapa 8 já com fill de metal). Fica documentado como limite: média global de todas as
+camadas dentro da faixa, mínimo de janela 0,25 (met2) a 0,33 (met5).
+
+**Fill na faixa dos pads (L90):** como os erros novos de DRC (difusão/tap/latch-up) vieram de lá e
+nenhuma janela da faixa reprova por densidade, o `12_densidade.sh` agora junta o fill **sem a faixa
+dos pads** (só ficam as formas inteiramente a mais de 205 µm da borda; a que atravessa sai inteira,
+para não virar lasca fora de regra) e aceita `FILL=` para reaproveitar o fill de 29 min e `ANTES=0`.
+Testado com GDS sintético (quadrado na faixa, no meio e atravessando a borda: só o do meio fica; a
+célula original do fill sai do GDS).
+
+**STA — a violação de transição:** `pad_tx/OUT`, transição **3,540 ns** contra o limite de
+**1,500 ns** do `.lib` do pad (`12_sta_nom_tt_025C_1v80_checks.rpt`). O caminho crítico de setup é o
+mesmo fio: `clk_pad → pad_clk/IN` (1,409 ns) `→ u_core/clk_i` (1,576) `→ u_core/uart0_txd_o`
+(7,694: **6,118 ns** dentro do modelo do núcleo, saída com transição 3,496 ns) `→ pad_tx/OUT`
+(8,013) `→ tx_pad` (11,513); folga +2,237 ns. **Causa:** a saída do núcleo foi dimensionada para a
+carga de saída do `nucleo.sdc` (`OUTPUT_CAP_LOAD` = 33,4 fF), e no chip ela enxerga **0,352 pF**
+(fio de ~2,7 mm até o pad + a entrada do pad): 10 vezes mais. Orçamento de bloco que não bateu com o
+chip — uma lição clássica de hierarquia. **Duas saídas:** (a) refazer o fluxo do chip com o modelo do
+núcleo no `MACROS` (o resizer do chip passa a "ver" a saída fraca e põe um buffer junto do pino);
+(b) refazer o núcleo com `OUTPUT_CAP_LOAD` ≈ 350 fF (horas). A violação não quebra o tempo (folga
++2,24 ns), mas tira o pad da faixa em que o `.lib` foi caracterizado.
+
+**LVS pelo GDS — o script morreu antes de copiar a netlist:** o `comum.sh` liga
+`set -euo pipefail`; o `grep … | head -15` da tabela de dispositivos fecha o pipe, o `pipefail`
+transforma isso em erro e o script sai logo ali (só ficaram `12_extracao_gds.txt` e
+`12_lvs_gds_spice.txt`). **Resolvi:** `gzip` da netlist antes da tabela, `|| true` na tabela e em
+todos os `… | head -N` de exibição dos scripts da etapa 12 (10 linhas). Do que veio:
+2 h 36 min de extração; núcleo abstraído (`asic_top matched`); as linhas "fatais" são só as camadas
+da OpenRAM (33/42, 33/43, 22/21, 22/22, 92/44, 115/42, 115/43, 235/0, L44); fecho dos SPICE completo
+(114 subcircuitos, nenhum faltando).
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L90 | Fill só fora da faixa dos pads (205 µm); densidade do miolo do núcleo documentada como limite do fill de chip | ✅ | Os erros novos de DRC vieram do fill dentro das células de I/O, e a faixa não reprova por densidade; o miolo do núcleo só se resolve com fill no próprio bloco |
+
 | # | Decisão | Status | Motivo |
 |---|---|---|---|
 | L89 | A L77 se decide pela ligação de topo extraída do GDS (assinaturas, sem nomes), não pelo LVS de transistor dos pads | ✅ | O LVS de transistor reprova pela modelagem da foundry (resistor do bond pad, diodos, dedos de ESD), igual nos 6 pads; curto entre células aparece como redes fundidas no topo, e o comparador pega (mutações) |
@@ -4551,6 +4601,7 @@ Falta rodar na netlist extraída **do GDS** (`12_extraida_gds.spice.gz` da rodad
 | L87 | STA do chip com modelo de tempo do núcleo (`write_timing_model`) | ✅ | 2026-11-02 |
 | L88 | LVS pelo GDS com pads inteiros, núcleo abstraído | ✅ | 2026-11-02 |
 | L89 | L77 decidida pela ligação de topo do GDS (`compara_ligacao.py`) | ✅ | 2026-11-03 |
+| L90 | Fill fora da faixa dos pads; densidade do miolo do núcleo é limite do fill de chip | ✅ | 2026-11-03 |
 
 ---
 

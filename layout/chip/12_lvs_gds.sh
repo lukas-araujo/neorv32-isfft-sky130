@@ -122,26 +122,27 @@ roda_librelane "$TAG" Magic.SpiceExtraction Checker.LVS "$ini" "$CHIP/.config_lv
 d="$(ls -d "$W"/[0-9]*-magic-spiceextraction 2>/dev/null | sort -V | tail -1 || true)"
 if [ -n "$d" ]; then
   { echo "== Magic.SpiceExtraction pelo GDS ($(basename "$d")), tempo: $(cat "$d/runtime.txt" 2>/dev/null || echo '?')"
-    grep -h "matched with the expression\|Failed to match" "$d"/*.log 2>/dev/null | head -5
+    grep -h "matched with the expression\|Failed to match" "$d"/*.log 2>/dev/null | head -5 || true
     echo
     echo "== Linhas que o MAGIC_CAPTURE_ERRORS trataria como fatais (desligado aqui)"
     linhas_fatais_magic "$(ls "$d"/*.log | head -1)"
     sp="$(ls "$d"/*.spice 2>/dev/null | head -1)"
     if [ -n "$sp" ]; then
+      gzip -c "$sp" > "$DEST/12_extraida_gds.spice.gz"
       echo
       echo "== Netlist extraida: dispositivos por modelo (todas as subcelulas)"
-      grep -hoE "^[XM][^ ]* .* sky130_fd_pr__[a-z0-9_]+" "$sp" | grep -oE "sky130_fd_pr__[a-z0-9_]+" \
-        | sort | uniq -c | sort -rn | head -15
-      gzip -c "$sp" > "$DEST/12_extraida_gds.spice.gz"
+      # (o "|| true": com pipefail, o head fechando o pipe mata o script -- 1a rodada)
+      { grep -hoE "^[XM][^ ]* .* sky130_fd_pr__[a-z0-9_]+" "$sp" | grep -oE "sky130_fd_pr__[a-z0-9_]+" \
+          | sort | uniq -c | sort -rn | head -15; } || true
     fi
   } > "$DEST/12_extracao_gds.txt" 2>&1
-  sed 's/^/    /' "$DEST/12_extracao_gds.txt" | head -40
+  sed 's/^/    /' "$DEST/12_extracao_gds.txt" | head -40 || true
 fi
 d="$(ls -d "$W"/[0-9]*-netgen-lvs 2>/dev/null | sort -V | tail -1 || true)"
 if [ -n "$d" ] && [ -f "$d/reports/lvs.netgen.rpt" ]; then
   python3 "$CHIP/resume_verifica.py" lvs "$d/reports/lvs.netgen.rpt" > "$DEST/12_lvs_gds.txt" 2>&1
   gzip -c "$d/reports/lvs.netgen.rpt" > "$DEST/12_lvs_gds_netgen.rpt.gz"
-  echo ">>> LVS pelo GDS:"; sed 's/^/    /' "$DEST/12_lvs_gds.txt" | head -40
+  echo ">>> LVS pelo GDS:"; sed 's/^/    /' "$DEST/12_lvs_gds.txt" | head -40 || true
 else
   echo ">>> Netgen.LVS nao gerou relatorio"
 fi
@@ -150,7 +151,7 @@ fi
 pnl="$(vista "$ini" pnl)"
 if [ -f "$DEST/12_extraida_gds.spice.gz" ] && [ -f "$pnl" ]; then
   python3 "$CHIP/compara_ligacao.py" "$DEST/12_extraida_gds.spice.gz" "$pnl" > "$DEST/12_ligacao_gds.txt" 2>&1 || true
-  echo ">>> ligacao de topo (metal do GDS x Verilog):"; sed -n '/redes de topo/,$p' "$DEST/12_ligacao_gds.txt" | sed 's/^/    /' | head -30
+  echo ">>> ligacao de topo (metal do GDS x Verilog):"; sed -n '/redes de topo/,$p' "$DEST/12_ligacao_gds.txt" | sed 's/^/    /' | head -30 || true
 fi
 st="$(ls -d "$W"/[0-9]*/ 2>/dev/null | while read -r x; do [ -f "$x/state_out.json" ] && echo "$x"; done | sort -V | tail -1 || true)"
 [ -n "$st" ] && python3 -c "

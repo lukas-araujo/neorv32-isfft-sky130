@@ -111,7 +111,7 @@ if python3 -c "import klayout.db" 2>/dev/null; then
 else
   klayout -b -r "$CHIP/compara_drc_anel.py" > "$DEST/12_drc_anel.txt" 2>&1 || true
 fi
-sed 's/^/    /' "$DEST/12_drc_anel.txt" | head -70
+sed 's/^/    /' "$DEST/12_drc_anel.txt" | head -70 || true
 echo
 echo "Resultados em ${DEST#$REPO/}: 12_drc_anel.txt (geometrico, L83), 12_drc_anel_area.txt (L81), 12_drc_ref_celulas.tsv"
 echo "  git add resultados/${TAG12}_layout_chip"

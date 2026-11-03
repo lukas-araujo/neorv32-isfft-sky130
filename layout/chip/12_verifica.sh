@@ -136,7 +136,7 @@ if [ -n "$d" ] && [ -f "$d/reports/drc.magic.rpt" ]; then
       | sed 's/(byte position [0-9]*)//' | sort | uniq -c | sort -rn | head -20 || true
   } > "$DEST/12_drc.txt" 2>&1
   gzip -c "$d/reports/drc.magic.rpt" > "$DEST/12_drc_magic.rpt.gz"
-  echo ">>> DRC:"; sed 's/^/    /' "$DEST/12_drc.txt" | head -40
+  echo ">>> DRC:"; sed 's/^/    /' "$DEST/12_drc.txt" | head -40 || true
 else
   echo ">>> Magic.DRC nao gerou relatorio"
 fi
@@ -145,7 +145,7 @@ d="$(passo netgen-lvs)"
 if [ -n "$d" ] && [ -f "$d/reports/lvs.netgen.rpt" ]; then
   python3 "$CHIP/resume_verifica.py" lvs "$d/reports/lvs.netgen.rpt" > "$DEST/12_lvs.txt" 2>&1
   gzip -c "$d/reports/lvs.netgen.rpt" > "$DEST/12_lvs_netgen.rpt.gz"
-  echo ">>> LVS:"; sed 's/^/    /' "$DEST/12_lvs.txt" | head -40
+  echo ">>> LVS:"; sed 's/^/    /' "$DEST/12_lvs.txt" | head -40 || true
 else
   echo ">>> Netgen.LVS nao gerou relatorio"
 fi

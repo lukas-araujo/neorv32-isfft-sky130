@@ -90,7 +90,7 @@ exit
 TCL
 echo ">>> A. OpenROAD: STA do nucleo + write_timing_model"
 openroad -no_init -no_splash -exit "$W/modelo/modelo.tcl" > "$W/modelo/modelo.log" 2>&1 || true
-grep -E "^==|wns|tns|worst slack|Error|ERROR" "$W/modelo/modelo.log" | sed 's/^/    /' | head -20
+grep -E "^==|wns|tns|worst slack|Error|ERROR" "$W/modelo/modelo.log" | sed 's/^/    /' | head -20 || true
 [ -s "$MODELO" ] || { echo "ERRO: o modelo nao saiu (veja $W/modelo/modelo.log)"; tail -20 "$W/modelo/modelo.log"; exit 1; }
 python3 - "$MODELO" <<'PY' | tee "$DEST/12_modelo_nucleo.txt" | sed 's/^/    /'
 import re, sys
