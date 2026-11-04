@@ -4531,6 +4531,46 @@ que já se tinha: ligação por pinos limpa (LVS abstrato), DRC sem nenhum erro 
 e a sobra de met4 encostando na mesma rede. Testado o resumo com os cabeçalhos reais vindos do chip
 (gpiov2: `VDDIO` ausente; vddio_hvc: nenhum ausente).
 
+### ✅ Extração das células sozinhas (`resultados/2026-11-04_1538_12cel_layout_chip/`): a L77 fecha
+
+`12_extrai_celulas.txt` (Magic, cada célula extraída **sozinha** a partir dos GDS do PDK, fora do chip):
+
+| Célula | Portas | Barramentos ausentes (fundidos dentro da célula) |
+|---|---|---|
+| `gpiov2_pad_wrapped` | 36 | **`VDDIO`, `VSSA`, `VSSIO`** |
+| `vccd_lvc_clamped_pad` | 10 | `VSSA`, `VSSIO` |
+| `vssd_lvc_clamped_pad` | 10 | `VSSA`, `VSSIO` |
+| `vddio`/`vssio`/`vdda`/`vssa_hvc_clamped_pad` | 12 | nenhum |
+| `corner_pad`, `com_bus_slice_20um` | 12 | nenhum |
+| `connect_vcchib_vccd_and_vswitch_vddio_slice_20um` | 10 | `VSWITCH`, `VCCHIB` — **a fusão de propósito** (L63): confere o método |
+
+- O `gpiov2_pad_wrapped` **sozinho** já sai sem `VDDIO`: o nó de `VDDIO` é o mesmo de outra porta
+  dentro da célula da foundry, sem o nosso chip por perto. Os pads lvc fundem `VSSA` e `VSSIO`.
+- A união dessas fusões (gpiov2: `VDDIO`+`VSSA`+`VSSIO`; lvc: `VSSA`+`VSSIO` com um terra; fatia:
+  `VSWITCH`+`VDDIO`, `VCCHIB`+`VCCD`) é o conjunto que apareceu no chip
+  (`VSSA=VSWITCH=VDDIO=VSSIO=VSSD`, `VCCHIB=VCCD`): **nada sobra para explicar com a ligação entre
+  células**.
+- **Por que o Magic funde e o silício não:** o log da extração lê células como
+  `sky130_fd_pr__m4short__example_…`, `m2short`, `M1short_CDNS_…`: são os "curtos de metal" que a
+  SkyWater usa para separar **nomes** de redes que no desenho são o mesmo metal (no SPICE viram os
+  resistores `res_generic_m*` de valor ínfimo), e os diodos de proteção entre terras. Onde o Magic
+  não reconhece o marcador, os nós se fundem. Juntando com o substrato comum (`VSUBS`, presente em
+  todos os pads), a extração do GDS da foundry não separa essas redes — com ou sem o nosso chip.
+
+**Fechamento da L77 (sobreposições "obsm4 × metal4" dos pads lvc):**
+
+| Evidência | Resultado |
+|---|---|
+| LVS pela vista abstrata (pinos dos LEF, metal do DEF) | ✅ "Circuits match uniquely" (L79) |
+| Ligação de topo do LVS abstrato × Verilog (`compara_ligacao.py`) | ✅ 159/159 assinaturas, anel com 10 redes |
+| DRC pelo GDS real, metal/via na faixa dos pads | ✅ nenhum erro de encosto (L85) |
+| A sobra de met4 dos pads lvc | encosta nos barramentos `VSSA`/`VSSD` do vizinho, **mesma rede** (LEF da fatia) |
+| Fusão de barramentos na extração pelo GDS | ✅ reproduzida pelas células **sozinhas** (esta tabela): é da extração das células da foundry |
+
+Não há curto do nosso chip no anel. O LVS de transistor pelo GDS com os pads inteiros fica
+documentado como **não conclusivo para pads da SkyWater no Magic** (modelagem das células), não como
+erro do desenho.
+
 | # | Decisão | Status | Motivo |
 |---|---|---|---|
 | L91 | A fusão dos barramentos na extração pelo GDS é investigada célula a célula (extração das células do anel sozinhas) | ✅ | Se a fusão já existe na célula da foundry sozinha, ela não diz nada sobre a ligação entre células; a L77 se decide pelo que não depende do modelo interno dos pads |
@@ -4639,7 +4679,7 @@ e a sobra de met4 encostando na mesma rede. Testado o resumo com os cabeçalhos 
 | L88 | LVS pelo GDS com pads inteiros, núcleo abstraído | ✅ | 2026-11-02 |
 | L89 | L77 decidida pela ligação de topo do GDS (`compara_ligacao.py`) | ✅ | 2026-11-03 |
 | L90 | Fill fora da faixa dos pads; densidade do miolo do núcleo é limite do fill de chip | ✅ | 2026-11-03 |
-| L91 | Extração das células do anel sozinhas para localizar a fusão dos barramentos | ✅ | 2026-11-03 |
+| L91 | Extração das células do anel sozinhas: a fusão dos barramentos é das células da foundry; L77 fechada | ✅ | 2026-11-04 |
 
 ---
 
@@ -4673,7 +4713,10 @@ e a sobra de met4 encostando na mesma rede. Testado o resumo com os cabeçalhos 
 - [ ] IR drop do chip com a fonte **no pad** (`VSRC_LOC_FILES` com a posição do `pad_vccd`/`pad_vssd`): sem terminal de topo, o `analyze_power_grid` usa "bump pattern" (`PSM-0073`: fontes virtuais a cada 140 µm no met5, como num flip-chip) e a queda sai otimista; o `PSM-0025` do `GeneratePDN` é a mesma falta de terminal (L68)
 - [x] Etapa 11, parte 2b: fluxo `Chip` completo na rodada `2026-11-01_1249` (L72–L77, 38ª sessão)
 - [x] Etapa 12: LVS limpo, DRC 0 no nosso desenho e no núcleo, faixa dos pads isenta (L85; 39ª sessão)
-- [ ] Etapa 12, extras: `12_sta.sh`, `12_lvs_gds.sh` (fecha a L77), `12_densidade.sh` no notebook (L86–L88)
+- [x] Etapa 12, STA do chip: setup +2,10 ns, hold +3,68 ns, 0 violações (L87)
+- [x] Etapa 12, L77 fechada: fusão dos barramentos é da extração das células da foundry (L89, L91)
+- [ ] Etapa 12, densidade de novo com o fill fora da faixa dos pads (`FILL=… ANTES=0 bash layout/chip/12_densidade.sh`, L90)
+- [ ] Transição do `pad_tx/OUT` (3,54 ns > 1,5 ns): refazer o chip com o modelo do núcleo (buffer) ou registrar como conhecida — escolha do Lukas
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
