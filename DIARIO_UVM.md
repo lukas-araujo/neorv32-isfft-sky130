@@ -1120,6 +1120,74 @@ casos o inocentou; era o testbench" — e o efeito colateral no RAL
 
 ---
 
+## 2026-11-04 — 9ª sessão: ✅ regressão no Xcelium 26.03 — 10/10, funcional 54/54
+
+Resultados em `resultados/2026-10-28_uvm_regressao_2603/` (rodada de
+28/10; trazidos pelo Lukas com `sim/traz_uvm.sh`). Pacote da 8ª sessão:
+10 testes, `cobertura.ccf` (U20 + U21), faixa válida (U23), 2º soft reset
+(U26), regra da mesma borda no scoreboard (U27). Semente 1.
+
+### Ambiente requalificado no Xcelium 26.03 (U22)
+
+| Item | Resultado | Fonte |
+|---|---|---|
+| Simulador / UVM | `xrun 26.03-s005`; **CDNS-UVM-1.1d** (o mesmo do 23.09) | linha `[TESTE] UVM:` dos logs |
+| `cobertura.ccf` lido | sim: `*N,CGNSWA` (linha 20: o `-all` não tira covergroup — o que queremos) e `*W,COVNSO` (linha 30: expressão de **evento** não entra no `-all`; não usamos) | log do bloco 1 (colado no chat, 26/10) |
+| Avisos novos do 26.03 | `*W,DLCPTH` às centenas: o `cds.lib` de fábrica aponta para bibliotecas **VHDL** que não existem na instalação nova. Inofensivo (ambiente só Verilog/SV) | idem |
+
+### Regressão
+
+| Teste | Bit a bit | Numérico | Bins novos (curta / trunc. 1ª / 31ª) | Tempo simulado | Resultado |
+|---|---|---|---|---|---|
+| `fumaca` | 32 | 0,77 LSB | — | 7 µs | ✅ |
+| `registradores` | — | — | — | 3 µs | ✅ |
+| `kria` | 96 | EVM **3,4122 / 0,7822 / 0,5965 %** = placa | — | 10 µs | ✅ |
+| `aleatorio` | 1.280 | ≤ 3,14 LSB | — | 123 µs | ✅ |
+| `truncado` | 1.280 | ≤ 2,98 LSB | 0 / **2** / **2** | 123 µs | ✅ |
+| `contrapressao` | 1.920 | ≤ 3,14 LSB | — | 183 µs | ✅ |
+| `soft_reset` | 200 (3 épocas) | ≤ 2,48 LSB | — | 44 µs | ✅ 2º soft reset com 35 palavras já entregues; 128 + 120 palavras perdidas (permitido) |
+| `kria_regressao` | 1.280 | (fora da faixa, informativo) | — | 187 µs | ✅ |
+| **`vazao`** | 2.560 | ≤ 4 LSB, 0 fora | **77** / 0 / 0 | 241 µs | ✅ |
+| **`estouro`** | 1.280 | fora da faixa: **40 de 40 estouraram**, pior 12.288,69 LSB (só contado) | 37 / 0 / 0 | 121 µs | ✅ |
+| **Total** | **9.928 palavras** | | | | **10/10** |
+
+0 `UVM_ERROR`, 0 `UVM_WARNING` em todos (`reports/regressao.txt`, linhas
+`[SB_RESUMO]`, `[COBERTURA]`, `[KRIA]`). Com a semente 1 do Xcelium a
+corrida da U27 **não** aconteceu (nenhuma linha "no instante do soft
+reset"); no Verilator, 9 de 30 sementes.
+
+### Cobertura (IMC 26.03, merge das 10 rodadas)
+
+| Métrica | 30/09 (Xcelium 23.09, 8 testes) | **28/10 (26.03, 10 testes, `.ccf`)** | Fonte |
+|---|---|---|---|
+| **Funcional** | 94,4 % (51/54) | **100 % (54/54)** — `cg_ent` 14/14, `cg_sai` 6/6, `cg_reg` 19/19, `cg_ocup` 15/15 | `cobertura_funcional.txt`, linhas 139–207 |
+| **Asserções** | 8/8 exercitadas, 0 falhas | **8/8 passaram, 0 falhas** (`a_sem_conflito` ×2; `a_lanca`, `a_armado`, `a_prebusca`, `a_reserva`, `a_in_used`, `a_sem_overflow`) | idem, linhas 75–123 |
+| Código, **wrapper** `isfft_axi_v4` (local) | 70,67 % (848/1.200) | **73,53 % (975/1.326)** — +126 itens: as expressões da U21 | `cobertura_resumo.txt`, linha 7 |
+| Código, núcleo `inst_isfft_matriz` (local) | 99,64 % (279/280) | **100 % (280/280)**; `inst_ifft_1d` e `inst_fft_1d` 100 % (782/782), todos os 9 estágios 100 % | idem |
+| `inst_write_fsm` / `inst_read_fsm` | 90,0 % (27/30) / 89,66 % (26/29) | 92,50 % (37/40) / 92,31 % (36/39) | idem |
+| `u_in_mem`, `u_out_mem` (modelos OpenRAM) | 59–61 % | **n/a** (fora, U20) | idem, linhas 8 e 183 |
+| `u_sva` ×3 | código 88–95 % | **só asserções** (1/1, 1/1, 6/6) | idem, linhas 9, 184, 185 |
+
+**Leituras:**
+- Os 3 bins que faltavam desde 30/09 fecharam com os testes da 7ª
+  sessão (U25): **54/54**.
+- A U20 funcionou exatamente como planejado: as macros saíram da
+  cobertura de código e as `u_sva` ficaram só com asserções.
+- O wrapper subiu pouco (70,7 → 73,5 %) e ganhou 126 itens: a U21
+  passou a medir expressões que antes nem existiam no relatório. O que
+  falta nele ainda não está separado por métrica (pendência: relatório
+  local por métrica).
+- O `reset` do núcleo com as duas transições (U26) **não dá para ler
+  deste relatório** (é por instância, não por sinal): fica para a GUI.
+
+**Vira slide?** Sim: `doc/tabelas_uvm.md` atualizado (rodada de 28/10).
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| U18 | ~~Regressão de 30/09 como referência~~ → referência = rodada de **28/10** (Xcelium 26.03, 10 testes) | ✅ | 10/10, funcional 54/54, asserções 8/8 |
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -1141,7 +1209,7 @@ casos o inocentou; era o testbench" — e o efeito colateral no RAL
 | U15 | Scripts do UVM no notebook em `sim/`; espelho mínimo da VM | 🟡 | 2026-09-30 |
 | U16 | Cobertura por instância; Verilator 5.052 | ✅ | 2026-09-30 |
 | U17 | PATH completo da VM no `run_first_uvm.tcl` | ✅ | 2026-09-30 |
-| U18 | Regressão no Xcelium: 8/8, funcional 94,4 % | 🟡 | 2026-09-30 |
+| U18 | Regressão de referência: ~~30/09~~ → 28/10 (26.03, 10/10, funcional 54/54) | ✅ | 2026-11-04 |
 | U19 | Cobertura de código pelo número local de cada módulo | 🟡 | 2026-10-07 |
 | U20 | Excluir modelos da OpenRAM e `u_sva` (bind) da cobertura de código (`cobertura.ccf`) | ✅ | 2026-10-07 |
 | U21 | Pontuar expressões com `&`/`\|`/`assign` | ✅ | 2026-10-21 |
@@ -1160,12 +1228,14 @@ casos o inocentou; era o testbench" — e o efeito colateral no RAL
 - [x] ~~Refazer a conferência no Verilator na estrutura nova~~ — 8/8, 12/12
 - [x] ~~Rodar na VM: blocos 0 a 3~~ — 4ª sessão: 8/8, IMC funcionou
 - [x] ~~Fechar os 3 bins de entrada~~ — 7ª sessão: `isfft_vazao_test` + truncados dirigidos (a conferir no Xcelium)
-- [ ] Cobertura de código do wrapper (70,7 %) e excluir os modelos da OpenRAM
+- [x] ~~Excluir os modelos da OpenRAM~~ — U20, 9ª sessão
+- [ ] Cobertura de código do wrapper: 73,53 % (975/1.326) — ver o que falta, por métrica
 - [x] ~~Ver a cobertura na GUI do IMC~~ — 5ª sessão
-- [ ] VM (Xcelium 26.03): blocos 0, 2 e 3 com o `cobertura.ccf` (U20) — requalifica o ambiente — e trazer com `traz_uvm.sh`
+- [x] ~~VM (Xcelium 26.03): blocos 0, 2 e 3~~ — 9ª sessão: 10/10, funcional 54/54
 - [ ] Wrapper por métrica, **local** (relatório do IMC, não print; falta a sintaxe: `help report`)
 - [x] ~~Bloco 0% no `write_fsm.v:55`~~ — inalcançável: o liberador gasta 33 ciclos por matriz (U24)
 - [ ] Refinamento no IMC: excluir `write_fsm.v:55` (U24) e os toggles constantes do Spiral, com comentário
 - [x] ~~`reset` do Spiral só com uma transição~~ — 8ª sessão: o soft reset caía dentro do reset estendido (U26)
 - [ ] Confirmar U3, U4, U13, U14, U15, U19, U22, U24, U25, U26, U27
-- [ ] Síntese com DFT só no IP da ISFFT (FE-D39) — depois do UVM
+- [ ] Conferir na GUI (merge de 28/10) o toggle do `reset` do núcleo: duas transições (U26)
+- [x] ~~Síntese com DFT~~ — outra frente (`DIARIO_DFT.md`)
