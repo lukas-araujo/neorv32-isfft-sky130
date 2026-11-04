@@ -1,0 +1,25 @@
+Starting Command: simulate_vectors 
+
+INFO (TDA-005): Command Line Invocation: 
+            simulate_vectors  [end TDA_005]
+
+INFO (TDA-014): Cadence(R) Modus(TM) DFT Software Solution, Version 25.12-s004_1, built Jan 28 2026 (linux26_64) [end TDA_014]
+
+INFO (TDA-015): Log File: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/testresults/logs/log_simulate_vectors_FULLSCAN_110426151646-480010000 [end TDA_015]
+
+INFO (TDA-007): Job Information:
+            Date Started: Wednesday Nov 04 15:16:46 2026  -03
+            Host machine is goku, x86_64 running Linux 4.18.0-553.el8_10.x86_64.
+            This job is process number 3657114.
+[end TDA_007]
+
+INFO (TDA-009): Options/Values information.
+            (options marked with '*' have program generated values,
+             options marked with '+' were specified to default.)
+
+            -WORKDIR /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work
+            -TESTMODE FULLSCAN
+
+            -LOGFILE /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/testresults/logs/log_simulate_vectors_FULLSCAN_110426151646-480010000
+            -HOSTADDR 127.0.0.1:5500
+[end TDA_009]

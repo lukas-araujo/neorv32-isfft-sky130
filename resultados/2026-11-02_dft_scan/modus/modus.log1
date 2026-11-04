@@ -1,0 +1,24 @@
+
+ 
+Copyright (C) 2002-2025 Cadence Design Systems Inc. All Rights Reserved. 
+Cadence and the Cadence logo are registered trademarks and Modus is a trademark 
+of Cadence Design Systems, Inc. in the United States and other countries.
+
+Type 'help legal_notices' for third party license notices. 
+Version : 25.12-s004_1, built Jan 28 2026 (linux26_64)
+Options : -gui
+Date    : Tue, November 03 23:58:01 2026
+Host    : goku (x86_64 Linux 4.18.0-553.el8_10.x86_64) (16*Common KVM processor 16384KB)
+OS      : Rocky Linux release 8.10 (Green Obsidian)
+
+INFO (TUI-300): Detected the presence of Modus database in present working directory. The 'workdir' root attribute is set to '/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work'. [end TUI_300]
+
+INFO (TUI-361): Initializing Model. This may take some time to load. [end TUI_361]
+
+INFO (TUI-766): Initialized Model. CPU time:  0:00:00 Elapsed time:  0:00:00.01 [end TUI_766]
+
+INFO (TUI-727): Successfully set the 'testmode' with value 'FULLSCAN'.  [end TUI_727] 
+
+INFO (TUI-726): The design is currently in circuit state 'tie_only'. [end TUI_726] 
+
+@modus:root:/ 1> exit

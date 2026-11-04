@@ -1,0 +1,408 @@
+
+ 
+Copyright (C) 2002-2025 Cadence Design Systems Inc. All Rights Reserved. 
+Cadence and the Cadence logo are registered trademarks and Modus is a trademark 
+of Cadence Design Systems, Inc. in the United States and other countries.
+
+Type 'help legal_notices' for third party license notices. 
+Version : 25.12-s004_1, built Jan 28 2026 (linux26_64)
+Options : -file runmodus.atpg.tcl
+Date    : Tue, November 03 23:39:13 2026
+Host    : goku (x86_64 Linux 4.18.0-553.el8_10.x86_64) (16*Common KVM processor 16384KB)
+OS      : Rocky Linux release 8.10 (Green Obsidian)
+#@ Processing -files option
+@modus:root:/ 1>  source runmodus.atpg.tcl
+#@ Begin verbose source runmodus.atpg.tcl
+@file(runmodus.atpg.tcl) 13: set_db workdir /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work;
+@file(runmodus.atpg.tcl) 14: set   WORKDIR [get_db workdir]
+@file(runmodus.atpg.tcl) 17: set_option stdout     summary;                                # Only print a summary for each command to the terminal
+@file(runmodus.atpg.tcl) 19: set ::env(CDS_LIC_REPORT) yes
+@file(runmodus.atpg.tcl) 20: set_db stop_on_severity error;
+@file(runmodus.atpg.tcl) 22: file delete -force $WORKDIR/tbdata;                       # Delete Test Database
+@file(runmodus.atpg.tcl) 23: file delete -force $WORKDIR/testresults;                  # Delete Test Output Files/Logs
+@file(runmodus.atpg.tcl) 30: build_model \
+    -cell	 isfft_axi_v4 \
+    -techlib	 /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus/sky130_fd_sc_hd_atpg.v,/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus/macros_caixa_preta.v \
+    -designsource	 $WORKDIR/isfft_axi_v4.test_netlist.v \
+    -allowmissingmodules	 yes \
+    -messagecounteach	 100 \
+
+ 
+INFO (TUI-772): The command 'build_model' will release the currently acquired resources. [end TUI_772] 
+
+Starting Command: build_model 
+INFO (TDA-014): Cadence(R) Modus(TM) DFT Software Solution, Version 25.12-s004_1, built Jan 28 2026 (linux26_64) [end TDA_014]
+INFO (TDA-009): Options/Values information.
+            (options marked with '*' have program generated values,
+             options marked with '+' were specified to default.)
+
+            -WORKDIR /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work
+
+            -designtop isfft_axi_v4
+            -TECHLIB /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus/sky130_fd_sc_hd_atpg.v,/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus/macros_caixa_preta.v
+            -allowmissingmodules yes
+            -LOGFILE /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/testresults/logs/log_build_model_110326233914-777716000
+            -STDOUT summary
+            -messagecounteach 100
+            -DESIGNSOURCE /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/isfft_axi_v4.test_netlist.v
+[end TDA_009]
+
+
+-------------------------------------------------------------------------------
+*                      Message Summary                                        *
+-------------------------------------------------------------------------------
+ Count  Number             First Instance of Message Text
+------- ------             ------------------------------
+
+  INFO Messages...
+      1 INFO (TEI-195): Build Model - Controller starting:  
+      1 INFO (TEI-196): Build Model - Hierarchical Model Build starting:  
+      1 INFO (TEI-197): Build Model - Hierarchical Model Build completed.  
+      1 INFO (TEI-198): Build Model - Flat Model Build starting:  
+      1 INFO (TEI-199): Build Model - Flat Model Build completed.   
+      1 INFO (TEI-200): Build Model - Controller completed.  
+      1 INFO (TFW-117): Modus checked out a modus_atpg license.   
+      1 INFO (TFW-119): Modus checked in a modus_atpg license.   
+      1 INFO (TLM-055): Design Summary
+
+  WARNING Messages...
+      2 WARNING (TLM-140): Cell 'sram_1rw1r_64x64_wpr2' has output and/or inout pins with no internal net. TIEX generated to drive pin 'dout0[0]' and all similar pins.   
+
+  WARNING [Severe] Messages...
+      2 WARNING (TEI-010): [Severe] Module 'sram_1rw1r_64x256' is undefined. The module will be defined as a black box.  
+
+ For a detailed explanation of a message and a suggested user response execute 'msgHelp <message id>'.  For example: msgHelp TDA-009
+
+-------------------------------------------------------------------------------
+@file(runmodus.atpg.tcl) 41: build_testmode \
+    -testmode	 FULLSCAN \
+    -assignfile	 $WORKDIR/isfft_axi_v4.FULLSCAN.pinassign \
+    -modedef	 FULLSCAN \
+ 
+Starting Command: build_testmode 
+INFO (TDA-014): Cadence(R) Modus(TM) DFT Software Solution, Version 25.12-s004_1, built Jan 28 2026 (linux26_64) [end TDA_014]
+INFO (TDA-009): Options/Values information.
+            (options marked with '*' have program generated values,
+             options marked with '+' were specified to default.)
+
+            -WORKDIR /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work
+            -TESTMODE FULLSCAN
+
+            -ASSIGNFILE /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/isfft_axi_v4.FULLSCAN.pinassign
+          * update_assign_file=
+            -LOGFILE /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/testresults/logs/log_build_testmode_FULLSCAN_110326233924-483085000
+            -MODEDEF FULLSCAN
+            -STDOUT summary
+[end TDA_009]
+
+
+-------------------------------------------------------------------------------
+*                      Message Summary                                        *
+-------------------------------------------------------------------------------
+ Count  Number             First Instance of Message Text
+------- ------             ------------------------------
+
+  INFO Messages...
+      1 INFO (TFW-117): Modus checked out a modus_atpg license.   
+      1 INFO (TFW-119): Modus checked in a modus_atpg license.   
+      1 INFO (THM-814): Testmode contains 99.66% active logic,  0.34% inactive logic and  0.00% constraint logic.    
+      1 INFO (TTM-357): There are 16 scan chains which are controllable and observable.    
+      1 INFO (TTM-387): A default scanop sequence will be generated.    
+      1 INFO (TTM-391): A default modeinit sequence will be generated.    
+      1 INFO (TTM-707): Build_testmode summary.  
+      1 INFO (TTM-800): build_testmode has created mode FULLSCAN.  
+
+ For a detailed explanation of a message and a suggested user response execute 'msgHelp <message id>'.  For example: msgHelp TDA-009
+
+-------------------------------------------------------------------------------
+@file(runmodus.atpg.tcl) 50: report_test_structures \
+    -testmode	 FULLSCAN \
+    -reportscanchain	 all \
+ 
+Starting Command: report_test_structures 
+INFO (TDA-014): Cadence(R) Modus(TM) DFT Software Solution, Version 25.12-s004_1, built Jan 28 2026 (linux26_64) [end TDA_014]
+INFO (TDA-009): Options/Values information.
+            (options marked with '*' have program generated values,
+             options marked with '+' were specified to default.)
+
+            -WORKDIR /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work
+            -TESTMODE FULLSCAN
+
+            -LOGFILE /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/testresults/logs/log_report_test_structures_FULLSCAN_110326233926-158129000
+            -STDOUT summary
+            -reportscanchain all
+[end TDA_009]
+
+
+-------------------------------------------------------------------------------
+*                      Message Summary                                        *
+-------------------------------------------------------------------------------
+ Count  Number             First Instance of Message Text
+------- ------             ------------------------------
+
+  INFO Messages...
+      1 INFO (TFW-117): Modus checked out a modus_atpg license.   
+      1 INFO (TFW-119): Modus checked in a modus_atpg license.   
+      1 INFO (TLM-055): Design Summary
+
+ For a detailed explanation of a message and a suggested user response execute 'msgHelp <message id>'.  For example: msgHelp TDA-009
+
+-------------------------------------------------------------------------------
+@file(runmodus.atpg.tcl) 58: verify_test_structures \
+    -messagecount	 TSV-016=10,TSV-024=10,TSV-315=10,TSV-027=10 \
+    -testmode	 FULLSCAN \
+ 
+Starting Command: verify_test_structures 
+INFO (TDA-014): Cadence(R) Modus(TM) DFT Software Solution, Version 25.12-s004_1, built Jan 28 2026 (linux26_64) [end TDA_014]
+INFO (TDA-009): Options/Values information.
+            (options marked with '*' have program generated values,
+             options marked with '+' were specified to default.)
+
+            -WORKDIR /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work
+            -TESTMODE FULLSCAN
+
+            -messagecount TSV-016=10,TSV-024=10,TSV-315=10,TSV-027=10
+            -LOGFILE /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/testresults/logs/log_verify_test_structures_FULLSCAN_110326233927-583994000
+            -STDOUT summary
+[end TDA_009]
+
+
+-------------------------------------------------------------------------------
+*                      Message Summary                                        *
+-------------------------------------------------------------------------------
+ Count  Number             First Instance of Message Text
+------- ------             ------------------------------
+
+  INFO Messages...
+      1 INFO (TFW-117): Modus checked out a modus_atpg license.   
+      1 INFO (TFW-119): Modus checked in a modus_atpg license.   
+      1 INFO (TLM-055): Design Summary
+      1 INFO (TSV-068): The length of the longest scan chain is 785 bit positions, which is 100% of the average scan chain length 785 (based on 12552 total scan chain bits and 16 valid scan chains).    
+     16 INFO (TSV-378): Scan chain beginning at 'pin scan_in_0' and ending at 'pin scan_out_0' is controllable and observable. The length of the scan chain is 785 bit positions.    
+      1 INFO (TSV-567): There are 16 controllable scan chains fed by Scan In (SI) primary inputs.    
+      1 INFO (TSV-568): There are 16 observable scan chains feeding to Scan Out (SO) primary outputs.    
+      1 INFO (TSV-569): There are 0 controllable scan chains fed by on-product Pattern Generator(s).    
+      1 INFO (TSV-570): There are 0 observable scan chains feeding to on-product Multiple-Input Signature Register (MISRs).    
+      1 INFO (TSV-900): verify_test_structures processing has started Tue Nov  3 23:39:27 2026     
+      1 INFO (TSV-908): verify_test_structures processing complete.    
+
+ For a detailed explanation of a message and a suggested user response execute 'msgHelp <message id>'.  For example: msgHelp TDA-009
+
+-------------------------------------------------------------------------------
+@file(runmodus.atpg.tcl) 66: build_faultmodel \
+    -includedynamic	 no \
+ 
+INFO (TUI-772): The command 'build_faultmodel' will release the currently acquired resources. [end TUI_772] 
+
+Starting Command: build_faultmodel 
+INFO (TDA-014): Cadence(R) Modus(TM) DFT Software Solution, Version 25.12-s004_1, built Jan 28 2026 (linux26_64) [end TDA_014]
+INFO (TDA-009): Options/Values information.
+            (options marked with '*' have program generated values,
+             options marked with '+' were specified to default.)
+
+            -WORKDIR /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work
+
+            -LOGFILE /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/testresults/logs/log_build_faultmodel_110326233928-983870000
+            -STDOUT summary
+            -includedynamic no
+[end TDA_009]
+
+
+-------------------------------------------------------------------------------
+*                      Message Summary                                        *
+-------------------------------------------------------------------------------
+ Count  Number             First Instance of Message Text
+------- ------             ------------------------------
+
+  INFO Messages...
+      1 INFO (TFM-099): Build Fault Model started.   
+      1 INFO (TFM-102): Creating faultModel file /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/tbdata/faultModel.   
+      1 INFO (TFM-103): Creating faultStatus file /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/tbdata/faultStatus.   
+      1 INFO (TFM-109): Build Fault Model has completed with highest level severity message of INFO.   
+      1 INFO (TFM-704): Maximum Global Test Coverage Statistics: 
+      1 INFO (TFW-117): Modus checked out a modus_atpg license.   
+      1 INFO (TFW-119): Modus checked in a modus_atpg license.   
+
+ For a detailed explanation of a message and a suggested user response execute 'msgHelp <message id>'.  For example: msgHelp TDA-009
+
+-------------------------------------------------------------------------------
+@file(runmodus.atpg.tcl) 73: create_logic_tests \
+    -experiment	 isfft_axi_v4_atpg \
+    -testmode	 FULLSCAN \
+
+
+Starting Command: create_logic_tests 
+INFO (TDA-014): Cadence(R) Modus(TM) DFT Software Solution, Version 25.12-s004_1, built Jan 28 2026 (linux26_64) [end TDA_014]
+INFO (TDA-009): Options/Values information.
+            (options marked with '*' have program generated values,
+             options marked with '+' were specified to default.)
+
+            -WORKDIR /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work
+            -TESTMODE FULLSCAN
+            -EXPERIMENT isfft_axi_v4_atpg
+
+            -LOGFILE /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/testresults/logs/log_create_logic_tests_FULLSCAN_isfft_axi_v4_atpg_110326233930-833346000
+            -STDOUT summary
+[end TDA_009]
+INFO (TDA-220):   --- Tests ---   Faults     ---- ATCov ----   -- Faults --   - Elapsed Time -  [end TDA_220] 
+INFO (TDA-220):    Sim.    Eff.  Detected    Tmode    Global     Untested                       [end TDA_220] 
+INFO (TDA-220):      1       1      87905    25.71%   25.62%       253966           00:00.36    [end TDA_220] 
+INFO (TDA-220):   --- Tests ---   Faults     ---- ATCov ----   -- Faults --   - Elapsed Time -  [end TDA_220] 
+INFO (TDA-220):    Sim.    Eff.  Detected    Tmode    Global     Untested                       [end TDA_220] 
+INFO (TDA-220):     16      16     196355    83.15%   82.86%        57405           00:08.00    [end TDA_220] 
+INFO (TDA-220):     32      32      20246    89.07%   88.76%        37150           00:09.71    [end TDA_220] 
+INFO (TDA-220):     48      48       8547    91.58%   91.26%        28592           00:11.13    [end TDA_220] 
+INFO (TDA-220):     64      64       6736    93.55%   93.22%        21846           00:12.52    [end TDA_220] 
+INFO (TDA-220):     80      80       5638    95.20%   94.87%        16204           00:12.96    [end TDA_220] 
+INFO (TDA-220):     96      96       4834    96.61%   96.28%        11366           00:13.16    [end TDA_220] 
+INFO (TDA-220):    112     112       4507    97.93%   97.59%         6859           00:13.41    [end TDA_220] 
+INFO (TDA-220):    128     128       3564    98.97%   98.63%         3294           00:13.60    [end TDA_220] 
+INFO (TDA-220):    144     144        583    99.15%   98.81%         2690           00:13.68    [end TDA_220] 
+INFO (TDA-220):    160     159        170    99.22%   98.88%         2445           00:13.73    [end TDA_220] 
+INFO (TDA-220):    167     166       1414    99.64%   99.29%         1020           00:13.75    [end TDA_220] 
+INFO (TDA-220):    168     167          4    99.64%   99.29%         1016           00:13.77    [end TDA_220] 
+INFO (TDA-220):    170     167          0    99.64%   99.29%         1016           00:13.79    [end TDA_220] 
+INFO (TDA-220):    172     169          7    99.65%   99.30%          996           00:14.89    [end TDA_220] 
+INFO (TDA-220):    174     169          0    99.65%   99.30%          996           00:14.89    [end TDA_220] 
+
+
+-------------------------------------------------------------------------------
+*                      Message Summary                                        *
+-------------------------------------------------------------------------------
+ Count  Number             First Instance of Message Text
+------- ------             ------------------------------
+
+  INFO Messages...
+     20 INFO (TDA-220):   --- Tests ---   Faults     ---- ATCov ----   -- Faults --   - Elapsed Time -   
+      1 INFO (TDA-221):    170     167          0    99.64%   99.29%         1016           00:13.79     
+      1 INFO (TFW-117): Modus checked out a modus_atpg license.   
+      1 INFO (TFW-119): Modus checked in a modus_atpg license.   
+      4 INFO (TTC-110): Starting Scan Test generation                                                    
+
+ For a detailed explanation of a message and a suggested user response execute 'msgHelp <message id>'.  For example: msgHelp TDA-009
+
+-------------------------------------------------------------------------------
+@file(runmodus.atpg.tcl) 81: write_toggle_gram \
+    -experiment	 isfft_axi_v4_atpg \
+    -testmode	 FULLSCAN \
+
+#-------------------------------------------------------------------------------
+Starting Command: write_toggle_gram 
+INFO (TDA-014): Cadence(R) Modus(TM) DFT Software Solution, Version 25.12-s004_1, built Jan 28 2026 (linux26_64) [end TDA_014]
+INFO (TDA-009): Options/Values information.
+            (options marked with '*' have program generated values,
+             options marked with '+' were specified to default.)
+
+            -WORKDIR /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work
+            -TESTMODE FULLSCAN
+            -EXPERIMENT isfft_axi_v4_atpg
+
+            -LOGFILE /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/testresults/logs/log_write_toggle_gram_FULLSCAN_isfft_axi_v4_atpg_110326233947-133199000
+            -STDOUT summary
+[end TDA_009]
+
+
+-------------------------------------------------------------------------------
+*                      Message Summary                                        *
+-------------------------------------------------------------------------------
+ Count  Number             First Instance of Message Text
+------- ------             ------------------------------
+
+  INFO Messages...
+      5 INFO (TBM-054): Scan Shift Toggle report categorized by SEQUENCE  
+      1 INFO (TBM-088): The total number of test to be analyzed for scan is 170 and for capture is 169.  
+      1 INFO (TFW-117): Modus checked out a modus_atpg license.   
+      1 INFO (TFW-119): Modus checked in a modus_atpg license.   
+
+  WARNING Messages...
+      1 WARNING (TBM-099):The switching percentage has exceeded the threshold value of 30 percent, in the current testmode. High switching can impact the power numbers at the tester.  
+      1 WARNING (TBM-109):The test patterns analyzed for toggle calculations contain X values for unknown latch/flop states. The X values can impact toggle numbers significantly. The default latch fill policy for X values (if not specified otherwise) is the 'dontcare' option set to 'random'.  
+
+ For a detailed explanation of a message and a suggested user response execute 'msgHelp <message id>'.  For example: msgHelp TDA-009
+
+-------------------------------------------------------------------------------
+@file(runmodus.atpg.tcl) 88: write_vectors \
+    -inexperiment	 isfft_axi_v4_atpg \
+    -testmode	 FULLSCAN \
+    -language	 verilog \
+    -scanformat	 parallel \
+
+
+Starting Command: write_vectors 
+INFO (TDA-014): Cadence(R) Modus(TM) DFT Software Solution, Version 25.12-s004_1, built Jan 28 2026 (linux26_64) [end TDA_014]
+INFO (TDA-009): Options/Values information.
+            (options marked with '*' have program generated values,
+             options marked with '+' were specified to default.)
+
+            -WORKDIR /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work
+            -TESTMODE FULLSCAN
+
+            -INEXPERIMENT isfft_axi_v4_atpg
+            -LOGFILE /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/testresults/logs/log_write_vectors_FULLSCAN_isfft_axi_v4_atpg_110326233948-678646000
+            -STDOUT summary
+            -scanformat parallel
+          + -language verilog
+[end TDA_009]
+
+
+-------------------------------------------------------------------------------
+*                      Message Summary                                        *
+-------------------------------------------------------------------------------
+ Count  Number             First Instance of Message Text
+------- ------             ------------------------------
+
+  INFO Messages...
+      1 INFO (TFW-117): Modus checked out a modus_atpg license.   
+      1 INFO (TFW-119): Modus checked in a modus_atpg license.   
+      1 INFO (TVE-001): Verilog write vectors started.    
+      1 INFO (TVE-002): Verilog write vectors has completed.    
+      4 INFO (TVE-003): Verilog write vectors output file will be: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/testresults/verilog/cycleMap.FULLSCAN.isfft_axi_v4_atpg.    
+      2 INFO (TVE-004): Reading test section 1.1. Test section type equals scan.    
+      2 INFO (TVE-008): Created 12552 total measures, of which 0 are PO measures and 12552 are SO (Scan Out) measures.   
+      1 INFO (TVE-050):         TEST SEQUENCE COVERAGE ESTIMATE REPORT  
+      2 INFO (TVE-103): There was no specified TEST offset for this clock 'pin aclk'.  A default clock offset of 8.000000 ns will be used.    
+      1 INFO (TVE-967): Temporary output files are created in /tmp directory.  
+
+ For a detailed explanation of a message and a suggested user response execute 'msgHelp <message id>'.  For example: msgHelp TDA-009
+
+-------------------------------------------------------------------------------
+@file(runmodus.atpg.tcl) 98: commit_tests \
+    -inexperiment	 isfft_axi_v4_atpg \
+    -testmode	 FULLSCAN 
+INFO (TUI-772): The command 'commit_tests' will release the currently acquired resources. [end TUI_772] 
+
+Starting Command: commit_tests 
+INFO (TDA-014): Cadence(R) Modus(TM) DFT Software Solution, Version 25.12-s004_1, built Jan 28 2026 (linux26_64) [end TDA_014]
+INFO (TDA-009): Options/Values information.
+            (options marked with '*' have program generated values,
+             options marked with '+' were specified to default.)
+
+            -WORKDIR /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work
+            -TESTMODE FULLSCAN
+
+            -INEXPERIMENT isfft_axi_v4_atpg
+            -LOGFILE /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/testresults/logs/log_commit_tests_FULLSCAN_isfft_axi_v4_atpg_110326233951-082702000
+            -STDOUT summary
+[end TDA_009]
+
+
+-------------------------------------------------------------------------------
+*                      Message Summary                                        *
+-------------------------------------------------------------------------------
+ Count  Number             First Instance of Message Text
+------- ------             ------------------------------
+
+  INFO Messages...
+      1 INFO (TBD-805): File(s) generated (bytes and name):   
+      1 INFO (TBD-806): Input test vector File(s) (bytes, name):   
+      1 INFO (TBD-807): Experiment isfft_axi_v4_atpg odometers prior to commit_tests: 1.1.1.2.1 thru 1.2.1.14.2 (Relative test numbers 1 thru 170).   
+      1 INFO (TBD-809): Master test vector file statistics:     
+      1 INFO (TBD-810): Experiment isfft_axi_v4_atpg is saved to the master test vectors odometers: 1.1.1.2.1 to 1.2.1.14.2 (Relative test numbers 1 to 170).   
+      1 INFO (TBD-831): commit_tests completed successfully.   
+      1 INFO (TFW-117): Modus checked out a modus_atpg license.   
+      1 INFO (TFW-119): Modus checked in a modus_atpg license.   
+
+ For a detailed explanation of a message and a suggested user response execute 'msgHelp <message id>'.  For example: msgHelp TDA-009
+
+-------------------------------------------------------------------------------
+@file(runmodus.atpg.tcl) 103: exit

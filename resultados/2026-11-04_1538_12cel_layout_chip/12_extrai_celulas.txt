@@ -1,0 +1,31 @@
+Extracao de cada celula do anel SOZINHA (Magic, GDS do PDK)
+
+Barramento ausente = fundido com outra porta dentro da celula (o Magic guarda um nome so).
+
+sky130_ef_io__gpiov2_pad_wrapped
+   36 portas; barramentos ausentes: VSSA, VDDIO, VSSIO
+   tem no de substrato VSUBS
+sky130_ef_io__vccd_lvc_clamped_pad
+   10 portas; barramentos ausentes: VSSA, VSSIO
+   tem no de substrato VSUBS
+sky130_ef_io__vssd_lvc_clamped_pad
+   10 portas; barramentos ausentes: VSSA, VSSIO
+   tem no de substrato VSUBS
+sky130_ef_io__vddio_hvc_clamped_pad
+   12 portas; barramentos ausentes: nenhum
+   tem no de substrato VSUBS
+sky130_ef_io__vssio_hvc_clamped_pad
+   12 portas; barramentos ausentes: nenhum
+   tem no de substrato VSUBS
+sky130_ef_io__vdda_hvc_clamped_pad
+   12 portas; barramentos ausentes: nenhum
+   tem no de substrato VSUBS
+sky130_ef_io__vssa_hvc_clamped_pad
+   12 portas; barramentos ausentes: nenhum
+   tem no de substrato VSUBS
+sky130_ef_io__corner_pad
+   12 portas; barramentos ausentes: nenhum
+sky130_ef_io__com_bus_slice_20um
+   12 portas; barramentos ausentes: nenhum
+sky130_ef_io__connect_vcchib_vccd_and_vswitch_vddio_slice_20um
+   10 portas; barramentos ausentes: VSWITCH, VCCHIB

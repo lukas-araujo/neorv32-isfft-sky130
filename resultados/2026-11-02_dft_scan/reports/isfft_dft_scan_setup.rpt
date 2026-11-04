@@ -1,0 +1,461 @@
+
+Design Name
+===========
+    isfft_axi_v4
+
+Scan Style
+==========
+    muxed_scan
+Design has a valid DFT rule check status
+
+Global Constraints
+==================
+    Minimum number of scan chains: no_value
+    Maximum length of scan chains: no_value
+    Lock-up element type: preferred_level_sensitive
+    Mix clock edges in scan chain: false
+    Prefix for unnamed scan objects: DFT_
+
+Test signal objects
+===================
+    shift_enable: 
+          object name: scan_en 
+          pin name: scan_en 
+          hookup_pin: scan_en 
+          hookup_polarity: non_inverted 
+          function: shift_enable 
+          active: high 
+          ideal: false 
+          user defined: true
+
+
+Test clock objects
+==================
+    test_clock:
+          object name: aclk 
+          test_clock_domain: aclk 
+          user defined: true 
+          source: aclk  
+          root source: aclk  
+          root source polarity: non_inverting
+          hookup_pin: aclk 
+          period: 20000.0
+
+
+DFT controllable objects
+========================
+
+DFT don't scan objects
+======================
+
+DFT abstract don't scan objects
+===============================
+
+DFT scan segment constraints
+============================
+
+DFT scan chain constraints
+==========================
+    User Chain: 
+          object name: cadeia_0 
+          scan-in: scan_in_0 
+          scan-in hookup_pin: scan_in_0
+          scan-out: scan_out_0 
+          scan-out hookup_pin: scan_out_0
+          shared out: false 
+          shift_enable object name: scan_en 
+          max length: no_value
+          complete: false
+
+    User Chain: 
+          object name: cadeia_1 
+          scan-in: scan_in_1 
+          scan-in hookup_pin: scan_in_1
+          scan-out: scan_out_1 
+          scan-out hookup_pin: scan_out_1
+          shared out: false 
+          shift_enable object name: scan_en 
+          max length: no_value
+          complete: false
+
+    User Chain: 
+          object name: cadeia_2 
+          scan-in: scan_in_2 
+          scan-in hookup_pin: scan_in_2
+          scan-out: scan_out_2 
+          scan-out hookup_pin: scan_out_2
+          shared out: false 
+          shift_enable object name: scan_en 
+          max length: no_value
+          complete: false
+
+    User Chain: 
+          object name: cadeia_3 
+          scan-in: scan_in_3 
+          scan-in hookup_pin: scan_in_3
+          scan-out: scan_out_3 
+          scan-out hookup_pin: scan_out_3
+          shared out: false 
+          shift_enable object name: scan_en 
+          max length: no_value
+          complete: false
+
+    User Chain: 
+          object name: cadeia_4 
+          scan-in: scan_in_4 
+          scan-in hookup_pin: scan_in_4
+          scan-out: scan_out_4 
+          scan-out hookup_pin: scan_out_4
+          shared out: false 
+          shift_enable object name: scan_en 
+          max length: no_value
+          complete: false
+
+    User Chain: 
+          object name: cadeia_5 
+          scan-in: scan_in_5 
+          scan-in hookup_pin: scan_in_5
+          scan-out: scan_out_5 
+          scan-out hookup_pin: scan_out_5
+          shared out: false 
+          shift_enable object name: scan_en 
+          max length: no_value
+          complete: false
+
+    User Chain: 
+          object name: cadeia_6 
+          scan-in: scan_in_6 
+          scan-in hookup_pin: scan_in_6
+          scan-out: scan_out_6 
+          scan-out hookup_pin: scan_out_6
+          shared out: false 
+          shift_enable object name: scan_en 
+          max length: no_value
+          complete: false
+
+    User Chain: 
+          object name: cadeia_7 
+          scan-in: scan_in_7 
+          scan-in hookup_pin: scan_in_7
+          scan-out: scan_out_7 
+          scan-out hookup_pin: scan_out_7
+          shared out: false 
+          shift_enable object name: scan_en 
+          max length: no_value
+          complete: false
+
+    User Chain: 
+          object name: cadeia_8 
+          scan-in: scan_in_8 
+          scan-in hookup_pin: scan_in_8
+          scan-out: scan_out_8 
+          scan-out hookup_pin: scan_out_8
+          shared out: false 
+          shift_enable object name: scan_en 
+          max length: no_value
+          complete: false
+
+    User Chain: 
+          object name: cadeia_9 
+          scan-in: scan_in_9 
+          scan-in hookup_pin: scan_in_9
+          scan-out: scan_out_9 
+          scan-out hookup_pin: scan_out_9
+          shared out: false 
+          shift_enable object name: scan_en 
+          max length: no_value
+          complete: false
+
+    User Chain: 
+          object name: cadeia_10 
+          scan-in: scan_in_10 
+          scan-in hookup_pin: scan_in_10
+          scan-out: scan_out_10 
+          scan-out hookup_pin: scan_out_10
+          shared out: false 
+          shift_enable object name: scan_en 
+          max length: no_value
+          complete: false
+
+    User Chain: 
+          object name: cadeia_11 
+          scan-in: scan_in_11 
+          scan-in hookup_pin: scan_in_11
+          scan-out: scan_out_11 
+          scan-out hookup_pin: scan_out_11
+          shared out: false 
+          shift_enable object name: scan_en 
+          max length: no_value
+          complete: false
+
+    User Chain: 
+          object name: cadeia_12 
+          scan-in: scan_in_12 
+          scan-in hookup_pin: scan_in_12
+          scan-out: scan_out_12 
+          scan-out hookup_pin: scan_out_12
+          shared out: false 
+          shift_enable object name: scan_en 
+          max length: no_value
+          complete: false
+
+    User Chain: 
+          object name: cadeia_13 
+          scan-in: scan_in_13 
+          scan-in hookup_pin: scan_in_13
+          scan-out: scan_out_13 
+          scan-out hookup_pin: scan_out_13
+          shared out: false 
+          shift_enable object name: scan_en 
+          max length: no_value
+          complete: false
+
+    User Chain: 
+          object name: cadeia_14 
+          scan-in: scan_in_14 
+          scan-in hookup_pin: scan_in_14
+          scan-out: scan_out_14 
+          scan-out hookup_pin: scan_out_14
+          shared out: false 
+          shift_enable object name: scan_en 
+          max length: no_value
+          complete: false
+
+    User Chain: 
+          object name: cadeia_15 
+          scan-in: scan_in_15 
+          scan-in hookup_pin: scan_in_15
+          scan-out: scan_out_15 
+          scan-out hookup_pin: scan_out_15
+          shared out: false 
+          shift_enable object name: scan_en 
+          max length: no_value
+          complete: false
+
+
+DFT actual scan chains
+======================
+    Actual Chain:
+          object name: cadeia_0 
+          scan-in: scan_in_0 
+          scan-in hookup_pin: scan_in_0 
+          scan-out: scan_out_0 
+          scan-out hookup_pin: scan_out_0 
+          shared out: false
+          shift_enable: scan_en 
+          length: 785
+          segment objects: none
+          analyzed: false
+          test_clock domain: aclk
+          test_clock edge: rise
+
+    Actual Chain:
+          object name: cadeia_1 
+          scan-in: scan_in_1 
+          scan-in hookup_pin: scan_in_1 
+          scan-out: scan_out_1 
+          scan-out hookup_pin: scan_out_1 
+          shared out: false
+          shift_enable: scan_en 
+          length: 785
+          segment objects: none
+          analyzed: false
+          test_clock domain: aclk
+          test_clock edge: rise
+
+    Actual Chain:
+          object name: cadeia_2 
+          scan-in: scan_in_2 
+          scan-in hookup_pin: scan_in_2 
+          scan-out: scan_out_2 
+          scan-out hookup_pin: scan_out_2 
+          shared out: false
+          shift_enable: scan_en 
+          length: 785
+          segment objects: none
+          analyzed: false
+          test_clock domain: aclk
+          test_clock edge: rise
+
+    Actual Chain:
+          object name: cadeia_3 
+          scan-in: scan_in_3 
+          scan-in hookup_pin: scan_in_3 
+          scan-out: scan_out_3 
+          scan-out hookup_pin: scan_out_3 
+          shared out: false
+          shift_enable: scan_en 
+          length: 785
+          segment objects: none
+          analyzed: false
+          test_clock domain: aclk
+          test_clock edge: rise
+
+    Actual Chain:
+          object name: cadeia_4 
+          scan-in: scan_in_4 
+          scan-in hookup_pin: scan_in_4 
+          scan-out: scan_out_4 
+          scan-out hookup_pin: scan_out_4 
+          shared out: false
+          shift_enable: scan_en 
+          length: 785
+          segment objects: none
+          analyzed: false
+          test_clock domain: aclk
+          test_clock edge: rise
+
+    Actual Chain:
+          object name: cadeia_5 
+          scan-in: scan_in_5 
+          scan-in hookup_pin: scan_in_5 
+          scan-out: scan_out_5 
+          scan-out hookup_pin: scan_out_5 
+          shared out: false
+          shift_enable: scan_en 
+          length: 785
+          segment objects: none
+          analyzed: false
+          test_clock domain: aclk
+          test_clock edge: rise
+
+    Actual Chain:
+          object name: cadeia_6 
+          scan-in: scan_in_6 
+          scan-in hookup_pin: scan_in_6 
+          scan-out: scan_out_6 
+          scan-out hookup_pin: scan_out_6 
+          shared out: false
+          shift_enable: scan_en 
+          length: 785
+          segment objects: none
+          analyzed: false
+          test_clock domain: aclk
+          test_clock edge: rise
+
+    Actual Chain:
+          object name: cadeia_7 
+          scan-in: scan_in_7 
+          scan-in hookup_pin: scan_in_7 
+          scan-out: scan_out_7 
+          scan-out hookup_pin: scan_out_7 
+          shared out: false
+          shift_enable: scan_en 
+          length: 785
+          segment objects: none
+          analyzed: false
+          test_clock domain: aclk
+          test_clock edge: rise
+
+    Actual Chain:
+          object name: cadeia_8 
+          scan-in: scan_in_8 
+          scan-in hookup_pin: scan_in_8 
+          scan-out: scan_out_8 
+          scan-out hookup_pin: scan_out_8 
+          shared out: false
+          shift_enable: scan_en 
+          length: 784
+          segment objects: none
+          analyzed: false
+          test_clock domain: aclk
+          test_clock edge: rise
+
+    Actual Chain:
+          object name: cadeia_9 
+          scan-in: scan_in_9 
+          scan-in hookup_pin: scan_in_9 
+          scan-out: scan_out_9 
+          scan-out hookup_pin: scan_out_9 
+          shared out: false
+          shift_enable: scan_en 
+          length: 784
+          segment objects: none
+          analyzed: false
+          test_clock domain: aclk
+          test_clock edge: rise
+
+    Actual Chain:
+          object name: cadeia_10 
+          scan-in: scan_in_10 
+          scan-in hookup_pin: scan_in_10 
+          scan-out: scan_out_10 
+          scan-out hookup_pin: scan_out_10 
+          shared out: false
+          shift_enable: scan_en 
+          length: 784
+          segment objects: none
+          analyzed: false
+          test_clock domain: aclk
+          test_clock edge: rise
+
+    Actual Chain:
+          object name: cadeia_11 
+          scan-in: scan_in_11 
+          scan-in hookup_pin: scan_in_11 
+          scan-out: scan_out_11 
+          scan-out hookup_pin: scan_out_11 
+          shared out: false
+          shift_enable: scan_en 
+          length: 784
+          segment objects: none
+          analyzed: false
+          test_clock domain: aclk
+          test_clock edge: rise
+
+    Actual Chain:
+          object name: cadeia_12 
+          scan-in: scan_in_12 
+          scan-in hookup_pin: scan_in_12 
+          scan-out: scan_out_12 
+          scan-out hookup_pin: scan_out_12 
+          shared out: false
+          shift_enable: scan_en 
+          length: 784
+          segment objects: none
+          analyzed: false
+          test_clock domain: aclk
+          test_clock edge: rise
+
+    Actual Chain:
+          object name: cadeia_13 
+          scan-in: scan_in_13 
+          scan-in hookup_pin: scan_in_13 
+          scan-out: scan_out_13 
+          scan-out hookup_pin: scan_out_13 
+          shared out: false
+          shift_enable: scan_en 
+          length: 784
+          segment objects: none
+          analyzed: false
+          test_clock domain: aclk
+          test_clock edge: rise
+
+    Actual Chain:
+          object name: cadeia_14 
+          scan-in: scan_in_14 
+          scan-in hookup_pin: scan_in_14 
+          scan-out: scan_out_14 
+          scan-out hookup_pin: scan_out_14 
+          shared out: false
+          shift_enable: scan_en 
+          length: 784
+          segment objects: none
+          analyzed: false
+          test_clock domain: aclk
+          test_clock edge: rise
+
+    Actual Chain:
+          object name: cadeia_15 
+          scan-in: scan_in_15 
+          scan-in hookup_pin: scan_in_15 
+          scan-out: scan_out_15 
+          scan-out hookup_pin: scan_out_15 
+          shared out: false
+          shift_enable: scan_en 
+          length: 784
+          segment objects: none
+          analyzed: false
+          test_clock domain: aclk
+          test_clock edge: rise
+

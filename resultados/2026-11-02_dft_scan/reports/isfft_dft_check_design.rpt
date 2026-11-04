@@ -1,0 +1,1224 @@
+
+ 	 Check Design Report (c)
+	 ------------------- 
+No subdesign's name is greater than 1.5k in length.
+
+ Feedthrough Module(s)
+ -------------------------
+No feed through module in 'isfft_axi_v4'
+
+  Unresolved References & Empty Modules
+  ------------------------------------- 
+No unresolved references in design 'isfft_axi_v4'
+
+No empty modules in design 'isfft_axi_v4'
+
+ Unloaded Pin(s), Port(s)
+ -------------------------
+design 'isfft_axi_v4' has the following unloaded sequential elements
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/memSys/shiftFIFO_41899/mem_reg[3][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage1/add40901/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage1/sub40931/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage1/add40916/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage1/sub40946/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage2/instPerm41903/memSys/shiftFIFO_41912/mem_reg[1][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41072/q_reg[0][29]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41072/q_reg[0][30]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41072/q_reg[1][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41072/q_reg[1][1]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41072/q_reg[1][2]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41072/q_reg[1][3]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41072/q_reg[1][4]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41072/q_reg[1][5]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41072/q_reg[1][6]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41072/q_reg[1][7]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41072/q_reg[1][8]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41072/q_reg[1][9]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41072/q_reg[1][10]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41072/q_reg[1][11]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41072/q_reg[1][12]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41072/q_reg[1][13]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41094/q_reg[0][29]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41094/q_reg[0][30]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41094/q_reg[1][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41094/q_reg[1][1]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41094/q_reg[1][2]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41094/q_reg[1][3]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41094/q_reg[1][4]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41094/q_reg[1][5]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41094/q_reg[1][6]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41094/q_reg[1][7]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41094/q_reg[1][8]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41094/q_reg[1][9]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41094/q_reg[1][10]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41094/q_reg[1][11]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41094/q_reg[1][12]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41094/q_reg[1][13]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41112/q_reg[0][29]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41112/q_reg[0][30]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41112/q_reg[1][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41112/q_reg[1][1]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41112/q_reg[1][2]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41112/q_reg[1][3]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41112/q_reg[1][4]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41112/q_reg[1][5]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41112/q_reg[1][6]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41112/q_reg[1][7]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41112/q_reg[1][8]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41112/q_reg[1][9]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41112/q_reg[1][10]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41112/q_reg[1][11]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41112/q_reg[1][12]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41112/q_reg[1][13]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41123/q_reg[0][29]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41123/q_reg[0][30]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41123/q_reg[1][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41123/q_reg[1][1]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41123/q_reg[1][2]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41123/q_reg[1][3]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41123/q_reg[1][4]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41123/q_reg[1][5]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41123/q_reg[1][6]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41123/q_reg[1][7]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41123/q_reg[1][8]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41123/q_reg[1][9]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41123/q_reg[1][10]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41123/q_reg[1][11]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41123/q_reg[1][12]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41123/q_reg[1][13]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage4/add41166/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage4/add41181/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage4/sub41196/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage4/sub41211/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/memSys/shiftFIFO_41929/mem_reg[3][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41336/q_reg[0][29]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41336/q_reg[0][30]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41336/q_reg[1][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41336/q_reg[1][1]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41336/q_reg[1][2]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41336/q_reg[1][3]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41336/q_reg[1][4]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41336/q_reg[1][5]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41336/q_reg[1][6]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41336/q_reg[1][7]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41336/q_reg[1][8]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41336/q_reg[1][9]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41336/q_reg[1][10]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41336/q_reg[1][11]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41336/q_reg[1][12]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41336/q_reg[1][13]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41358/q_reg[0][29]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41358/q_reg[0][30]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41358/q_reg[1][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41358/q_reg[1][1]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41358/q_reg[1][2]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41358/q_reg[1][3]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41358/q_reg[1][4]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41358/q_reg[1][5]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41358/q_reg[1][6]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41358/q_reg[1][7]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41358/q_reg[1][8]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41358/q_reg[1][9]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41358/q_reg[1][10]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41358/q_reg[1][11]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41358/q_reg[1][12]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41358/q_reg[1][13]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41376/q_reg[0][29]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41376/q_reg[0][30]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41376/q_reg[1][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41376/q_reg[1][1]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41376/q_reg[1][2]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41376/q_reg[1][3]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41376/q_reg[1][4]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41376/q_reg[1][5]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41376/q_reg[1][6]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41376/q_reg[1][7]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41376/q_reg[1][8]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41376/q_reg[1][9]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41376/q_reg[1][10]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41376/q_reg[1][11]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41376/q_reg[1][12]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41376/q_reg[1][13]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41387/q_reg[0][29]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41387/q_reg[0][30]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41387/q_reg[1][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41387/q_reg[1][1]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41387/q_reg[1][2]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41387/q_reg[1][3]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41387/q_reg[1][4]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41387/q_reg[1][5]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41387/q_reg[1][6]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41387/q_reg[1][7]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41387/q_reg[1][8]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41387/q_reg[1][9]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41387/q_reg[1][10]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41387/q_reg[1][11]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41387/q_reg[1][12]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/m41387/q_reg[1][13]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage7/add41438/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage7/add41453/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage7/sub41468/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage7/sub41483/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/memSys/shiftFIFO_41946/mem_reg[3][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/memSys/shiftFIFO_7821/mem_reg[3][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage1/add6823/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage1/add6838/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage1/sub6853/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage1/sub6868/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage2/instPerm7825/memSys/shiftFIFO_7834/mem_reg[1][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m6994/q_reg[0][29]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m6994/q_reg[0][30]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m6994/q_reg[1][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m6994/q_reg[1][1]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m6994/q_reg[1][2]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m6994/q_reg[1][3]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m6994/q_reg[1][4]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m6994/q_reg[1][5]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m6994/q_reg[1][6]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m6994/q_reg[1][7]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m6994/q_reg[1][8]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m6994/q_reg[1][9]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m6994/q_reg[1][10]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m6994/q_reg[1][11]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m6994/q_reg[1][12]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m6994/q_reg[1][13]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7016/q_reg[0][29]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7016/q_reg[0][30]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7016/q_reg[1][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7016/q_reg[1][1]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7016/q_reg[1][2]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7016/q_reg[1][3]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7016/q_reg[1][4]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7016/q_reg[1][5]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7016/q_reg[1][6]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7016/q_reg[1][7]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7016/q_reg[1][8]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7016/q_reg[1][9]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7016/q_reg[1][10]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7016/q_reg[1][11]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7016/q_reg[1][12]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7016/q_reg[1][13]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7034/q_reg[0][29]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7034/q_reg[0][30]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7034/q_reg[1][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7034/q_reg[1][1]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7034/q_reg[1][2]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7034/q_reg[1][3]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7034/q_reg[1][4]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7034/q_reg[1][5]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7034/q_reg[1][6]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7034/q_reg[1][7]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7034/q_reg[1][8]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7034/q_reg[1][9]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7034/q_reg[1][10]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7034/q_reg[1][11]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7034/q_reg[1][12]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7034/q_reg[1][13]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7045/q_reg[0][29]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7045/q_reg[0][30]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7045/q_reg[1][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7045/q_reg[1][1]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7045/q_reg[1][2]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7045/q_reg[1][3]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7045/q_reg[1][4]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7045/q_reg[1][5]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7045/q_reg[1][6]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7045/q_reg[1][7]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7045/q_reg[1][8]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7045/q_reg[1][9]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7045/q_reg[1][10]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7045/q_reg[1][11]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7045/q_reg[1][12]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/m7045/q_reg[1][13]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage4/add7088/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage4/add7103/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage4/sub7118/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage4/sub7133/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/memSys/shiftFIFO_7851/mem_reg[3][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7258/q_reg[0][29]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7258/q_reg[0][30]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7258/q_reg[1][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7258/q_reg[1][1]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7258/q_reg[1][2]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7258/q_reg[1][3]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7258/q_reg[1][4]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7258/q_reg[1][5]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7258/q_reg[1][6]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7258/q_reg[1][7]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7258/q_reg[1][8]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7258/q_reg[1][9]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7258/q_reg[1][10]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7258/q_reg[1][11]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7258/q_reg[1][12]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7258/q_reg[1][13]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7280/q_reg[0][29]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7280/q_reg[0][30]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7280/q_reg[1][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7280/q_reg[1][1]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7280/q_reg[1][2]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7280/q_reg[1][3]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7280/q_reg[1][4]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7280/q_reg[1][5]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7280/q_reg[1][6]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7280/q_reg[1][7]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7280/q_reg[1][8]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7280/q_reg[1][9]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7280/q_reg[1][10]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7280/q_reg[1][11]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7280/q_reg[1][12]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7280/q_reg[1][13]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7298/q_reg[0][29]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7298/q_reg[0][30]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7298/q_reg[1][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7298/q_reg[1][1]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7298/q_reg[1][2]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7298/q_reg[1][3]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7298/q_reg[1][4]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7298/q_reg[1][5]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7298/q_reg[1][6]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7298/q_reg[1][7]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7298/q_reg[1][8]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7298/q_reg[1][9]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7298/q_reg[1][10]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7298/q_reg[1][11]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7298/q_reg[1][12]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7298/q_reg[1][13]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7309/q_reg[0][29]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7309/q_reg[0][30]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7309/q_reg[1][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7309/q_reg[1][1]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7309/q_reg[1][2]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7309/q_reg[1][3]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7309/q_reg[1][4]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7309/q_reg[1][5]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7309/q_reg[1][6]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7309/q_reg[1][7]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7309/q_reg[1][8]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7309/q_reg[1][9]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7309/q_reg[1][10]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7309/q_reg[1][11]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7309/q_reg[1][12]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/m7309/q_reg[1][13]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage7/add7360/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage7/add7375/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage7/sub7390/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage7/sub7405/res_reg[0][0]
+inst:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/memSys/shiftFIFO_7868/mem_reg[3][0]
+Total number of unloaded sequential elements in design 'isfft_axi_v4' : 288
+
+design 'isfft_axi_v4' has the following unloaded port(s)
+port:isfft_axi_v4/s_axi_awprot[2]
+port:isfft_axi_v4/s_axi_awprot[1]
+port:isfft_axi_v4/s_axi_awprot[0]
+port:isfft_axi_v4/s_axi_wdata[31]
+port:isfft_axi_v4/s_axi_wdata[30]
+port:isfft_axi_v4/s_axi_wdata[29]
+port:isfft_axi_v4/s_axi_wdata[28]
+port:isfft_axi_v4/s_axi_wdata[27]
+port:isfft_axi_v4/s_axi_wdata[26]
+port:isfft_axi_v4/s_axi_wdata[25]
+port:isfft_axi_v4/s_axi_wdata[24]
+port:isfft_axi_v4/s_axi_wdata[23]
+port:isfft_axi_v4/s_axi_wdata[22]
+port:isfft_axi_v4/s_axi_wdata[21]
+port:isfft_axi_v4/s_axi_wdata[20]
+port:isfft_axi_v4/s_axi_wdata[19]
+port:isfft_axi_v4/s_axi_wdata[18]
+port:isfft_axi_v4/s_axi_wdata[17]
+port:isfft_axi_v4/s_axi_wdata[16]
+port:isfft_axi_v4/s_axi_wstrb[3]
+port:isfft_axi_v4/s_axi_wstrb[2]
+port:isfft_axi_v4/s_axi_arprot[2]
+port:isfft_axi_v4/s_axi_arprot[1]
+port:isfft_axi_v4/s_axi_arprot[0]
+port:isfft_axi_v4/s00_axis_tkeep[7]
+port:isfft_axi_v4/s00_axis_tkeep[6]
+port:isfft_axi_v4/s00_axis_tkeep[5]
+port:isfft_axi_v4/s00_axis_tkeep[4]
+port:isfft_axi_v4/s00_axis_tkeep[3]
+port:isfft_axi_v4/s00_axis_tkeep[2]
+port:isfft_axi_v4/s00_axis_tkeep[1]
+port:isfft_axi_v4/s00_axis_tkeep[0]
+Total number of unloaded ports in design 'isfft_axi_v4' : 32
+
+ Unloaded Combinational Pin(s)
+ -------------------------------
+design 'isfft_axi_v4' has the following unloaded combinational elements
+pin:isfft_axi_v4/ctl_aw_addr_510_23/g7/z
+pin:isfft_axi_v4/ctl_379_9/g9/z
+pin:isfft_axi_v4/ctl_402_13/g9/z
+Total number of unloaded combinational elements in design 'isfft_axi_v4' : 3
+
+ Assigns
+ ------- 
+Encountered an assign statement at hport 'hport:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/memSys/memMod0/ctl_inAddr_19_9/out_0[0]' in module case_box
+Encountered an assign statement at hport 'hport:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage2/instPerm41903/memSys/memMod0/ctl_inAddr_19_9/out_0[0]' in module case_box_29
+Encountered an assign statement at hport 'hport:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/instD8inst0_41137/ctl_addr_10_9/out_0[0]' in module case_box_46
+Encountered an assign statement at hport 'hport:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/instD6inst0_41145/ctl_addr_10_9/out_0[0]' in module case_box_49
+Encountered an assign statement at hport 'hport:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41072/q_sc[1]' in module multfix_WIDTH16_CYCLES2
+Encountered an assign statement at hport 'hport:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41072/q_sc[0]' in module multfix_WIDTH16_CYCLES2
+Encountered an assign statement at hport 'hport:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41072/q_unsc[15]' in module multfix_WIDTH16_CYCLES2
+Encountered an assign statement at hport 'hport:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/m41072/q_unsc[14]' in module multfix_WIDTH16_CYCLES2
+Encountered an assign statement at hport 'hport:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/ctl_state_33_19/out_0[0]' in module case_box_133
+Encountered an assign statement at hport 'hport:isfft_axi_v4/inst_isfft_matriz/inst_read_fsm/ctl_state_31_19/out_0[0]' in module case_box_136
+Encountered an assign statement at hport 'hport:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/instD8inst0_7059/ctl_addr_10_9/out_0[0]' in module case_box_156
+Encountered an assign statement at hport 'hport:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/instD6inst0_7067/ctl_addr_10_9/out_0[0]' in module case_box_159
+Encountered an assign statement at hport 'hport:isfft_axi_v4/inst_isfft_matriz/ctl_inst_write_fsm_78_30/out_0[0]' in module case_box_369
+Encountered an assign statement at hport 'hport:isfft_axi_v4/inst_isfft_matriz/ctl_wr_row_cnt_50_13/out_0[0]' in module case_box_370
+Encountered an assign statement at hport 'hport:isfft_axi_v4/inst_isfft_matriz/ctl_wr_row_cnt_48_13/out_0[0]' in module case_box_421
+Encountered an assign statement at hport 'hport:isfft_axi_v4/inst_isfft_matriz/ctl_wr_bank_sel_48_13/out_0[1]' in module case_box_424
+Encountered an assign statement at hport 'hport:isfft_axi_v4/inst_isfft_matriz/ctl_wr_bank_sel_48_13/out_0[0]' in module case_box_424
+Encountered an assign statement at hport 'hport:isfft_axi_v4/inst_isfft_matriz/ctl_inst_write_fsm_78_369/out_0[0]' in module case_box_430
+Encountered an assign statement at port 'port:isfft_axi_v4/s_axi_bresp[1]' in design isfft_axi_v4
+Encountered an assign statement at port 'port:isfft_axi_v4/s_axi_bresp[0]' in design isfft_axi_v4
+Encountered an assign statement at port 'port:isfft_axi_v4/s_axi_rresp[1]' in design isfft_axi_v4
+Encountered an assign statement at port 'port:isfft_axi_v4/s_axi_rresp[0]' in design isfft_axi_v4
+Encountered an assign statement at port 'port:isfft_axi_v4/m00_axis_tkeep[7]' in design isfft_axi_v4
+Encountered an assign statement at port 'port:isfft_axi_v4/m00_axis_tkeep[6]' in design isfft_axi_v4
+Encountered an assign statement at port 'port:isfft_axi_v4/m00_axis_tkeep[5]' in design isfft_axi_v4
+Encountered an assign statement at port 'port:isfft_axi_v4/m00_axis_tkeep[4]' in design isfft_axi_v4
+Encountered an assign statement at port 'port:isfft_axi_v4/m00_axis_tkeep[3]' in design isfft_axi_v4
+Encountered an assign statement at port 'port:isfft_axi_v4/m00_axis_tkeep[2]' in design isfft_axi_v4
+Encountered an assign statement at port 'port:isfft_axi_v4/m00_axis_tkeep[1]' in design isfft_axi_v4
+Encountered an assign statement at port 'port:isfft_axi_v4/m00_axis_tkeep[0]' in design isfft_axi_v4
+Total number of assign statements in design 'isfft_axi_v4' : 30
+
+ Undriven Port(s)/Pin(s)
+ ------------------------
+No undriven combinational pin in 'isfft_axi_v4'
+
+No undriven sequential pin in 'isfft_axi_v4'
+
+No undriven hierarchical pin in 'isfft_axi_v4'
+
+No undriven port in 'isfft_axi_v4'
+
+ Multidriven Port(s)/Pin(s)
+--------------------------
+
+No multidriven combinational pin in 'isfft_axi_v4'
+
+No multidriven sequential pin in 'isfft_axi_v4'
+
+No multidriven hierarchical pin in 'isfft_axi_v4'
+
+No multidriven ports in 'isfft_axi_v4'
+
+No multidriven unloaded nets in 'isfft_axi_v4'
+
+  Constant Pin(s)
+  ----------------
+design 'isfft_axi_v4' has the following constant input combinational pin(s)
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/memSys/memMod0/g11/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/memSys/memMod0/g12/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/memSys/memMod0/g13/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/memSys/memMod0/g14/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/memSys/memMod0/g15/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/memSys/memMod0/g16/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/memSys/memMod0/g17/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/memSys/memMod0/g18/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/memSys/memMod1/g11/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/memSys/memMod1/g12/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/memSys/memMod1/g13/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/memSys/memMod1/g14/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/memSys/memMod1/g15/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/memSys/memMod1/g16/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/memSys/memMod1/g17/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/memSys/memMod1/g18/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage2/instPerm41903/memSys/memMod0/g7/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage2/instPerm41903/memSys/memMod0/g8/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage2/instPerm41903/memSys/memMod0/g9/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage2/instPerm41903/memSys/memMod0/g10/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage2/instPerm41903/memSys/memMod1/g7/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage2/instPerm41903/memSys/memMod1/g8/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage2/instPerm41903/memSys/memMod1/g9/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage2/instPerm41903/memSys/memMod1/g10/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/memSys/memMod0/g11/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/memSys/memMod0/g12/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/memSys/memMod0/g13/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/memSys/memMod0/g14/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/memSys/memMod0/g15/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/memSys/memMod0/g16/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/memSys/memMod0/g17/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/memSys/memMod0/g18/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/memSys/memMod1/g11/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/memSys/memMod1/g12/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/memSys/memMod1/g13/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/memSys/memMod1/g14/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/memSys/memMod1/g15/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/memSys/memMod1/g16/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/memSys/memMod1/g17/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/memSys/memMod1/g18/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/memSys/memMod0/g11/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/memSys/memMod0/g12/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/memSys/memMod0/g13/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/memSys/memMod0/g14/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/memSys/memMod0/g15/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/memSys/memMod0/g16/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/memSys/memMod0/g17/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/memSys/memMod0/g18/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/memSys/memMod1/g11/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/memSys/memMod1/g12/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/memSys/memMod1/g13/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/memSys/memMod1/g14/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/memSys/memMod1/g15/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/memSys/memMod1/g16/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/memSys/memMod1/g17/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/memSys/memMod1/g18/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/memSys/memMod0/g11/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/memSys/memMod0/g12/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/memSys/memMod0/g13/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/memSys/memMod0/g14/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/memSys/memMod0/g15/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/memSys/memMod0/g16/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/memSys/memMod0/g17/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/memSys/memMod0/g18/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/memSys/memMod1/g11/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/memSys/memMod1/g12/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/memSys/memMod1/g13/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/memSys/memMod1/g14/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/memSys/memMod1/g15/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/memSys/memMod1/g16/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/memSys/memMod1/g17/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/memSys/memMod1/g18/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage2/instPerm7825/memSys/memMod0/g7/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage2/instPerm7825/memSys/memMod0/g8/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage2/instPerm7825/memSys/memMod0/g9/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage2/instPerm7825/memSys/memMod0/g10/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage2/instPerm7825/memSys/memMod1/g7/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage2/instPerm7825/memSys/memMod1/g8/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage2/instPerm7825/memSys/memMod1/g9/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage2/instPerm7825/memSys/memMod1/g10/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/memSys/memMod0/g11/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/memSys/memMod0/g12/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/memSys/memMod0/g13/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/memSys/memMod0/g14/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/memSys/memMod0/g15/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/memSys/memMod0/g16/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/memSys/memMod0/g17/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/memSys/memMod0/g18/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/memSys/memMod1/g11/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/memSys/memMod1/g12/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/memSys/memMod1/g13/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/memSys/memMod1/g14/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/memSys/memMod1/g15/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/memSys/memMod1/g16/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/memSys/memMod1/g17/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/memSys/memMod1/g18/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/memSys/memMod0/g11/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/memSys/memMod0/g12/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/memSys/memMod0/g13/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/memSys/memMod0/g14/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/memSys/memMod0/g15/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/memSys/memMod0/g16/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/memSys/memMod0/g17/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/memSys/memMod0/g18/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/memSys/memMod1/g11/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/memSys/memMod1/g12/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/memSys/memMod1/g13/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/memSys/memMod1/g14/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/memSys/memMod1/g15/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/memSys/memMod1/g16/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/memSys/memMod1/g17/in_1
+pin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/memSys/memMod1/g18/in_1
+Total number of constant combinational pins in design 'isfft_axi_v4' : 112
+
+design 'isfft_axi_v4' has the following constant input sequential pin(s)
+pin:isfft_axi_v4/u_in_mem/web0
+pin:isfft_axi_v4/u_out_mem/web0
+Total number of constant sequential pins in design 'isfft_axi_v4' : 2
+
+design 'isfft_axi_v4' has the following constant input hierarchical pin(s)
+hpin:isfft_axi_v4/sub_146_69/B 	 (fanout : 2)
+hpin:isfft_axi_v4/add_198_40/B 	 (fanout : 2)
+hpin:isfft_axi_v4/add_199_38/B 	 (fanout : 2)
+hpin:isfft_axi_v4/gte_227_35/B[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/gte_227_35/B[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/gte_227_35/B[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/gte_227_35/B[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/gte_227_35/B[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/gte_227_35/B[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/sub_214_44/A[8] 	 (fanout : 2)
+hpin:isfft_axi_v4/sub_214_44/A[7] 	 (fanout : 2)
+hpin:isfft_axi_v4/sub_214_44/A[6] 	 (fanout : 2)
+hpin:isfft_axi_v4/sub_214_44/A[5] 	 (fanout : 2)
+hpin:isfft_axi_v4/sub_214_44/A[4] 	 (fanout : 2)
+hpin:isfft_axi_v4/sub_214_44/A[3] 	 (fanout : 2)
+hpin:isfft_axi_v4/sub_214_44/A[2] 	 (fanout : 2)
+hpin:isfft_axi_v4/sub_214_44/A[1] 	 (fanout : 2)
+hpin:isfft_axi_v4/sub_214_44/A[0] 	 (fanout : 2)
+hpin:isfft_axi_v4/gte_227_54/B[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/gte_227_54/B[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/gte_227_54/B[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/gte_227_54/B[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/gte_227_54/B[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/gte_227_54/B[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/add_238_37/B 	 (fanout : 2)
+hpin:isfft_axi_v4/add_239_38/B 	 (fanout : 2)
+hpin:isfft_axi_v4/add_371_52/B 	 (fanout : 2)
+hpin:isfft_axi_v4/add_399_65/B 	 (fanout : 2)
+hpin:isfft_axi_v4/add_400_65/B 	 (fanout : 2)
+hpin:isfft_axi_v4/neq_465_55/B 	 (fanout : 1)
+hpin:isfft_axi_v4/add_403_45/B[5] 	 (fanout : 2)
+hpin:isfft_axi_v4/add_403_45/B[4] 	 (fanout : 2)
+hpin:isfft_axi_v4/add_403_45/B[3] 	 (fanout : 2)
+hpin:isfft_axi_v4/add_403_45/B[2] 	 (fanout : 2)
+hpin:isfft_axi_v4/add_403_45/B[1] 	 (fanout : 2)
+hpin:isfft_axi_v4/add_403_45/B[0] 	 (fanout : 2)
+hpin:isfft_axi_v4/sub_404_45/B 	 (fanout : 2)
+hpin:isfft_axi_v4/add_405_45/B[4] 	 (fanout : 2)
+hpin:isfft_axi_v4/add_405_45/B[3] 	 (fanout : 2)
+hpin:isfft_axi_v4/add_405_45/B[2] 	 (fanout : 2)
+hpin:isfft_axi_v4/add_405_45/B[1] 	 (fanout : 2)
+hpin:isfft_axi_v4/add_405_45/B[0] 	 (fanout : 2)
+hpin:isfft_axi_v4/add_434_38/B 	 (fanout : 2)
+hpin:isfft_axi_v4/sub_419_53/B 	 (fanout : 2)
+hpin:isfft_axi_v4/add_437_73/B 	 (fanout : 2)
+hpin:isfft_axi_v4/add_432_42/B 	 (fanout : 2)
+hpin:isfft_axi_v4/add_436_48/B 	 (fanout : 2)
+hpin:isfft_axi_v4/add_450_38/B 	 (fanout : 2)
+hpin:isfft_axi_v4/eq_416_36/B 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_clr_err_511_32/in_0 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_clr_err_510_23/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_clr_err_506_28/in_0 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[31] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[30] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[29] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[28] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[27] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[26] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[25] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[24] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[23] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[22] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[21] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[20] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[19] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[18] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[17] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[16] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[15] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[14] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[13] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[12] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[11] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[10] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[9] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[8] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[7] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_0[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[31] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[30] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[29] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[28] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[27] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[26] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[25] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[24] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[23] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[22] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[21] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[20] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[19] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[18] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[17] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[16] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[15] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[14] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[13] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[12] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[11] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[10] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[7] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_1[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[31] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[30] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[29] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[28] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[27] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[26] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[25] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[24] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[23] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[22] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[21] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[20] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[19] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[18] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[17] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[16] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[15] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[14] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[13] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[12] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[11] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[10] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[9] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[8] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[7] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_5[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_6[31] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_6[30] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_6[29] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_6[28] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_6[27] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_6[26] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_6[25] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_6[24] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_6[23] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_6[22] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_6[21] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_6[20] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_6[19] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_6[18] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_6[17] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_6[16] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[31] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[30] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[29] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[28] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[27] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[26] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[25] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[24] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[23] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[22] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[21] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[20] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[19] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[18] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[17] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[16] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[15] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[14] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[13] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[12] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[11] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[10] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[9] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[8] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[7] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_rdata_535_19/in_7[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_416_36/in_1[15] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_416_36/in_1[14] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_416_36/in_1[13] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_416_36/in_1[12] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_416_36/in_1[11] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_416_36/in_1[10] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_416_36/in_1[9] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_416_36/in_1[8] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_416_36/in_1[7] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_416_36/in_1[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_416_36/in_1[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_416_36/in_1[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_416_36/in_1[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_416_36/in_1[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_416_36/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_416_36/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_437_36/in_1[15] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_437_36/in_1[14] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_437_36/in_1[13] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_437_36/in_1[12] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_437_36/in_1[11] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_437_36/in_1[10] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_437_36/in_1[9] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_437_36/in_1[8] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_437_36/in_1[7] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_437_36/in_1[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_437_36/in_1[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_437_36/in_1[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_437_36/in_1[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_437_36/in_1[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_437_36/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_437_36/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_aw_q_506_28/in_0 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_aw_q_506_28/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_bvalid_524_30/in_0 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_s_axi_bvalid_524_30/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_in_wcnt_193_17/in_1[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_in_wcnt_193_17/in_1[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_in_wcnt_193_17/in_1[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_in_wcnt_193_17/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_in_wcnt_193_17/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_launch_cnt_234_22/in_1[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_launch_cnt_234_22/in_1[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_launch_cnt_234_22/in_1[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_launch_cnt_234_22/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/mux_launch_cnt_234_22/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/memSys/memMod0/writeSel 	 (fanout : 8)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/memSys/memMod1/writeSel 	 (fanout : 8)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/in_sw_0_0/x0[1] 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/in_sw_0_0/x1[1] 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/add_104_61/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/gte_133_25/B[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/gte_133_25/B[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/add_138_32/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/add_120_57/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/mux_inCount_132_19/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/mux_inCount_132_19/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/mux_outCount_for_rd_addr_117_22/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/mux_outCount_for_rd_addr_117_22/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/mux_outCount_for_rd_data_101_36/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage0/instPerm41890/mux_outCount_for_rd_data_101_36/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage2/instPerm41903/memSys/memMod0/writeSel 	 (fanout : 4)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage2/instPerm41903/memSys/memMod1/writeSel 	 (fanout : 4)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage2/instPerm41903/in_sw_0_0/x0[0] 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage2/instPerm41903/in_sw_0_0/x1[0] 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage2/instPerm41903/add_101_61/B 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage2/instPerm41903/gte_130_25/B 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage2/instPerm41903/add_135_32/B 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage2/instPerm41903/add_117_57/B 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage2/instPerm41903/mux_inCount_129_19/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage2/instPerm41903/mux_outCount_for_rd_addr_114_22/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage2/instPerm41903/mux_outCount_for_rd_data_98_36/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/instD8inst0_41137/mux_out3_10_9/in_0 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/instD8inst0_41137/mux_out3_10_9/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/instD6inst0_41145/mux_out3_10_9/in_0 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/codeBlockIsnt41913/instD6inst0_41145/mux_out3_10_9/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/add_34_22/B 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/mux_i2_31_22/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage3/mux_i2_29_19/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/memSys/memMod0/writeSel 	 (fanout : 8)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/memSys/memMod1/writeSel 	 (fanout : 8)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/in_sw_0_0/x0[1] 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/in_sw_0_0/x1[1] 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/add_104_61/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/gte_133_25/B[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/gte_133_25/B[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/add_138_32/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/add_120_57/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/mux_inCount_132_19/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/mux_inCount_132_19/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/mux_outCount_for_rd_addr_117_22/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/mux_outCount_for_rd_addr_117_22/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/mux_outCount_for_rd_data_101_36/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage5/instPerm41920/mux_outCount_for_rd_data_101_36/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_0[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_0[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_0[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_0[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_0[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_0[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_0[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_1[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_1[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_1[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_1[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_1[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_2[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_2[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_2[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_2[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_2[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_2[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_2[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_3[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_3[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_3[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_3[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_3[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_3[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD4inst0_41403/mux_out3_10_9/in_3[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_0[15] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_0[14] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_0[13] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_0[12] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_0[11] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_0[10] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_0[9] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_0[8] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_0[7] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_0[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_0[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_0[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_0[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_0[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_0[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_0[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_1[15] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_1[14] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_1[13] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_1[12] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_1[11] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_1[10] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_1[9] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_1[8] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_1[7] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_1[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_1[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_1[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_1[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_1[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_2[15] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_2[14] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_2[13] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_2[12] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_2[11] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_2[10] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_2[9] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_2[8] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_2[7] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_2[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_2[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_2[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_2[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_2[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_2[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_2[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_3[15] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_3[14] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_3[13] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_3[12] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_3[11] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_3[10] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_3[9] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_3[8] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_3[7] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_3[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_3[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_3[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_3[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_3[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_3[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/codeBlockIsnt41930/instD2inst0_41415/mux_out3_10_9/in_3[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/add_34_22/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/mux_i1_31_22/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/mux_i1_31_22/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/mux_i1_29_19/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage6/mux_i1_29_19/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/memSys/memMod0/writeSel 	 (fanout : 8)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/memSys/memMod1/writeSel 	 (fanout : 8)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/in_sw_0_0/x0[1] 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/in_sw_0_0/x1[1] 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/add_104_61/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/gte_133_25/B[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/gte_133_25/B[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/add_138_32/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/add_120_57/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/mux_inCount_132_19/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/mux_inCount_132_19/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/mux_outCount_for_rd_addr_117_22/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/mux_outCount_for_rd_addr_117_22/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/mux_outCount_for_rd_data_101_36/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_ifft_1d/stage8/instPerm41937/mux_outCount_for_rd_data_101_36/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/add_67_44/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/add_63_48/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/mux_state_33_19/in_0 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/mux_state_33_19/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/mux_matrix_ready_50_37/in_0 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/mux_matrix_ready_50_37/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/mux_matrix_ready_47_33/in_0 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/mux_matrix_ready_33_19/in_0 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/mux_write_en_35_39/in_0 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/mux_write_en_35_39/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/mux_write_en_33_19/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/mux_col_cnt_47_33/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/mux_col_cnt_47_33/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/mux_col_cnt_33_19/in_0[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/mux_col_cnt_33_19/in_0[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/mux_row_cnt_50_37/in_1[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/mux_row_cnt_50_37/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/mux_row_cnt_50_37/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/mux_row_cnt_33_19/in_0[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/mux_row_cnt_33_19/in_0[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_write_fsm/mux_row_cnt_33_19/in_0[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_read_fsm/add_57_54/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_read_fsm/add_61_60/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_read_fsm/mux_state_31_19/in_0 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_read_fsm/mux_state_31_19/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_read_fsm/mux_fft_next_in_49_46/in_0 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_read_fsm/mux_fft_next_in_49_46/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_read_fsm/mux_fft_next_in_46_40/in_0 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_read_fsm/mux_fft_next_in_43_41/in_0 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_read_fsm/mux_fft_next_in_31_19/in_0 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_read_fsm/mux_rd_row_pair_cnt_43_41/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_read_fsm/mux_rd_row_pair_cnt_43_41/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_read_fsm/mux_rd_row_pair_cnt_31_19/in_0[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_read_fsm/mux_rd_row_pair_cnt_31_19/in_0[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_read_fsm/mux_rd_col_cnt_46_40/in_1[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_read_fsm/mux_rd_col_cnt_46_40/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_read_fsm/mux_rd_col_cnt_46_40/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_read_fsm/mux_rd_col_cnt_31_19/in_0[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_read_fsm/mux_rd_col_cnt_31_19/in_0[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_read_fsm/mux_rd_col_cnt_31_19/in_0[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/memSys/memMod0/writeSel 	 (fanout : 8)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/memSys/memMod1/writeSel 	 (fanout : 8)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/in_sw_0_0/x0[1] 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/in_sw_0_0/x1[1] 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/add_104_61/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/gte_133_25/B[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/gte_133_25/B[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/add_138_32/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/add_120_57/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/mux_inCount_132_19/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/mux_inCount_132_19/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/mux_outCount_for_rd_addr_117_22/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/mux_outCount_for_rd_addr_117_22/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/mux_outCount_for_rd_data_101_36/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage0/instPerm7812/mux_outCount_for_rd_data_101_36/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage2/instPerm7825/memSys/memMod0/writeSel 	 (fanout : 4)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage2/instPerm7825/memSys/memMod1/writeSel 	 (fanout : 4)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage2/instPerm7825/in_sw_0_0/x0[0] 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage2/instPerm7825/in_sw_0_0/x1[0] 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage2/instPerm7825/add_101_61/B 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage2/instPerm7825/gte_130_25/B 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage2/instPerm7825/add_135_32/B 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage2/instPerm7825/add_117_57/B 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage2/instPerm7825/mux_inCount_129_19/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage2/instPerm7825/mux_outCount_for_rd_addr_114_22/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage2/instPerm7825/mux_outCount_for_rd_data_98_36/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/instD8inst0_7059/mux_out3_10_9/in_0[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/instD8inst0_7059/mux_out3_10_9/in_0[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/instD8inst0_7059/mux_out3_10_9/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/instD8inst0_7059/mux_out3_10_9/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/instD6inst0_7067/mux_out3_10_9/in_0 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/codeBlockIsnt7835/instD6inst0_7067/mux_out3_10_9/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/add_34_22/B 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/mux_i2_31_22/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage3/mux_i2_29_19/in_1 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/memSys/memMod0/writeSel 	 (fanout : 8)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/memSys/memMod1/writeSel 	 (fanout : 8)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/in_sw_0_0/x0[1] 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/in_sw_0_0/x1[1] 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/add_104_61/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/gte_133_25/B[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/gte_133_25/B[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/add_138_32/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/add_120_57/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/mux_inCount_132_19/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/mux_inCount_132_19/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/mux_outCount_for_rd_addr_117_22/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/mux_outCount_for_rd_addr_117_22/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/mux_outCount_for_rd_data_101_36/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage5/instPerm7842/mux_outCount_for_rd_data_101_36/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_0[10] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_0[9] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_0[8] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_0[7] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_0[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_0[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_0[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_0[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_0[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_0[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_0[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_1[10] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_1[9] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_1[8] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_1[7] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_1[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_1[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_1[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_1[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_1[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_2[10] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_2[9] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_2[8] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_2[7] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_2[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_2[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_2[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_2[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_2[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_2[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_2[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_3[10] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_3[9] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_3[8] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_3[7] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_3[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_3[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_3[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_3[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_3[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_3[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD4inst0_7325/mux_out3_10_9/in_3[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_0[15] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_0[14] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_0[13] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_0[12] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_0[11] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_0[10] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_0[9] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_0[8] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_0[7] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_0[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_0[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_0[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_0[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_0[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_0[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_0[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_1[15] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_1[14] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_1[13] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_1[12] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_1[11] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_1[10] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_1[9] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_1[8] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_1[7] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_1[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_1[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_1[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_1[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_1[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_2[15] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_2[14] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_2[13] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_2[12] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_2[11] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_2[10] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_2[9] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_2[8] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_2[7] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_2[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_2[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_2[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_2[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_2[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_2[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_2[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_3[15] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_3[14] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_3[13] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_3[12] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_3[11] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_3[10] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_3[9] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_3[8] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_3[7] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_3[6] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_3[5] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_3[4] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_3[3] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_3[2] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_3[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/codeBlockIsnt7852/instD2inst0_7337/mux_out3_10_9/in_3[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/add_34_22/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/mux_i1_31_22/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/mux_i1_31_22/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/mux_i1_29_19/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage6/mux_i1_29_19/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/memSys/memMod0/writeSel 	 (fanout : 8)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/memSys/memMod1/writeSel 	 (fanout : 8)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/in_sw_0_0/x0[1] 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/in_sw_0_0/x1[1] 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/add_104_61/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/gte_133_25/B[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/gte_133_25/B[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/add_138_32/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/add_120_57/B 	 (fanout : 2)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/mux_inCount_132_19/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/mux_inCount_132_19/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/mux_outCount_for_rd_addr_117_22/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/mux_outCount_for_rd_addr_117_22/in_1[0] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/mux_outCount_for_rd_data_101_36/in_1[1] 	 (fanout : 1)
+hpin:isfft_axi_v4/inst_isfft_matriz/inst_fft_1d/stage8/instPerm7859/mux_outCount_for_rd_data_101_36/in_1[0] 	 (fanout : 1)
+Total number of constant hierarchical pins in design 'isfft_axi_v4' : 612
+
+design 'isfft_axi_v4' has the following constant port(s)
+port:isfft_axi_v4/s_axi_bresp[1]
+port:isfft_axi_v4/s_axi_bresp[0]
+port:isfft_axi_v4/s_axi_rresp[1]
+port:isfft_axi_v4/s_axi_rresp[0]
+port:isfft_axi_v4/m00_axis_tkeep[7]
+port:isfft_axi_v4/m00_axis_tkeep[6]
+port:isfft_axi_v4/m00_axis_tkeep[5]
+port:isfft_axi_v4/m00_axis_tkeep[4]
+port:isfft_axi_v4/m00_axis_tkeep[3]
+port:isfft_axi_v4/m00_axis_tkeep[2]
+port:isfft_axi_v4/m00_axis_tkeep[1]
+port:isfft_axi_v4/m00_axis_tkeep[0]
+Total number of constant port(s) in design 'isfft_axi_v4' : 12
+
+  Preserved instances(s)
+  ----------------
+No preserved combinational instance(s) in design 'isfft_axi_v4'
+design 'isfft_axi_v4' has the following preserved sequential instance(s)
+inst:isfft_axi_v4/u_in_mem
+inst:isfft_axi_v4/u_out_mem
+Total number of preserved sequential instances in design 'isfft_axi_v4' : 2
+No preserved hierarchical instance(s) in design 'isfft_axi_v4'
+
+  Physical only instances(s)
+  ----------------
+No physical only instance(s) in design 'isfft_axi_v4'
+
+  Logical only instance(s) and linked libcells
+    -----------------------------------------
+design 'isfft_axi_v4' has following logical only instance(s)
+inst:isfft_axi_v4/u_in_mem
+inst:isfft_axi_v4/u_out_mem
+Total number of logical only instances in design 'isfft_axi_v4' : 2
+
+design 'isfft_axi_v4' has the following logical only libcells linked to above instance(s)
+lib_cell:ls_of_ld_typ/sram_1rw1r_64x64_wpr2_TT_1p8V_25C_lib/sram_1rw1r_64x64_wpr2
+lib_cell:ls_of_ld_typ/sram_1rw1r_64x256_TT_1p8V_25C_lib/sram_1rw1r_64x256
+
+Libcells with no corresponding LEF
+----------------------------------
+No libcell(s) found.
+
+LEF cells with no corresponding libcell
+---------------------------------------
+
+No physical (LEF) cells found.
+
+ Summary
+ ------- 
+
+              Name                       Total
+----------------------------------------------
+Unresolved References                        0
+Empty Modules                                0
+Unloaded Port(s)                            32
+Unloaded Sequential Pin(s)                 288
+Unloaded Combinational Pin(s)                3
+Assigns                                     30
+Undriven Port(s)                             0
+Undriven Leaf Pin(s)                         0
+Undriven hierarchical pin(s)                 0
+Multidriven Port(s)                          0
+Multidriven Leaf Pin(s)                      0
+Multidriven hierarchical Pin(s)              0
+Multidriven unloaded net(s)                  0
+Constant Port(s)                            12
+Constant Leaf Pin(s)                       114
+Constant hierarchical Pin(s)               612
+Preserved leaf instance(s)                   2
+Preserved hierarchical instance(s)           0
+Feedthrough Modules(s)                       0
+Libcells with no LEF cell                    0
+Physical (LEF) cells with no libcell         0
+Subdesigns with long module name             0
+Physical only instance(s)                    0
+Logical only instance(s)                     2
+
+  Done Checking the design.

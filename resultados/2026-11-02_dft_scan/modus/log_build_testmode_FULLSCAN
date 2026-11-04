@@ -1,0 +1,169 @@
+
+INFO (TDA-005): Command Line Invocation: 
+            build_testmode -modedef FULLSCAN -assignfile /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/isfft_axi_v4.FULLSCAN.pinassign -testmode FULLSCAN -workdir /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work -stdout summary  [end TDA_005]
+
+INFO (TDA-014): Cadence(R) Modus(TM) DFT Software Solution, Version 25.12-s004_1, built Jan 28 2026 (linux26_64) [end TDA_014]
+
+INFO (TDA-015): Log File: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/testresults/logs/log_build_testmode_FULLSCAN_110326233924-483085000 [end TDA_015]
+
+INFO (TDA-007): Job Information:
+            Date Started: Tuesday Nov 03 23:39:24 2026  -03
+            Host machine is goku, x86_64 running Linux 4.18.0-553.el8_10.x86_64.
+            This job is process number 3388087.
+[end TDA_007]
+
+INFO (TDA-009): Options/Values information.
+            (options marked with '*' have program generated values,
+             options marked with '+' were specified to default.)
+
+            -WORKDIR /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work
+            -TESTMODE FULLSCAN
+
+            -ASSIGNFILE /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/isfft_axi_v4.FULLSCAN.pinassign
+          * update_assign_file=
+            -LOGFILE /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/testresults/logs/log_build_testmode_FULLSCAN_110326233924-483085000
+            -MODEDEF FULLSCAN
+            -STDOUT summary
+[end TDA_009]
+MODEDEFPATH set to:  /tools/cadence/MODUS251/tools.lnx86/tb/defaults/rules/modedef 
+TDRPATH set to: /tools/cadence/MODUS251/tools.lnx86/tb/defaults/rules/tdr 
+
+Modus Build Test Mode(s) beginning...
+
+   TDR NAME      =  dummy.tdr 
+
+   SCAN_TYPE     =  GSD 
+   BOUNDARY      =  NONE 
+   IN            =  PI 
+   OUT           =  PO 
+
+INFO (TFW-117): Modus checked out a modus_atpg license.  [end TFW_117] 
+INFO (TTM-391): A default modeinit sequence will be generated.   [end TTM_391] 
+INFO (TTM-387): A default scanop sequence will be generated.   [end TTM_387] 
+INFO (THM-814): Testmode contains 99.66% active logic,  0.34% inactive logic and  0.00% constraint logic.   [end THM_814] 
+INFO (TTM-357): There are 16 scan chains which are controllable and observable.   [end TTM_357] 
+INFO (TTM-707): Build_testmode summary.  
+
+     ---------------------------------------------------------------------------
+    |Information for Test Mode: FULLSCAN
+    |---------------------------------------------------------------------------
+    |Scan Type                : General
+    |Decompressor             : Direct feed from Scan Ins
+    |Compressor               : Direct feed to Scan Outs
+    |Masking                  : Not Present
+    |Low Power Gating         : Not Present
+    |OPCG                     : Not Present
+    |CME Pipelines            : Not Present
+    |Non-CME Pipelines        : Not Present
+    |Resettable Pipelines     : No
+    |Percentage Active Logic  : 99.660519 %
+     ---------------------------------------------------------------------------
+
+     ---------------------------------------------------------------------------
+    |Scan Chain Information
+    |--------------------------------------------------------------------------- 
+    |Control Only Chains              : 0
+    |Observe Only Chains              : 0
+    |Control and Observe Chains       : 16
+    |Correlation Ratio                : 1.000000 (Number of Control and Observe Chains/ Number of Control Chains)
+    |Number of corrupted control bits : 0
+    |Number of corrupted observe bits : 0
+    |Longest Scan Chain               : 785
+    |Shortest Scan Chain              : 784
+    |Percentage Floating Latches      : 0.000000 %
+     ---------------------------------------------------------------------------
+
+
+    ==================================================================================================== 
+   |=============================== BUILD  TESTMODE  SUMMARY ===========================================|
+   |====================================================================================================|
+   |        FUNCTIONALITY         | HIGHEST SEVERITY  | ASSOCIATED NON-INFO MESSAGE IDs                 |
+   |------------------------------|-------------------|-------------------------------------------------|
+   |Mode Initialization Sequence  |INFO               |                                                 |
+   |Scan Chains                   |INFO               |                                                 |
+    ==================================================================================================== 
+
+[end TTM_707] 
+INFO (TFW-119): Modus checked in a modus_atpg license.  [end TFW_119] 
+
+There are no PPIs for Test Mode:  FULLSCAN
+
+Information for Test Mode:  FULLSCAN
+-------------------------
+
+         Scan Type = GSD
+
+
+ Latch Summary for Test Mode:  FULLSCAN
+ Latch Type                #Active   #Inactive       Total
+ ---------------------   ---------   ---------   ---------
+ Test Constraint (TC)            0           0           0 
+ Scan Enable     (SE)            0           0           0 
+ Fixed Value     (FV)            0           0           0 
+ Floating                        0           0           0 
+ Finite State    (FSM)           0           0           0 
+
+INFO (TTM-800): build_testmode has created mode FULLSCAN. [end TTM_800] 
+
+Test Function Pin Information for Test Mode:  FULLSCAN
+-------------------------------------------
+
+          1  SC    (System  Clock)             Pins
+          0  PC    (P Shift Clock)             Pins
+          1  EC    (E Shift Clock)             Pins
+
+          0  OSC   (Oscillator)                Pins
+
+          0  TI    (Test Inhibit)              Pins
+          1  SE    (Scan Enable)               Pins
+          0  CI    (Clock Isolation)           Pins
+          0  OI    (Output Inhibit)            Pins
+
+         16  SI    (Scan Input)                Pins
+         16  SO    (Scan Output)               Pins
+
+  Pin Index    Type Test Function                         Pin Name / Net Name
+  ---------    ---- ----------------------------------    -------------------
+          0      PI  -EC  -SC                             aclk / aclk
+        136      PI  +SE                                  scan_en / scan_en
+        137      PI   SI                                  scan_in_0 / scan_in_0
+        138      PI   SI1                                 scan_in_1 / scan_in_1
+        145      PI   SI2                                 scan_in_2 / scan_in_2
+        146      PI   SI3                                 scan_in_3 / scan_in_3
+        147      PI   SI4                                 scan_in_4 / scan_in_4
+        148      PI   SI5                                 scan_in_5 / scan_in_5
+        149      PI   SI6                                 scan_in_6 / scan_in_6
+        150      PI   SI7                                 scan_in_7 / scan_in_7
+        151      PI   SI8                                 scan_in_8 / scan_in_8
+        152      PI   SI9                                 scan_in_9 / scan_in_9
+        139      PI   SI10                                scan_in_10 / scan_in_10
+        140      PI   SI11                                scan_in_11 / scan_in_11
+        141      PI   SI12                                scan_in_12 / scan_in_12
+        142      PI   SI13                                scan_in_13 / scan_in_13
+        143      PI   SI14                                scan_in_14 / scan_in_14
+        144      PI   SI15                                scan_in_15 / scan_in_15
+        269      PO   SO                                  scan_out_0 / scan_out_0
+        270      PO   SO1                                 scan_out_1 / scan_out_1
+        277      PO   SO2                                 scan_out_2 / scan_out_2
+        278      PO   SO3                                 scan_out_3 / scan_out_3
+        279      PO   SO4                                 scan_out_4 / scan_out_4
+        280      PO   SO5                                 scan_out_5 / scan_out_5
+        281      PO   SO6                                 scan_out_6 / scan_out_6
+        282      PO   SO7                                 scan_out_7 / scan_out_7
+        283      PO   SO8                                 scan_out_8 / scan_out_8
+        284      PO   SO9                                 scan_out_9 / scan_out_9
+        271      PO   SO10                                scan_out_10 / scan_out_10
+        272      PO   SO11                                scan_out_11 / scan_out_11
+        273      PO   SO12                                scan_out_12 / scan_out_12
+        274      PO   SO13                                scan_out_13 / scan_out_13
+        275      PO   SO14                                scan_out_14 / scan_out_14
+        276      PO   SO15                                scan_out_15 / scan_out_15
+
+
+               Total Memory =           79,095,024  bytes
+
+            Cumulative Time in hours:minutes:seconds:
+                   CPU Time =   0:00:00.39
+               Elapsed Time =   0:00:00.55
+
+

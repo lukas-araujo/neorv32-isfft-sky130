@@ -1,0 +1,94 @@
+xrun(64): 23.09-s013: (c) Copyright 1995-2024 Cadence Design Systems, Inc.
+TOOL:	xrun(64)	23.09-s013: Started on Sep 30, 2026 at 16:51:29 -03
+xrun
+	-64bit
+	-sv
+	-uvm
+	-timescale 1ns/1ps
+	-xmlibdirname /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/xcelium.d
+	-f /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/scripts/isfft_uvm.f
+		+incdir+/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/env
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tb/axil_if.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tb/axis_if.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tb/isfft_sva.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/agents/axil/axil_pkg.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/agents/axis/axis_pkg.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/env/isfft_env_pkg.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/seq/isfft_seq_pkg.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tests/isfft_test_pkg.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tb/isfft_tb_top.sv
+		-f /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/isfft_dut.f
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft_axi_v4.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/addfxp.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock40889.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock40973.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock41154.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock41237.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock41426.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock6811.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock6895.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock7076.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock7159.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock7348.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D2_41415.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D2_7337.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D4_41403.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D4_7325.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D6_41145.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D6_7067.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D8_41137.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D8_7059.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/DirSum_41151.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/DirSum_41423.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/DirSum_7073.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/DirSum_7345.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/fft_1d_top.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/ifft_1d_top.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray4_40968.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray4_6890.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_40885.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_41233.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_41505.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_6807.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_7155.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_7427.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memMod.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/multfix.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm40885.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm40968.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm41233.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm41505.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm6807.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm6890.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm7155.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm7427.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc40887.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc40970.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc41235.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc41507.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc6809.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc6892.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc7157.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc7429.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/read_fsm.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/shiftRegFIFO.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/subfxp.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/switch.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/top_isfft.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/write_fsm.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/tech/verilog/sram_1rw1r_64x64_wpr2.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/tech/verilog/sram_1rw1r_64x256.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/ref/isfft_axi_wrapper.v
+	-top isfft_tb_top
+	-coverage all
+	-covdut isfft_axi_v4
+	-covworkdir /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work
+	-covoverwrite
+	+UVM_NO_RELNOTES
+	-elaborate
+	-l /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/reports/compila.log
+
+   User defined plus("+") options:
+	+UVM_NO_RELNOTES
+
+TOOL:	xrun(64)	23.09-s013: Exiting on Sep 30, 2026 at 16:51:29 -03  (total: 00:00:00)

@@ -1,0 +1,45 @@
+IMC(64): 26.03-s030: (c) Copyright 1995-2026 Cadence Design Systems Inc - Simulator version: 26.03-s005 - Coverage engine version: 26.03-s005
+Starting batch mode
+imc> merge /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work/scope/* -out /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_merged -overwrite
+imc: 2026-10-28 19:23:14,680 *W,MGOPOW: The merge output directory /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_merged will be overwritten.
+imc: 2026-10-28 19:23:14,683 *I,MERGL1: Merging Simulation Coverage ...
+----------------------------
+imc: 2026-10-28 19:23:14,683 *I,MERGL1: Preparing target model ...
+imc: 2026-10-28 19:23:14,693 *I,MERGL1: Reading model of primary run (/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work/scope/isfft_aleatorio_test_s1) as initial model: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work/scope/icc_6f0adfe8_79d4faa7.ucm
+imc: 2026-10-28 19:23:14,693 *I,MERGL1: Target model generated successfully.
+imc: 2026-10-28 19:23:14,693 *I,MERGL1: Projecting Simulation ucd data into the target model ...
+imc: *I,MERGL2:   /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work/scope/isfft_aleatorio_test_s1:
+imc: 2026-10-28 19:23:14,714 *I,MERGL3:       Data is projected in to the target model.
+imc: *I,MERGL2:   /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work/scope/isfft_contrapressao_test_s1:
+imc: 2026-10-28 19:23:14,730 *I,MERGL3:       Data is projected in to the target model.
+imc: *I,MERGL2:   /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work/scope/isfft_estouro_test_s1:
+imc: 2026-10-28 19:23:14,730 *I,MERGL3:       Data is projected in to the target model.
+imc: *I,MERGL2:   /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work/scope/isfft_fumaca_test_s1:
+imc: 2026-10-28 19:23:14,730 *I,MERGL3:       Data is projected in to the target model.
+imc: *I,MERGL2:   /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work/scope/isfft_kria_regressao_test_s1:
+imc: 2026-10-28 19:23:14,733 *I,MERGL3:       Data is projected in to the target model.
+imc: *I,MERGL2:   /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work/scope/isfft_kria_test_s1:
+imc: 2026-10-28 19:23:14,737 *I,MERGL3:       Data is projected in to the target model.
+imc: *I,MERGL2:   /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work/scope/isfft_registradores_test_s1:
+imc: 2026-10-28 19:23:14,738 *I,MERGL3:       Data is projected in to the target model.
+imc: *I,MERGL2:   /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work/scope/isfft_soft_reset_test_s1:
+imc: 2026-10-28 19:23:14,745 *I,MERGL3:       Data is projected in to the target model.
+imc: *I,MERGL2:   /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work/scope/isfft_truncado_test_s1:
+imc: 2026-10-28 19:23:14,749 *I,MERGL3:       Data is projected in to the target model.
+imc: *I,MERGL2:   /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work/scope/isfft_vazao_test_s1:
+imc: 2026-10-28 19:23:14,754 *I,MERGL3:       Data is projected in to the target model.
+imc: 2026-10-28 19:23:14,762 *I,MERGL1: Writing output database /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_merged:
+imc: 2026-10-28 19:23:14,793 *I,MERGL2:   Model: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_merged/icc_6f0adfe8_79d4faa7.ucm
+imc: 2026-10-28 19:23:14,794 *I,MERGL2:   Data : /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_merged/icc_6f0adfe8_79d4faa7.ucd
+imc: 2026-10-28 19:23:14,804 *I,MERGL1: No Specman coverage databases found in the runs.
+Total conflicts during target model creation: 0
+Total items not merged                      : 0
+Total runs not considered during target model creation: 0
+Total runs not merged                                 : 0
+imc> load /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_merged
+imc: *I,RUNLD: Successfully loaded run /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_merged.
+imc> report -out /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/reports/cobertura_resumo.txt -summary
+imc: *W,REPDEP: This is a legacy report and no future enhancement is planned for this report. It is recommended that you use the 'report_metrics' command and generate a dynamic report.
+imc> report -out /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/reports/cobertura_funcional.txt -detail -metrics functional -all -aspect both -assertionStatus
+imc: *W,REPDEP: This is a legacy report and no future enhancement is planned for this report. It is recommended that you use the 'report_metrics' command and generate a dynamic report.
+imc> exit

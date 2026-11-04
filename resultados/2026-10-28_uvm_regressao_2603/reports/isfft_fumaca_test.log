@@ -1,0 +1,1303 @@
+xrun(64): 26.03-s005: (c) Copyright 1995-2026 Cadence Design Systems, Inc.
+TOOL:	xrun(64)	26.03-s005: Started on Oct 26, 2026 at 18:13:02 -03
+xrun
+	-64bit
+	-sv
+	-uvm
+	-timescale 1ns/1ps
+	-xmlibdirname /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/xcelium.d
+	-f /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/scripts/isfft_uvm.f
+		+incdir+/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/env
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tb/axil_if.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tb/axis_if.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tb/isfft_sva.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/agents/axil/axil_pkg.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/agents/axis/axis_pkg.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/env/isfft_env_pkg.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/seq/isfft_seq_pkg.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tests/isfft_test_pkg.sv
+		/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tb/isfft_tb_top.sv
+		-f /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/isfft_dut.f
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft_axi_v4.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/addfxp.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock40889.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock40973.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock41154.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock41237.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock41426.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock6811.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock6895.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock7076.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock7159.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock7348.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D2_41415.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D2_7337.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D4_41403.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D4_7325.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D6_41145.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D6_7067.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D8_41137.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D8_7059.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/DirSum_41151.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/DirSum_41423.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/DirSum_7073.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/DirSum_7345.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/fft_1d_top.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/ifft_1d_top.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray4_40968.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray4_6890.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_40885.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_41233.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_41505.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_6807.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_7155.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_7427.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memMod.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/multfix.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm40885.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm40968.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm41233.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm41505.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm6807.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm6890.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm7155.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm7427.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc40887.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc40970.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc41235.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc41507.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc6809.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc6892.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc7157.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc7429.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/read_fsm.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/shiftRegFIFO.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/subfxp.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/switch.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/top_isfft.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/write_fsm.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/tech/verilog/sram_1rw1r_64x64_wpr2.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/tech/verilog/sram_1rw1r_64x256.v
+			/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/ref/isfft_axi_wrapper.v
+	-top isfft_tb_top
+	-coverage all
+	-covdut isfft_axi_v4
+	-covfile /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/scripts/cobertura.ccf
+	-covworkdir /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work
+	-covoverwrite
+	+UVM_NO_RELNOTES
+	+UVM_TESTNAME=isfft_fumaca_test
+	-svseed 1
+	-covtest isfft_fumaca_test_s1
+	-l /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/reports/isfft_fumaca_test.log
+
+   User defined plus("+") options:
+	+UVM_NO_RELNOTES
+
+DEFINE std       ./STD
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,1): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/STD' (cds.lib command ignored).
+DEFINE synopsys  ./SYNOPSYS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,2): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/SYNOPSYS' (cds.lib command ignored).
+DEFINE ieee      ./IEEE
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,3): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/IEEE' (cds.lib command ignored).
+DEFINE ambit     ./AMBIT
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,4): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/AMBIT' (cds.lib command ignored).
+DEFINE vital_memory ./VITAL_MEMORY
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,5): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/VITAL_MEMORY' (cds.lib command ignored).
+DEFINE ncutils ./NCUTILS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,6): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCUTILS' (cds.lib command ignored).
+DEFINE ncinternal ./NCINTERNAL
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,7): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCINTERNAL' (cds.lib command ignored).
+DEFINE ncmodels ./NCMODELS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,8): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCMODELS' (cds.lib command ignored).
+DEFINE xmutils ./XMUTILS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,9): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMUTILS' (cds.lib command ignored).
+DEFINE xminternal ./XMINTERNAL
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,10): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMINTERNAL' (cds.lib command ignored).
+DEFINE xmmodels ./XMMODELS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,11): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMMODELS' (cds.lib command ignored).
+DEFINE cds_assertions ./CDS_ASSERTIONS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,12): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/CDS_ASSERTIONS' (cds.lib command ignored).
+DEFINE std       ./STD
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,1): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/STD' (cds.lib command ignored).
+DEFINE synopsys  ./SYNOPSYS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,2): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/SYNOPSYS' (cds.lib command ignored).
+DEFINE ieee      ./IEEE
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,3): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/IEEE' (cds.lib command ignored).
+DEFINE ambit     ./AMBIT
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,4): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/AMBIT' (cds.lib command ignored).
+DEFINE vital_memory ./VITAL_MEMORY
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,5): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/VITAL_MEMORY' (cds.lib command ignored).
+DEFINE ncutils ./NCUTILS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,6): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCUTILS' (cds.lib command ignored).
+DEFINE ncinternal ./NCINTERNAL
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,7): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCINTERNAL' (cds.lib command ignored).
+DEFINE ncmodels ./NCMODELS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,8): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCMODELS' (cds.lib command ignored).
+DEFINE xmutils ./XMUTILS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,9): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMUTILS' (cds.lib command ignored).
+DEFINE xminternal ./XMINTERNAL
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,10): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMINTERNAL' (cds.lib command ignored).
+DEFINE xmmodels ./XMMODELS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,11): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMMODELS' (cds.lib command ignored).
+DEFINE cds_assertions ./CDS_ASSERTIONS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,12): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/CDS_ASSERTIONS' (cds.lib command ignored).
+DEFINE std       ./STD
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,1): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/STD' (cds.lib command ignored).
+DEFINE synopsys  ./SYNOPSYS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,2): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/SYNOPSYS' (cds.lib command ignored).
+DEFINE ieee      ./IEEE
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,3): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/IEEE' (cds.lib command ignored).
+DEFINE ambit     ./AMBIT
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,4): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/AMBIT' (cds.lib command ignored).
+DEFINE vital_memory ./VITAL_MEMORY
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,5): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/VITAL_MEMORY' (cds.lib command ignored).
+DEFINE ncutils ./NCUTILS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,6): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCUTILS' (cds.lib command ignored).
+DEFINE ncinternal ./NCINTERNAL
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,7): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCINTERNAL' (cds.lib command ignored).
+DEFINE ncmodels ./NCMODELS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,8): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCMODELS' (cds.lib command ignored).
+DEFINE xmutils ./XMUTILS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,9): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMUTILS' (cds.lib command ignored).
+DEFINE xminternal ./XMINTERNAL
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,10): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMINTERNAL' (cds.lib command ignored).
+DEFINE xmmodels ./XMMODELS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,11): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMMODELS' (cds.lib command ignored).
+DEFINE cds_assertions ./CDS_ASSERTIONS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,12): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/CDS_ASSERTIONS' (cds.lib command ignored).
+DEFINE std       ./STD
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,1): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/STD' (cds.lib command ignored).
+DEFINE synopsys  ./SYNOPSYS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,2): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/SYNOPSYS' (cds.lib command ignored).
+DEFINE ieee      ./IEEE
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,3): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/IEEE' (cds.lib command ignored).
+DEFINE ambit     ./AMBIT
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,4): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/AMBIT' (cds.lib command ignored).
+DEFINE vital_memory ./VITAL_MEMORY
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,5): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/VITAL_MEMORY' (cds.lib command ignored).
+DEFINE ncutils ./NCUTILS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,6): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCUTILS' (cds.lib command ignored).
+DEFINE ncinternal ./NCINTERNAL
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,7): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCINTERNAL' (cds.lib command ignored).
+DEFINE ncmodels ./NCMODELS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,8): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCMODELS' (cds.lib command ignored).
+DEFINE xmutils ./XMUTILS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,9): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMUTILS' (cds.lib command ignored).
+DEFINE xminternal ./XMINTERNAL
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,10): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMINTERNAL' (cds.lib command ignored).
+DEFINE xmmodels ./XMMODELS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,11): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMMODELS' (cds.lib command ignored).
+DEFINE cds_assertions ./CDS_ASSERTIONS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,12): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/CDS_ASSERTIONS' (cds.lib command ignored).
+DEFINE std       ./STD
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,1): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/STD' (cds.lib command ignored).
+DEFINE synopsys  ./SYNOPSYS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,2): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/SYNOPSYS' (cds.lib command ignored).
+DEFINE ieee      ./IEEE
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,3): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/IEEE' (cds.lib command ignored).
+DEFINE ambit     ./AMBIT
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,4): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/AMBIT' (cds.lib command ignored).
+DEFINE vital_memory ./VITAL_MEMORY
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,5): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/VITAL_MEMORY' (cds.lib command ignored).
+DEFINE ncutils ./NCUTILS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,6): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCUTILS' (cds.lib command ignored).
+DEFINE ncinternal ./NCINTERNAL
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,7): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCINTERNAL' (cds.lib command ignored).
+DEFINE ncmodels ./NCMODELS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,8): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCMODELS' (cds.lib command ignored).
+DEFINE xmutils ./XMUTILS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,9): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMUTILS' (cds.lib command ignored).
+DEFINE xminternal ./XMINTERNAL
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,10): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMINTERNAL' (cds.lib command ignored).
+DEFINE xmmodels ./XMMODELS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,11): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMMODELS' (cds.lib command ignored).
+DEFINE cds_assertions ./CDS_ASSERTIONS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,12): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/CDS_ASSERTIONS' (cds.lib command ignored).
+Compiling UVM packages (uvm_pkg.sv cdns_uvm_pkg.sv) using uvmhome location /tools/cadence/XCELIUM2603/tools/methodology/UVM/CDNS-1.1d
+DEFINE std       ./STD
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,1): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/STD' (cds.lib command ignored).
+DEFINE synopsys  ./SYNOPSYS
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,2): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/SYNOPSYS' (cds.lib command ignored).
+DEFINE ieee      ./IEEE
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,3): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/IEEE' (cds.lib command ignored).
+DEFINE ambit     ./AMBIT
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,4): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/AMBIT' (cds.lib command ignored).
+DEFINE vital_memory ./VITAL_MEMORY
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,5): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/VITAL_MEMORY' (cds.lib command ignored).
+DEFINE ncutils ./NCUTILS
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,6): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCUTILS' (cds.lib command ignored).
+DEFINE ncinternal ./NCINTERNAL
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,7): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCINTERNAL' (cds.lib command ignored).
+DEFINE ncmodels ./NCMODELS
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,8): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCMODELS' (cds.lib command ignored).
+DEFINE xmutils ./XMUTILS
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,9): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMUTILS' (cds.lib command ignored).
+DEFINE xminternal ./XMINTERNAL
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,10): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMINTERNAL' (cds.lib command ignored).
+DEFINE xmmodels ./XMMODELS
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,11): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMMODELS' (cds.lib command ignored).
+DEFINE cds_assertions ./CDS_ASSERTIONS
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,12): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/CDS_ASSERTIONS' (cds.lib command ignored).
+DEFINE std       ./STD
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,1): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/STD' (cds.lib command ignored).
+DEFINE synopsys  ./SYNOPSYS
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,2): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/SYNOPSYS' (cds.lib command ignored).
+DEFINE ieee      ./IEEE
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,3): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/IEEE' (cds.lib command ignored).
+DEFINE ambit     ./AMBIT
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,4): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/AMBIT' (cds.lib command ignored).
+DEFINE vital_memory ./VITAL_MEMORY
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,5): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/VITAL_MEMORY' (cds.lib command ignored).
+DEFINE ncutils ./NCUTILS
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,6): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCUTILS' (cds.lib command ignored).
+DEFINE ncinternal ./NCINTERNAL
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,7): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCINTERNAL' (cds.lib command ignored).
+DEFINE ncmodels ./NCMODELS
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,8): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCMODELS' (cds.lib command ignored).
+DEFINE xmutils ./XMUTILS
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,9): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMUTILS' (cds.lib command ignored).
+DEFINE xminternal ./XMINTERNAL
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,10): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMINTERNAL' (cds.lib command ignored).
+DEFINE xmmodels ./XMMODELS
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,11): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMMODELS' (cds.lib command ignored).
+DEFINE cds_assertions ./CDS_ASSERTIONS
+|
+xmvlog: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,12): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/CDS_ASSERTIONS' (cds.lib command ignored).
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tb/axil_if.sv
+	interface worklib.axil_if:sv
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tb/axis_if.sv
+	interface worklib.axis_if:sv
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tb/isfft_sva.sv
+	interface worklib.isfft_probe_if:sv
+		errors: 0, warnings: 0
+	module worklib.isfft_v4_sva:sv
+		errors: 0, warnings: 0
+	module worklib.sram_1rw1r_sva:sv
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/agents/axil/axil_pkg.sv
+	package worklib.axil_pkg:sv
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/agents/axis/axis_pkg.sv
+	package worklib.axis_pkg:sv
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/env/isfft_env_pkg.sv
+	package worklib.isfft_env_pkg:sv
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/seq/isfft_seq_pkg.sv
+	package worklib.isfft_seq_pkg:sv
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tests/isfft_test_pkg.sv
+	package worklib.isfft_test_pkg:sv
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tb/isfft_tb_top.sv
+	module worklib.isfft_tb_top:sv
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft_axi_v4.v
+	module worklib.isfft_axi_v4:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/addfxp.v
+	module worklib.addfxp:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock40889.v
+	module worklib.codeBlock40889:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock40973.v
+	module worklib.codeBlock40973:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock41154.v
+	module worklib.codeBlock41154:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock41237.v
+	module worklib.codeBlock41237:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock41426.v
+	module worklib.codeBlock41426:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock6811.v
+	module worklib.codeBlock6811:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock6895.v
+	module worklib.codeBlock6895:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock7076.v
+	module worklib.codeBlock7076:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock7159.v
+	module worklib.codeBlock7159:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/codeBlock7348.v
+	module worklib.codeBlock7348:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D2_41415.v
+	module worklib.D2_41415:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D2_7337.v
+	module worklib.D2_7337:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D4_41403.v
+	module worklib.D4_41403:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D4_7325.v
+	module worklib.D4_7325:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D6_41145.v
+	module worklib.D6_41145:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D6_7067.v
+	module worklib.D6_7067:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D8_41137.v
+	module worklib.D8_41137:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/D8_7059.v
+	module worklib.D8_7059:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/DirSum_41151.v
+	module worklib.DirSum_41151:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/DirSum_41423.v
+	module worklib.DirSum_41423:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/DirSum_7073.v
+	module worklib.DirSum_7073:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/DirSum_7345.v
+	module worklib.DirSum_7345:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/fft_1d_top.v
+	module worklib.fft_1d_top:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/ifft_1d_top.v
+	module worklib.ifft_1d_top:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray4_40968.v
+	module worklib.memArray4_40968:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray4_6890.v
+	module worklib.memArray4_6890:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_40885.v
+	module worklib.memArray8_40885:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_41233.v
+	module worklib.memArray8_41233:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_41505.v
+	module worklib.memArray8_41505:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_6807.v
+	module worklib.memArray8_6807:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_7155.v
+	module worklib.memArray8_7155:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memArray8_7427.v
+	module worklib.memArray8_7427:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/memMod.v
+	module worklib.memMod:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/multfix.v
+	module worklib.multfix:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm40885.v
+	module worklib.perm40885:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm40968.v
+	module worklib.perm40968:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm41233.v
+	module worklib.perm41233:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm41505.v
+	module worklib.perm41505:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm6807.v
+	module worklib.perm6807:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm6890.v
+	module worklib.perm6890:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm7155.v
+	module worklib.perm7155:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/perm7427.v
+	module worklib.perm7427:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc40887.v
+	module worklib.rc40887:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc40970.v
+	module worklib.rc40970:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc41235.v
+	module worklib.rc41235:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc41507.v
+	module worklib.rc41507:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc6809.v
+	module worklib.rc6809:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc6892.v
+	module worklib.rc6892:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc7157.v
+	module worklib.rc7157:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/rc7429.v
+	module worklib.rc7429:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/read_fsm.v
+	module worklib.read_fsm:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/shiftRegFIFO.v
+	module worklib.shiftRegFIFO:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/subfxp.v
+	module worklib.subfxp:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/switch.v
+	module worklib.switch:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/top_isfft.v
+	module worklib.top_isfft:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/write_fsm.v
+	module worklib.write_fsm:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/tech/verilog/sram_1rw1r_64x64_wpr2.v
+	module worklib.sram_1rw1r_64x64_wpr2:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/tech/verilog/sram_1rw1r_64x256.v
+	module worklib.sram_1rw1r_64x256:v
+		errors: 0, warnings: 0
+file: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/ref/isfft_axi_wrapper.v
+	module worklib.isfft_axi_wrapper:v
+		errors: 0, warnings: 0
+	Total errors/warnings found outside modules and primitives:
+		errors: 0, warnings: 12
+DEFINE std       ./STD
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,1): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/STD' (cds.lib command ignored).
+DEFINE synopsys  ./SYNOPSYS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,2): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/SYNOPSYS' (cds.lib command ignored).
+DEFINE ieee      ./IEEE
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,3): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/IEEE' (cds.lib command ignored).
+DEFINE ambit     ./AMBIT
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,4): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/AMBIT' (cds.lib command ignored).
+DEFINE vital_memory ./VITAL_MEMORY
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,5): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/VITAL_MEMORY' (cds.lib command ignored).
+DEFINE ncutils ./NCUTILS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,6): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCUTILS' (cds.lib command ignored).
+DEFINE ncinternal ./NCINTERNAL
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,7): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCINTERNAL' (cds.lib command ignored).
+DEFINE ncmodels ./NCMODELS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,8): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCMODELS' (cds.lib command ignored).
+DEFINE xmutils ./XMUTILS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,9): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMUTILS' (cds.lib command ignored).
+DEFINE xminternal ./XMINTERNAL
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,10): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMINTERNAL' (cds.lib command ignored).
+DEFINE xmmodels ./XMMODELS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,11): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMMODELS' (cds.lib command ignored).
+DEFINE cds_assertions ./CDS_ASSERTIONS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,12): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/CDS_ASSERTIONS' (cds.lib command ignored).
+DEFINE std       ./STD
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,1): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/STD' (cds.lib command ignored).
+DEFINE synopsys  ./SYNOPSYS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,2): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/SYNOPSYS' (cds.lib command ignored).
+DEFINE ieee      ./IEEE
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,3): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/IEEE' (cds.lib command ignored).
+DEFINE ambit     ./AMBIT
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,4): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/AMBIT' (cds.lib command ignored).
+DEFINE vital_memory ./VITAL_MEMORY
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,5): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/VITAL_MEMORY' (cds.lib command ignored).
+DEFINE ncutils ./NCUTILS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,6): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCUTILS' (cds.lib command ignored).
+DEFINE ncinternal ./NCINTERNAL
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,7): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCINTERNAL' (cds.lib command ignored).
+DEFINE ncmodels ./NCMODELS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,8): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCMODELS' (cds.lib command ignored).
+DEFINE xmutils ./XMUTILS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,9): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMUTILS' (cds.lib command ignored).
+DEFINE xminternal ./XMINTERNAL
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,10): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMINTERNAL' (cds.lib command ignored).
+DEFINE xmmodels ./XMMODELS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,11): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMMODELS' (cds.lib command ignored).
+DEFINE cds_assertions ./CDS_ASSERTIONS
+|
+xrun: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,12): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/CDS_ASSERTIONS' (cds.lib command ignored).
+DEFINE std       ./STD
+|
+xmelab: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,1): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/STD' (cds.lib command ignored).
+DEFINE synopsys  ./SYNOPSYS
+|
+xmelab: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,2): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/SYNOPSYS' (cds.lib command ignored).
+DEFINE ieee      ./IEEE
+|
+xmelab: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,3): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/IEEE' (cds.lib command ignored).
+DEFINE ambit     ./AMBIT
+|
+xmelab: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,4): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/AMBIT' (cds.lib command ignored).
+DEFINE vital_memory ./VITAL_MEMORY
+|
+xmelab: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,5): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/VITAL_MEMORY' (cds.lib command ignored).
+DEFINE ncutils ./NCUTILS
+|
+xmelab: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,6): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCUTILS' (cds.lib command ignored).
+DEFINE ncinternal ./NCINTERNAL
+|
+xmelab: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,7): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCINTERNAL' (cds.lib command ignored).
+DEFINE ncmodels ./NCMODELS
+|
+xmelab: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,8): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCMODELS' (cds.lib command ignored).
+DEFINE xmutils ./XMUTILS
+|
+xmelab: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,9): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMUTILS' (cds.lib command ignored).
+DEFINE xminternal ./XMINTERNAL
+|
+xmelab: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,10): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMINTERNAL' (cds.lib command ignored).
+DEFINE xmmodels ./XMMODELS
+|
+xmelab: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,11): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMMODELS' (cds.lib command ignored).
+DEFINE cds_assertions ./CDS_ASSERTIONS
+|
+xmelab: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,12): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/CDS_ASSERTIONS' (cds.lib command ignored).
+	Elaborating the design hierarchy:
+xmelab: *N,CGNSWA: (File: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/scripts/cobertura.ccf, Line: 20): A covergroup is not (de)selected with the "-all" option of the (de)select_coverage command. Use the coverage metric "-covergroup" with the (de)select_coverage command to (de)select a covergroup.
+		Caching library 'worklib' ....... Done
+	Top level design units:
+		worklib.uvm_pkg:sv (package)
+		worklib.cdns_uvmapi:svp (package)
+		worklib.cdns_assert2uvm_pkg:sv (package)
+		worklib.cdns_uvm_pkg:sv (package)
+		worklib.axis_pkg:sv (package)
+		worklib.axil_pkg:sv (package)
+		worklib.isfft_env_pkg:sv (package)
+		worklib.isfft_seq_pkg:sv (package)
+		worklib.isfft_test_pkg:sv (package)
+		worklib.isfft_tb_top:sv (module)
+
+	Extracting FSMs for coverage:
+		worklib.shiftRegFIFO
+		worklib.memMod
+		worklib.memArray8_40885
+		worklib.switch
+		worklib.perm40885
+		worklib.rc40887
+		worklib.addfxp
+		worklib.subfxp
+		worklib.codeBlock40889
+		worklib.memArray4_40968
+		worklib.perm40968
+		worklib.rc40970
+		worklib.D8_41137
+		worklib.D6_41145
+		worklib.multfix
+		worklib.codeBlock40973
+		worklib.DirSum_41151
+		worklib.codeBlock41154
+		worklib.memArray8_41233
+		worklib.perm41233
+		worklib.rc41235
+		worklib.D4_41403
+		worklib.D2_41415
+		worklib.codeBlock41237
+		worklib.DirSum_41423
+		worklib.codeBlock41426
+		worklib.memArray8_41505
+		worklib.perm41505
+		worklib.rc41507
+		worklib.ifft_1d_top
+		worklib.write_fsm
+			FSM extracted for state register state
+		worklib.read_fsm
+			FSM extracted for state register state
+		worklib.memArray8_6807
+		worklib.perm6807
+		worklib.rc6809
+		worklib.codeBlock6811
+		worklib.memArray4_6890
+		worklib.perm6890
+		worklib.rc6892
+		worklib.D8_7059
+		worklib.D6_7067
+		worklib.codeBlock6895
+		worklib.DirSum_7073
+		worklib.codeBlock7076
+		worklib.memArray8_7155
+		worklib.perm7155
+		worklib.rc7157
+		worklib.D4_7325
+		worklib.D2_7337
+		worklib.codeBlock7159
+		worklib.DirSum_7345
+		worklib.codeBlock7348
+		worklib.memArray8_7427
+		worklib.perm7427
+		worklib.rc7429
+		worklib.fft_1d_top
+		worklib.top_isfft
+		worklib.isfft_axi_v4
+	Total FSMs extracted = 2
+	Building instance overlay tables: 
+xmelab: *W,COVSEC: (/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft_axi_v4.v,416|45): SOP expression evaluates to a constant: not checked.
+.....
+xmelab: *W,COVFDP: FSM description matching across instance of a module for "COVFDM" warning has been moved from elaboration to simulation dumping. To restore old matching behavior, use "set_backward_compat -COVFDM_during_elab". Also, it is recommended to use set_parameterized_module_coverage CCF command to avoid coverage loss due to FSM description difference across instances of a module.
+xmelab: *W,COVFHT: FSM hold transitions (transitions to the current state) are not extracted for any FSM in default mode.
+............... Done
+	Enabling instrumentation for coverage types: block expression FSM toggle functional
+xmelab: *W,COVNSO: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/scripts/cobertura.ccf:30 Scoring of "event" is not supported for the set_coverable_operators -all command in the current release. However, it will be supported in a future release. To score "event" in the current release, use "-event_or" with the set_coverable_operators command, along with appropriate options of the set_coverable_statements command.
+	Generating native compiled code:
+DEFINE std       ./STD
+|
+xmvlog_cg: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,1): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/STD' (cds.lib command ignored).
+DEFINE synopsys  ./SYNOPSYS
+|
+xmvlog_cg: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,2): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/SYNOPSYS' (cds.lib command ignored).
+DEFINE ieee      ./IEEE
+|
+xmvlog_cg: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,3): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/IEEE' (cds.lib command ignored).
+DEFINE ambit     ./AMBIT
+|
+xmvlog_cg: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,4): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/AMBIT' (cds.lib command ignored).
+DEFINE vital_memory ./VITAL_MEMORY
+|
+xmvlog_cg: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,5): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/VITAL_MEMORY' (cds.lib command ignored).
+DEFINE ncutils ./NCUTILS
+|
+xmvlog_cg: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,6): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCUTILS' (cds.lib command ignored).
+DEFINE ncinternal ./NCINTERNAL
+|
+xmvlog_cg: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,7): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCINTERNAL' (cds.lib command ignored).
+DEFINE ncmodels ./NCMODELS
+|
+xmvlog_cg: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,8): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCMODELS' (cds.lib command ignored).
+DEFINE xmutils ./XMUTILS
+|
+xmvlog_cg: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,9): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMUTILS' (cds.lib command ignored).
+DEFINE xminternal ./XMINTERNAL
+|
+xmvlog_cg: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,10): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMINTERNAL' (cds.lib command ignored).
+DEFINE xmmodels ./XMMODELS
+|
+xmvlog_cg: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,11): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMMODELS' (cds.lib command ignored).
+DEFINE cds_assertions ./CDS_ASSERTIONS
+|
+xmvlog_cg: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,12): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/CDS_ASSERTIONS' (cds.lib command ignored).
+		worklib.memArray8_7427:v <0x26b87dd2>
+			streams:   2, words:   302
+		worklib.perm7427:v <0x57fec37d>
+			streams:  23, words:  6877
+		worklib.rc7429:v <0x1096aa5a>
+			streams:   4, words:  1000
+		worklib.codeBlock7348:v <0x1a17a082>
+			streams:  11, words:  2540
+		worklib.D2_7337:v <0x451c258f>
+			streams:   3, words:  1100
+		worklib.D4_7325:v <0x5c0adefa>
+			streams:   3, words:   984
+		worklib.codeBlock7159:v <0x71e562a3>
+			streams:   5, words:  5234
+		worklib.DirSum_7345:v <0x25d03576>
+			streams:   2, words:   692
+		worklib.memArray8_7155:v <0x024d8850>
+			streams:   2, words:   302
+		worklib.perm7155:v <0x18da9118>
+			streams:  23, words:  6878
+		worklib.rc7157:v <0x313671b0>
+			streams:   4, words:  1000
+		worklib.codeBlock7076:v <0x295db691>
+			streams:  11, words:  2540
+		worklib.D6_7067:v <0x2bc93ecf>
+			streams:   3, words:   828
+		worklib.D8_7059:v <0x70ca7626>
+			streams:   3, words:   828
+		worklib.codeBlock6895:v <0x25a7dd2a>
+			streams:   5, words:  5242
+		worklib.DirSum_7073:v <0x144cd842>
+			streams:   2, words:   713
+		worklib.memArray4_6890:v <0x48e04047>
+			streams:   0, words:     0
+		worklib.perm6890:v <0x2970114c>
+			streams:  24, words:  6999
+		worklib.rc6892:v <0x33e6a53e>
+			streams:   4, words:  1000
+		worklib.codeBlock6811:v <0x6328dc33>
+			streams:  11, words:  2540
+		worklib.memArray8_6807:v <0x70c15a4a>
+			streams:   2, words:   302
+		worklib.perm6807:v <0x0c2f2a42>
+			streams:  23, words:  6878
+		worklib.rc6809:v <0x7013e379>
+			streams:   4, words:  1000
+		worklib.fft_1d_top:v <0x5dcf63ac>
+			streams:   0, words:     0
+		worklib.read_fsm:v <0x22541fd4>
+			streams:   9, words:  3237
+		worklib.write_fsm:v <0x4d4bac1a>
+			streams:   6, words:  2827
+		worklib.memArray8_41505:v <0x3e794315>
+			streams:   2, words:   302
+		worklib.perm41505:v <0x59b7ba60>
+			streams:  23, words:  6877
+		worklib.rc41507:v <0x682e8ff9>
+			streams:   4, words:  1000
+		worklib.codeBlock41426:v <0x586c6c08>
+			streams:  11, words:  2540
+		worklib.D2_41415:v <0x73f2ee91>
+			streams:   3, words:  1100
+		worklib.D4_41403:v <0x2a69aca1>
+			streams:   3, words:   984
+		worklib.codeBlock41237:v <0x56c2c274>
+			streams:   5, words:  5234
+		worklib.DirSum_41423:v <0x5176e7a6>
+			streams:   2, words:   692
+		worklib.memArray8_41233:v <0x29e000bb>
+			streams:   2, words:   302
+		worklib.perm41233:v <0x5a295262>
+			streams:  23, words:  6878
+		worklib.rc41235:v <0x254b8805>
+			streams:   4, words:  1000
+		worklib.codeBlock41154:v <0x041fdcc9>
+			streams:  11, words:  2540
+		worklib.addfxp:v <0x4f30a130>
+			streams:   4, words:  1179
+		worklib.subfxp:v <0x637e5a37>
+			streams:   4, words:  1185
+		worklib.multfix:v <0x1e6d804f>
+			streams:   5, words:  1273
+		worklib.D6_41145:v <0x33c6a5fd>
+			streams:   3, words:   828
+		worklib.D8_41137:v <0x74a78589>
+			streams:   3, words:   828
+		worklib.shiftRegFIFO:v <0x59a5090e>
+			streams:   4, words:  1804
+		worklib.codeBlock40973:v <0x2ce365fb>
+			streams:   5, words:  5242
+		worklib.DirSum_41151:v <0x078a8e27>
+			streams:   2, words:   713
+		worklib.switch:v <0x69b94e93>
+			streams:   1, words:   482
+		worklib.switch:v <0x021f9de9>
+			streams:   1, words:  1359
+		worklib.memMod:v <0x53cd4bc0>
+			streams:   2, words:  1116
+		worklib.shiftRegFIFO:v <0x6c368ebd>
+			streams:   0, words:     0
+		worklib.memArray4_40968:v <0x4cfb0dbd>
+			streams:   0, words:     0
+		worklib.perm40968:v <0x20a1c5d3>
+			streams:  24, words:  6999
+		worklib.rc40970:v <0x1d36f792>
+			streams:   4, words:  1000
+		worklib.subfxp:v <0x2e338d90>
+			streams:   4, words:  1228
+		worklib.addfxp:v <0x027d7697>
+			streams:   4, words:  1222
+		worklib.shiftRegFIFO:v <0x0d3b7aa8>
+			streams:   4, words:  1159
+		worklib.codeBlock40889:v <0x4ab0b5fd>
+			streams:  11, words:  2540
+		worklib.switch:v <0x0710c194>
+			streams:   1, words:   506
+		worklib.switch:v <0x6c1990b1>
+			streams:   1, words:   490
+		worklib.switch:v <0x12d228f2>
+			streams:   1, words:  1359
+		worklib.memMod:v <0x460b02a2>
+			streams:   2, words:  1045
+		worklib.shiftRegFIFO:v <0x0f2fd629>
+			streams:   0, words:     0
+		worklib.memArray8_40885:v <0x083faeea>
+			streams:   2, words:   302
+		worklib.shiftRegFIFO:v <0x64448eab>
+			streams:   4, words:  1002
+		worklib.shiftRegFIFO:v <0x70a81b58>
+			streams:   4, words:  1168
+		worklib.perm40885:v <0x09dda3c3>
+			streams:  23, words:  6878
+		worklib.rc40887:v <0x79ac998d>
+			streams:   4, words:  1000
+		worklib.ifft_1d_top:v <0x14abeb8b>
+			streams:   0, words:     0
+		worklib.top_isfft:v <0x1eba7631>
+			streams:   5, words:  3532
+		worklib.isfft_axi_wrapper:v <0x0f73553a>
+			streams:  14, words:  4451
+		worklib.isfft_v4_sva:sv <0x113e7867>
+			streams:  30, words: 22456
+		worklib.sram_1rw1r_sva:sv <0x71cbbcf1>
+			streams:   4, words:  2890
+		worklib.memArray8_7427:v <0x24ceb417>
+			streams:   2, words:   302
+		worklib.perm7427:v <0x2b4f227d>
+			streams:  37, words: 19283
+		worklib.rc7429:v <0x62cc2129>
+			streams:   4, words:  1000
+		worklib.codeBlock7348:v <0x4b1cb579>
+			streams:  15, words:  4752
+		worklib.D2_7337:v <0x23b5ea78>
+			streams:   3, words:  1861
+		worklib.D4_7325:v <0x3aa3110d>
+			streams:   3, words:  1861
+		worklib.codeBlock7159:v <0x4bdf52b4>
+			streams:   8, words: 15129
+		worklib.DirSum_7345:v <0x10178bae>
+			streams:   2, words:  2299
+		worklib.memArray8_7155:v <0x003b4195>
+			streams:   2, words:   302
+		worklib.perm7155:v <0x646b7018>
+			streams:  37, words: 19288
+		worklib.rc7157:v <0x436cfac3>
+			streams:   4, words:  1000
+		worklib.codeBlock7076:v <0x7856a36a>
+			streams:  15, words:  4752
+		worklib.D6_7067:v <0x1b845dbe>
+			streams:   3, words:  1547
+		worklib.D8_7059:v <0x40871557>
+			streams:   3, words:  1547
+		worklib.codeBlock6895:v <0x1f9ded3d>
+			streams:   8, words: 15134
+		worklib.DirSum_7073:v <0x218b669a>
+			streams:   2, words:  2334
+		worklib.memArray4_6890:v <0x044772c9>
+			streams:   0, words:     0
+		worklib.perm6890:v <0x5bd64d7b>
+			streams:  31, words: 19969
+		worklib.rc6892:v <0x41bc2e4d>
+			streams:   4, words:  1000
+		worklib.codeBlock6811:v <0x3223c9c8>
+			streams:  15, words:  4752
+		worklib.memArray8_6807:v <0x72b7938f>
+			streams:   2, words:   302
+		worklib.perm6807:v <0x709ecb42>
+			streams:  37, words: 19288
+		worklib.rc6809:v <0x0249680a>
+			streams:   4, words:  1000
+		worklib.fft_1d_top:v <0x66e169b7>
+			streams:   8, words:  1330
+		worklib.read_fsm:v <0x0b9611a4>
+			streams:   9, words:  8818
+		worklib.write_fsm:v <0x32c02656>
+			streams:   7, words:  6657
+		worklib.memArray8_41505:v <0x7b2def97>
+			streams:   2, words:   302
+		worklib.perm41505:v <0x102c20a5>
+			streams:  37, words: 19283
+		worklib.rc41507:v <0x2f053f10>
+			streams:   4, words:  1000
+		worklib.codeBlock41426:v <0x15c89300>
+			streams:  15, words:  4752
+		worklib.D2_41415:v <0x06a3297b>
+			streams:   3, words:  1861
+		worklib.D4_41403:v <0x5f386b4b>
+			streams:   3, words:  1861
+		worklib.codeBlock41237:v <0x26113e92>
+			streams:   8, words: 15129
+		worklib.DirSum_41423:v <0x57cf060a>
+			streams:   2, words:  2299
+		worklib.memArray8_41233:v <0x6cb4ac39>
+			streams:   2, words:   302
+		worklib.perm41233:v <0x13b2c8a7>
+			streams:  37, words: 19288
+		worklib.rc41235:v <0x626038ec>
+			streams:   4, words:  1000
+		worklib.codeBlock41154:v <0x49bb23c1>
+			streams:  15, words:  4752
+		worklib.addfxp:v <0x7068af73>
+			streams:   4, words:  1439
+		worklib.subfxp:v <0x5c265474>
+			streams:   4, words:  1445
+		worklib.multfix:v <0x034ade37>
+			streams:   5, words:  2056
+		worklib.D6_41145:v <0x7c01a85b>
+			streams:   3, words:  1547
+		worklib.D8_41137:v <0x3b60882f>
+			streams:   3, words:  1547
+		worklib.shiftRegFIFO:v <0x527da378>
+			streams:   4, words:  1689
+		worklib.codeBlock40973:v <0x5c30991d>
+			streams:   8, words: 15134
+		worklib.DirSum_41151:v <0x01336f8b>
+			streams:   2, words:  2334
+		worklib.switch:v <0x35457501>
+			streams:   1, words:  1229
+		worklib.switch:v <0x5ee3a67b>
+			streams:   1, words:  2410
+		worklib.memMod:v <0x1c928681>
+			streams:   3, words:  1507
+		worklib.memArray4_40968:v <0x01ab6226>
+			streams:   0, words:     0
+		worklib.perm40968:v <0x62eaebed>
+			streams:  31, words: 19969
+		worklib.rc40970:v <0x5a1d477b>
+			streams:   4, words:  1000
+		worklib.subfxp:v <0x116b83d3>
+			streams:   4, words:  1488
+		worklib.addfxp:v <0x3d2578d4>
+			streams:   4, words:  1482
+		worklib.shiftRegFIFO:v <0x06e3d0de>
+			streams:   4, words:  1437
+		worklib.codeBlock40889:v <0x07144af5>
+			streams:  15, words:  4752
+		worklib.switch:v <0x5becfa06>
+			streams:   1, words:  1339
+		worklib.switch:v <0x30e5ab23>
+			streams:   1, words:  1291
+		worklib.switch:v <0x4e2e1360>
+			streams:   1, words:  2410
+		worklib.memMod:v <0x0954cfe3>
+			streams:   3, words:  1439
+		worklib.shiftRegFIFO:v <0x0c857c49>
+			streams:   4, words:  1689
+		worklib.memArray8_40885:v <0x4d6b0268>
+			streams:   2, words:   302
+		worklib.shiftRegFIFO:v <0x6f9c24dd>
+			streams:   4, words:  1689
+		worklib.shiftRegFIFO:v <0x7b70b12e>
+			streams:   4, words:  1689
+		worklib.perm40885:v <0x40463906>
+			streams:  37, words: 19288
+		worklib.rc40887:v <0x3e872964>
+			streams:   4, words:  1000
+		worklib.ifft_1d_top:v <0x33f52646>
+			streams:   8, words:  1330
+		worklib.top_isfft:v <0x4c4f4b9f>
+			streams:   5, words:  4506
+		worklib.sram_1rw1r_sva:sv <0x57e76178>
+			streams:   4, words:  2890
+		worklib.isfft_tb_top:sv <0x2e33a0ac>
+			streams: 1170, words: 1234039
+		worklib.axil_pkg:sv <0x7b4ce92f>
+			streams: 517, words: 588594
+		worklib.axis_pkg:sv <0x0fda57b2>
+			streams: 568, words: 631521
+		worklib.axil_if:sv <0x71155a76>
+			streams:  30, words: 30897
+		worklib.sram_1rw1r_64x64_wpr2:v <0x5b465919>
+			streams:   5, words:  3257
+		worklib.sram_1rw1r_64x256:v <0x7e124a6c>
+			streams:   5, words:  3269
+		worklib.axis_if:sv <0x4e56b5b4>
+			streams:  10, words:  9962
+		worklib.cdns_uvm_pkg:sv <0x344d848f>
+			streams: 179, words: 271132
+		worklib.cdns_uvmapi:svp <0x34c4fa7f>
+			streams:  27, words: 29160
+		worklib.cdns_assert2uvm_pkg:sv <0x6327a645>
+			streams:   3, words:  1590
+		worklib.uvm_pkg:sv <0x7b3c6b48>
+			streams: 5101, words: 7607646
+		worklib.isfft_axi_v4:v <0x65b8b2dc>
+			streams:  97, words: 63282
+   reg [width-1:0]    mem [depth-1:0];
+                        |
+xmelab: *W,COVMDD (/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/shiftRegFIFO.v,8|24): Toggle coverage for bit, logic, reg, wire, enum and struct multi-dimensional static arrays and vectors is not supported by default. To enable toggle coverage for enum multi-dimensional static arrays specify 'set_toggle_scoring -sv_enum enable_mda' and for other multi-dimensional static arrays, specify 'set_toggle_scoring -sv_mda [<max_bit_base2_exponent>] [-sv_mda_of_struct]' ccf command in the coverage configuration file.
+   integer            index;
+                          |
+xmelab: *W,COVUTA (/prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/frontend/isfft/shiftRegFIFO.v,9|26): Toggle coverage is not supported for SystemVerilog integer, real array, string, dynamic array, sparse memory and reference ports. It is also not supported for VHDL multi-dimensional array and array of record. There may also be other such objects in the design.
+	Building instance specific data structures.
+xmelab: *W,CGPIDF: Covergroup "per_instance" option , by default, is set as 0.
+xmelab: *N,COVCGN: Coverage configuration file command "set_covergroup -new_instance_reporting" can be specified to improve the scoping and naming of covergroup instances. It may be noted that subsequent merging of a coverage database saved with this command and a coverage database saved without this command is not allowed.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                        Instances  Unique
+		Modules:                      354      64
+		Interfaces:                     6       3
+		Verilog packages:               9       9
+		Registers:                 17,940  11,551
+		Scalar wires:                 593       -
+		Expanded wires:             1,080      32
+		Vectored wires:             1,129       -
+		Named events:                  26      27
+		Always blocks:                410     142
+		Initial blocks:               425     209
+		Parallel blocks:               31      32
+		Cont. assignments:            679     489
+		Pseudo assignments:           167       -
+		Assertions:                    24      17
+		Covergroup Instances:           0       4
+		SV Class declarations:        239     352
+		SV Class specializations:     497     497
+		Process Clocks:               320       9
+		Simulation timescale:         1ps
+	Writing initial simulation snapshot: worklib.isfft_tb_top:sv
+DEFINE std       ./STD
+|
+xmsim: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,1): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/STD' (cds.lib command ignored).
+DEFINE synopsys  ./SYNOPSYS
+|
+xmsim: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,2): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/SYNOPSYS' (cds.lib command ignored).
+DEFINE ieee      ./IEEE
+|
+xmsim: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,3): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/IEEE' (cds.lib command ignored).
+DEFINE ambit     ./AMBIT
+|
+xmsim: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,4): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/AMBIT' (cds.lib command ignored).
+DEFINE vital_memory ./VITAL_MEMORY
+|
+xmsim: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,5): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/VITAL_MEMORY' (cds.lib command ignored).
+DEFINE ncutils ./NCUTILS
+|
+xmsim: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,6): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCUTILS' (cds.lib command ignored).
+DEFINE ncinternal ./NCINTERNAL
+|
+xmsim: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,7): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCINTERNAL' (cds.lib command ignored).
+DEFINE ncmodels ./NCMODELS
+|
+xmsim: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,8): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/NCMODELS' (cds.lib command ignored).
+DEFINE xmutils ./XMUTILS
+|
+xmsim: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,9): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMUTILS' (cds.lib command ignored).
+DEFINE xminternal ./XMINTERNAL
+|
+xmsim: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,10): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMINTERNAL' (cds.lib command ignored).
+DEFINE xmmodels ./XMMODELS
+|
+xmsim: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,11): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/XMMODELS' (cds.lib command ignored).
+DEFINE cds_assertions ./CDS_ASSERTIONS
+|
+xmsim: *W,DLCPTH (/tools/cadence/XCELIUM2603/tools/inca/files/cdsvhdl.lib,12): cds.lib Invalid path '/tools/cadence/XCELIUM2603/tools/inca/files/CDS_ASSERTIONS' (cds.lib command ignored).
+Loading snapshot worklib.isfft_tb_top:sv .................... Done
+SVSEED set from command line: 1
+xcelium> source /tools/cadence/XCELIUM2603/tools/xcelium/files/xmsimrc
+xcelium> source /tools/cadence/XCELIUM2603/tools/methodology/UVM/CDNS-1.1d/additions/sv/files/tcl/uvm_sim.tcl
+xcelium> run
+----------------------------------------------------------------
+CDNS-UVM-1.1d (26.03-s005)
+(C) 2007-2013 Mentor Graphics Corporation
+(C) 2007-2013 Cadence Design Systems, Inc.
+(C) 2006-2013 Synopsys, Inc.
+(C) 2011-2013 Cypress Semiconductor Corp.
+----------------------------------------------------------------
+UVM_INFO @ 0: reporter [RNTST] Running test isfft_fumaca_test...
+UVM_INFO /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tests/isfft_test_pkg.sv(62) @ 0: uvm_test_top [TESTE] UVM: CDNS-UVM-1.1d (26.03-s005)
+----------------------------------------------------------------------
+Name                       Type                            Size  Value
+----------------------------------------------------------------------
+uvm_test_top               isfft_fumaca_test               -     @2604
+  env                      isfft_env                       -     @2649
+    axil_agt               axil_agent                      -     @2737
+      drv                  axil_driver                     -     @4973
+        rsp_port           uvm_analysis_port               -     @5122
+        seq_item_port      uvm_seq_item_pull_port          -     @5073
+      mon                  axil_monitor                    -     @4309
+        ap                 uvm_analysis_port               -     @4358
+      sqr                  uvm_sequencer                   -     @4338
+        rsp_export         uvm_analysis_export             -     @4446
+        seq_item_export    uvm_seq_item_pull_imp           -     @4994
+        arbitration_queue  array                           0     -    
+        lock_queue         array                           0     -    
+        num_last_reqs      integral                        32    'd1  
+        num_last_rsps      integral                        32    'd1  
+    cov                    isfft_cobertura                 -     @3444
+      ctl_imp              uvm_analysis_imp_ctl            -     @3637
+      ent_imp              uvm_analysis_imp_ent            -     @3541
+      sai_imp              uvm_analysis_imp_sai            -     @3589
+    in_agt                 axis_agent                      -     @2767
+      drv                  axis_driver                     -     @5212
+        rsp_port           uvm_analysis_port               -     @5360
+        seq_item_port      uvm_seq_item_pull_port          -     @5311
+      mon                  axis_monitor                    -     @5183
+        ap                 uvm_analysis_port               -     @5232
+      sqr                  uvm_sequencer                   -     @5340
+        rsp_export         uvm_analysis_export             -     @5448
+        seq_item_export    uvm_seq_item_pull_imp           -     @5996
+        arbitration_queue  array                           0     -    
+        lock_queue         array                           0     -    
+        num_last_reqs      integral                        32    'd1  
+        num_last_rsps      integral                        32    'd1  
+    out_agt                axis_agent                      -     @2797
+      drv                  axis_driver                     -     @6124
+        rsp_port           uvm_analysis_port               -     @6219
+        seq_item_port      uvm_seq_item_pull_port          -     @6171
+      mon                  axis_monitor                    -     @6046
+        ap                 uvm_analysis_port               -     @6094
+      sqr                  uvm_sequencer                   -     @6249
+        rsp_export         uvm_analysis_export             -     @6304
+        seq_item_export    uvm_seq_item_pull_imp           -     @6844
+        arbitration_queue  array                           0     -    
+        lock_queue         array                           0     -    
+        num_last_reqs      integral                        32    'd1  
+        num_last_rsps      integral                        32    'd1  
+    predictor              uvm_reg_predictor #(axil_item)  -     @2984
+      bus_in               uvm_analysis_imp                -     @3044
+      reg_ap               uvm_analysis_port               -     @3095
+    refm                   isfft_ref_model                 -     @3126
+      ap                   uvm_analysis_port               -     @3278
+      ctl_imp              uvm_analysis_imp_ctl            -     @3229
+      ent_imp              uvm_analysis_imp_ent            -     @3178
+    sb                     isfft_scoreboard                -     @3309
+      ctl_imp              uvm_analysis_imp_ctl            -     @3463
+      esp_imp              uvm_analysis_imp_esp            -     @3415
+      sai_imp              uvm_analysis_imp_sai            -     @3366
+    vsqr                   isfft_vsequencer                -     @3671
+      rsp_export           uvm_analysis_export             -     @3729
+      seq_item_export      uvm_seq_item_pull_imp           -     @4277
+      arbitration_queue    array                           0     -    
+      lock_queue           array                           0     -    
+      num_last_reqs        integral                        32    'd1  
+      num_last_rsps        integral                        32    'd1  
+----------------------------------------------------------------------
+UVM_INFO /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/seq/isfft_seq_pkg.sv(138) @ 6970000: uvm_test_top.env.vsqr@@vseq [VSEQ] registradores OK: MAT_IN=1 MAT_OUT=1 ERR_CNT=0 STATUS=0x000
+UVM_INFO /tools/cadence/XCELIUM2603/tools/methodology/UVM/CDNS-1.1d/sv/src/base/uvm_objection.svh(1268) @ 6970000: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+UVM_INFO /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/env/isfft_cobertura.svh(172) @ 6970000: uvm_test_top.env.cov [COBERTURA] entrada 33.3%  saida 62.5%  registradores 41.7%  ocupacao 54.2%
+UVM_INFO /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/env/isfft_cobertura.svh(174) @ 6970000: uvm_test_top.env.cov [COBERTURA] acertos: espera curta (1-3) 0, truncado na 1a palavra 0, na 31a 0
+UVM_INFO /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/env/isfft_env_pkg.sv(425) @ 6970000: uvm_test_top.env.sb [SB_RESUMO] 1 matrizes / 32 palavras comparadas bit a bit; 0 erros de dado, 0 de tlast; 1 epocas
+UVM_INFO /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/env/isfft_env_pkg.sv(430) @ 6970000: uvm_test_top.env.sb [SB_RESUMO] checagem numerica: 1 matrizes, 0 fora do limite (erro max <= 4.0 LSB, medio <= 1.5 LSB)
+UVM_INFO /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/env/isfft_env_pkg.sv(437) @ 6970000: uvm_test_top.env.sb [SB_RESUMO]   faixa AMP_MEDIA:    1 matrizes  pior erro 0.77 LSB  pior EVM 0.2879%
+UVM_INFO /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/tests/isfft_test_pkg.sv(98) @ 6970000: uvm_test_top [TESTE] TESTE PASSOU: isfft_fumaca_test
+
+--- UVM Report catcher Summary ---
+
+
+Number of demoted UVM_FATAL reports  :    0
+Number of demoted UVM_ERROR reports  :    0
+Number of demoted UVM_WARNING reports:    0
+Number of caught UVM_FATAL reports   :    0
+Number of caught UVM_ERROR reports   :    0
+Number of caught UVM_WARNING reports :    0
+
+--- UVM Report Summary ---
+
+Quit count :     0 of    20
+** Report counts by severity
+UVM_INFO :   10
+UVM_WARNING :    0
+UVM_ERROR :    0
+UVM_FATAL :    0
+** Report counts by id
+[COBERTURA]     2
+[RNTST]     1
+[SB_RESUMO]     3
+[TESTE]     2
+[TEST_DONE]     1
+[VSEQ]     1
+Simulation complete via $finish(1) at time 6970 NS + 57
+/tools/cadence/XCELIUM2603/tools/methodology/UVM/CDNS-1.1d/sv/src/base/uvm_root.svh:457     $finish;
+xcelium> exit
+xmsim: *N,COVCGN: Coverage configuration file command "set_covergroup -new_instance_reporting" can be specified to improve the scoping and naming of covergroup instances. It may be noted that subsequent merging of a coverage database saved with this command and a coverage database saved without this command is not allowed.
+xmsim: *W,CGDEFN: Default name "worklib.uvm_pkg::.cg_ent" will be generated for covergroup instance "cg_ent" as the name of the covergroup instance is not specified explicitly: ../env/isfft_cobertura.svh, 37.
+xmsim: *W,CGDEFN: Default name "worklib.uvm_pkg::.cg_sai" will be generated for covergroup instance "cg_sai" as the name of the covergroup instance is not specified explicitly: ../env/isfft_cobertura.svh, 63.
+xmsim: *W,CGDEFN: Default name "worklib.uvm_pkg::.cg_reg" will be generated for covergroup instance "cg_reg" as the name of the covergroup instance is not specified explicitly: ../env/isfft_cobertura.svh, 74.
+xmsim: *W,CGDEFN: Default name "worklib.uvm_pkg::.cg_ocup" will be generated for covergroup instance "cg_ocup" as the name of the covergroup instance is not specified explicitly: ../env/isfft_cobertura.svh, 96.
+
+coverage setup:
+  workdir  :  /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work
+  dutinst  :  isfft_tb_top.dut(isfft_axi_v4)
+  scope    :  scope
+  testname :  isfft_fumaca_test_s1
+
+coverage files:
+  model(design data) :  /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work/scope/icc_6f0adfe8_79d4faa7.ucm
+  data               :  /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/verification/uvm_isfft/work/cov_work/scope/isfft_fumaca_test_s1/icc_6f0adfe8_79d4faa7.ucd
+TOOL:	xrun(64)	26.03-s005: Exiting on Oct 26, 2026 at 18:13:07 -03  (total: 00:00:05)

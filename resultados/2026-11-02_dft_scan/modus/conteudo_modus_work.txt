@@ -1,0 +1,14 @@
+Inca_libs_16_59_41
+isfft_axi_v4.FULLSCAN.pinassign
+isfft_axi_v4.test_netlist.v
+modus.cmd
+modus.cmd1
+modus.log
+modus.log1
+ncverilog_FULLSCAN.history
+ncverilog_FULLSCAN.log
+run_fullscan_sim
+run_fullscan_sim_sdf
+runmodus.atpg.tcl
+tbdata
+testresults

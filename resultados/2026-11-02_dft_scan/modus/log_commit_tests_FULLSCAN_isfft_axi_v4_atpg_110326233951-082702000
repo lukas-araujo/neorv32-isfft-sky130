@@ -1,0 +1,122 @@
+Starting Command: commit_tests 
+
+INFO (TDA-005): Command Line Invocation: 
+            commit_tests -inexperiment isfft_axi_v4_atpg -testmode FULLSCAN -workdir /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work -stdout summary  [end TDA_005]
+
+INFO (TDA-014): Cadence(R) Modus(TM) DFT Software Solution, Version 25.12-s004_1, built Jan 28 2026 (linux26_64) [end TDA_014]
+
+INFO (TDA-015): Log File: /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/testresults/logs/log_commit_tests_FULLSCAN_isfft_axi_v4_atpg_110326233951-082702000 [end TDA_015]
+
+INFO (TDA-007): Job Information:
+            Date Started: Tuesday Nov 03 23:39:51 2026  -03
+            Host machine is goku, x86_64 running Linux 4.18.0-553.el8_10.x86_64.
+            This job is process number 3389836.
+[end TDA_007]
+
+INFO (TDA-009): Options/Values information.
+            (options marked with '*' have program generated values,
+             options marked with '+' were specified to default.)
+
+            -WORKDIR /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work
+            -TESTMODE FULLSCAN
+
+            -INEXPERIMENT isfft_axi_v4_atpg
+            -LOGFILE /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/testresults/logs/log_commit_tests_FULLSCAN_isfft_axi_v4_atpg_110326233951-082702000
+            -STDOUT summary
+[end TDA_009]
+INFO (TFW-117): Modus checked out a modus_atpg license.  [end TFW_117] 
+
+INFO (TBD-806): Input test vector File(s) (bytes, name):  [end TBD_806] 
+        3248845 /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/tbdata/TBDbin.FULLSCAN.isfft_axi_v4_atpg
+
+INFO (TBD-807): Experiment isfft_axi_v4_atpg odometers prior to commit_tests: 1.1.1.2.1 thru 1.2.1.14.2 (Relative test numbers 1 thru 170).  [end TBD_807] 
+
+Testmode and Global statistics prior to commit_tests
+
+                 ---- ATCov ---- ------------------------ Testmode Faults ----------------------- ------------------------- Global Faults ------------------------
+                 Testmode Global        Total       Tested     Possibly    Redundant     Untested        Total       Tested     Possibly    Redundant     Untested
+
+Total Static         0.00   0.00       341871            0            0            0       341871       343063            0            0            0       343063
+Collapsed Static     0.00   0.00       253733            0            0            0       253733       254593            0            0            0       254593
+PI Static            0.00   0.00          114            0            0            0          114          242            0            0            0          242
+PO Static            0.00   0.00          240            0            0            0          240          252            0            0            0          252
+
+Total Dynamic                               0
+
+Parametric        
+
+IDDq                 0.00   0.00       343063            0                                 343063       343063            0                                 343063
+
+Path                 0.00   0.00            0            0                                      0            0            0                                      0
+
+
+
+
+Testmode and Global statistics after commit_tests
+
+                 ---- ATCov ---- ------------------------ Testmode Faults ----------------------- ------------------------- Global Faults ------------------------
+                 Testmode Global        Total       Tested     Possibly    Redundant     Untested        Total       Tested     Possibly    Redundant     Untested
+
+Total Static        99.65  99.30       341871       340510          214          151          996       343063       340510          214          151         2188
+Collapsed Static    99.66  99.32       253733       252712          206          151          664       254593       252712          206          151         1524
+PI Static          100.00  47.11          114          114            0            0            0          242          114            0            0          128
+PO Static          100.00  95.24          240          240            0            0            0          252          240            0            0           12
+
+Total Dynamic                               0
+
+Parametric        
+
+IDDq                 0.00   0.00       343063            0                                 343063       343063            0                                 343063
+
+Path                 0.00   0.00            0            0                                      0            0            0                                      0
+
+
+
+INFO (TBD-810): Experiment isfft_axi_v4_atpg is saved to the master test vectors odometers: 1.1.1.2.1 to 1.2.1.14.2 (Relative test numbers 1 to 170).  [end TBD_810] 
+
+INFO (TBD-809): Master test vector file statistics:  [end TBD_809]   
+  experiments     = 1
+  test sections   = 2
+  tester loops    = 2
+  test procedures = 16
+  test sequence   = 170
+  init sequencess = 2
+
+INFO (TBD-805): File(s) generated (bytes and name):  [end TBD_805] 
+        3248845 /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/tbdata/TBDbin.FULLSCAN 
+        1679360 /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work/tbdata/faultStatus 
+
+INFO (TBD-831): commit_tests completed successfully.  [end TBD_831] 
+
+INFO (TDA-001): Maximum Memory used during the run and Cumulative Time in hours:minutes:seconds:
+
+                  Total Memory =           25,082,672  bytes
+
+                      CPU Time =    0:00:00.12
+                  Elapsed Time =    0:00:00.15                    [end TDA_001]
+
+     Date Ended:  Tuesday Nov 03 23:39:51 2026  -03
+
+INFO (TFW-119): Modus checked in a modus_atpg license.  [end TFW_119] 
+
+
+
+-------------------------------------------------------------------------------
+*                      Message Summary                                        *
+-------------------------------------------------------------------------------
+ Count  Number             First Instance of Message Text
+------- ------             ------------------------------
+
+  INFO Messages...
+      1 INFO (TBD-805): File(s) generated (bytes and name):   
+      1 INFO (TBD-806): Input test vector File(s) (bytes, name):   
+      1 INFO (TBD-807): Experiment isfft_axi_v4_atpg odometers prior to commit_tests: 1.1.1.2.1 thru 1.2.1.14.2 (Relative test numbers 1 thru 170).   
+      1 INFO (TBD-809): Master test vector file statistics:     
+      1 INFO (TBD-810): Experiment isfft_axi_v4_atpg is saved to the master test vectors odometers: 1.1.1.2.1 to 1.2.1.14.2 (Relative test numbers 1 to 170).   
+      1 INFO (TBD-831): commit_tests completed successfully.   
+      1 INFO (TFW-117): Modus checked out a modus_atpg license.   
+      1 INFO (TFW-119): Modus checked in a modus_atpg license.   
+
+ For a detailed explanation of a message and a suggested user response execute 'msgHelp <message id>'.  For example: msgHelp TDA-009
+
+-------------------------------------------------------------------------------

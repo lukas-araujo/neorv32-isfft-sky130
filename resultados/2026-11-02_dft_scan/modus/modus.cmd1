@@ -1,0 +1,5 @@
+# Cadence Modus
+#   Cadence(R) Modus(TM) DFT Software Solution, Version 25.12-s004_1, built Jan 28 2026 (linux26_64)
+#   Date: Tuesday, November 03, 2026
+set_db workdir /prj/ci/workarea/aluno12/projetos/neorv32_isfft_soc/backend/dft_isfft/modus_work
+exit
