@@ -105,7 +105,9 @@ git pull --rebase origin main && git push origin main
 Todo script da VM (`run_first*.tcl`) usa **este** `export`, inteiro. Um
 PATH recortado já custou tempo: o `run_first_uvm.tcl` só tinha o Xcelium e
 o **IMC** (bloco 3, cobertura) não era achado (`DIARIO_UVM`, 3ª sessão).
-Tem também o **Modus** (ATPG, para a frente de DFT).
+Tem também o **Modus** (ATPG, para a frente de DFT). **Exceção:** o
+`run_first_dft.tcl` usa `MODUS251` no lugar de `MODUS261` — a licença do
+Modus no servidor é v25.1 e o 26.1 não sobe (`TDA-011`; DIARIO_DFT T15).
 
 A VM foi **atualizada em out/2026** e as pastas da Cadence mudaram de nome
 (ex.: `XCELIUM2309` → `XCELIUM2603`). Sintoma: `imc`/`xrun: command not found`

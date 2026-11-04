@@ -26,9 +26,11 @@ export PROJECT_DIR=/prj/ci/workarea/${USER}/projetos/neorv32_isfft_soc
 export BACKEND_DIR=${PROJECT_DIR}/backend
 export TECH_DIR=${PROJECT_DIR}/tech
 
-# PATH completo da VM (CLAUDE.md): o mesmo em todo run_first*.tcl. Tem o
-# MODUS261 (ATPG).
-export PATH=/tools/cadence/QUANTUS261/bin:/tools/cadence/QUANTUS261/tools/bin:/tools/cadence/PEGASUS261/bin:/tools/cadence/PEGASUS261/tools/bin:/tools/cadence/SSV261/bin:/tools/cadence/SSV261/tools/bin:/tools/cadence/XCELIUM2603/tools/bin/64bit:/tools/cadence/XCELIUM2603/tools/bin:/tools/cadence/MODUS261/bin:/tools/cadence/MODUS261/tools/bin:/tools/cadence/CONFRML261/bin:/tools/cadence/CONFRML261/tools/bin:/tools/cadence/DDI221/bin:/tools/cadence/DDI221/tools/bin:/tools/cadence/PVS251/bin:/tools/cadence/PVS251/tools/bin:/tools/cadence/VMANAGER2603/bin:/tools/bin:/tools/cadence/SPECTRE251/bin:/tools/cadence/SPECTRE251/tools/bin:/tools/cadence/IC618/bin:/tools/cadence/IC618/tools/bin:/tools/cadence/IC618/tools/dfII/bin:/pdk/TSMC/CLN12FFC+/TSMCHOME/sram/Compiler/MC2/MC2_2013.12.00.g/bin/Linux-64:/home/aluno12/.local/bin:/home/aluno12/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+# PATH completo da VM (CLAUDE.md), com UMA diferenca: o Modus e o 25.1
+# (MODUS251), nao o 26.1. A licenca do servidor (Modus_common_ui) e v25.1; o
+# 26.1 da TDA-011 (DIARIO_DFT, 2a sessao). O admin instalou o 25.1 em 03/11
+# (T15).
+export PATH=/tools/cadence/QUANTUS261/bin:/tools/cadence/QUANTUS261/tools/bin:/tools/cadence/PEGASUS261/bin:/tools/cadence/PEGASUS261/tools/bin:/tools/cadence/SSV261/bin:/tools/cadence/SSV261/tools/bin:/tools/cadence/XCELIUM2603/tools/bin/64bit:/tools/cadence/XCELIUM2603/tools/bin:/tools/cadence/MODUS251/bin:/tools/cadence/MODUS251/tools/bin:/tools/cadence/CONFRML261/bin:/tools/cadence/CONFRML261/tools/bin:/tools/cadence/DDI221/bin:/tools/cadence/DDI221/tools/bin:/tools/cadence/PVS251/bin:/tools/cadence/PVS251/tools/bin:/tools/cadence/VMANAGER2603/bin:/tools/bin:/tools/cadence/SPECTRE251/bin:/tools/cadence/SPECTRE251/tools/bin:/tools/cadence/IC618/bin:/tools/cadence/IC618/tools/bin:/tools/cadence/IC618/tools/dfII/bin:/pdk/TSMC/CLN12FFC+/TSMCHOME/sram/Compiler/MC2/MC2_2013.12.00.g/bin/Linux-64:/home/aluno12/.local/bin:/home/aluno12/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
 
 export DFT_DIR=${BACKEND_DIR}/dft_isfft
 export SCRIPTS=${DFT_DIR}/scripts

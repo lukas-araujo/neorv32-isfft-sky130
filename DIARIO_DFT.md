@@ -443,6 +443,21 @@ do `run_first_dft.tcl` (rodar depois do 3).
 
 ---
 
+## 2026-11-03 — 4ª sessão: Modus 25.1 instalado na VM
+
+O Prof. Gilmar avisou que a VM foi consertada. `ls -d /tools/cadence/*MODUS*`
+(Lukas): **`MODUS251`** e `MODUS261` — o administrador instalou o 25.1 ao lado,
+que casa com a licença v25.1 (2ª sessão).
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| T15 | `run_first_dft.tcl` com `MODUS251` no PATH (só ele; o resto do PATH igual ao `CLAUDE.md`) | ✅ | Licença `Modus_common_ui` v25.1; o 26.1 dá `TDA-011`. Registrado também no `CLAUDE.md` |
+
+O bloco 3 volta a ser o caminho principal; o bloco 5 (modo de teste na mão,
+T13) fica como complemento.
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -467,7 +482,7 @@ do `run_first_dft.tcl` (rodar depois do 3).
 - [x] ~~VM: bloco 1 (Genus)~~ — passou (2ª sessão)
 - [x] ~~VM: bloco 2a (LEC)~~ — PASS (2ª sessão)
 - [x] ~~VM: bloco 2b (Kria no netlist com scan)~~ — PASSOU, 10 s (2ª sessão)
-- [ ] VM: bloco 3 (Modus) — **bloqueado**: licença v25.1 × Modus 26.1 (`TDA-011`). Lukas pede ao administrador o Modus 25.1 ou licença 26.1
+- [ ] VM: bloco 3 (Modus) — destravado: Modus 25.1 instalado (T15)
 - [ ] VM: bloco 4 (`run_fullscan_sim`)
 - [ ] `traz_dft.sh … scan` com tudo
 - [ ] Comparar área/timing com a síntese sem DFT (o IP sozinho: rodar o mesmo script sem scan? ou ler o `u_isfft` do `_area_hier.rpt` do chip)
