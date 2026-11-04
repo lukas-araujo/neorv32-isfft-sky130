@@ -647,7 +647,8 @@ portas AXI) não é o mesmo contexto do chip; o slack (+4,48 ns) não se compara
 - [x] ~~VM: bloco 2b (Kria no netlist com scan)~~ — PASSOU, 10 s (2ª sessão)
 - [x] ~~VM: bloco 3 (Modus)~~ — 170 padrões, 99,65 % (4ª sessão)
 - [x] ~~VM: bloco 4 (`run_fullscan_sim`)~~ — 170/170, 0 divergências (4ª sessão)
-- [ ] `traz_dft.sh … scan` com tudo
+- [x] ~~`traz_dft.sh … scan`~~ — `resultados/2026-11-02_dft_scan/` (5ª sessão)
+- [ ] (opcional) Bloco 5, modo de teste na mão: mapa do netlist do Genus (`bash sim/run_dft_modo_teste.sh`) + VM
 - [x] ~~Comparar área com a síntese sem DFT~~ — +17,2 % de lógica (5ª sessão)
 - [x] ~~Confirmar T10~~ — Lukas (01/11): "a ideia da DFT é só testar como funciona e ver no Modus as coisas funcionando; um teste básico já é suficiente" → etapas 1–3
 - [ ] (fora do escopo, T10) Etapas 5–7: *shadow logic*, proteção do `csb`, transição, compressão
