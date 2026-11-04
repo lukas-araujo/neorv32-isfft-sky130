@@ -456,6 +456,63 @@ que casa com a licença v25.1 (2ª sessão).
 O bloco 3 volta a ser o caminho principal; o bloco 5 (modo de teste na mão,
 T13) fica como complemento.
 
+### ✅ Bloco 3 — ATPG no Modus 25.1: 170 padrões, 99,65 % de cobertura
+
+Fonte: saída do `run_first_dft.tcl` (bloco 3) colada no chat; Modus
+**25.12-s004_1** (`MODUS251`). Licenças `Modus_common_ui` e `modus_atpg`
+retiradas sem erro. Fluxo inteiro ~40 s; `create_logic_tests` 15 s.
+
+| Comando | Resultado |
+|---|---|
+| `build_model` | ok; `TLM-140`: `sram_1rw1r_64x64_wpr2` sem rede interna → `TIEX` nas saídas; `TEI-010` [Severe]: `sram_1rw1r_64x256` "indefinido" → caixa-preta (efeito igual ao planejado, T6; ver abaixo) |
+| `build_testmode FULLSCAN` | **16 cadeias controláveis e observáveis** (`TTM-357`); 99,66 % de lógica ativa, 0,34 % inativa |
+| `verify_test_structures` | 16 × "controllable and observable" (`TSV-378`); maior cadeia 785 = 100 % da média; 12.552 bits |
+| `build_faultmodel` | *stuck-at* (`-includedynamic no`) |
+| `create_logic_tests` | **170 padrões simulados, 169 efetivos; ATCov 99,65 % (modo de teste) / 99,30 % (global); 996 falhas não testadas** |
+| `write_toggle_gram` | `TBM-099`: comutação no deslocamento > 30 % |
+| `write_vectors` (Verilog, paralelo) | 12.552 medidas, todas nas saídas de scan (0 nas saídas primárias) |
+| `commit_tests` | testes 1 a 170 gravados |
+
+**A curva de cobertura (`TDA-220`):**
+
+| Padrões | Falhas detectadas no trecho | Cobertura (modo de teste) | Não testadas |
+|---|---|---|---|
+| 1 (teste de cadeia) | 87.905 | **25,71 %** | 253.966 |
+| 16 | 196.355 | 83,15 % | 57.405 |
+| 32 | 20.246 | 89,07 % | 37.150 |
+| 64 | 6.736 | 93,55 % | 21.846 |
+| 96 | 4.834 | 96,61 % | 11.366 |
+| 128 | 3.564 | 98,97 % | 3.294 |
+| 167 | 1.414 | 99,64 % | 1.020 |
+| 174 (169 efetivos) | 0 | **99,65 %** | **996** |
+
+Total de falhas ≈ 87.905 + 253.966 ≈ **342 mil** (estimativa pela 1ª linha;
+o número exato está no log do `build_faultmodel`, que chega pelo
+`traz_dft.sh`).
+
+**Leituras:**
+1. **O teste de cadeia sozinho cobre 25,7 %**: as falhas do próprio caminho de
+   scan (SCD/SCE, mux de scan, Q). É o E1 da 3ª sessão em escala: o
+   deslocamento vê o "trem", não a lógica.
+2. **Retorno decrescente:** o padrão 16 levou 196 mil falhas; o 168, 4. As
+   fáceis caem primeiro; as difíceis pedem um padrão quase só para elas.
+3. **T6 confirmada:** perde-se pouco em volta das macros (996 falhas, ~0,3 %):
+   o que entra e sai delas passa por flip-flops de scan.
+4. **Rapidez:** 15 s para 170 padrões em ~342 mil falhas — é o scan que
+   transforma o problema sequencial em combinacional.
+
+**Avisos:**
+
+| Aviso | O que é | Efeito |
+|---|---|---|
+| `TEI-010` [Severe] `sram_1rw1r_64x256` indefinido | a 64×256 está no `macros_caixa_preta.v`, mas não foi reconhecida (a 64×64 foi) | nenhum nos números (vira caixa-preta de qualquer jeito); entender pelo log completo |
+| `TLM-140` `TIEX` nas saídas da 64×64 | saída sem rede interna = fonte de X | é a caixa-preta funcionando |
+| `TBM-099` comutação > 30 % no deslocamento | consumo alto no testador | o lado de potência da DFT (como os acessos espúrios às macros, 1ª sessão); fora do escopo (T10) |
+| `TBM-109` X nos padrões | estados desconhecidos (macros) preenchidos aleatoriamente para a conta de comutação | só afeta a estimativa de comutação |
+| `TVE-103` sem *offset* de teste para `aclk` | o Modus usou 8 ns | só na temporização dos vetores |
+
+**Vira slide?** Sim, os dois: a curva de cobertura e "1 padrão = 25 %".
+
 ---
 
 ## Índice de decisões
@@ -482,7 +539,7 @@ T13) fica como complemento.
 - [x] ~~VM: bloco 1 (Genus)~~ — passou (2ª sessão)
 - [x] ~~VM: bloco 2a (LEC)~~ — PASS (2ª sessão)
 - [x] ~~VM: bloco 2b (Kria no netlist com scan)~~ — PASSOU, 10 s (2ª sessão)
-- [ ] VM: bloco 3 (Modus) — destravado: Modus 25.1 instalado (T15)
+- [x] ~~VM: bloco 3 (Modus)~~ — 170 padrões, 99,65 % (4ª sessão)
 - [ ] VM: bloco 4 (`run_fullscan_sim`)
 - [ ] `traz_dft.sh … scan` com tudo
 - [ ] Comparar área/timing com a síntese sem DFT (o IP sozinho: rodar o mesmo script sem scan? ou ler o `u_isfft` do `_area_hier.rpt` do chip)
