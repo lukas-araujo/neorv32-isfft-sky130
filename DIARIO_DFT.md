@@ -486,9 +486,8 @@ retiradas sem erro. Fluxo inteiro ~40 s; `create_logic_tests` 15 s.
 | 167 | 1.414 | 99,64 % | 1.020 |
 | 174 (169 efetivos) | 0 | **99,65 %** | **996** |
 
-Total de falhas ≈ 87.905 + 253.966 ≈ **342 mil** (estimativa pela 1ª linha;
-o número exato está no log do `build_faultmodel`, que chega pelo
-`traz_dft.sh`).
+Total de falhas: **341.871** no modo de teste (343.063 no global) — número
+exato na 5ª sessão.
 
 **Leituras:**
 1. **O teste de cadeia sozinho cobre 25,7 %**: as falhas do próprio caminho de
@@ -505,7 +504,7 @@ o número exato está no log do `build_faultmodel`, que chega pelo
 
 | Aviso | O que é | Efeito |
 |---|---|---|
-| `TEI-010` [Severe] `sram_1rw1r_64x256` indefinido | a 64×256 está no `macros_caixa_preta.v`, mas não foi reconhecida (a 64×64 foi) | nenhum nos números (vira caixa-preta de qualquer jeito); entender pelo log completo |
+| `TEI-010` [Severe] `sram_1rw1r_64x256` indefinido | as **duas** macros (o resumo mostra só a 1ª ocorrência, "Count 2"; ver 5ª sessão) | nenhum: é a caixa-preta planejada (T6) |
 | `TLM-140` `TIEX` nas saídas da 64×64 | saída sem rede interna = fonte de X | é a caixa-preta funcionando |
 | `TBM-099` comutação > 30 % no deslocamento | consumo alto no testador | o lado de potência da DFT (como os acessos espúrios às macros, 1ª sessão); fora do escopo (T10) |
 | `TBM-109` X nos padrões | estados desconhecidos (macros) preenchidos aleatoriamente para a conta de comutação | só afeta a estimativa de comutação |
@@ -550,6 +549,78 @@ o Modus fez 170 vezes. Rodá-lo na VM exige o mapa do netlist do Genus
 
 ---
 
+## 2026-11-04 — 5ª sessão: os resultados completos no git; números exatos
+
+O Lukas copiou a pasta da VM e rodou `bash sim/traz_dft.sh … scan`:
+**`resultados/2026-11-02_dft_scan/`** (4,1 MB; a data é a do netlist do
+Genus). A síntese do chip (`backend/synthesis/`) não mudou desde a etapa 9
+do layout (arquivo mais novo de 26/10 18:00, já em
+`resultados/2026-10-26_layout_etapa9/`) — o `traz_vm.sh` não precisou rodar.
+Os números abaixo substituem os que vinham dos trechos colados no chat.
+
+### Cobertura exata (`modus/log_create_logic_tests_*`)
+
+| | #Faults | #Tested | #Possibly | #Redund | #Untested | %TCov | **%ATCov** |
+|---|---|---|---|---|---|---|---|
+| Modo de teste FULLSCAN | 341.871 | 340.510 | 214 | 151 | **996** | 99,60 | **99,65** |
+| Global | 343.063 | 340.510 | 214 | 151 | 2.188 | 99,26 | 99,30 |
+
+- **TCov** = testadas ÷ todas; **ATCov** (ajustada) = testadas ÷ (todas −
+  redundantes). As 151 **redundantes** são falhas que não mudam nenhuma saída
+  em circuito nenhum (lógica sem efeito) — não há padrão que as detecte, e
+  elas não indicam defeito do teste.
+- **Possibly** (214): o padrão produz X no circuito com falha (perto das
+  macros caixa-preta): talvez detecte, talvez não.
+- **Global − modo de teste = 1.192 falhas inativas** (`build_faultmodel`:
+  "Total Static 343063 / Active 341871 / Inactive 1192"): pontos que o modo
+  FULLSCAN não usa (0,34 % de lógica inativa, `THM-814`) — PI estáticas
+  ativas só 47 % (portas paradas no teste, como `scan_en` fixa na captura).
+
+### Modelo do Modus (`log_build_model_*`, `TLM-055`)
+
+| Item | Valor |
+|---|---|
+| Blocos (hierárquico / achatado) | 422.058 / 174.384 |
+| Entradas / saídas primárias | 153 / 132 (as do IP + `scan_en` + 16 `scan_in` / 16 `scan_out`) |
+| Redes amarradas | 14 em 0, 14 em 1, **128 em X** |
+| Flip-flops (borda de subida) | 12.552 |
+| MUX2 | 12.579 (os muxes de scan dentro das `sdfxtp` + 27 da lógica) |
+| RAMs / latches | 0 / 0 |
+
+**As 128 redes em X = os `dout0[63:0]` das duas macros** (porta 0 só escreve;
+saída sem uso). Com as macros caixa-preta, o Modus põe `TIEX` nelas (`TLM-140`).
+
+### 🔍 `TEI-010` não era só da 64×256
+
+O resumo de mensagens do Modus mostra **só a 1ª ocorrência** de cada código,
+com a contagem ao lado ("2 WARNING (TEI-010) … `sram_1rw1r_64x256`"). No log
+completo há as duas: `sram_1rw1r_64x256` **e** `sram_1rw1r_64x64_wpr2` "is
+undefined … defined as a black box" — e o mesmo com o `TLM-140`. O
+`macros_caixa_preta.v` (módulo só com portas) é lido, e o Modus chama módulo
+sem conteúdo de "indefinido". Resultado: exatamente o planejado (T6).
+**Lição:** "Count" no resumo do Modus = ocorrências do mesmo código, não da
+mesma instância.
+
+### Custo do scan em área (Genus, mesma biblioteca e mesmo RTL)
+
+| | IP no chip, sem scan (`2026-09-29_sintese_layout`, `u_isfft`) | IP com scan (`isfft_dft_area_hier.rpt`) | Diferença |
+|---|---|---|---|
+| Área total (com as 2 macros, 449.871 µm²) | 897.901 µm² | 974.849 µm² | +76.948 µm² (**+8,6 %**) |
+| Só lógica | 448.030 µm² | 524.977 µm² | **+17,2 %** |
+| Instâncias | 36.375 | 35.962 | −413 |
+| Sequencial (scan) | — | 329.808 µm² (12.552 `sdfxtp`, 33,8 %) | |
+
+O custo vem da célula: `sdfxtp_1` tem um mux embutido. **Menos** instâncias
+com scan: os 9.8xx flip-flops com enable (`edfxtp`, que o Genus usou no chip)
+viraram `sdfxtp` com a recirculação do enable feita na lógica em volta
+(só 1 `mux2_1` e 26 `mux2i_1` no netlist: o Genus fundiu o mux do enable com
+portas que já existiam). O SDC do IP isolado (atrasos de E/S de 6 ns nas
+portas AXI) não é o mesmo contexto do chip; o slack (+4,48 ns) não se compara.
+
+**Vira slide?** Sim: "scan = +17 % de lógica, 99,65 % de cobertura".
+
+---
+
 ## Índice de decisões
 
 | # | Resumo | Status | Data |
@@ -577,6 +648,6 @@ o Modus fez 170 vezes. Rodá-lo na VM exige o mapa do netlist do Genus
 - [x] ~~VM: bloco 3 (Modus)~~ — 170 padrões, 99,65 % (4ª sessão)
 - [x] ~~VM: bloco 4 (`run_fullscan_sim`)~~ — 170/170, 0 divergências (4ª sessão)
 - [ ] `traz_dft.sh … scan` com tudo
-- [ ] Comparar área/timing com a síntese sem DFT (o IP sozinho: rodar o mesmo script sem scan? ou ler o `u_isfft` do `_area_hier.rpt` do chip)
+- [x] ~~Comparar área com a síntese sem DFT~~ — +17,2 % de lógica (5ª sessão)
 - [x] ~~Confirmar T10~~ — Lukas (01/11): "a ideia da DFT é só testar como funciona e ver no Modus as coisas funcionando; um teste básico já é suficiente" → etapas 1–3
 - [ ] (fora do escopo, T10) Etapas 5–7: *shadow logic*, proteção do `csb`, transição, compressão
