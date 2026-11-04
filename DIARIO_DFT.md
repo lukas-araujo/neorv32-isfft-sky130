@@ -513,6 +513,41 @@ o número exato está no log do `build_faultmodel`, que chega pelo
 
 **Vira slide?** Sim, os dois: a curva de cobertura e "1 padrão = 25 %".
 
+### ✅ Bloco 4 — os 170 padrões do Modus simulados no netlist (Xcelium)
+
+Fonte: fim da saída do `run_fullscan_sim` colada no chat (Xcelium 26.03-s005,
+`testresults/verilog/VER.FULLSCAN.isfft_axi_v4_atpg.mainsim.v`).
+
+| Arquivo de vetores | Testes | Comparações | Divergências |
+|---|---|---|---|
+| teste de cadeia | 1 | 12.552 (1 por flip-flop) | 0 |
+| lógica (`...data.logic.ex1.ts2.verilog`) | 169 | 2.143.560 | 0 |
+| **Total (`TVE-209`)** | **170 / 170** | **2.156.112** | **0** |
+
+855 ciclos, 68,4 µs simulados, 9 s reais. O formato é **paralelo**
+(`-scanformat parallel`, do `runmodus.atpg.tcl` do Genus): o simulador
+carrega/lê as cadeias de uma vez, sem os 785 ciclos de deslocamento por
+padrão (em série seriam ~170 × 785 ≈ 133 mil ciclos). O deslocamento em si
+está provado à parte: `verify_test_structures` (bloco 3), flush na nuvem
+(1ª sessão) e o arquivo do teste de cadeia.
+
+**Vira slide?** Sim: "170 padrões, 2,16 milhões de comparações, 0 erros".
+
+### Escopo da frente fechado (T10)
+
+| Etapa | Prova |
+|---|---|
+| 1. Síntese com scan | 12.552 flip-flops, 100 % com scan, 16 cadeias, slack +4,48 ns |
+| 2a. LEC RTL ≡ netlist com scan | PASS, 0 não-equivalentes |
+| 2b. Kria no netlist com scan | PASSOU, 40 matrizes |
+| 3. ATPG *stuck-at* | 170 padrões, **99,65 %** (modo de teste) / 99,30 % (global), 996 falhas não testadas |
+| 4. Padrões simulados | 170/170, 2.156.112 comparações, 0 divergências |
+
+O bloco 5 (modo de teste na mão, T13) fica como material opcional para a
+aula: mostra um padrão por dentro (carga, captura, descarga, falha) — o que
+o Modus fez 170 vezes. Rodá-lo na VM exige o mapa do netlist do Genus
+(`traz_dft.sh` + `sim/run_dft_modo_teste.sh`).
+
 ---
 
 ## Índice de decisões
@@ -540,7 +575,7 @@ o número exato está no log do `build_faultmodel`, que chega pelo
 - [x] ~~VM: bloco 2a (LEC)~~ — PASS (2ª sessão)
 - [x] ~~VM: bloco 2b (Kria no netlist com scan)~~ — PASSOU, 10 s (2ª sessão)
 - [x] ~~VM: bloco 3 (Modus)~~ — 170 padrões, 99,65 % (4ª sessão)
-- [ ] VM: bloco 4 (`run_fullscan_sim`)
+- [x] ~~VM: bloco 4 (`run_fullscan_sim`)~~ — 170/170, 0 divergências (4ª sessão)
 - [ ] `traz_dft.sh … scan` com tudo
 - [ ] Comparar área/timing com a síntese sem DFT (o IP sozinho: rodar o mesmo script sem scan? ou ler o `u_isfft` do `_area_hier.rpt` do chip)
 - [x] ~~Confirmar T10~~ — Lukas (01/11): "a ideia da DFT é só testar como funciona e ver no Modus as coisas funcionando; um teste básico já é suficiente" → etapas 1–3

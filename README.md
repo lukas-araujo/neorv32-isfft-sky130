@@ -10,7 +10,7 @@ geradas pela **OpenRAM**.
 | Síntese Genus, pós-síntese Xcelium, LEC Conformal | ✅ | `DIARIO.md` |
 | Ressíntese para o layout + LibreLane → GDSII | ▶ | `DIARIO_GDSII.md` |
 | UVM no IP da ISFFT (8/8 no Xcelium, cobertura funcional 94,4 %, 12/12 mutações) | ▶ | `DIARIO_UVM.md` |
-| Síntese com DFT (scan) + ATPG no IP da ISFFT | ▶ | `DIARIO_DFT.md` |
+| Síntese com DFT (scan) + ATPG no IP da ISFFT (16 cadeias, 170 padrões, 99,65 % *stuck-at*) | ✅ | `DIARIO_DFT.md` |
 
 Números de referência (Genus, 50 MHz): 1,91 mm² (62% macros), slack
 +2,4 ns, LEC 169/169 módulos. EVM do chip = Kria (3,41 / 0,78 / 0,60 %).
