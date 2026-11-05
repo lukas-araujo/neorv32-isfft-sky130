@@ -4663,6 +4663,30 @@ lugar onde nesta rodada **não havia fill nenhum**.
 | L90 | ~~Fill só fora da faixa dos pads~~ **revertida**: fill no chip todo | ✅ | A faixa precisa do fill para FOM/li/met1, e os erros de DRC a mais não vinham dele |
 | L93 | Testar se a reescrita do GDS pelo KLayout muda o DRC do Magic (`12_drc_reescrita.sh`) | ✅ | O DRC do preenchido deu idêntico com e sem fill na faixa; a única coisa em comum é a reescrita |
 
+### L93 confirmada: a reescrita pelo KLayout, sozinha, muda o DRC do Magic
+
+`12_drc_reescrita.sh` (rodada `2026-11-05_1443_12reesc`, saída do notebook): o GDS do chip **sem
+fill**, só lido e gravado pelo KLayout (1454 células antes e depois), dá **316073** caixas no DRC
+(305262 no GDS original do Magic). As 10811 caixas a mais nunca foram do fill.
+
+Duas explicações possíveis, com consequências diferentes:
+
+| Hipótese | Consequência | Como decidir |
+|---|---|---|
+| a geometria mudou (arredondamento na reescrita) | o GDS final, gravado pelo KLayout, estaria **errado** | XOR original × reescrito ≠ 0 |
+| só a estrutura mudou (ordem/forma das células) | artefato do DRC hierárquico do Magic, como na L85 | XOR = 0 |
+
+- `12_xor_reescrita.sh` (L94): o mesmo `xor.drc` do passo `KLayout.XOR` do LibreLane, entre o
+  original e o reescrito da rodada `_12reesc`.
+- `12_densidade.sh`: o DRC do chip preenchido deixa de usar o GDS juntado pelo KLayout; o Magic lê
+  o **GDS original** do chip e o GDS do fill e instancia o fill no `chip_top` na memória
+  (`getcell chip_top_fill_pattern child 0 0`, como o próprio `generate_fill.py` monta o fill).
+  Assim o DRC mede só o efeito do fill. O `drc_magic` do `comum_chip.sh` ganhou o 3º argumento.
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L94 | DRC do preenchido juntando chip + fill no Magic (sem reescrita); XOR original × reescrito para saber se a reescrita muda geometria | ✅ | A reescrita sozinha muda o DRC; é preciso separar efeito do fill de efeito da reescrita, e saber se o GDS final do KLayout é fiel |
+
 | # | Decisão | Status | Motivo |
 |---|---|---|---|
 | L92 | Refazer o fluxo do chip com o modelo de tempo do núcleo no `MACROS`, para o `repair_design` bufferizar o `tx` | ✅ (Lukas escolheu a opção a) | Fecha a violação de transição no sign-off e mostra o orçamento de carga do bloco × chip |
@@ -4778,7 +4802,8 @@ lugar onde nesta rodada **não havia fill nenhum**.
 | L91 | Extração das células do anel sozinhas: a fusão dos barramentos é das células da foundry; L77 fechada | ✅ | 2026-11-04 |
 | L92 | Chip refeito com o modelo de tempo do núcleo no `MACROS` (buffer no `tx`) | ✅ | 2026-11-05 |
 | L90 | (revertida em 05/11: fill volta para o chip todo) | ✅ | 2026-11-05 |
-| L93 | Teste: a reescrita do GDS pelo KLayout muda o DRC do Magic? | ✅ | 2026-11-05 |
+| L93 | A reescrita do GDS pelo KLayout, sozinha, muda o DRC do Magic (305262 → 316073) | ✅ confirmada | 2026-11-05 |
+| L94 | DRC do preenchido montado no Magic; XOR original × reescrito | ✅ | 2026-11-05 |
 
 ---
 
@@ -4815,7 +4840,8 @@ lugar onde nesta rodada **não havia fill nenhum**.
 - [x] Etapa 12, STA do chip: setup +2,10 ns, hold +3,68 ns, 0 violações (L87)
 - [x] Etapa 12, L77 fechada: fusão dos barramentos é da extração das células da foundry (L89, L91)
 - [x] Transição do `pad_tx/OUT`: chip refeito com o modelo do núcleo (L92), 1 buffer, 0 violações
-- [ ] `12_drc_reescrita.sh` (L93) e densidade de novo com fill no chip todo
+- [x] `12_drc_reescrita.sh` (L93): a reescrita sozinha dá 316073
+- [ ] `12_xor_reescrita.sh` (L94) e densidade com fill no chip todo + DRC montado no Magic
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou

@@ -133,9 +133,10 @@ sed 's/^/    /' "$DEST/12_densidade.txt"
 
 #--- 5. DRC no GDS preenchido ---------------------------------------------------
 if [ "${DRC:-1}" = 1 ]; then
-  echo ">>> 5. DRC (Magic) no GDS preenchido, nucleo caixa-preta (~20 min)"
+  echo ">>> 5. DRC (Magic) do chip + fill juntados no proprio Magic, nucleo caixa-preta (~20 min)"
   mkdir -p "$W/drc"
-  if drc_magic "$W/depois/chip_top.gds" "$W/drc/drc.magic.rpt"; then
+  # DRC sem reescrita (L94): GDS original do chip + GDS do fill, juntos no Magic
+  if drc_magic "$gds" "$W/drc/drc.magic.rpt" "$fill"; then
     python3 "$CHIP/resume_verifica.py" drc "$W/drc/drc.magic.rpt" > "$DEST/12_drc_preenchido.txt" 2>&1
     gzip -c "$W/drc/drc.magic.rpt" > "$DEST/12_drc_preenchido.rpt.gz"
     sed 's/^/    /' "$DEST/12_drc_preenchido.txt" | head -25 || true

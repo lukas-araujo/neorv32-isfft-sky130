@@ -85,9 +85,18 @@ py_klayout () {
 
 # drc_magic <gds> <rpt>: o mesmo DRC do Magic.DRC do LibreLane (drc(full),
 # euclidiano), nucleo caixa-preta pelo maglef da L82 (gerado pelo 12_verifica.sh)
-drc_magic () {
-  local gds="$1" rpt="$2" w
+drc_magic () {   # drc_magic <gds> <rpt> [<fill.gds.gz>]
+  # com o 3o argumento, o Magic le o GDS do fill e o instancia no chip_top em
+  # (0, 0) na memoria: o DRC do chip preenchido sem o GDS passar pelo KLayout
+  # (a reescrita pelo KLayout sozinha ja muda o DRC do Magic: L93)
+  local gds="$1" rpt="$2" fill="${3:-}" w extra=""
   w="$(dirname "$rpt")"
+  if [ -n "$fill" ]; then
+    extra="gds read $fill
+load chip_top
+box values 0 0 0 0
+getcell chip_top_fill_pattern child 0 0"
+  fi
   [ -f "$ENT/maglef/asic_top.mag" ] || { echo "ERRO: falta $ENT/maglef/asic_top.mag (rode o 12_verifica.sh)"; return 1; }
   cat > "$w/drc.tcl" <<TCL
 crashbackups disable
@@ -97,6 +106,7 @@ load $ENT/maglef/asic_top.mag
 gds noduplicates true
 gds readonly true
 gds read $gds
+$extra
 set fout [open $rpt w]
 set oscale [cif scale out]
 load chip_top
