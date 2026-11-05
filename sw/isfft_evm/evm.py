@@ -16,7 +16,7 @@ import sys
 import numpy as np
 
 NOMES = ["Impulso", "Senoide", "Rampa"]
-EVM_KRIA = [3.41, 0.78, 0.60]      # medido na KV260 (DIARIO)
+EVM_KRIA = [3.41, 0.78, 0.60]      # medido na KR260 (DIARIO)
 
 
 def matrizes():

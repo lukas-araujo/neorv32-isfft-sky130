@@ -56,7 +56,7 @@ confirmação) · ❌ descartada.
 
 ### Objetivo
 
-Levar o SoC **NEORV32 + acelerador ISFFT** (validado na Kria KV260) do
+Levar o SoC **NEORV32 + acelerador ISFFT** (validado na Kria KR260) do
 RTL ao **layout (GDSII)** em **SkyWater 130 nm**, com **macros da OpenRAM
 onde elas compensam** — fronteira macro × flip-flop **medida** no próprio
 projeto.
