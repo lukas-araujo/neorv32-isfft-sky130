@@ -4599,6 +4599,70 @@ poderia cair em cima de fio novo):
 | 3 | `bash layout/chip/12_sta.sh` | minutos |
 | 4 | `bash layout/chip/12_densidade.sh` | ~1 h 30 (fill + densidade + DRC) |
 
+### Chip refeito com o modelo do núcleo (rodadas de 05/11): ✅ a transição do `tx` fechou
+
+| Rodada | Resultado | Fonte |
+|---|---|---|
+| `2026-11-05_1033` (`11_anel.sh chip`) | "Flow complete."; `RSZ-0034 Found 1 slew violations` → `RSZ-0038 Inserted 1 buffers in 1 nets` (no `RepairDesignPostGPL`); max slew/cap **0/0**; roteamento 0 DRC, 14692 µm; XOR 0; antena 0 | `11_chip_metricas.json`, `logs_anel.tar.gz` |
+| `2026-11-05_1153_12` (`12_verifica.sh`) | DRC: `chip` **0**, núcleo **0**, faixa dos pads 305262 (as mesmas); LVS **"Circuits match uniquely"** (503 dispositivos, 144 redes: o buffer novo); ligação de topo **igual**, anel com 10 redes | `12_drc.txt`, `12_lvs.txt`, `12_ligacao.txt` |
+| `2026-11-05_1218_12sta` (`12_sta.sh`) | 0 violações de setup, hold, slew, capacitância e fanout em todos os corners | `12_sta.txt`, `…_checks.rpt` |
+
+O caminho crítico (TT nominal), antes × depois:
+
+| Ponto | Antes (`1923_12sta`) | Depois (`1218_12sta`) |
+|---|---|---|
+| carga da saída `uart0_txd_o` do núcleo | 0,352 pF | 0,242 pF |
+| transição na saída do núcleo | 3,496 ns | 1,767 ns |
+| atraso dentro do modelo do núcleo | 6,118 ns | 4,854 ns |
+| buffer | — | `wire1` (`sky130_fd_sc_hd__buf_8`), entrada com 1,809 ns, saída 0,104 ns |
+| transição no `pad_tx/OUT` (limite 1,5 ns) | **3,540 ns ❌** | **0,109 ns** |
+| chegada no `tx_pad` | 11,513 ns | 10,660 ns |
+| folga de setup | +2,237 ns | **+3,090 ns** |
+
+| Corner | Setup: pior folga | Hold: pior folga |
+|---|---|---|
+| `nom_tt` / `nom_ss` / `nom_ff` | +3,090 / **+2,538** / +3,209 | +3,634 |
+| `min_tt` / `min_ss` / `min_ff` | +3,238 / +2,707 / +3,355 | +3,633 |
+| `max_tt` / `max_ss` / `max_ff` | +2,953 / **+2,370** / +3,071 | +3,642 |
+
+- O `repair_design` pôs o buffer **perto do pad** e não junto do núcleo (nome `wire1`: é reparo
+  de fio longo). Mesmo assim resolve: o núcleo passa a enxergar só o trecho até o buffer
+  (0,242 pF), a transição cai pela metade e o buffer de força 8 dirige o pad com folga.
+- Agora tt/ss/ff **diferem** dentro de cada extração: o buffer é célula-padrão, com `.lib` de cada
+  corner. O pior caso é `max_ss` (+2,37 ns); o núcleo e os pads continuam só TT (L87).
+
+### 🐛 Densidade sem fill na faixa dos pads (`2026-11-05_1221_12dens`): a L90 estava errada
+
+| Camada | Janelas reprovadas, fill no chip todo (`1614_12dens`) | fill fora da faixa (`1221_12dens`) |
+|---|---|---|
+| FOM | 26 | **236** (todas na borda) |
+| li | 0 | 21 |
+| met1 | 0 | **103** (borda) |
+| met2 / met3 | 209 / 139 | 343 / 261 |
+| met4 | 39 | 59 (20 delas **acima** de 60 %, na borda) |
+| met5 | 224 | 224 |
+
+DRC do GDS preenchido: **316073** caixas, exatamente o mesmo número da rodada com fill na faixa.
+Comparando os relatórios caixa a caixa (sem fill `1153_12` × com fill `1221_12dens`, conta aqui):
+34572 caixas só no preenchido e 23761 só no sem fill, quase todas dentro dos **pads do sul** (x ≈ 600,
+1000–1100, 1500–1600, 2000; y 70–90 µm), de `licon.7` (19344), `LU.3` (9008), `diff/tap.3`... —
+lugar onde nesta rodada **não havia fill nenhum**.
+
+- **Sintoma:** tirar o fill da faixa não mudou o DRC e estragou a densidade da borda.
+- **Causa:** (1) a densidade da borda **precisa** do fill: as células de I/O sozinhas têm pouca difusão
+  e pouco met1; (2) os erros a mais do DRC não vinham do fill dentro dos pads. O que as duas rodadas
+  com fill têm em comum é o GDS do chip **lido e reescrito pelo KLayout** na junção chip + fill.
+- **Resolvi com:** L90 revertida (`FAIXA=0`: fill no chip todo, como na 1ª rodada); teste da
+  hipótese da reescrita (L93): `12_drc_reescrita.sh` roda o mesmo DRC no GDS do chip **sem fill**, só
+  lido e gravado pelo KLayout. Se der ~316073, a diferença é da reescrita (o Magic recebe a hierarquia
+  dos pads de outro jeito e rechecha diferente), não do fill.
+- **Vira slide?** Sim: "a hipótese errada custou uma rodada, e o número idêntico foi a pista".
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L90 | ~~Fill só fora da faixa dos pads~~ **revertida**: fill no chip todo | ✅ | A faixa precisa do fill para FOM/li/met1, e os erros de DRC a mais não vinham dele |
+| L93 | Testar se a reescrita do GDS pelo KLayout muda o DRC do Magic (`12_drc_reescrita.sh`) | ✅ | O DRC do preenchido deu idêntico com e sem fill na faixa; a única coisa em comum é a reescrita |
+
 | # | Decisão | Status | Motivo |
 |---|---|---|---|
 | L92 | Refazer o fluxo do chip com o modelo de tempo do núcleo no `MACROS`, para o `repair_design` bufferizar o `tx` | ✅ (Lukas escolheu a opção a) | Fecha a violação de transição no sign-off e mostra o orçamento de carga do bloco × chip |
@@ -4713,6 +4777,8 @@ poderia cair em cima de fio novo):
 | L90 | Fill fora da faixa dos pads; densidade do miolo do núcleo é limite do fill de chip | ✅ | 2026-11-03 |
 | L91 | Extração das células do anel sozinhas: a fusão dos barramentos é das células da foundry; L77 fechada | ✅ | 2026-11-04 |
 | L92 | Chip refeito com o modelo de tempo do núcleo no `MACROS` (buffer no `tx`) | ✅ | 2026-11-05 |
+| L90 | (revertida em 05/11: fill volta para o chip todo) | ✅ | 2026-11-05 |
+| L93 | Teste: a reescrita do GDS pelo KLayout muda o DRC do Magic? | ✅ | 2026-11-05 |
 
 ---
 
@@ -4748,8 +4814,8 @@ poderia cair em cima de fio novo):
 - [x] Etapa 12: LVS limpo, DRC 0 no nosso desenho e no núcleo, faixa dos pads isenta (L85; 39ª sessão)
 - [x] Etapa 12, STA do chip: setup +2,10 ns, hold +3,68 ns, 0 violações (L87)
 - [x] Etapa 12, L77 fechada: fusão dos barramentos é da extração das células da foundry (L89, L91)
-- [ ] Etapa 12, densidade de novo com o fill fora da faixa dos pads (`FILL=… ANTES=0 bash layout/chip/12_densidade.sh`, L90)
-- [ ] Transição do `pad_tx/OUT`: refazer o chip com o modelo do núcleo (L92): `11_anel.sh chip` → `12_verifica.sh` → `12_sta.sh` → `12_densidade.sh`
+- [x] Transição do `pad_tx/OUT`: chip refeito com o modelo do núcleo (L92), 1 buffer, 0 violações
+- [ ] `12_drc_reescrita.sh` (L93) e densidade de novo com fill no chip todo
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou

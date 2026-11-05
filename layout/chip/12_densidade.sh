@@ -30,7 +30,7 @@
 #   Uso (nix-shell do LibreLane):  bash layout/chip/12_densidade.sh
 #     FILL=<...fill_pattern.gds.gz>  reaproveita um fill ja gerado (pula o passo 2)
 #     ANTES=0                        pula a medida antes do fill
-#     FAIXA=205                      largura (um) da faixa dos pads sem fill (L90)
+#     FAIXA=0                        largura (um) da faixa sem fill (L90 revertida: 0 = fill no chip todo)
 #=============================================================================
 source "$(dirname "$0")/comum_chip.sh"
 confere_chip
@@ -86,7 +86,7 @@ echo "    fill: $(du -h "$fill" | cut -f1)"
 # O fill de difusao/poly/metal dentro das celulas de I/O criou 10811 erros de
 # DRC de difusao/tap/latch-up (1a rodada). As celulas de I/O vem completas da
 # foundry: so fica o fill INTEIRAMENTE a mais de FAIXA um da borda do die.
-FAIXA="${FAIXA:-205}"
+FAIXA="${FAIXA:-0}"
 echo ">>> 3. KLayout: chip_top + fill (sem fill a menos de $FAIXA um da borda)"
 "$PY" - "$gds" "$fill" "$W/depois/chip_top.gds" "$FAIXA" <<'PY'
 import sys
