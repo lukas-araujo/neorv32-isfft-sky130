@@ -4842,6 +4842,7 @@ Duas explicações possíveis, com consequências diferentes:
 - [x] Transição do `pad_tx/OUT`: chip refeito com o modelo do núcleo (L92), 1 buffer, 0 violações
 - [x] `12_drc_reescrita.sh` (L93): a reescrita sozinha dá 316073
 - [ ] `12_xor_reescrita.sh` (L94) e densidade com fill no chip todo + DRC montado no Magic
+- [ ] Imagem do chip inteiro em alta resolução para slide: `bash layout/chip/12_imagem.sh` (render.py do LibreLane, 6000 px; `GUI=1` abre o KLayout com a tecnologia do sky130)
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou
