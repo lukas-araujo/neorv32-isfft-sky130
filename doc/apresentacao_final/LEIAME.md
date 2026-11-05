@@ -34,3 +34,11 @@ caracteres, 50 pt).
 - Trocar as capturas de tela ruins (IMC, block design, Genus, Modus) e incluir as que faltarem.
 - Capa: data "Nov. 2026" e "PONTO DE CONTROLE 4" — ajustar para o dia da apresentação.
 - Mostrar o PDF do notebook no slide 23, se quiser.
+
+## Slides extras (05/11/2026, 18h30)
+
+`slides_extras.pptx` (gerado por `build_extra.py`), para o Lukas inserir no deck:
+PDK SkyWater 130 nm e Memórias: OpenRAM (logo no início), e FPGA: energia por matriz
+(depois do slide do Jupyter). Energia por matriz = P × t: hardware ≈ 0,88 µJ
+(0,128 W de PL dinâmica × 6,87 µs). **Pendente:** medir `t_ARM` (numpy no ARM) no
+notebook e preencher a coluna do ARM (E = 2,417 W × t_ARM).
