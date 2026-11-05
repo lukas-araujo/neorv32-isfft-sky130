@@ -1,0 +1,55 @@
+== Magic.DRC (01-magic-drc), tempo: 00:14:29.216
+DRC: /home/lukas/Projects/neorv32-isfft-sky130/layout/chip/runs/2026-11-05_1153_12/01-magic-drc/reports/drc.magic.rpt
+total de caixas: 305262
+
+[chip] 0 caixas
+
+[anel] 305262 caixas
+  213330  LV to MV Diffusion spacing < 54 (diff/tap.3)   (ex.: 4.820 1100.810 14.820 1100.960)
+   20088  Spacing of N-Diffusion or P-tap to MV nwell < 0.43um (diff/tap.18,20)   (ex.: 163.200 1100.460 170.200 1100.740)
+   19668  All HV nwell can contain only HV diffusion (diff/tap.21)   (ex.: 163.200 1100.460 170.200 1100.740)
+   12193  Can't overlap those layers   (ex.: 5.185 1120.565 14.655 1120.620)
+   11712  N-Diffusion overhang of nFET < 50 (poly.7)   (ex.: 1074.710 125.025 1074.925 125.085)
+    6308  MV Diffusion to MV tap spacing < 54 (diff/tap.3)   (ex.: 1083.525 29.975 1083.590 30.025)
+    4544  P-tap overlap of P-tap contact < 24 in one direction (licon.7)   (ex.: 1082.015 153.505 1082.135 153.655)
+    3904  P-Diffusion overhang of pmos < 50 (poly.7)   (ex.: 1108.325 125.365 1108.540 125.425)
+    2600  P-tap contact width     < 34 (licon.1)   (ex.: 1090.360 149.400 1090.450 149.570)
+    2176  This layer can't abut or partially overlap between subcells   (ex.: 1091.835 62.795 1092.345 64.325)
+    1456  MV Diffusion in N-well to P-tap spacing < 152 (diff/tap.20 + diff/tap.17,19)   (ex.: 1078.610 86.620 1078.910 86.780)
+    1432  MV N-diffusion to LV N-diffusion < 72 (diff/tap.23 + diff/tap.22)   (ex.: 1076.235 49.600 1076.390 49.950)
+    1414  LV N-diffusion to MV N-diffusion < 72 (diff/tap.23 + diff/tap.22)   (ex.: 1076.235 49.600 1076.390 49.950)
+     420  N-well overlap of P-Diffusion < 36 (diff/tap.8)   (ex.: 636.175 196.720 636.605 196.770)
+     408  MV Tap width < 30 (diff/tap.1)   (ex.: 1072.260 125.565 1072.630 125.605)
+     404  N-tap overlap of N-tap contact < 24 in one direction (licon.7)   (ex.: 1079.865 127.070 1080.035 127.190)
+     356  Diffusion contact spacing < 34 (licon.2)   (ex.: 1070.915 126.190 1071.085 126.290)
+     348  Min. space between N-tap contact and butting P diffusion < 12 (licon.5b)   (ex.: 1083.530 30.125 1100.960 30.165)
+     344  Diffusion spacing < 54 (diff/tap.3)   (ex.: 1076.595 44.950 1076.785 45.010)
+     336  Diffusion width < 30 (diff/tap.1)   (ex.: 1072.240 106.925 1072.630 107.015)
+     300  Spacing of HV nwell to HV nwell < 2.0um (nwell.8)   (ex.: 1097.945 136.040 1098.380 137.660)
+     270  MV P-diffusion to LV P-diffusion < 72 (diff/tap.23 + diff/tap.22)   (ex.: 1072.695 179.510 1073.055 179.530)
+     269  MV Diffusion width < 58 (diff/tap.14)   (ex.: 1083.590 30.125 1100.960 30.315)
+     210  P-diff distance to N-tap must be < 15.0um (LU.3)   (ex.: 636.355 179.650 636.425 196.590)
+     128  Transistor width < 84 (diff/tap.2)   (ex.: 1142.240 10.890 1142.440 11.090)
+     120  Spacing of HV nwell to LV nwell < 2.0um (nwell.8)   (ex.: 1098.810 134.040 1100.380 134.190)
+      64  Only 90 degree angles permitted on poly (x.2)   (ex.: 1142.040 11.090 1142.240 11.290)
+      56  mcon.spacing < 38 (mcon.2)   (ex.: 1074.540 79.265 1074.550 79.350)
+      48  All nwells must contain metal-connected N+ taps (nwell.4)   (ex.: 617.205 195.750 635.585 195.820)
+      44  N-tap contact width     < 34 (licon.1)   (ex.: 1070.915 125.610 1071.085 125.680)
+      44  Deep N-well spacing to N-well < 900 (nwell.7)   (ex.: 1100.980 127.255 1103.660 127.765)
+      42  MV P-Diffusion to MV N-tap spacing < 25 across butted junction (nsd.5a)   (ex.: 1083.465 30.125 1083.590 30.230)
+      42  LV P-diffusion to MV P-diffusion < 72 (diff/tap.23 + diff/tap.22)   (ex.: 1082.835 176.330 1082.850 176.350)
+      40  Poly resistor spacing to poly < 96 (poly.9)   (ex.: 1089.550 70.295 1089.570 70.305)
+      32  HVNTM spacing < 140 (hvntm.2)   (ex.: 1133.650 186.600 1133.810 186.660)
+      32  No bends in transistors (poly.11)   (ex.: 1142.435 10.890 1142.440 10.895)
+      20  Width of HVNTM < 140 (hvntm.1)   (ex.: 1099.520 172.270 1100.175 172.330)
+      18  Spacing of metal2 features attached to and within 0.28um of large metal2 < 56 (met2.3a)   (ex.: 166.520 1088.685 166.800 1088.835)
+      12  via4 spacing < 84 (via4.2 - 2 * via4.4)   (ex.: 181.310 156.935 181.320 157.280)
+      10  MV Butting tap length < 140 (diff/tap.16)   (ex.: 1083.695 29.325 1100.960 29.855)
+       8  P-tap minimum area < 0.07011um^2 (psd.10b)   (ex.: 1132.420 160.315 1132.590 160.435)
+       4  MV P-Diffusion to MV N-tap spacing < 25 across butted junction (nsd.5b)   (ex.: 1083.590 30.025 1083.650 30.105)
+       4  MV Diffusion spacing < 60 (diff/tap.15a)   (ex.: 1125.190 178.670 1125.225 178.970)
+       4  N-well overlap of Deep N-well < 0.4um outside, 1.03um inside (nwell.5a, 7)   (ex.: 1086.170 176.645 1086.420 176.920)
+
+[nucleo] 0 caixas
+
+== Linhas de leitura do GDS que o LibreLane trata como fatais (MAGIC_CAPTURE_ERRORS)

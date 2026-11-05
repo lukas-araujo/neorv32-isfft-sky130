@@ -1,0 +1,65 @@
+Startpoint: u_cpu.neorv32_top_inst.soc_generators_neorv32_sys_reset_inst.n1061_q_reg
+            (rising edge-triggered flip-flop clocked by clk_i)
+Endpoint: u_cpu.neorv32_top_inst.neorv32_dma_complex_enabled_neorv32_dma_inst.n2167_q_reg[58]
+          (removal check against rising-edge clock clk_i)
+Path Group: asynchronous
+Path Type: min
+
+   Delay     Time   Description
+-----------------------------------------------------------
+   0.000    0.000   clock clk_i (rise edge)
+   2.728    2.728   clock network delay (propagated)
+   0.000    2.728 ^ u_cpu.neorv32_top_inst.soc_generators_neorv32_sys_reset_inst.n1061_q_reg/CLK (sky130_fd_sc_hd__dfrtp_1)
+   0.350    3.078 ^ u_cpu.neorv32_top_inst.soc_generators_neorv32_sys_reset_inst.n1061_q_reg/Q (sky130_fd_sc_hd__dfrtp_1)
+   1.049    4.126 ^ fanout11830/X (sky130_fd_sc_hd__clkdlybuf4s25_1)
+   0.411    4.538 ^ fanout11492/X (sky130_fd_sc_hd__clkdlybuf4s25_1)
+   0.218    4.756 ^ load_slew11493/X (sky130_fd_sc_hd__clkbuf_4)
+   0.007    4.763 ^ u_cpu.neorv32_top_inst.neorv32_dma_complex_enabled_neorv32_dma_inst.n2167_q_reg[58]/RESET_B (sky130_fd_sc_hd__dfrtp_1)
+            4.763   data arrival time
+
+   0.000    0.000   clock clk_i (rise edge)
+   3.078    3.078   clock network delay (propagated)
+   0.250    3.328   clock uncertainty
+  -0.164    3.165   clock reconvergence pessimism
+            3.165 ^ u_cpu.neorv32_top_inst.neorv32_dma_complex_enabled_neorv32_dma_inst.n2167_q_reg[58]/CLK (sky130_fd_sc_hd__dfrtp_1)
+   0.363    3.527   library removal time
+            3.527   data required time
+-----------------------------------------------------------
+            3.527   data required time
+           -4.763   data arrival time
+-----------------------------------------------------------
+            1.235   slack (MET)
+
+
+Startpoint: u_cpu.neorv32_top_inst.io_system_neorv32_sysinfo_inst.n4264_q_reg[9]
+            (rising edge-triggered flip-flop clocked by clk_i)
+Endpoint: u_cpu.neorv32_top_inst.io_system_neorv32_bus_io_switch_inst.neorv32_bus_reg_inst.n11404_q_reg[9]
+          (rising edge-triggered flip-flop clocked by clk_i)
+Path Group: clk_i
+Path Type: min
+
+   Delay     Time   Description
+-----------------------------------------------------------
+   0.000    0.000   clock clk_i (rise edge)
+   2.731    2.731   clock network delay (propagated)
+   0.000    2.731 ^ u_cpu.neorv32_top_inst.io_system_neorv32_sysinfo_inst.n4264_q_reg[9]/CLK (sky130_fd_sc_hd__dfrtp_1)
+   0.328    3.059 ^ u_cpu.neorv32_top_inst.io_system_neorv32_sysinfo_inst.n4264_q_reg[9]/Q (sky130_fd_sc_hd__dfrtp_1)
+   0.110    3.169 ^ u_cpu.neorv32_top_inst.io_system_neorv32_sysinfo_inst.g1204/X (sky130_fd_sc_hd__and2_1)
+   0.088    3.257 ^ u_cpu.neorv32_top_inst.io_system_neorv32_bus_io_switch_inst.g999/X (sky130_fd_sc_hd__or3_1)
+   0.000    3.257 ^ u_cpu.neorv32_top_inst.io_system_neorv32_bus_io_switch_inst.neorv32_bus_reg_inst.n11404_q_reg[9]/D (sky130_fd_sc_hd__dfxtp_1)
+            3.257   data arrival time
+
+   0.000    0.000   clock clk_i (rise edge)
+   3.088    3.088   clock network delay (propagated)
+   0.250    3.338   clock uncertainty
+  -0.189    3.149   clock reconvergence pessimism
+            3.149 ^ u_cpu.neorv32_top_inst.io_system_neorv32_bus_io_switch_inst.neorv32_bus_reg_inst.n11404_q_reg[9]/CLK (sky130_fd_sc_hd__dfxtp_1)
+  -0.026    3.124   library hold time
+            3.124   data required time
+-----------------------------------------------------------
+            3.124   data required time
+           -3.257   data arrival time
+-----------------------------------------------------------
+            0.134   slack (MET)
+
+

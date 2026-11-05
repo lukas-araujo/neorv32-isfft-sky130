@@ -1,0 +1,10 @@
+LVS: /home/lukas/Projects/neorv32-isfft-sky130/layout/chip/runs/2026-11-05_1153_12/05-netgen-lvs/reports/lvs.netgen.rpt
+resultado final: Circuits match uniquely.
+  Number of devices: 503 |Number of devices: 503 
+  Number of nets: 144 |Number of nets: 144 
+
+'Netlists match': 1 linha(s)
+      1x Netlists match with 5 symmetries.
+
+'Cell pin lists': 22 linha(s)
+     22x Cell pin lists are equivalent.

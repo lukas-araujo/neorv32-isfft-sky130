@@ -1,0 +1,7 @@
+modelo: /home/lukas/Projects/neorv32-isfft-sky130/layout/chip/entrada/asic_top_tt.lib (3367 bytes)
+  clk_i          input   clock arcos: max_clock_tree_path, min_clock_tree_path
+  rstn_i         input         arcos: -
+  uart0_rxd_i    input         arcos: hold_rising, setup_rising  (rel. clk_i)
+  uart0_txd_o    output        arcos: rising_edge  (rel. clk_i)
+  vssd1          input         arcos: -
+  vccd1          input         arcos: -

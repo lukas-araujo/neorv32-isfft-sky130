@@ -1,0 +1,30 @@
+layout:  /home/lukas/Projects/neorv32-isfft-sky130/resultados/2026-11-05_1153_12_layout_chip/12_extraida.spice.gz
+verilog: /home/lukas/Projects/neorv32-isfft-sky130/layout/chip/runs/2026-11-05_1033/46-openroad-fillinsertion/chip_top.pnl.v
+
+celula                                                        layout verilog
+asic_top                                                           1       1
+sky130_ef_io__com_bus_slice_10um                                  12      12
+sky130_ef_io__com_bus_slice_1um                                   41      41
+sky130_ef_io__com_bus_slice_20um                                 358     358
+sky130_ef_io__com_bus_slice_5um                                   15      15
+sky130_ef_io__connect_vcchib_vccd_and_vswitch_vddio_slice_20um       1       1
+sky130_ef_io__corner_pad                                           4       4
+sky130_ef_io__gpiov2_pad_wrapped                                   4       4
+sky130_ef_io__vccd_lvc_clamped_pad                                 1       1
+sky130_ef_io__vdda_hvc_clamped_pad                                 1       1
+sky130_ef_io__vddio_hvc_clamped_pad                                1       1
+sky130_ef_io__vssa_hvc_clamped_pad                                 1       1
+sky130_ef_io__vssd_lvc_clamped_pad                                 1       1
+sky130_ef_io__vssio_hvc_clamped_pad                                1       1
+sky130_fd_sc_hd__buf_8                                             1       1
+sky130_fd_sc_hd__conb_1                                           55      55
+sky130_fd_sc_hd__diode_2                                          11      11
+
+redes de topo (sem decap/fill/tap): layout 160, verilog 160
+assinaturas iguais: 160; so no layout: 0; so no verilog: 0
+
+Anel (pinos de barramento de todas as celulas sky130_ef_io):
+  layout   10 redes: AMUXBUS_A; AMUXBUS_B; VSSA; VDDA; VSWITCH=VDDIO; VDDIO_Q; VCCHIB=VCCD; VSSIO; VSSD; VSSIO_Q
+  verilog  10 redes: AMUXBUS_A; AMUXBUS_B; VSSA; VDDA; VSWITCH=VDDIO; VDDIO_Q; VCCHIB=VCCD; VSSIO; VSSD; VSSIO_Q
+
+Veredito: ligacao de topo IGUAL (nenhum curto nem aberto entre celulas)

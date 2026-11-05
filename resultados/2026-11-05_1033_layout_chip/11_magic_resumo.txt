@@ -1,0 +1,6 @@
+linhas fatais (Error while reading cell, sem Warning) em magic-streamout.log:
+> gds read /home/lukas/Projects/pdks/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/gds/sky130_fd_sc_hd.gds
+> gds read /home/lukas/Projects/neorv32-isfft-sky130/layout/chip/entrada/sky130_fd_io.gds
+> gds read /home/lukas/Projects/pdks/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_io/gds/sky130_ef_io.gds
+> gds read /home/lukas/Projects/pdks/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_io/gds/sky130_ef_io__gpiov2_pad_wrapped.gds
+> gds read /home/lukas/Projects/pdks/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_io/gds/sky130_ef_io__connect_vcchib_vccd_and_vswitch_vddio_slice_20um.gds

@@ -1,0 +1,83 @@
+
+===========================================================================
+report_checks -path_delay max (Setup)
+============================================================================
+======================= nom_tt_025C_1v80 Corner ===================================
+
+Startpoint: u_core (rising edge-triggered flip-flop clocked by clk_i)
+Endpoint: tx_pad (output port clocked by clk_i)
+Path Group: clk_i
+Path Type: max
+
+Fanout         Cap        Slew       Delay        Time   Description
+---------------------------------------------------------------------------------------------
+                                  0.000000    0.000000   clock clk_i (rise edge)
+                                  0.000000    0.000000   clock source latency
+     1    1.117215    0.000000    0.000000    0.000000 ^ clk_pad (inout)
+                                                         clk_pad (net)
+                      0.000000    0.000000    0.000000 ^ pad_clk/PAD (sky130_ef_io__gpiov2_pad_wrapped)
+     1    0.495184    0.552956    1.403195    1.403195 ^ pad_clk/IN (sky130_ef_io__gpiov2_pad_wrapped)
+                                                         clk_core (net)
+                      0.635595    0.161329    1.564524 ^ u_core/clk_i (asic_top)
+     1    0.242364    1.767464    4.853948    6.418472 v u_core/uart0_txd_o (asic_top)
+                                                         tx_core (net)
+                      1.808671    0.213158    6.631629 v wire1/A (sky130_fd_sc_hd__buf_8)
+     1    0.072402    0.103768    0.645268    7.276897 v wire1/X (sky130_fd_sc_hd__buf_8)
+                                                         net1 (net)
+                      0.109224    0.019894    7.296792 v pad_tx/OUT (sky130_ef_io__gpiov2_pad_wrapped)
+     1    1.117215    0.841857    3.363200   10.659992 v pad_tx/PAD (sky130_ef_io__gpiov2_pad_wrapped)
+                                                         tx_pad (net)
+                      0.841857    0.000000   10.659992 v tx_pad (inout)
+                                             10.659992   data arrival time
+
+                                 20.000000   20.000000   clock clk_i (rise edge)
+                                  0.000000   20.000000   clock network delay (propagated)
+                                 -0.250000   19.750002   clock uncertainty
+                                  0.000000   19.750002   clock reconvergence pessimism
+                                 -6.000000   13.750002   output external delay
+                                             13.750002   data required time
+---------------------------------------------------------------------------------------------
+                                             13.750002   data required time
+                                            -10.659992   data arrival time
+---------------------------------------------------------------------------------------------
+                                              3.090009   slack (MET)
+
+
+Startpoint: rx_pad (input port clocked by clk_i)
+Endpoint: u_core (rising edge-triggered flip-flop clocked by clk_i)
+Path Group: clk_i
+Path Type: max
+
+Fanout         Cap        Slew       Delay        Time   Description
+---------------------------------------------------------------------------------------------
+                                  0.000000    0.000000   clock clk_i (rise edge)
+                                  0.000000    0.000000   clock network delay (propagated)
+                                  6.000000    6.000000 ^ input external delay
+     1    1.117215    0.000000    0.000000    6.000000 ^ rx_pad (inout)
+                                                         rx_pad (net)
+                      0.000000    0.000000    6.000000 ^ pad_rx/PAD (sky130_ef_io__gpiov2_pad_wrapped)
+     1    0.193259    0.235482    1.257093    7.257092 ^ pad_rx/IN (sky130_ef_io__gpiov2_pad_wrapped)
+                                                         rx_core (net)
+                      0.298058    0.093375    7.350467 ^ u_core/uart0_rxd_i (asic_top)
+                                              7.350467   data arrival time
+
+                                 20.000000   20.000000   clock clk_i (rise edge)
+                                  0.000000   20.000000   clock source latency
+     1    1.117215    0.000000    0.000000   20.000000 ^ clk_pad (inout)
+                                                         clk_pad (net)
+                      0.000000    0.000000   20.000000 ^ pad_clk/PAD (sky130_ef_io__gpiov2_pad_wrapped)
+     1    0.495184    0.552956    1.403194   21.403194 ^ pad_clk/IN (sky130_ef_io__gpiov2_pad_wrapped)
+                                                         clk_core (net)
+                      0.635595    0.161331   21.564526 ^ u_core/clk_i (asic_top)
+                                 -0.250000   21.314526   clock uncertainty
+                                  0.000000   21.314526   clock reconvergence pessimism
+                                  1.781700   23.096226   library setup time
+                                             23.096226   data required time
+---------------------------------------------------------------------------------------------
+                                             23.096226   data required time
+                                             -7.350467   data arrival time
+---------------------------------------------------------------------------------------------
+                                             15.745759   slack (MET)
+
+
+
