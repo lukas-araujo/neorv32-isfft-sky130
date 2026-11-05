@@ -152,6 +152,12 @@ fi
 # as duas netlists que o LVS compara (pequenas no chip: ~4 mil instancias)
 d="$(passo magic-spiceextraction)"
 [ -n "$d" ] && ls "$d"/*.spice >/dev/null 2>&1 && gzip -c "$(ls "$d"/*.spice | head -1)" > "$DEST/12_extraida.spice.gz"
+# ligacao de topo, sem nomes (L89): netlist extraida x Verilog do chip
+pnl="$(python3 -c "import json,sys; print(json.load(open(sys.argv[1])).get('pnl') or '')" "$ini")"
+if [ -f "$DEST/12_extraida.spice.gz" ] && [ -f "$pnl" ]; then
+  python3 "$CHIP/compara_ligacao.py" "$DEST/12_extraida.spice.gz" "$pnl" > "$DEST/12_ligacao.txt" 2>&1 || true
+  echo ">>> ligacao de topo:"; tail -4 "$DEST/12_ligacao.txt" | sed 's/^/    /'
+fi
 pnl="$(python3 -c "import json,sys; print(json.load(open(sys.argv[1])).get('pnl') or '')" "$ini")"
 [ -n "$pnl" ] && [ -f "$pnl" ] && gzip -c "$pnl" > "$DEST/12_chip_top.pnl.v.gz"
 

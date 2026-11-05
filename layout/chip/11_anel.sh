@@ -109,6 +109,9 @@ else echo ">>> o PDK nao traz config de pads para o LibreLane (tudo vem da nossa
 TAG="$(date +%Y-%m-%d_%H%M)"
 echo "$TAG" > "$CHIP/.rodada_atual"
 r=0
+# O nucleo entra com o modelo de tempo do 12_sta.sh (L92): sem ele o resizer do
+# chip nao "ve" a saida fraca do nucleo e nao bufferiza o fio ate o pad do tx
+[ -f "$ENT/asic_top_tt.lib" ] || { echo "ERRO: falta $ENT/asic_top_tt.lib -- rode antes: bash layout/chip/12_sta.sh (parte A gera o modelo)"; exit 1; }
 CONFIGS=(config.json)
 [ "$PARTE" = chip ] || CONFIGS+=("config_${PARTE}.json")
 ( cd "$CHIP" && librelane --pdk-root "$PDK_ROOT" --run-tag "$TAG" "${CONFIGS[@]}" ) || r=$?
@@ -132,6 +135,7 @@ for k in ["design__die__area", "design__core__area",
           "design__instance__count", "design__instance__count__macros",
           "design__io", "timing__setup__ws", "timing__hold__ws",
           "timing__setup_vio__count", "timing__hold_vio__count",
+          "design__max_slew_violation__count", "design__max_cap_violation__count",
           "route__drc_errors", "route__wirelength", "antenna__violating__nets"]:
     if k in m: print(f"  {k:36s} {m[k]}")
 PY

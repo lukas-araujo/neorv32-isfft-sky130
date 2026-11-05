@@ -4571,6 +4571,38 @@ Não há curto do nosso chip no anel. O LVS de transistor pelo GDS com os pads i
 documentado como **não conclusivo para pads da SkyWater no Magic** (modelagem das células), não como
 erro do desenho.
 
+### Refazer o chip com o modelo do núcleo (Lukas: "bora refazer", 05/11) — L92
+
+A violação de transição do `pad_tx/OUT` (3,54 ns > 1,5 ns) vem do orçamento de carga do núcleo
+(`OUTPUT_CAP_LOAD` = 33,4 fF) contra o que ele dirige no chip (0,352 pF). O fluxo do chip só pode
+consertar se **souber** que a saída do núcleo é fraca: até aqui o núcleo era uma macro sem `.lib`, e
+o `repair_design` (passo `OpenROAD.RepairDesignPostGPL`) não tinha o que calcular.
+
+| Mudança | Onde |
+|---|---|
+| `MACROS.asic_top.lib = {"*": ["dir::entrada/asic_top_tt.lib"]}` (o modelo do `12_sta.sh`, parte A) | `layout/chip/config.json` |
+| Fluxo `chip` recusa rodar sem o modelo; resumo mostra violações de slew e capacitância | `layout/chip/11_anel.sh` |
+| Ligação de topo sem nomes (`compara_ligacao.py`) no fim do LVS abstrato → `12_ligacao.txt` | `layout/chip/12_verifica.sh` |
+
+O que se espera: o `repair_design` põe um buffer perto do pino `uart0_txd_o` (a saída do núcleo passa
+a enxergar só a entrada do buffer) e o buffer dirige os ~2,7 mm até o pad. O Yosys lê o `.lib` como
+caixa-preta (`read_liberty -lib`, atributo `blackbox`; `steps/pyosys.py` do LibreLane 3.0.14) e o
+`caixas_pretas.v` define a mesma caixa-preta com as mesmas portas (o modelo tem `vccd1`/`vssd1`).
+
+Sequência no notebook (o fill precisa ser **gerado de novo**: o roteamento muda e o fill antigo
+poderia cair em cima de fio novo):
+
+| # | Comando | Tempo aproximado |
+|---|---|---|
+| 1 | `bash layout/chip/11_anel.sh chip` | ~1 h |
+| 2 | `bash layout/chip/12_verifica.sh` | ~25 min (DRC + LVS abstrato + ligação) |
+| 3 | `bash layout/chip/12_sta.sh` | minutos |
+| 4 | `bash layout/chip/12_densidade.sh` | ~1 h 30 (fill + densidade + DRC) |
+
+| # | Decisão | Status | Motivo |
+|---|---|---|---|
+| L92 | Refazer o fluxo do chip com o modelo de tempo do núcleo no `MACROS`, para o `repair_design` bufferizar o `tx` | ✅ (Lukas escolheu a opção a) | Fecha a violação de transição no sign-off e mostra o orçamento de carga do bloco × chip |
+
 | # | Decisão | Status | Motivo |
 |---|---|---|---|
 | L91 | A fusão dos barramentos na extração pelo GDS é investigada célula a célula (extração das células do anel sozinhas) | ✅ | Se a fusão já existe na célula da foundry sozinha, ela não diz nada sobre a ligação entre células; a L77 se decide pelo que não depende do modelo interno dos pads |
@@ -4680,6 +4712,7 @@ erro do desenho.
 | L89 | L77 decidida pela ligação de topo do GDS (`compara_ligacao.py`) | ✅ | 2026-11-03 |
 | L90 | Fill fora da faixa dos pads; densidade do miolo do núcleo é limite do fill de chip | ✅ | 2026-11-03 |
 | L91 | Extração das células do anel sozinhas: a fusão dos barramentos é das células da foundry; L77 fechada | ✅ | 2026-11-04 |
+| L92 | Chip refeito com o modelo de tempo do núcleo no `MACROS` (buffer no `tx`) | ✅ | 2026-11-05 |
 
 ---
 
@@ -4716,7 +4749,7 @@ erro do desenho.
 - [x] Etapa 12, STA do chip: setup +2,10 ns, hold +3,68 ns, 0 violações (L87)
 - [x] Etapa 12, L77 fechada: fusão dos barramentos é da extração das células da foundry (L89, L91)
 - [ ] Etapa 12, densidade de novo com o fill fora da faixa dos pads (`FILL=… ANTES=0 bash layout/chip/12_densidade.sh`, L90)
-- [ ] Transição do `pad_tx/OUT` (3,54 ns > 1,5 ns): refazer o chip com o modelo do núcleo (buffer) ou registrar como conhecida — escolha do Lukas
+- [ ] Transição do `pad_tx/OUT`: refazer o chip com o modelo do núcleo (L92): `11_anel.sh chip` → `12_verifica.sh` → `12_sta.sh` → `12_densidade.sh`
 - [ ] (opcional) ECO de hold pós-roteamento para zerar os 15 holds do FF (L40)
 - [ ] IR drop com a potência das macros corrigida (L37)
 - [x] ~~VM: síntese com L20~~ — 12ª sessão, tudo passou

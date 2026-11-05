@@ -47,7 +47,10 @@
       ],
       "gds": [
         "dir::entrada/asic_top.gds"
-      ]
+      ],
+      "lib": {
+        "*": ["dir::entrada/asic_top_tt.lib"]
+      }
     }
   },
   "PAD_LEFS": [
