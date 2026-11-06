@@ -127,11 +127,11 @@ Layout (extra) & LibreLane 3.0.14 (OpenROAD, Magic, Netgen, KLayout) \\
 \end{table}
 
 \subsection{O IP ISFFT}
-O núcleo do IP é o mesmo do Estudo Dirigido 1 (Fig.~\ref{fig_pipeline}). Dois núcleos de 8 pontos gerados pelo Spiral \cite{b4}, com representação em ponto fixo de 16 bits para as partes real e imaginária, latência de 41 ciclos e uma transformada a cada 4 ciclos, realizam a IFFT nas linhas e a FFT nas colunas. Entre eles, um banco \textit{ping-pong} de $2 \times 8 \times 8$ palavras de 32 bits faz a transposição: uma matriz é escrita por linhas em um banco enquanto a anterior é lida por colunas do outro. O modelo de referência em Python aplica \textit{ifft} nas linhas, \textit{fft} nas colunas e divide o resultado por 8.
+O núcleo de cálculo é o mesmo do Estudo Dirigido 1; a Fig.~\ref{fig_pipeline} mostra o caminho de dados do IP na versão ASIC. Dois núcleos de 8 pontos gerados pelo Spiral \cite{b4}, com representação em ponto fixo de 16 bits para as partes real e imaginária, latência de 41 ciclos e uma transformada a cada 4 ciclos, realizam a IFFT nas linhas e a FFT nas colunas. Entre eles, um banco \textit{ping-pong} de $2 \times 8 \times 8$ palavras de 32 bits faz a transposição: uma matriz é escrita por linhas em um banco enquanto a anterior é lida por colunas do outro. O modelo de referência em Python aplica \textit{ifft} nas linhas, \textit{fft} nas colunas e divide o resultado por 8.
 
 \begin{figure*}[htbp]
-\centerline{\includegraphics[width=0.85\textwidth]{Imagens/Pipeline.png}}
-\caption{Bloco operacional da ISFFT: IFFT 1D, banco \textit{ping-pong} de transposição e FFT 1D.}
+\centerline{\includegraphics[width=0.9\textwidth]{Imagens/bloco_operacional.pdf}}
+\caption{Bloco operacional do IP ISFFT na versão ASIC: buffer de entrada (\texttt{in\_mem}) e FIFO de saída (\texttt{out\_mem}) em macros OpenRAM, IFFT 1D, banco \textit{ping-pong} de transposição selecionado por \texttt{wr\_bank\_sel}/\texttt{rd\_bank\_sel} e FFT 1D.}
 \label{fig_pipeline}
 \end{figure*}
 
@@ -191,7 +191,7 @@ Em ASIC não existem o Zynq, o AXI DMA e os demais IPs da Xilinx. A arquitetura 
 \end{itemize}
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=0.44\textwidth]{Imagens/asic_neorv32.png}}
+\centerline{\includegraphics[width=0.44\textwidth]{Imagens/asic_neorv32.pdf}}
 \caption{Arquitetura do SoC em ASIC: IMEM e DMEM em macros OpenRAM, transporte de dados por DMA e SLINK do NEORV32.}
 \label{fig_asic_arch}
 \end{figure}
